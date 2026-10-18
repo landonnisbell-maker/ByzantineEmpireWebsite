@@ -1,0 +1,48 @@
+{
+  "repo_name": "porphyra-portal-test",
+  "base": "/porphyra-portal-test",
+  "file_count": 137,
+  "bytes": 36845305,
+  "extensions": {
+    ".svg": 1,
+    ".html": 1,
+    ".png": 1,
+    "[no extension]": 1,
+    ".txt": 1,
+    ".opus": 28,
+    ".webp": 29,
+    ".mp4": 6,
+    ".wav": 1,
+    ".wasm": 1,
+    ".js": 31,
+    ".avif": 3,
+    ".woff2": 2,
+    ".css": 3,
+    ".ktx2": 9,
+    ".glb": 11,
+    ".json": 8
+  },
+  "duplicate_saved_paths": [
+    [
+      "icon.svg",
+      2008,
+      2008
+    ],
+    [
+      "__assets__/W3RONE Video.mp4",
+      2506937,
+      2670777
+    ],
+    [
+      "__assets__/Presti AI Video.mp4",
+      1015981,
+      1212589
+    ],
+    [
+      "icon.svg",
+      2008,
+      2008
+    ]
+  ],
+  "missing": []
+}
