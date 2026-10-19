@@ -102,3 +102,9 @@
 @media (max-width:780px) {
   .loader-module__y9w63G__header::after {font-size:9px;letter-spacing:.11em;white-space:normal;max-width:74vw;}
 }
+
+/* Purple & Premium: original loader button animated typography */
+.loader-module__y9w63G__ctaLabel{color:#bb79ef!important;}
+.loader-module__y9w63G__cta:hover .loader-module__y9w63G__ctaLabel{color:#dcacff!important;}
+/* Show the original GPU scene below the graphic overlay so that its actual fluid postprocessing remains visible. */
+.loader-module__y9w63G__loaderContainer{background-color:rgba(17,13,25,.80)!important;}
