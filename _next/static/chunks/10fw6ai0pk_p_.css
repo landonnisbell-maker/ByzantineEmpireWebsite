@@ -108,3 +108,9 @@
 .loader-module__y9w63G__cta:hover .loader-module__y9w63G__ctaLabel{color:#dcacff!important;}
 /* Show the original GPU scene below the graphic overlay so that its actual fluid postprocessing remains visible. */
 .loader-module__y9w63G__loaderContainer{background-color:rgba(17,13,25,.80)!important;}
+
+/* P&P fluid loader V2: existing WebGPU refraction appears BEHIND loader DOM.
+   The original 3D scene and all pointer simulation code are unchanged. */
+.loader-module__y9w63G__loaderContainer{background-color:rgba(16,10,24,.12)!important;}
+.loader-module__y9w63G__frameGrid{opacity:.28!important;filter:none!important;}
+@media (prefers-reduced-motion:reduce){.loader-module__y9w63G__loaderContainer{background-color:#121014!important;}.loader-module__y9w63G__frameGrid{opacity:.8!important;}}
