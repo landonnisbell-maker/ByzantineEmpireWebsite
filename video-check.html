@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PORPHYRA — Local video check</title><style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{background:#0a0d14;color:#f0e7d4;font:15px/1.5 system-ui,sans-serif;margin:0;padding:36px}
+main{max-width:1050px;margin:auto}h1{font-size:30px;font-weight:500}p{color:#bac6d9}code{font-size:12px;color:#d7c4ff;overflow-wrap:anywhere}button{border:1px solid #aaa1ca;background:#231a32;color:white;padding:11px 16px;cursor:pointer;border-radius:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px 0}.card{border:1px solid #393747;border-radius:9px;padding:15px;min-width:0}.card h2{font-size:15px;margin-top:0}.card video{width:100%;aspect-ratio:1;object-fit:contain;background:#08080d}.status{margin:7px 0;font-size:13px}.ok{color:#8cf5b6}.error{color:#ff8b8b}.muted{color:#b6aabd}footer{color:#abb1bc;font-size:12px;margin-top:30px}</style></head>
+<body><main><h1>Project crystal video diagnostics</h1><p>This page tests the MP4 files hosted with the site. It does not contact AENGEL. If these load but crystal interiors remain blank, check the compiled script and browser console.</p>
+<p>Page URL: <code id="origin"></code></p><button type="button" id="play">Play all videos (muted)</button><div class="grid" id="grid"></div>
+<footer>The captured Grandir MP4 is known to be incomplete. The other five were validated as playable MP4s in the exported package.</footer></main><script>
+const filenames = ["CG Trader Video.mp4", "W3RONE Video.mp4", "Presti AI Video.mp4", "Reaali Video.mp4", "Currency Video.mp4", "Grandir Video.mp4"];
+document.querySelector('#origin').textContent=location.href;
+const grid=document.querySelector('#grid');
+for(const name of filenames){
+ const card=document.createElement('div');card.className='card';
+ const heading=document.createElement('h2');heading.textContent=name;
+ const video=document.createElement('video');video.controls=true;video.muted=true;video.playsInline=true;video.preload='metadata';
+ const url=new URL('./__assets__/'+encodeURIComponent(name),location.href);video.src=url.href;
+ const status=document.createElement('div');status.className='status muted';status.textContent='Checking MP4…';
+ video.addEventListener('loadedmetadata',()=>{status.className='status ok';status.textContent='Loaded video metadata — '+(Number.isFinite(video.duration)?video.duration.toFixed(1)+' seconds':'duration unknown')});
+ video.addEventListener('error',()=>{status.className='status error';status.textContent='Video error '+(video.error?.code||'unknown')+' — check DevTools Network'});
+ const loc=document.createElement('code');loc.textContent=url.href;
+ card.append(heading,video,status,loc);grid.append(card);
+}
+document.querySelector('#play').addEventListener('click',()=>document.querySelectorAll('video').forEach(v=>v.play().catch(()=>{})));
+</script></body></html>
