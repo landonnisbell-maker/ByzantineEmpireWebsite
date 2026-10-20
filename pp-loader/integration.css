@@ -1,0 +1,11 @@
+/* Only loading-gate visual state; original decorations, cards and shader unchanged. */
+.pp-site-loading .loader-module__y9w63G__progressZone { --loader-gate:0!important; }
+.pp-site-loading .loader-module__y9w63G__cta,
+.pp-site-loading .loader-module__y9w63G__ctaLabel { opacity:0!important; visibility:hidden!important;pointer-events:none!important; }
+.pp-site-loading .loader-module__y9w63G__status {opacity:1!important;visibility:visible!important;}
+.pp-site-loading .loader-module__y9w63G__track{opacity:1!important;}
+.pp-site-loading .loader-module__y9w63G__fill{transition:width .17s ease!important;}
+.pp-site-loading .loader-module__y9w63G__bigPercent{opacity:1;}
+.pp-site-loading .loader-module__y9w63G__cta{display:flex!important;}
+.pp-live-integrated #gpu-panel{opacity:0;pointer-events:none;}
+.pp-transitioning{pointer-events:none!important;}

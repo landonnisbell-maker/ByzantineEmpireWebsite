@@ -21,7 +21,7 @@
     balanced: { scale: .58, simHeight: 244, fps: 45, bloom: .50, mode: 1 },
     lite: { scale: .42, simHeight: 152, fps: 30, bloom: .28, mode: 0 }
   };
-  let quality = mobile || lowCore ? 'lite' : ((navigator.hardwareConcurrency||4)>=8 && (navigator.deviceMemory||8)>=8 ? 'high':'balanced');
+  let quality = (mobile || lowCore) ? 'lite' : 'balanced';
   let active = !lowMotion;
   let distortionPreset = 'extreme';
   let cursorMotion = 0;
