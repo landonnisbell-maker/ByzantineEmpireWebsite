@@ -1,0 +1,324 @@
+@font-face{font-family:PP-Spartan;src:url('assets/league-spartan.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:PP-Manrope;src:url('assets/manrope.woff2') format('woff2');font-weight:100 900;font-display:swap}
+:root{--font-navbar-display:PP-Spartan,Arial,sans-serif;--font-navbar-body:PP-Manrope,Arial,sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;background:#141114;color:#eee}
+.loader-module__y9w63G__loaderContainer{--loader-accent:#bd78ef;background-color:#141116;isolation:isolate}
+#gilded-grid{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;display:block;contain:strict}
+#gilded-grid.off{display:none}
+.loader-module__y9w63G__frameGrid{z-index:0}
+.loader-module__y9w63G__header,.loader-module__y9w63G__logo,.loader-module__y9w63G__cornerImage,.loader-module__y9w63G__ticketCard,.loader-module__y9w63G__bigPercent,.loader-module__y9w63G__progressZone,.loader-module__y9w63G__lite,.loader-module__y9w63G__frameLine{z-index:2}
+.loader-module__y9w63G__cta{pointer-events:auto}
+.loader-module__y9w63G__lite{opacity:1;visibility:visible;pointer-events:auto}
+.loader-module__y9w63G__header::after{content:'FINE GOODS OF CONSTANTINOPLE / CIRCA 1000 CE';display:block;color:#b67cb6;font:700 max(8px,.48vw) PP-Manrope,sans-serif;letter-spacing:.19em;margin-top:calc(.65 * var(--vu))}
+.loader-module__y9w63G__cornerImageMedia{opacity:0!important}
+.loader-module__y9w63G__logo{display:none}
+#gilded-hint{position:absolute;bottom:calc(var(--frame-inset) + 1.35 * var(--vu));left:50%;transform:translateX(-50%);z-index:3;color:#b9966d;opacity:.70;white-space:nowrap;pointer-events:none;letter-spacing:.22em;font:700 max(8px,.44vw) PP-Manrope,sans-serif;transition:opacity .7s ease;text-align:center}
+#gilded-hint.is-active{opacity:.19}
+#standalone-note{position:absolute;left:50%;bottom:calc(var(--frame-inset) + 4.5 * var(--vu));transform:translateX(-50%);z-index:7;pointer-events:none;color:#e5c99f;letter-spacing:.1em;text-align:center;font:600 11px PP-Manrope,sans-serif;max-width:80vw;opacity:0;transition:opacity .2s}
+#standalone-note.show{opacity:1}
+#gpu-panel{position:absolute;z-index:6;top:calc(var(--frame-inset) + 3.9 * var(--vu));right:calc(var(--frame-inset) + .7 * var(--vu));display:flex;gap:8px;align-items:center;pointer-events:auto;color:#bca990;font:600 9px PP-Manrope,sans-serif;letter-spacing:.08em}
+#gpu-panel select{font:inherit;color:#ceb799;background:#211920;border:1px solid #735739;padding:6px;outline:none}
+#gpu-panel .gpu-pill{border:1px solid #5e4735;padding:6px;background:#181218;white-space:nowrap}
+#gpu-panel #performance-readout{min-width:47px;text-align:right;display:inline-block}
+.srOnly{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media(max-width:700px){#gilded-hint{bottom:16vh;white-space:normal;max-width:72vw;line-height:1.5}#gpu-panel{top:auto;bottom:14vh;right:5vw}.loader-module__y9w63G__header::after{max-width:70vw;line-height:1.5;font-size:8px}}
+@media(prefers-reduced-motion:reduce){#gilded-grid,#gilded-hint{display:none}}
+
+/* Keep the exact original, pixel-sharp grid visible underneath the gold canvas.
+   The shader only adds local animated warping/highlights; it never replaces the grid. */
+body.gpu-grid .loader-module__y9w63G__frameGrid{opacity:1}
+
+/* V4.2 standalone study controls: original loader is otherwise unchanged. */
+#gpu-panel .distort-select-label{font-size:9px;color:#bd9b70;letter-spacing:.11em}
+#gpu-panel #material-distortion{border-color:#9f7641;background:#24181f;color:#e4be8e}
+@media(max-width:750px){#gpu-panel{flex-wrap:wrap;max-width:280px;justify-content:flex-end}#gpu-panel .gpu-pill{display:none}}
+
+/* V4.5: original single-line CTA lettering. Only the BUTTON tilts; glyphs retain native clipping. */
+.loader-module__y9w63G__progressZone{isolation:isolate;overflow:visible}
+.loader-module__y9w63G__cta{
+  --pp-pitch:0deg;--pp-yaw:0deg;--pp-x:0px;--pp-y:0px;
+  overflow:hidden;transform-origin:center 62%;
+  transform:perspective(1000px) translate3d(var(--pp-x),var(--pp-y),0)
+    rotateX(var(--pp-pitch)) rotateY(var(--pp-yaw));
+  transform-style:preserve-3d;will-change:transform;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.98))
+         drop-shadow(0 0 4px rgba(14,6,23,.88));
+}
+.loader-module__y9w63G__ctaLabel{
+  color:#bb79ef!important;font-weight:500;
+  text-shadow:0 2px 3px #08040c,0 0 9px rgba(8,2,14,.92);
+  transform-style:flat;
+}
+.loader-module__y9w63G__ctaChar{clip-path:inset(0 -.06em);overflow:hidden;transform-style:flat}
+.loader-module__y9w63G__ctaCharFront,.loader-module__y9w63G__ctaCharUnder{
+  color:inherit!important;display:block;
+  background:none!important;-webkit-text-fill-color:currentColor!important;
+  -webkit-text-stroke:0!important;text-shadow:inherit;
+}
+.loader-module__y9w63G__ctaCharUnder{transform:translateY(110%)}
+.loader-module__y9w63G__cta:hover .loader-module__y9w63G__ctaLabel,
+.loader-module__y9w63G__cta:focus-visible .loader-module__y9w63G__ctaLabel{
+  color:#dcacff!important;
+  text-shadow:0 2px 4px #08040c,0 0 9px rgba(8,2,14,.9);
+}
+@media(prefers-reduced-motion:reduce){
+  .loader-module__y9w63G__cta{transform:none!important;will-change:auto}
+}
+
+/* V4.6 — restore the original GitHub-like up/down rolling lettering.
+   Each letter scrolls vertically; the overall button retains mouse parallax.
+   The label stays the original small violet style with a dark drop shadow. */
+.loader-module__y9w63G__ctaCharFront,
+.loader-module__y9w63G__ctaCharUnder {
+  transition: transform .48s cubic-bezier(.2,.85,.2,1);
+  transition-delay: calc(var(--pp-letter-index,0) * 17ms);
+  backface-visibility: hidden;
+}
+.loader-module__y9w63G__cta:is(:hover,:focus-visible) .loader-module__y9w63G__ctaCharFront {
+  transform: translateY(-110%);
+}
+.loader-module__y9w63G__cta:is(:hover,:focus-visible) .loader-module__y9w63G__ctaCharUnder {
+  transform: translateY(0%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader-module__y9w63G__ctaCharFront,
+  .loader-module__y9w63G__ctaCharUnder { transition: none !important; }
+}
+
+
+/* V4.7 — Byzantine merchant ticket: remove modern barcode and creator mark. */
+.pp-imperial-frieze{
+  left:calc(23 * var(--ticket-u));top:calc(328 * var(--ticket-u));
+  width:calc(125 * var(--ticket-u));height:calc(43 * var(--ticket-u));
+  position:absolute;display:block;opacity:.95;pointer-events:none;
+}
+.pp-imperial-frieze svg{display:block;width:100%;height:100%;filter:drop-shadow(0 0 calc(2 * var(--ticket-u)) rgba(215,160,78,.24))}
+.loader-module__y9w63G__barcodeLabel{letter-spacing:.19em!important;color:#d9bc8c;font-size:calc(10.5 * var(--ticket-u))!important;top:calc(377 * var(--ticket-u))!important}
+.pp-merchant-mark{
+  position:absolute;left:calc(179 * var(--ticket-u));top:calc(330 * var(--ticket-u));
+  width:calc(44 * var(--ticket-u));height:calc(44 * var(--ticket-u));
+  display:flex;align-items:center;justify-content:center;white-space:nowrap;border:1px solid rgba(212,165,91,.5);
+  color:#e4c48d;font:700 calc(21 * var(--ticket-u)) Georgia,serif;
+  letter-spacing:-.07em;line-height:1;text-shadow:0 0 calc(7 * var(--ticket-u)) rgba(231,180,86,.30);
+}
+.pp-merchant-mark span{color:#f6db99;font-size:.58em;vertical-align:middle;letter-spacing:0}
+.loader-module__y9w63G__cardNumber{font-size:calc(20 * var(--ticket-u))!important;top:calc(274 * var(--ticket-u))!important;color:#f0dfc0}
+.loader-module__y9w63G__cardPortfolio{color:#f2e0bf;font-size:calc(19 * var(--ticket-u))!important;letter-spacing:.045em!important}
+.loader-module__y9w63G__copyright{color:#e2c797!important;white-space:nowrap;letter-spacing:0!important;font-size:calc(7.1 * var(--ticket-u))!important}
+.loader-module__y9w63G__variantLabel{color:#dfc498}
+.loader-module__y9w63G__archLabel{color:#e8d0ae;font-size:calc(14 * var(--ticket-u))!important}
+
+/* V4.7 — richly metallic GOLD, rather than purple, for the existing roll-up CTA. 
+   No new render passes: shine is a CSS highlight; mouse parallax remains from JS. */
+.loader-module__y9w63G__cta{
+  filter:drop-shadow(0 3px 2px rgba(0,0,0,.95))
+         drop-shadow(0 0 9px rgba(160,93,24,.38));
+}
+.loader-module__y9w63G__ctaLabel,
+.loader-module__y9w63G__cta:hover .loader-module__y9w63G__ctaLabel,
+.loader-module__y9w63G__cta:focus-visible .loader-module__y9w63G__ctaLabel{
+  color:#f2c772!important;
+  font-weight:700!important;
+  text-shadow:none!important;
+  position:relative;
+}
+.loader-module__y9w63G__ctaCharFront,
+.loader-module__y9w63G__ctaCharUnder{
+  color:#ecc172!important;
+  background:linear-gradient(116deg,#a76925 0%,#d1a04d 20%,#fff6d7 42%,#edbb62 53%,#a66b25 73%,#f9df9f 100%)!important;
+  background-size:260% 100%!important;
+  background-position:var(--pp-sheen,32%) center!important;
+  background-clip:text!important;
+  -webkit-background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:.20px rgba(255,230,177,.55)!important;
+  filter:drop-shadow(0 1px 1px #030102) drop-shadow(0 0 2.5px rgba(226,159,59,.47));
+}
+.loader-module__y9w63G__ctaLabel::after{
+  content:attr(data-shine-text);
+  position:absolute;inset:0;
+  pointer-events:none;white-space:nowrap;
+  color:transparent;
+  background:linear-gradient(96deg,transparent 0%,transparent 41%,rgba(255,251,217,.08) 46%,rgba(255,253,235,.95) 49%,rgba(255,241,178,.18) 52%,transparent 57%,transparent 100%);
+  background-size:330% 100%;background-position:0% 50%;animation:ppGoldSheen 3.6s cubic-bezier(.45,0,.55,1) infinite;
+  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  font:inherit;letter-spacing:inherit;opacity:.9;
+  filter:drop-shadow(0 0 3px rgba(251,192,79,.4));
+  transition:opacity .2s;
+}
+.loader-module__y9w63G__cta:is(:hover,:focus-visible) .loader-module__y9w63G__ctaLabel::after{opacity:0}
+@keyframes ppGoldSheen{0%,7%{background-position:0% 50%}67%,100%{background-position:100% 50%}}
+@media (prefers-reduced-motion:reduce){
+ .loader-module__y9w63G__ctaCharFront,.loader-module__y9w63G__ctaCharUnder{background-position:50% 50%!important}
+ .loader-module__y9w63G__ctaLabel::after{display:none}
+}
+
+/* V5.0 — the user's exact Hagia Sophia architectural blueprint, presented inside
+   the pre-existing portrait card. No GPU, animation, interaction, or layout changes. */
+.loader-module__y9w63G__cornerImage {
+  background:#08090a!important;
+  background-image:none!important;
+  border-color:rgba(211,211,211,.26)!important;
+  box-shadow:inset 0 0 25px rgba(0,0,0,.78), 0 0 0 1px rgba(255,255,255,.035);
+}
+.loader-module__y9w63G__cornerImage .loader-module__y9w63G__cornerImageMedia {
+  opacity:1!important;
+  object-fit:contain!important;
+  object-position:center center;
+  filter:none!important;
+  background:#000;
+}
+.loader-module__y9w63G__cornerImage::before {
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,transparent 19%,transparent 81%,rgba(0,0,0,.7) 100%);
+}
+.loader-module__y9w63G__cornerImage::after {
+  content:"HAGIA SOPHIA  /  CONSTANTINOPLE"!important;
+  z-index:2;bottom:8%;padding-top:7px;
+  color:#f0f0ee!important;border-top-color:rgba(230,230,225,.46)!important;
+  font-family:PP-Manrope,Arial,sans-serif!important;
+  font-size:clamp(6px,.39vw,9px)!important;letter-spacing:.06em!important;
+  font-weight:750!important;text-shadow:0 2px 5px #000,0 0 14px #000!important;
+  white-space:nowrap;
+}
+
+/* Preserve legibility of the caption without hiding the architectural drawings. */
+.loader-module__y9w63G__cornerImage::after{bottom:3.5%!important;padding-top:5px!important;filter:drop-shadow(0 1px 3px #000);}
+
+
+/* V5.1 — Blueprint fills its panel without side letterboxing. The card top stays in
+   the same position; only its lower edge extends to make space for the new credit.
+   The SVG/WebGL scenes, loader lettering and merchant ticket are untouched. */
+.loader-module__y9w63G__cornerImage.pp-blueprint-card{
+  width:calc(251 * var(--ticket-u))!important;
+  height:calc(373 * var(--ticket-u))!important;
+  bottom:calc(var(--frame-inset) + var(--card-gap) + 32 * var(--ticket-u))!important;
+  margin:0!important;
+  background:#030304!important;
+  display:flex!important;flex-direction:column!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.035),inset 0 0 20px rgba(0,0,0,.5);
+}
+.loader-module__y9w63G__cornerImage.pp-blueprint-card::before,
+.loader-module__y9w63G__cornerImage.pp-blueprint-card::after{content:none!important;display:none!important;}
+.pp-blueprint-artwork{
+  flex:0 0 calc(334 * var(--ticket-u));
+  width:100%;
+  position:relative;
+  overflow:hidden;
+  min-height:0;
+  background:#000;
+}
+.pp-blueprint-artwork .loader-module__y9w63G__cornerImageMedia{
+  display:block!important;position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;opacity:1!important;
+  object-fit:fill!important;object-position:center center!important;
+  background:#000!important;filter:none!important;
+  transform:scaleX(1.075);transform-origin:center center;
+}
+.pp-blueprint-artwork::after{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,transparent 0%,transparent 86%,rgba(3,3,4,.10) 91%,rgba(3,3,4,.64) 97%,#030304 100%);
+}
+.pp-blueprint-credit{
+  flex:1 1 auto;min-height:0;position:relative;z-index:2;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:calc(2 * var(--ticket-u)) calc(12 * var(--ticket-u)) calc(4 * var(--ticket-u));
+  gap:calc(3 * var(--ticket-u));
+  background:#030304;
+  color:#c9c3c2;
+  font-family:PP-Manrope,Arial,sans-serif;
+  font-weight:550;font-size:clamp(7px,calc(9.4 * var(--ticket-u)),11px);
+  line-height:1.25;letter-spacing:.01em;white-space:nowrap;
+  text-shadow:0 1px 3px rgba(0,0,0,.9);
+}
+.pp-blueprint-credit strong{color:#f4efea;font-weight:800;}
+.pp-blueprint-credit span:last-child{color:#a8a2a1;font-size:.90em;letter-spacing:.005em;}
+
+
+/* V5.2 — preserve all visuals, but shrink the loading counter so it sits
+   BELOW the expanded blueprint rather than overlapping its lower edge.
+   The counter remains right-aligned with the blueprint. */
+@media (orientation:landscape){
+  .loader-module__y9w63G__bigPercent{
+    font-size:calc(37 * var(--ticket-u))!important;
+  }
+}
+
+
+/* V5.3 — lower-right cards are foreground islands. The fragment shader
+   separately fades liquid beneath + around their bounding boxes.
+   These opaque backplates prevent any glow slipping through card corners. */
+.loader-module__y9w63G__cornerImage.pp-blueprint-card {
+  background:#030304!important;
+  isolation:isolate;
+  box-shadow:0 0 0 1px rgba(226,208,181,.15),
+             0 0 24px 5px rgba(3,3,4,.42),
+             inset 0 0 12px rgba(0,0,0,.2)!important;
+}
+.loader-module__y9w63G__ticketCard{
+  background:#121014!important;
+  isolation:isolate;
+  box-shadow:0 0 0 1px rgba(226,208,181,.12),
+             0 0 24px 5px rgba(3,3,4,.44)!important;
+}
+
+/* Reduce CTA perspective; retain the gold gleam and original rolling glyphs. */
+.loader-module__y9w63G__cta {
+  transform:perspective(1500px) translate3d(var(--pp-x),var(--pp-y),0)
+    rotateX(var(--pp-pitch)) rotateY(var(--pp-yaw));
+  transform-origin:50% 50%;
+  filter:drop-shadow(0 2px 2px #08050b) drop-shadow(0 0 4px rgba(189,119,31,.20));
+}
+
+/* V5.4 — restore the original static brand heading (no hover sweep/lift).
+   Keep the normal colors inherited from loader-original.css. */
+.loader-module__y9w63G__brandName,
+.loader-module__y9w63G__brandRole {
+  animation:none!important;
+  transform:none!important;
+  transition:none!important;
+  filter:none!important;
+  -webkit-text-fill-color:currentColor;
+  background:none!important;
+}
+
+/* V5.4 — flatter gold CTA, in the same restrained typographic style
+   as the main heading. Retains original per-letter hover roll. */
+.loader-module__y9w63G__cta {
+  transform:translate(var(--pp-x,0px),var(--pp-y,0px))!important;
+  transform-style:flat!important;
+  filter:none!important;
+  will-change:transform;
+}
+.loader-module__y9w63G__ctaLabel,
+.loader-module__y9w63G__cta:is(:hover,:focus-visible) .loader-module__y9w63G__ctaLabel {
+  color:#ddbb83!important;
+  font-weight:700!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.92)!important;
+  filter:none!important;
+}
+.loader-module__y9w63G__ctaCharFront,
+.loader-module__y9w63G__ctaCharUnder {
+  color:#ddbb83!important;
+  background:none!important;
+  -webkit-background-clip:initial!important;
+  background-clip:initial!important;
+  -webkit-text-fill-color:currentColor!important;
+  -webkit-text-stroke:0!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.92)!important;
+  filter:none!important;
+}
+/* Prevent the gold-specular duplicate lettering from drawing over the roll. */
+.loader-module__y9w63G__ctaLabel::after {
+  content:none!important;
+  display:none!important;
+  animation:none!important;
+}
+.loader-module__y9w63G__cta:is(:hover,:focus-visible) .loader-module__y9w63G__ctaCharFront,
+.loader-module__y9w63G__cta:is(:hover,:focus-visible) .loader-module__y9w63G__ctaCharUnder {
+  color:#f0d19a!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .loader-module__y9w63G__cta{transform:none!important;will-change:auto}
+}
