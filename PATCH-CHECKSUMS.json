@@ -1,0 +1,60 @@
+{
+  "base_version": "V5.8.2",
+  "target_version": "V5.8.3",
+  "repository": "ByzantineEmpireWebsite",
+  "changes": [
+    "Restore purple/gold portal core colors and inner clamp",
+    "Stop backward scroll from crystal scene to portal",
+    "Rename navigation Home to Portal"
+  ],
+  "files": {
+    "_next/static/chunks/026g.996apuos.js": {
+      "old_sha256": "0eaf633f8ad748dad09cf76b990b369bc34d58acfe016f3d9ec5789b5a4f4b1f",
+      "new_sha256": "116744f22b41a980cc99b70dde1fc2df0151fe381b2e60f5881e7d6f807b14ad",
+      "old_bytes": 80406,
+      "new_bytes": 80414
+    },
+    "_next/static/chunks/1502ibkr~cu.4.js": {
+      "old_sha256": "83e090a1243535d463e9682618a735c38a26c8baa7c5b661575f8e96efa25ce8",
+      "new_sha256": "ed2fe8db0443cf8d69b4a266fa9fd30f80f53388a6ea937f2a7f6f3112119953",
+      "old_bytes": 260303,
+      "new_bytes": 260380
+    },
+    "_next/static/chunks/07t.dc2agnmbw.js": {
+      "old_sha256": "cb4e87ffd0d3c6685fbf2f251159d5c79c11f0a061562cd5c6b0eb691231224a",
+      "new_sha256": "ee5c62c6308723b1260ee50fa46635fe28b76d494de4973f7de18e25c8976b2d",
+      "old_bytes": 30587,
+      "new_bytes": 30593
+    },
+    "_next/static/chunks/01n9.x1x734yf.js": {
+      "old_sha256": "a83e370d8dfcdfc21150bb31c26411fcbf542b730e3daa6b84d2decd0edf7f5f",
+      "new_sha256": "7d4c21c5b4f5ed9a245217b7501696d05728ebe0a3d56ccc2e988a6255cc8183",
+      "old_bytes": 30587,
+      "new_bytes": 30593
+    },
+    "_next/static/chunks/01ay6y4_-9myt.js": {
+      "old_sha256": "3a49f5ed701873311f7d1edfb951dfeec4f69fad692c5459f110c7d143f5f511",
+      "new_sha256": "f891c470c4f990d668f5fcbfef890353d8a45010a2f70d51134d2fa66a8425eb",
+      "old_bytes": 67866,
+      "new_bytes": 68991
+    },
+    "_next/static/chunks/0it~jto.lpwlw.js": {
+      "old_sha256": "fc6998a54bc17217ec19c99d9af0986e1173a53dae2a63e188f24a0a2d214a8b",
+      "new_sha256": "38facbbe51f6d36edee451efce5ea187f0f3221e8f041e4c4fcfafdc28553692",
+      "old_bytes": 44925,
+      "new_bytes": 44990
+    },
+    "_next/static/chunks/0iwslgx3.9rzg.js": {
+      "old_sha256": "eaa3dd45b330e08bdd5ce5af8f8c5226062db9f6b5a7ef3b2c231f27230acd2c",
+      "new_sha256": "6ed3082ac999d1a9068be5a6a1a46f8cf5fb660aa5dcee656d17a0565191ca7e",
+      "old_bytes": 44925,
+      "new_bytes": 44990
+    },
+    "index.html": {
+      "old_sha256": "9c2ed32d747b827a197c284d52e1a873066620dfca9175a19efceb084229b2f2",
+      "new_sha256": "2344057cd537198f069b4afc833e063b6f5072082cddaffdd54486bded2f04f2",
+      "old_bytes": 163701,
+      "new_bytes": 163707
+    }
+  }
+}
