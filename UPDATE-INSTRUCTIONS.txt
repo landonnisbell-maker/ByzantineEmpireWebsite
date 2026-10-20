@@ -1,31 +1,28 @@
-BYZANTINE EMPIRE WEBSITE V5.8.4 — HOMEPAGE START FIX
+BYZANTINE EMPIRE WEBSITE V5.8.5 — PORTAL START + REFRESH REPAIR
 
-THIS IS AN UPDATE-ONLY PATCH FOR YOUR EXISTING ByzantineEmpireWebsite REPO.
-DO NOT DELETE YOUR OTHER FILES.
+UPDATE-ONLY FOR YOUR EXISTING ByzantineEmpireWebsite GITHUB REPOSITORY.
 
 INSTALL
 1. Extract this ZIP.
-2. Merge the _next folder into the _next folder in the ROOT of your
-   existing ByzantineEmpireWebsite repository.
-3. Replace the four matching JavaScript files.
-4. Commit and Push origin with GitHub Desktop.
-5. After deployment, hard-refresh with Ctrl+Shift+R.
+2. Copy index.html, 404.html and the _next folder into the ROOT of your
+   existing repository, overwriting matching files and merging _next.
+3. Commit and Push origin in GitHub Desktop.
+4. Wait until GitHub Pages deploys; open the canonical link:
+   https://YOUR-GITHUB-USERNAME.github.io/ByzantineEmpireWebsite/
+5. Hard-refresh (Ctrl+Shift+R). Test with a fresh tab too.
 
-WHAT IT FIXES
-- Opening https://YOUR-USERNAME.github.io/ByzantineEmpireWebsite/
-  now resolves to the original Portal/landing scene, not the crystals.
-- Selecting Portal (three-dot menu) keeps the browser URL inside the
-  /ByzantineEmpireWebsite/ GitHub Pages base path.
-- The no-scroll-back rule from V5.8.3 is preserved after entering crystals.
-- Portal purple/gold shader, crystal behavior, landmark images, mountains,
-  and all morphing animations remain exactly unchanged.
+FIXES
+- Prevents scrolling and menu navigation from rewriting the address bar to
+  /projects and other subpaths that GitHub Pages cannot serve on refresh.
+- Normalizes old deep paths to /ByzantineEmpireWebsite/ at app startup.
+- Uses the original Portal (landing) scene when a route is invalid.
+- Ensures scroll starts at 0 on a fresh homepage entry before the experience
+  overlay is dismissed.
+- Includes 404.html as a fallback for previously bookmarked deep URLs.
+- Preserves no-scroll-back from crystals to portal; Portal menu still works.
+- Leaves the crystal, mountain, images, portal shader, and morphing unchanged.
 
-TEST
-1. Open the GitHub Pages homepage in a new tab: Portal should appear first.
-2. Scroll through the portal to the crystals.
-3. Try scrolling backward at the first crystal: should remain on crystals.
-4. Open the menu and choose Portal: should return to the Portal.
-5. Reload: it should start at the Portal when the URL is the homepage.
-
-If your browser remembers a previously open tab, test by explicitly opening
-/ByzantineEmpireWebsite/ in a fresh tab (rather than browser Back/Forward).
+NOTE
+The address bar intentionally remains on /ByzantineEmpireWebsite/ while
+visitors navigate between the site's internal scenes. This is how the current
+single-HTML GitHub Pages deployment avoids refresh 404s.
