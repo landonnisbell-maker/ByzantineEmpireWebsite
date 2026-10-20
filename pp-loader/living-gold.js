@@ -22,6 +22,7 @@
     lite: { scale: .42, simHeight: 152, fps: 30, bloom: .28, mode: 0 }
   };
   let quality = (mobile || lowCore) ? 'lite' : 'balanced';
+  let slowWindows = 0;
   let active = !lowMotion;
   let distortionPreset = 'extreme';
   let cursorMotion = 0;
@@ -624,7 +625,16 @@ void main(){
     const dt=clamp((now-last)/1000||.016,.005,.045);last=now;elapsed+=dt;frames++;
     cursorMotion*=Math.exp(-dt*5.0);
     animateButton();
-    if(now-fpsStart>1250){const measured=Math.round(frames*1000/(now-fpsStart));fpsLabel.textContent=measured+' FPS';frames=0;fpsStart=now;}
+    if(now-fpsStart>1750){
+      const measured=Math.round(frames*1000/(now-fpsStart));
+      if(fpsLabel)fpsLabel.textContent=measured+' FPS';frames=0;fpsStart=now;
+      // The expensive original WebGPU warmup gets priority. Never throttle the
+      // original site or interfere with its requestAnimationFrame scheduling.
+      if(document.body.classList.contains('pp-live-integrated') && quality==='balanced' && measured<23){
+        slowWindows++;
+        if(slowWindows>=2){slowWindows=0;configure('lite');}
+      }else slowWindows=0;
+    }
     const x=pointer.x,y=pointer.y;
     const activePointer=pointer.active&&now-pointer.last<140;
     const prevX=pointer.px,prevY=pointer.py;
