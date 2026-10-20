@@ -1,39 +1,10 @@
 {
-  "version": "V5.8.5",
-  "base": "V5.8.4",
-  "changed_files": [
-    {
-      "path": "_next/static/chunks/07t.dc2agnmbw.js",
-      "old_bytes": 30653,
-      "new_bytes": 30636
-    },
-    {
-      "path": "_next/static/chunks/01n9.x1x734yf.js",
-      "old_bytes": 30653,
-      "new_bytes": 30636
-    },
-    {
-      "path": "_next/static/chunks/01ay6y4_-9myt.js",
-      "old_bytes": 68991,
-      "new_bytes": 68913
-    },
-    {
-      "path": "_next/static/chunks/0it~jto.lpwlw.js",
-      "old_bytes": 45073,
-      "new_bytes": 45073
-    },
-    {
-      "path": "_next/static/chunks/0iwslgx3.9rzg.js",
-      "old_bytes": 45073,
-      "new_bytes": 45073
-    },
-    {
-      "path": "index.html",
-      "old_bytes": 163707,
-      "new_bytes": 163916
-    },
-    {
-      "path": "404.html"
-    }
-  ]
+  "version": "V5.8.6",
+  "base": "V5.8.5",
+  "files": [
+    "_next/static/chunks/01ay6y4_-9myt.js"
+  ],
+  "size": 69907,
+  "sha256": "db92eff654359fe6c57b96739b6f9990729ccfd9e8123b3e210ef23d52e64e1d",
+  "change": "Defer upward scroll clamping until portal-forward traversal has actually reached the crystal settle anchor; allow Portal menu to disarm."
 }

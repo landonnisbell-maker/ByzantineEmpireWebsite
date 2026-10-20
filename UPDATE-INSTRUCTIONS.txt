@@ -1,28 +1,22 @@
-BYZANTINE EMPIRE WEBSITE V5.8.5 — PORTAL START + REFRESH REPAIR
+BYZANTINE V5.8.6 — RESTORE PORTAL TRAVERSAL ANIMATION
 
-UPDATE-ONLY FOR YOUR EXISTING ByzantineEmpireWebsite GITHUB REPOSITORY.
+Official GitHub patch only. Apply after V5.8.5.
 
-INSTALL
 1. Extract this ZIP.
-2. Copy index.html, 404.html and the _next folder into the ROOT of your
-   existing repository, overwriting matching files and merging _next.
-3. Commit and Push origin in GitHub Desktop.
-4. Wait until GitHub Pages deploys; open the canonical link:
-   https://YOUR-GITHUB-USERNAME.github.io/ByzantineEmpireWebsite/
-5. Hard-refresh (Ctrl+Shift+R). Test with a fresh tab too.
+2. Copy the _next folder into the ROOT of your existing ByzantineEmpireWebsite GitHub repository.
+3. Replace the matching file (01ay6y4_-9myt.js).
+4. Commit, push, wait for GitHub Pages deployment, then hard-refresh your browser.
 
-FIXES
-- Prevents scrolling and menu navigation from rewriting the address bar to
-  /projects and other subpaths that GitHub Pages cannot serve on refresh.
-- Normalizes old deep paths to /ByzantineEmpireWebsite/ at app startup.
-- Uses the original Portal (landing) scene when a route is invalid.
-- Ensures scroll starts at 0 on a fresh homepage entry before the experience
-  overlay is dismissed.
-- Includes 404.html as a fallback for previously bookmarked deep URLs.
-- Preserves no-scroll-back from crystals to portal; Portal menu still works.
-- Leaves the crystal, mountain, images, portal shader, and morphing unchanged.
+CHANGE
+The existing backward-scroll restriction waited only for the routing state to
+switch to projects. That state changes DURING forward portal travel, and the
+restriction immediately jumped scroll to the crystal landing point.
 
-NOTE
-The address bar intentionally remains on /ByzantineEmpireWebsite/ while
-visitors navigate between the site's internal scenes. This is how the current
-single-HTML GitHub Pages deployment avoids refresh 404s.
+The restriction now remains inactive until the actual forward scroll reaches
+the crystal settle position. Then it activates, preventing backward scrolling
+from returning through the portal. Choosing Portal in the menu still allows
+the intentional backward transition.
+
+Unchanged: GitHub Pages path and refresh behavior, portal colors, portal/crystal
+shaders, original mountain animations, four projects/pages, landmark images,
+menu navigation and every other website asset.
