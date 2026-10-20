@@ -1,0 +1,26 @@
+{
+  "version": "V5.8.4",
+  "previous_version": "V5.8.3",
+  "changed_files": [
+    {
+      "path": "_next/static/chunks/0it~jto.lpwlw.js",
+      "before_sha256": "38facbbe51f6d36edee451efce5ea187f0f3221e8f041e4c4fcfafdc28553692",
+      "after_sha256": "b90790a0aace37c01024439df36669560d1087caecc92a2884d18ede27c14117"
+    },
+    {
+      "path": "_next/static/chunks/0iwslgx3.9rzg.js",
+      "before_sha256": "6ed3082ac999d1a9068be5a6a1a46f8cf5fb660aa5dcee656d17a0565191ca7e",
+      "after_sha256": "18a6314ace09618e00ff039702e925f13919cfd08b73e588d0e2f9318d48a86a"
+    },
+    {
+      "path": "_next/static/chunks/07t.dc2agnmbw.js",
+      "before_sha256": "ee5c62c6308723b1260ee50fa46635fe28b76d494de4973f7de18e25c8976b2d",
+      "after_sha256": "f70fbcbc4f41a6ff4f18a22256fc88a0e755fb60352f857cfc43223a928f85fa"
+    },
+    {
+      "path": "_next/static/chunks/01n9.x1x734yf.js",
+      "before_sha256": "7d4c21c5b4f5ed9a245217b7501696d05728ebe0a3d56ccc2e988a6255cc8183",
+      "after_sha256": "e74a51b1a312786a5ca054449c13d324a356a94585c84c2130f77862b51bd1d1"
+    }
+  ]
+}

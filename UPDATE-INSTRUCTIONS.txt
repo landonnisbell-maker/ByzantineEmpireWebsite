@@ -1,0 +1,31 @@
+BYZANTINE EMPIRE WEBSITE V5.8.4 — HOMEPAGE START FIX
+
+THIS IS AN UPDATE-ONLY PATCH FOR YOUR EXISTING ByzantineEmpireWebsite REPO.
+DO NOT DELETE YOUR OTHER FILES.
+
+INSTALL
+1. Extract this ZIP.
+2. Merge the _next folder into the _next folder in the ROOT of your
+   existing ByzantineEmpireWebsite repository.
+3. Replace the four matching JavaScript files.
+4. Commit and Push origin with GitHub Desktop.
+5. After deployment, hard-refresh with Ctrl+Shift+R.
+
+WHAT IT FIXES
+- Opening https://YOUR-USERNAME.github.io/ByzantineEmpireWebsite/
+  now resolves to the original Portal/landing scene, not the crystals.
+- Selecting Portal (three-dot menu) keeps the browser URL inside the
+  /ByzantineEmpireWebsite/ GitHub Pages base path.
+- The no-scroll-back rule from V5.8.3 is preserved after entering crystals.
+- Portal purple/gold shader, crystal behavior, landmark images, mountains,
+  and all morphing animations remain exactly unchanged.
+
+TEST
+1. Open the GitHub Pages homepage in a new tab: Portal should appear first.
+2. Scroll through the portal to the crystals.
+3. Try scrolling backward at the first crystal: should remain on crystals.
+4. Open the menu and choose Portal: should return to the Portal.
+5. Reload: it should start at the Portal when the URL is the homepage.
+
+If your browser remembers a previously open tab, test by explicitly opening
+/ByzantineEmpireWebsite/ in a fresh tab (rather than browser Back/Forward).
