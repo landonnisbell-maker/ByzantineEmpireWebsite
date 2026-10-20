@@ -1,0 +1,15 @@
+APPLY UPDATED FILES — ONLY if your existing GitHub repository ALREADY hosts
+an older full version of our ByzantineEmpireWebsite static capture.
+
+Unzip this patch. Copy its files and directories to the REPOSITORY ROOT,
+overwriting matching paths. Do not put the patch contents in a subfolder.
+
+IMPORTANT: This update does not include unchanged base assets such as the
+mountain textures, 3D crystal/scenery models or other Next.js chunks. Use the
+COMPLETE GitHub ZIP if you aren't sure what is currently in your repository.
+
+You should delete two obsolete local prototype files if present:
+  __assets__/models/city/ByzantineEmpire.glb
+  pp-city-tuner.js
+
+Then commit and push, and Ctrl+Shift+R to clear stale resources.
