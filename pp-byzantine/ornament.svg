@@ -1,0 +1,10 @@
+<svg fill="none" viewbox="0 0 240 70" xmlns="http://www.w3.org/2000/svg">
+<defs><lineargradient gradientunits="userSpaceOnUse" id="frieze-metal" x1="0" x2="240" y1="0" y2="70"><stop stop-color="#9D6940"></stop><stop offset=".37" stop-color="#F0C778"></stop><stop offset=".65" stop-color="#B78950"></stop><stop offset="1" stop-color="#EAD09B"></stop></lineargradient></defs>
+<g opacity=".91" stroke="url(#frieze-metal)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+<path d="M5 35H32M208 35H235M49 35H89M151 35H191"></path>
+<path d="M49 35C65 17 66 53 82 35S99 17 111 35S138 53 151 35S174 17 191 35"></path>
+<path d="M19 24Q39 10 49 35Q38 61 19 46M221 24Q201 10 191 35Q202 61 221 46"></path>
+<path d="M120 7L130 25L150 25L134 39L140 59L120 48L100 59L106 39L90 25L110 25Z"></path>
+<circle cx="120" cy="35" r="13"></circle><circle cx="120" cy="35" r="5"></circle>
+<path d="M80 22Q67 5 57 19M160 22Q173 5 183 19M80 48Q67 65 57 51M160 48Q173 65 183 51"></path>
+</g></svg>
