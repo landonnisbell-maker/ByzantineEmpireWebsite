@@ -1,23 +1,26 @@
-V5.8.12 — OFFICIAL GITHUB UPDATE ONLY
+V5.8.13 — Official GitHub update (apply after V5.8.12)
 
-Apply on top of V5.8.11 to the existing ByzantineEmpireWebsite repository.
+INSTALL IN YOUR EXISTING REPOSITORY ROOT
+1. Extract this ZIP.
+2. Copy index.html, favicon-32x32.png, favicon.ico and _next/ into
+   the root of the EXISTING ByzantineEmpireWebsite GitHub repository.
+3. Replace matching files, commit, and push to GitHub.
+4. After deployment, open in a new browser tab and refresh with Ctrl+Shift+R.
+   Favicons may be cached; a private browser window can help verify the new one.
 
-Replace these TWO files only:
-  1. index.html
-  2. _next/static/chunks/1502ibkr~cu.4.js
+CHANGES
+- The landmark images behind the mountains now use the exact existing
+  project interiorReveal transition value during crystal entry. They no longer
+  run their own .65-second fade before the page transition begins.
+- The established smoother landmark exit and crystal-to-crystal image morph
+  remain unchanged.
+- Replaced the browser-tab favicon with the supplied Byzantine flower logo,
+  trimmed to its nontransparent bounds and scaled uniformly inside 32x32 pixels.
+  No image distortion or redesign; includes PNG and ICO fallbacks.
+- No standalone experiments, navigation changes, or other UI updates.
 
-The distant landmark images now stay vertically stationary during crystal-page entry.
-Their smooth fades and crystal-to-crystal distortion are preserved.
-
-Browser tab titles update as follows:
-  Byzantine · Portal
-  Byzantine · Pages
-  Byzantine · Introduction
-  Byzantine · About Us
-  Byzantine · Market
-  Byzantine · Historical Connection
-
-Also supports Byzantine · Contact if that scene is reached.
-
-Commit and push in GitHub Desktop, wait for GitHub Pages deployment, then
-refresh once with Ctrl+Shift+R.
+Files in patch:
+ index.html
+ favicon-32x32.png
+ favicon.ico
+ _next/static/chunks/1502ibkr~cu.4.js
