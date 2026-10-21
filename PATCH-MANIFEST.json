@@ -1,24 +1,22 @@
 {
-  "version": "V5.8.14",
+  "version": "V5.8.15",
+  "base": "V5.8.14",
   "type": "official-existing-GitHub-repository-update-only",
-  "base": "V5.8.13",
   "files": [
     "_next/static/chunks/1502ibkr~cu.4.js"
   ],
   "changes": [
-    "Reverse-match landmark entrance opacity to already-working exit tween",
-    "Delay entry landmark dissolve until scene traversal begins",
-    "Remove direct dependency on interiorReveal shader uniform"
+    "Cancel unfinished landmark morph when opening/interacting with interior",
+    "Enforce only selected landmark visible during entering/interior/exiting",
+    "Prevent morph completion from forcing any landmark opacity"
   ],
-  "unchanged": [
-    "favicon",
-    "index.html",
-    "mountain geometry",
-    "crystal morph",
-    "landmark geometry",
-    "landmark image selections",
-    "landmark return animation",
-    "page content",
-    "all standalone experiments"
+  "preserves": [
+    "Exterior between-crystal animation",
+    "Return-to-crystals smooth fade",
+    "Inward crystal animation",
+    "Page content",
+    "Favicon",
+    "Tabs",
+    "Other UI"
   ]
 }

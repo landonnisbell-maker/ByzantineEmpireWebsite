@@ -119,35 +119,59 @@ function ppByzantineLandmarkBackdrop(){
       });
     };
   },[group,config]);
-  // The project store changes at the same instant as the mountain's original
-  // 1.8-second circ.inOut morph. Animate only background state here.
+  // Project-to-project morphing belongs ONLY to the exterior overview.
+  // On page entry, the user-selected index becomes the sole visible landmark.
+  // In particular, cancel a still-running 1.8-second morph so an old image
+  // cannot be drawn at the same time as the new landmark during crystal zoom.
   (0,x.useEffect)(()=>{
     const next=Math.max(0,Math.min(3,index));
     const data=state.current;
+    if(interiorStatus!=="exterior"){
+      sequence.current?.kill();
+      sequence.current=null;
+      // Snap to the selected landmark WITHOUT modifying its visual position.
+      // All four mesh deformations are restored, preventing stale warped
+      // geometry from being revealed after exiting a previously visited page.
+      state.current={from:next,to:next,active:false,driver:{value:1}};
+      group.children.forEach((mesh,i)=>{
+        const pos=mesh.geometry.attributes.position;
+        const uv=mesh.geometry.attributes.uv;
+        pos.array.set(mesh.userData.restPositions);
+        uv.array.set(mesh.userData.restUVs);
+        pos.needsUpdate=true;
+        uv.needsUpdate=true;
+        mesh.position.y=config[i].y;
+        // The frame renderer owns opacity. Never show an old image here.
+        mesh.material.opacity=0;
+      });
+      return;
+    }
     if(next===data.to)return;
     sequence.current?.kill();
     const previous=data.to;
     state.current={from:previous,to:next,active:true,driver:{value:0}};
     const target=state.current;
-    // No changes to the crystal: the timeline drives only the landmark planes.
+    // Exterior-only: original 1.8s circ.inOut landmark deformation.
     sequence.current=ea.gsap.to(target.driver,{
       value:1,duration:1.8,ease:"circ.inOut",
       onComplete:()=>{
         if(state.current!==target)return;
         target.active=false;
         group.children.forEach((mesh,i)=>{
-          mesh.material.opacity=i===target.to?config[i].opacity:0;
+          // Do not force full opacity from an animation callback: that can
+          // briefly display a landmark during the unrelated interior fade.
           const pos=mesh.geometry.attributes.position;
           const uv=mesh.geometry.attributes.uv;
           pos.array.set(mesh.userData.restPositions);
           uv.array.set(mesh.userData.restUVs);
-          pos.needsUpdate=true;uv.needsUpdate=true;
+          pos.needsUpdate=true;
+          uv.needsUpdate=true;
           mesh.position.y=config[i].y;
         });
       }
     });
     return ()=>sequence.current?.kill();
-  },[index,group,config]);
+  },[index,interiorStatus,group,config]);
   (0,b.useFrame)((_,dt)=>{
     const data=state.current;
     const from=data.from,to=data.to;
@@ -161,17 +185,22 @@ function ppByzantineLandmarkBackdrop(){
     // Use the same smoothly animated visibility state in both directions.
     // Also multiplies the same smoothed mountain 'awaken' reveal, unchanged.
     const reveal=visual.awaken*Math.max(0,Math.min(1,visual.value));
-    const progress=data.active?data.driver.value:1;
-    const crest=data.active?Math.sin(Math.PI*progress):0;
+    // Only the exterior overview may show outgoing + incoming images together.
+    // The zoom into a page, its interior, and the return from the page must
+    // render the selected landmark exclusively, even if a morph was in-flight.
+    const morphing=interiorStatus==="exterior"&&data.active;
+    const progress=morphing?data.driver.value:1;
+    const crest=morphing?Math.sin(Math.PI*progress):0;
     // The fade out on crystal entry changes reveal, but must never
     // drag the fixed distant landmarks downward. Only an actual
     // between-crystals image morph retains its original crest movement.
     const falling=-.17*crest;
     group.children.forEach((mesh,i)=>{
       const cfg=config[i];
-      mesh.position.y=cfg.y+falling+(data.active?(i===from?-.045*progress:i===to?.09*(1-progress):0):0);
-      if(!data.active){
-        mesh.material.opacity=(i===to&&mesh.userData.textureLoaded)?cfg.opacity*reveal:0;
+      mesh.position.y=cfg.y+falling+(morphing?(i===from?-.045*progress:i===to?.09*(1-progress):0):0);
+      if(!morphing){
+        // An active/old pair MUST NOT survive into the page-entry animation.
+        mesh.material.opacity=(i===index&&mesh.userData.textureLoaded)?cfg.opacity*reveal:0;
         return;
       }
       const out=i===from,incoming=i===to;

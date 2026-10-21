@@ -1,26 +1,30 @@
-V5.8.14 — Official GitHub landmark-transition fix (after V5.8.13)
+V5.8.15 — Exclusive landmark rendering during crystal entry
+OFFICIAL GITHUB UPDATE ONLY — apply after V5.8.14
 
-INSTALL IN EXISTING REPOSITORY
-1. Extract this ZIP.
-2. Copy its _next folder into your current ByzantineEmpireWebsite repository,
-   replacing ONLY the matching _next/static/chunks/1502ibkr~cu.4.js.
-3. Commit and Push origin in GitHub Desktop.
-4. After GitHub Pages finishes deploying, hard-refresh (Ctrl+Shift+R).
+1. Extract ZIP.
+2. Copy _next/static/chunks/1502ibkr~cu.4.js to the SAME path in your
+   existing GitHub repository, replacing that single matching file.
+3. Commit and Push origin, then hard refresh after GitHub Pages deploys.
 
 FIX
-- V5.8.13 used the page interiorReveal uniform to hide the landmark images
-  on entry. That value switches state with the 3D scene and could create
-  flickering/ghosted overlapping landmark images.
-- V5.8.14 removes that coupling. Entry now uses a reverse of the already
-  working 1.05-second sine.inOut exit fade, with its start delayed until
-  the crystal's real inward traversal begins (1.15 seconds).
-- Exit stays the same 1.05-second sine.inOut fade with 0.38s delay.
-- Mountain awaken smoothing, between-crystal landmark deformation, positions,
-  page text, favicon, and all other scenes remain untouched.
+When opening a crystal interior after switching crystals, a previous 1.8s
+landmark morph could remain active, rendering BOTH images during the 3D zoom.
 
-This ZIP contains only 1 updated website file; nothing from the standalone
-team/profile experiments is included.
+Now:
+- Between crystals on the exterior overview: keep the original animated
+  image-to-image morph, including the mesh distortion.
+- Entering any crystal page: cancel any active landmark-to-landmark morph,
+  restore both images' geometry, and keep ONLY the selected landmark.
+- Inside a crystal and exiting: never show a second landmark; keep the
+  original working page exit fade.
+- No forced landmark opacity from morph completion callbacks.
+- The existing inward/outward easing, mountain and crystal visuals, page
+  content, favicon, tab titles, navigation and all other code stay unchanged.
 
-Verification: bundle JavaScript syntax, exact patch points, original crystal
-renderer preserved, and ZIP integrity. Requires visual confirmation in the
-actual deployed WebGPU site.
+Suggested regression test: Purple page -> exit -> Green crystal -> enter
+quickly, then repeat Green -> Red and Red -> Blue. On page entry, never see
+an earlier landmark layered on top of the selected one.
+
+Checks performed: JavaScript syntax, exclusive-image invariants for four
+indices, package integrity and exact patch points. WebGPU browser visual
+behavior needs testing on the deployed site.
