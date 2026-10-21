@@ -1,8 +1,13 @@
 {
-  "version": "5.8.11",
-  "base": "5.8.10",
+  "version": "5.8.12",
+  "type": "official GitHub update only",
+  "apply_after": "V5.8.11",
   "files": [
+    "index.html",
     "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "notes": "Crystal interior exit fade synchronized; landmark reveal smoothed during return to crystals. Crystal and mountain renderers unchanged."
+  "changes": [
+    "Keep distant landmark images vertically fixed while fading on entering a crystal page; retain smooth return and landmark-to-landmark morph",
+    "Synchronize browser tab titles with actual scene/crystal page"
+  ]
 }

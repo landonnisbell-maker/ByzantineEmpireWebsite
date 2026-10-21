@@ -1,16 +1,23 @@
-V5.8.11 — OFFICIAL GITHUB UPDATE ONLY
+V5.8.12 — OFFICIAL GITHUB UPDATE ONLY
 
-Apply after V5.8.10. This is not a standalone website.
+Apply on top of V5.8.11 to the existing ByzantineEmpireWebsite repository.
 
-1. Extract this ZIP.
-2. Copy the _next folder to the ROOT of your existing ByzantineEmpireWebsite repository.
-3. Replace the matching JavaScript file.
-4. Commit and push with GitHub Desktop.
-5. After GitHub Pages deploys, open in a new browser tab and hard refresh (Ctrl+Shift+R).
+Replace these TWO files only:
+  1. index.html
+  2. _next/static/chunks/1502ibkr~cu.4.js
 
-Check both directions: crystal -> interior -> close -> crystals.
-The interior placeholder images/text should dissolve while exiting.
-The Byzantine landmark in the background should reappear smoothly behind the mountains.
+The distant landmark images now stay vertically stationary during crystal-page entry.
+Their smooth fades and crystal-to-crystal distortion are preserved.
 
-Does NOT contain any standalone About / team-wheel experiments.
-Does NOT modify portal, navigation, crystals or mountains.
+Browser tab titles update as follows:
+  Byzantine · Portal
+  Byzantine · Pages
+  Byzantine · Introduction
+  Byzantine · About Us
+  Byzantine · Market
+  Byzantine · Historical Connection
+
+Also supports Byzantine · Contact if that scene is reached.
+
+Commit and push in GitHub Desktop, wait for GitHub Pages deployment, then
+refresh once with Ctrl+Shift+R.
