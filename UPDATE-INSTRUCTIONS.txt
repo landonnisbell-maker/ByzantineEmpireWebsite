@@ -1,27 +1,16 @@
-V5.8.10 — OFFICIAL GITHUB: CRYSTAL DESTINATION CONTENT PLACEHOLDERS
+V5.8.11 — OFFICIAL GITHUB UPDATE ONLY
 
-THIS IS AN UPDATE-ONLY PATCH FOR YOUR EXISTING REPOSITORY.
-It does not include or modify any of the standalone About/team experiments.
+Apply after V5.8.10. This is not a standalone website.
 
-HOW TO INSTALL
 1. Extract this ZIP.
-2. Copy index.html and the pp-crystal-page-placeholders folder into the ROOT
-   of your existing ByzantineEmpireWebsite GitHub repository.
-3. Replace the existing index.html when prompted, and include the new folder.
-4. Commit and Push origin. After deployment, hard refresh or use a private window.
+2. Copy the _next folder to the ROOT of your existing ByzantineEmpireWebsite repository.
+3. Replace the matching JavaScript file.
+4. Commit and push with GitHub Desktop.
+5. After GitHub Pages deploys, open in a new browser tab and hard refresh (Ctrl+Shift+R).
 
-CHANGES ONLY TO THE FOUR PAGES ENTERED FROM THE CRYSTALS
-1. Introduction          -> heading "Introduction"
-2. About Us              -> heading "About Us"
-3. Market                -> heading "Market"
-4. Historical Connection -> heading "Historical Connection"
+Check both directions: crystal -> interior -> close -> crystals.
+The interior placeholder images/text should dissolve while exiting.
+The Byzantine landmark in the background should reappear smoothly behind the mountains.
 
-All four destination-page descriptions, role and stack copy, and challenge text
-have been replaced with nonsensical placeholder copy. The original hero and
-carousel images have been replaced by a neutral image reading
-"No image supplied yet."
-
-No changes were made to crystal geometry, colors, transitions, mountains,
-portal, homepage routing, About, Contact, or any JavaScript bundle.
-The original exterior crystal video assets were deliberately left untouched
-so the crystal scene continues to function as before.
+Does NOT contain any standalone About / team-wheel experiments.
+Does NOT modify portal, navigation, crystals or mountains.

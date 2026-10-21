@@ -1,16 +1,8 @@
 {
-  "version": "5.8.10",
-  "scope": "Four crystal destination-page editorial and image placeholders only",
-  "based_on": "Official GitHub V5.8.9 (index.html last modified V5.8.7)",
+  "version": "5.8.11",
+  "base": "5.8.10",
   "files": [
-    "index.html",
-    "pp-crystal-page-placeholders/no-image-supplied.webp"
+    "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "names": [
-    "Introduction",
-    "About Us",
-    "Market",
-    "Historical Connection"
-  ],
-  "unchanged": "All JavaScript, crystal, mountain, portal and external scenes"
+  "notes": "Crystal interior exit fade synchronized; landmark reveal smoothed during return to crystals. Crystal and mountain renderers unchanged."
 }
