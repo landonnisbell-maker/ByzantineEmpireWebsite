@@ -1,31 +1,36 @@
-BYZANTINE EMPIRE V5.8.8 — RESTORE FOUR-CRYSTAL PROGRESSION
-OFFICIAL GITHUB UPDATE ONLY — apply after V5.8.7
+BYZANTINE V5.8.9 — PORTAL, CRYSTAL AND ABOUT RECOVERY
+OFFICIAL GITHUB PATCH (UPDATE ONLY) • APPLY AFTER V5.8.8
 
-1. Extract the ZIP to a temporary folder.
-2. In your EXISTING ByzantineEmpireWebsite repository, copy the _next folder
-   from this patch into the repository root, replacing these THREE matching files:
-   _next/static/chunks/0it~jto.lpwlw.js
-   _next/static/chunks/0iwslgx3.9rzg.js
-   _next/static/chunks/01ay6y4_-9myt.js
-3. Commit and Push origin; wait for GitHub Pages to deploy.
-4. Hard refresh the website (Ctrl+Shift+R).
+1. Back up or commit your current repository before applying.
+2. Unzip this patch. Copy its _next/ folder into the ROOT of your existing
+   ByzantineEmpireWebsite repository. Replace only the FOUR matching .js files.
+3. Commit and Push origin. Wait for GitHub Pages deployment.
+4. On the live website, press Ctrl+Shift+R or open a fresh private window.
 
-CHANGES
-- Portal menu arrival selects Introduction (first crystal) without resetting
-  the whole crystal state or doing so during forward navigation requests.
-- The Contact-page scroll restriction runs ONLY when the active scene is
-  About, and only after navigation settles. It cannot affect crystal navigation.
-- Keeps Contact/Lite Version entry points removed, all existing assets,
-  portal animation, mountains, crystals, landmark image morphs, and existing
-  GitHub Pages URL/refresh fixes.
+ROOT FIXES
+1. Removes a circular JS module dependency introduced with V5.8.7:
+   navigation -> crystal store -> audio -> navigation. This can disturb a
+   cold first load and leave page-switching state incompletely initialized.
+2. The Portal-return reset now runs in the existing experience transition
+   controller AFTER the Portal menu transition, not inside the router or
+   ordinary crystal navigation. It returns to Introduction/01 upon re-entry.
+3. Removes the V5.8.7 About-scroll clamp. It measured a transformed Contact
+   handoff element and could stop scrolling before About was fully accessible.
+   The original V5.8.6 backward lock still blocks scrolling out of crystals.
+4. Preserves Contact route blocking and removed navigation links, no Lite
+   menu options, GitHub Pages homepage/refresh fix, and lossless landmark WebP.
 
-VERIFY
-- Enter through Portal -> Introduction (01/04).
-- Click the next arrow: About Us (02/04), Market (03/04),
-  Historical Connection (04/04), then Introduction (01/04).
-- Navigate to Market, then menu -> Portal, then re-enter -> Introduction.
-- Scroll back at crystals should NOT leave for Portal.
-- Refresh on GitHub Pages should NOT show 404.
-- About should no longer scroll into Contact.
+TEST
+[ ] First fresh visit: loading screen -> Enter Experience -> Portal
+[ ] Scroll through the Portal animation -> Introduction (01/04)
+[ ] NEXT: About Us (02/04), Market (03/04), Historical Connection (04/04)
+[ ] Menu Portal -> re-enter -> Introduction (01/04) again
+[ ] About section scrolls normally
+[ ] Refresh remains on a valid GitHub Pages URL (no 404)
+[ ] No Contact or Lite navigation entries
 
-Only 3 JavaScript files are in this patch; do NOT delete other site files.
+The original crystal and mountain shaders, and all background landmark
+positions and transitions, have NOT been changed. This update was checked
+statically and with navigation-state tests, not fully visually rendered in
+Chrome WebGPU. Report exact symptoms and DevTools console errors if anything
+still fails after deployment.

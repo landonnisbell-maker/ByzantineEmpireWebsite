@@ -43,45 +43,14 @@
      data.event?.preventDefault?.();
    }
  };
- // V5.8.7: Do not allow wheel / touch scrolling into the retired
- // Contact zone below the About scene. Do not touch the portal boundary.
- const getAboutEnd=()=>{
-   const section=document.getElementById("sceneContactHandoff");
-   if(!section)return null;
-   const y=section.getBoundingClientRect().top+window.scrollY-1;
-   return Number.isFinite(y)&&y>0?y:null;
- };
- const capAfterAbout=()=>{
-   if(correcting)return;
-   // Contact is beyond About. Never clamp scroll inside the portal or
-   // four-crystal experience: doing so breaks crystal advancement.
-   const nav=s.useNavigationStore.getState();
-   if(nav.phase!=="idle"||nav.route.scene!=="about")return;
-   const cap=getAboutEnd();
-   if(cap!==null&&P.scroll>cap+.5){
-     correcting=true;
-     try{P.scrollTo(cap,{immediate:true,force:true});}finally{correcting=false;}
-   }
- };
- const stopForwardPastAbout=data=>{
-   const nav=s.useNavigationStore.getState();
-   if(nav.phase!=="idle"||nav.route.scene!=="about")return;
-   const cap=getAboutEnd();
-   if(cap!==null&&data.deltaY>0&&P.scroll>=cap-3)
-     data.event?.preventDefault?.();
- };
  P.on("scroll",updateLock);
- P.on("scroll",capAfterAbout);
  P.on("virtual-scroll",blockUpwardAtBoundary);
- P.on("virtual-scroll",stopForwardPastAbout);
  const unsubscribe=s.useNavigationStore.subscribe(updateLock);
  // Also support visits that initialize directly at or beyond the crystals.
  updateLock();
  return()=>{
    P.off("scroll",updateLock);
-   P.off("scroll",capAfterAbout);
    P.off("virtual-scroll",blockUpwardAtBoundary);
-   P.off("virtual-scroll",stopForwardPastAbout);
    unsubscribe();
  };
 },[P]);
