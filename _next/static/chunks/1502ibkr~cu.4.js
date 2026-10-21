@@ -143,6 +143,7 @@ function ppByzantineLandmarkBackdrop(){
         mesh.position.y=config[i].y;
         // The frame renderer owns opacity. Never show an old image here.
         mesh.material.opacity=0;
+        mesh.visible=false;
       });
       return;
     }
@@ -175,6 +176,13 @@ function ppByzantineLandmarkBackdrop(){
   (0,b.useFrame)((_,dt)=>{
     const data=state.current;
     const from=data.from,to=data.to;
+    // Read the live store on the SAME frame we render the landmark meshes.
+    // A React effect (and its captured index/status) can lag the crystal click
+    // by one frame: that was enough to display the previous project's image.
+    const live=ei.useProjectStore.getState();
+    const selected=Math.max(0,Math.min(3,live.currentProjectIndex));
+    const liveStatus=live.interiorStatus;
+    const liveMorph=live.morphStatus;
     // The mountain's reveal can jump when the camera changes scenes. Smooth
     // its sampled value before driving landmark opacity and vertical position.
     const raw=Math.max(0,Math.min(1,(awaken.value-.10)/.72));
@@ -188,7 +196,23 @@ function ppByzantineLandmarkBackdrop(){
     // Only the exterior overview may show outgoing + incoming images together.
     // The zoom into a page, its interior, and the return from the page must
     // render the selected landmark exclusively, even if a morph was in-flight.
-    const morphing=interiorStatus==="exterior"&&data.active;
+    // Two-image blending is allowed ONLY while the stone is genuinely morphing
+    // between exterior projects. It is forbidden during crystal zoom, inside a
+    // project and during the return (and when its React state has gone stale).
+    const morphing=liveStatus==="exterior"&&liveMorph==="morphing"&&data.active&&data.to===selected;
+    if(!morphing&&data.active){
+      sequence.current?.kill();
+      sequence.current=null;
+      data.active=false;
+      // Restore the original geometry once when a morph is interrupted.
+      // This avoids showing a leftover deformation after another page is opened.
+      group.children.forEach(mesh=>{
+        mesh.geometry.attributes.position.array.set(mesh.userData.restPositions);
+        mesh.geometry.attributes.uv.array.set(mesh.userData.restUVs);
+        mesh.geometry.attributes.position.needsUpdate=true;
+        mesh.geometry.attributes.uv.needsUpdate=true;
+      });
+    }
     const progress=morphing?data.driver.value:1;
     const crest=morphing?Math.sin(Math.PI*progress):0;
     // The fade out on crystal entry changes reveal, but must never
@@ -199,11 +223,16 @@ function ppByzantineLandmarkBackdrop(){
       const cfg=config[i];
       mesh.position.y=cfg.y+falling+(morphing?(i===from?-.045*progress:i===to?.09*(1-progress):0):0);
       if(!morphing){
-        // An active/old pair MUST NOT survive into the page-entry animation.
-        mesh.material.opacity=(i===index&&mesh.userData.textureLoaded)?cfg.opacity*reveal:0;
+        // Explicit mesh visibility, not just transparent opacity: prevents
+        // stale frames / maps from participating in render passes at all.
+        // Crucially this uses the LIVE selected index, never the morph's from/to.
+        const sole=i===selected&&!!mesh.userData.textureLoaded;
+        mesh.visible=sole;
+        mesh.material.opacity=sole?cfg.opacity*reveal:0;
         return;
       }
       const out=i===from,incoming=i===to;
+      mesh.visible=!!mesh.userData.textureLoaded&&(out||incoming);
       if(!out&&!incoming){mesh.material.opacity=0;return;}
       // Overlap the images for a continuous flowing transformation instead
       // of performing a static image swap.

@@ -1,30 +1,28 @@
-V5.8.15 — Exclusive landmark rendering during crystal entry
-OFFICIAL GITHUB UPDATE ONLY — apply after V5.8.14
+V5.8.16 — Live landmark visibility guard
+OFFICIAL GITHUB UPDATE ONLY — apply after V5.8.15
 
-1. Extract ZIP.
-2. Copy _next/static/chunks/1502ibkr~cu.4.js to the SAME path in your
-   existing GitHub repository, replacing that single matching file.
-3. Commit and Push origin, then hard refresh after GitHub Pages deploys.
+INSTALL:
+1. Extract this ZIP.
+2. Copy _next/static/chunks/1502ibkr~cu.4.js into the same location in
+   your existing GitHub repository, replacing only this file.
+3. Commit and Push origin; after Pages deployment, use Ctrl + Shift + R.
 
-FIX
-When opening a crystal interior after switching crystals, a previous 1.8s
-landmark morph could remain active, rendering BOTH images during the 3D zoom.
+CHANGES:
+- The landmark renderer now reads the currently selected crystal and its
+  interior/morph state in the render loop, rather than relying on React's
+  one-frame-delayed state capture.
+- Outside a genuine exterior crystal-to-crystal morph, exactly one landmark
+  mesh is allowed to draw. Old meshes are explicitly made invisible rather
+  than just given zero opacity.
+- Any interrupted image morph is stopped and its original mesh geometry
+  restored at the time the renderer detects the state change.
+- Existing return-from-page opacity transitions are left unchanged.
 
-Now:
-- Between crystals on the exterior overview: keep the original animated
-  image-to-image morph, including the mesh distortion.
-- Entering any crystal page: cancel any active landmark-to-landmark morph,
-  restore both images' geometry, and keep ONLY the selected landmark.
-- Inside a crystal and exiting: never show a second landmark; keep the
-  original working page exit fade.
-- No forced landmark opacity from morph completion callbacks.
-- The existing inward/outward easing, mountain and crystal visuals, page
-  content, favicon, tab titles, navigation and all other code stay unchanged.
+TEST:
+Blue page > back > Purple crystal > enter > back > Green crystal > enter,
+then repeat quickly in a different order. You should not see the image from
+any previous crystal behind the current crystal while zooming into its page.
 
-Suggested regression test: Purple page -> exit -> Green crystal -> enter
-quickly, then repeat Green -> Red and Red -> Blue. On page entry, never see
-an earlier landmark layered on top of the selected one.
-
-Checks performed: JavaScript syntax, exclusive-image invariants for four
-indices, package integrity and exact patch points. WebGPU browser visual
-behavior needs testing on the deployed site.
+Verified: JS syntax, exclusive visibility condition over four pages and all
+state combinations, no changes outside the landmark renderer, ZIP integrity.
+A deployed browser WebGPU test remains necessary.
