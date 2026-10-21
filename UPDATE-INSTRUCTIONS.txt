@@ -1,22 +1,46 @@
-BYZANTINE V5.8.6 — RESTORE PORTAL TRAVERSAL ANIMATION
+PURPLE & PREMIUM / BYZANTINE EMPIRE — V5.8.7 OFFICIAL GITHUB PATCH
 
-Official GitHub patch only. Apply after V5.8.5.
+APPLY TO YOUR EXISTING REPOSITORY (following V5.8.6):
+1. Make a backup or commit your current GitHub repository first.
+2. Extract this ZIP.
+3. Copy index.html, _next/ and pp-byzantine/ to the repository ROOT.
+4. Replace the matching files, then commit and Push origin.
+5. Once GitHub Pages deploys, hard-refresh (Ctrl+Shift+R).
 
-1. Extract this ZIP.
-2. Copy the _next folder into the ROOT of your existing ByzantineEmpireWebsite GitHub repository.
-3. Replace the matching file (01ay6y4_-9myt.js).
-4. Commit, push, wait for GitHub Pages deployment, then hard-refresh your browser.
+CHANGES
+• Clicking Portal in the menu returns to the portal, resetting the stored
+  crystal selection. Entering from the portal always opens crystal #1.
+• Removes Contact from both navigation menus, keyboard end navigation, and
+  route entry, and stops scroll at the end of the About area so the retired
+  contact experience cannot be reached.
+• Removes public Lite Version links, options and fallback redirects.
+  Unsupported WebGPU browsers show a clear requirements notice instead.
+• Replaces four PNG backgrounds with LOSSLESS WebP equivalents: visible RGBA
+  pixels are identical. All image plane positions and shaders are unchanged.
+• Preserves V5.8.6 portal traversal animation and back-scroll lock, and all
+  four crystals, terrain shaders, landmark deformation and timing.
 
-CHANGE
-The existing backward-scroll restriction waited only for the routing state to
-switch to projects. That state changes DURING forward portal travel, and the
-restriction immediately jumped scroll to the crystal landing point.
+OPTIONAL REPOSITORY CLEANUP: these four original PNGs are now unused. After
+confirming the deployed backgrounds work, you may DELETE the old originals
+from your repository (do not delete their newly added .webp replacements):
+  pp-byzantine/hagia-sophia-shadow.png
+  pp-byzantine/hippodrome.png
+  pp-byzantine/great-palace.png
+  pp-byzantine/theodosian-walls.png
 
-The restriction now remains inactive until the actual forward scroll reaches
-the crystal settle position. Then it activates, preventing backward scrolling
-from returning through the portal. Choosing Portal in the menu still allows
-the intentional backward transition.
+PERFORMANCE NOTE: WebP cuts transfer size, but the GPU will still decode four
+textures at their original resolution. This is safe asset optimization, NOT a
+claim that the website is fully optimized across every device or GPU.
+WebGPU renders, crystal physics and post-processing remain intentionally
+untouched to preserve the approved visual effects. Contact assets remaining
+in the existing repository can be reviewed later before deletion.
 
-Unchanged: GitHub Pages path and refresh behavior, portal colors, portal/crystal
-shaders, original mountain animations, four projects/pages, landmark images,
-menu navigation and every other website asset.
+REGRESSION CHECKLIST
+[ ] Site loads at /ByzantineEmpireWebsite/; starts on Portal
+[ ] Go through portal; see crystal 1 Introduction
+[ ] Switch to crystal 3, select Portal menu, re-enter: crystal 1
+[ ] Crystal transitions, background textures and mountains still work
+[ ] Up-scroll in crystals cannot re-enter Portal
+[ ] No Contact or Lite Version menu entries
+[ ] Scroll through About without entering Contact
+[ ] Refresh site, no 404
