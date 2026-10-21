@@ -1,22 +1,16 @@
 {
-  "version": "V5.8.9",
-  "requires": "V5.8.8",
-  "files": {
-    "_next/static/chunks/0it~jto.lpwlw.js": {
-      "previous_sha256": "c189402a4e596c004fdb30cbca8e2797019a7d235a446afb0cda20caaaeb8c69",
-      "updated_sha256": "93d689d9d5376a796fd992c3a58f24864c36c2f41571f0d5df491ce65032779b"
-    },
-    "_next/static/chunks/0iwslgx3.9rzg.js": {
-      "previous_sha256": "a97cf0e7047aa4a9f0257aa76f4db2007edde7fd631120f0f20bb109c511754d",
-      "updated_sha256": "03573ab57366071ea7c999bc916f307b3e78e31e6ae2f6e3acc093352d0e2bfe"
-    },
-    "_next/static/chunks/01ay6y4_-9myt.js": {
-      "previous_sha256": "49d980beecff594d35ab3dcd943dd3dac34316580af12e5f4b0d526b13e042bd",
-      "updated_sha256": "7f370e82d70a57aacad02e134133b0c125a6b3633dbeb6b6cb94543cfe07968d"
-    },
-    "_next/static/chunks/1502ibkr~cu.4.js": {
-      "previous_sha256": "21710ed0d8f5d69458ea774a68b2ab3b97cfbed727f8f668aa25ff72eef355aa",
-      "updated_sha256": "e5d97a290e14fa159d43974ddf8093ea786a9e30ee8d158314f8b249df7f8a02"
-    }
-  }
+  "version": "5.8.10",
+  "scope": "Four crystal destination-page editorial and image placeholders only",
+  "based_on": "Official GitHub V5.8.9 (index.html last modified V5.8.7)",
+  "files": [
+    "index.html",
+    "pp-crystal-page-placeholders/no-image-supplied.webp"
+  ],
+  "names": [
+    "Introduction",
+    "About Us",
+    "Market",
+    "Historical Connection"
+  ],
+  "unchanged": "All JavaScript, crystal, mountain, portal and external scenes"
 }

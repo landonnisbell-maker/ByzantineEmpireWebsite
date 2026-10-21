@@ -1,36 +1,27 @@
-BYZANTINE V5.8.9 — PORTAL, CRYSTAL AND ABOUT RECOVERY
-OFFICIAL GITHUB PATCH (UPDATE ONLY) • APPLY AFTER V5.8.8
+V5.8.10 — OFFICIAL GITHUB: CRYSTAL DESTINATION CONTENT PLACEHOLDERS
 
-1. Back up or commit your current repository before applying.
-2. Unzip this patch. Copy its _next/ folder into the ROOT of your existing
-   ByzantineEmpireWebsite repository. Replace only the FOUR matching .js files.
-3. Commit and Push origin. Wait for GitHub Pages deployment.
-4. On the live website, press Ctrl+Shift+R or open a fresh private window.
+THIS IS AN UPDATE-ONLY PATCH FOR YOUR EXISTING REPOSITORY.
+It does not include or modify any of the standalone About/team experiments.
 
-ROOT FIXES
-1. Removes a circular JS module dependency introduced with V5.8.7:
-   navigation -> crystal store -> audio -> navigation. This can disturb a
-   cold first load and leave page-switching state incompletely initialized.
-2. The Portal-return reset now runs in the existing experience transition
-   controller AFTER the Portal menu transition, not inside the router or
-   ordinary crystal navigation. It returns to Introduction/01 upon re-entry.
-3. Removes the V5.8.7 About-scroll clamp. It measured a transformed Contact
-   handoff element and could stop scrolling before About was fully accessible.
-   The original V5.8.6 backward lock still blocks scrolling out of crystals.
-4. Preserves Contact route blocking and removed navigation links, no Lite
-   menu options, GitHub Pages homepage/refresh fix, and lossless landmark WebP.
+HOW TO INSTALL
+1. Extract this ZIP.
+2. Copy index.html and the pp-crystal-page-placeholders folder into the ROOT
+   of your existing ByzantineEmpireWebsite GitHub repository.
+3. Replace the existing index.html when prompted, and include the new folder.
+4. Commit and Push origin. After deployment, hard refresh or use a private window.
 
-TEST
-[ ] First fresh visit: loading screen -> Enter Experience -> Portal
-[ ] Scroll through the Portal animation -> Introduction (01/04)
-[ ] NEXT: About Us (02/04), Market (03/04), Historical Connection (04/04)
-[ ] Menu Portal -> re-enter -> Introduction (01/04) again
-[ ] About section scrolls normally
-[ ] Refresh remains on a valid GitHub Pages URL (no 404)
-[ ] No Contact or Lite navigation entries
+CHANGES ONLY TO THE FOUR PAGES ENTERED FROM THE CRYSTALS
+1. Introduction          -> heading "Introduction"
+2. About Us              -> heading "About Us"
+3. Market                -> heading "Market"
+4. Historical Connection -> heading "Historical Connection"
 
-The original crystal and mountain shaders, and all background landmark
-positions and transitions, have NOT been changed. This update was checked
-statically and with navigation-state tests, not fully visually rendered in
-Chrome WebGPU. Report exact symptoms and DevTools console errors if anything
-still fails after deployment.
+All four destination-page descriptions, role and stack copy, and challenge text
+have been replaced with nonsensical placeholder copy. The original hero and
+carousel images have been replaced by a neutral image reading
+"No image supplied yet."
+
+No changes were made to crystal geometry, colors, transitions, mountains,
+portal, homepage routing, About, Contact, or any JavaScript bundle.
+The original exterior crystal video assets were deliberately left untouched
+so the crystal scene continues to function as before.
