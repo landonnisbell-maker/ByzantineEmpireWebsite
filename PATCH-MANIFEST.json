@@ -1,23 +1,24 @@
 {
-  "version": "V5.8.13",
-  "type": "existing-repository-update-only",
-  "base": "V5.8.12",
+  "version": "V5.8.14",
+  "type": "official-existing-GitHub-repository-update-only",
+  "base": "V5.8.13",
   "files": [
-    "index.html",
-    "favicon-32x32.png",
-    "favicon.ico",
     "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "logo_source": "ByzantineEmpireLogo_NoText.png",
-  "logo_original_size": [
-    2048,
-    1730
+  "changes": [
+    "Reverse-match landmark entrance opacity to already-working exit tween",
+    "Delay entry landmark dissolve until scene traversal begins",
+    "Remove direct dependency on interiorReveal shader uniform"
   ],
-  "logo_alpha_bbox": [
-    526,
-    128,
-    1509,
-    1452
-  ],
-  "policy": "Original crystal renderer and navigation unchanged; only landmark visibility and favicon metadata changed."
+  "unchanged": [
+    "favicon",
+    "index.html",
+    "mountain geometry",
+    "crystal morph",
+    "landmark geometry",
+    "landmark image selections",
+    "landmark return animation",
+    "page content",
+    "all standalone experiments"
+  ]
 }

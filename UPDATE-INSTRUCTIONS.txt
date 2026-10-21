@@ -1,26 +1,26 @@
-V5.8.13 — Official GitHub update (apply after V5.8.12)
+V5.8.14 — Official GitHub landmark-transition fix (after V5.8.13)
 
-INSTALL IN YOUR EXISTING REPOSITORY ROOT
+INSTALL IN EXISTING REPOSITORY
 1. Extract this ZIP.
-2. Copy index.html, favicon-32x32.png, favicon.ico and _next/ into
-   the root of the EXISTING ByzantineEmpireWebsite GitHub repository.
-3. Replace matching files, commit, and push to GitHub.
-4. After deployment, open in a new browser tab and refresh with Ctrl+Shift+R.
-   Favicons may be cached; a private browser window can help verify the new one.
+2. Copy its _next folder into your current ByzantineEmpireWebsite repository,
+   replacing ONLY the matching _next/static/chunks/1502ibkr~cu.4.js.
+3. Commit and Push origin in GitHub Desktop.
+4. After GitHub Pages finishes deploying, hard-refresh (Ctrl+Shift+R).
 
-CHANGES
-- The landmark images behind the mountains now use the exact existing
-  project interiorReveal transition value during crystal entry. They no longer
-  run their own .65-second fade before the page transition begins.
-- The established smoother landmark exit and crystal-to-crystal image morph
-  remain unchanged.
-- Replaced the browser-tab favicon with the supplied Byzantine flower logo,
-  trimmed to its nontransparent bounds and scaled uniformly inside 32x32 pixels.
-  No image distortion or redesign; includes PNG and ICO fallbacks.
-- No standalone experiments, navigation changes, or other UI updates.
+FIX
+- V5.8.13 used the page interiorReveal uniform to hide the landmark images
+  on entry. That value switches state with the 3D scene and could create
+  flickering/ghosted overlapping landmark images.
+- V5.8.14 removes that coupling. Entry now uses a reverse of the already
+  working 1.05-second sine.inOut exit fade, with its start delayed until
+  the crystal's real inward traversal begins (1.15 seconds).
+- Exit stays the same 1.05-second sine.inOut fade with 0.38s delay.
+- Mountain awaken smoothing, between-crystal landmark deformation, positions,
+  page text, favicon, and all other scenes remain untouched.
 
-Files in patch:
- index.html
- favicon-32x32.png
- favicon.ico
- _next/static/chunks/1502ibkr~cu.4.js
+This ZIP contains only 1 updated website file; nothing from the standalone
+team/profile experiments is included.
+
+Verification: bundle JavaScript syntax, exact patch points, original crystal
+renderer preserved, and ZIP integrity. Requires visual confirmation in the
+actual deployed WebGPU site.
