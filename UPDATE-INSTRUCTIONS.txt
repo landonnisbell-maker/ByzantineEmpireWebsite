@@ -1,46 +1,31 @@
-PURPLE & PREMIUM / BYZANTINE EMPIRE — V5.8.7 OFFICIAL GITHUB PATCH
+BYZANTINE EMPIRE V5.8.8 — RESTORE FOUR-CRYSTAL PROGRESSION
+OFFICIAL GITHUB UPDATE ONLY — apply after V5.8.7
 
-APPLY TO YOUR EXISTING REPOSITORY (following V5.8.6):
-1. Make a backup or commit your current GitHub repository first.
-2. Extract this ZIP.
-3. Copy index.html, _next/ and pp-byzantine/ to the repository ROOT.
-4. Replace the matching files, then commit and Push origin.
-5. Once GitHub Pages deploys, hard-refresh (Ctrl+Shift+R).
+1. Extract the ZIP to a temporary folder.
+2. In your EXISTING ByzantineEmpireWebsite repository, copy the _next folder
+   from this patch into the repository root, replacing these THREE matching files:
+   _next/static/chunks/0it~jto.lpwlw.js
+   _next/static/chunks/0iwslgx3.9rzg.js
+   _next/static/chunks/01ay6y4_-9myt.js
+3. Commit and Push origin; wait for GitHub Pages to deploy.
+4. Hard refresh the website (Ctrl+Shift+R).
 
 CHANGES
-• Clicking Portal in the menu returns to the portal, resetting the stored
-  crystal selection. Entering from the portal always opens crystal #1.
-• Removes Contact from both navigation menus, keyboard end navigation, and
-  route entry, and stops scroll at the end of the About area so the retired
-  contact experience cannot be reached.
-• Removes public Lite Version links, options and fallback redirects.
-  Unsupported WebGPU browsers show a clear requirements notice instead.
-• Replaces four PNG backgrounds with LOSSLESS WebP equivalents: visible RGBA
-  pixels are identical. All image plane positions and shaders are unchanged.
-• Preserves V5.8.6 portal traversal animation and back-scroll lock, and all
-  four crystals, terrain shaders, landmark deformation and timing.
+- Portal menu arrival selects Introduction (first crystal) without resetting
+  the whole crystal state or doing so during forward navigation requests.
+- The Contact-page scroll restriction runs ONLY when the active scene is
+  About, and only after navigation settles. It cannot affect crystal navigation.
+- Keeps Contact/Lite Version entry points removed, all existing assets,
+  portal animation, mountains, crystals, landmark image morphs, and existing
+  GitHub Pages URL/refresh fixes.
 
-OPTIONAL REPOSITORY CLEANUP: these four original PNGs are now unused. After
-confirming the deployed backgrounds work, you may DELETE the old originals
-from your repository (do not delete their newly added .webp replacements):
-  pp-byzantine/hagia-sophia-shadow.png
-  pp-byzantine/hippodrome.png
-  pp-byzantine/great-palace.png
-  pp-byzantine/theodosian-walls.png
+VERIFY
+- Enter through Portal -> Introduction (01/04).
+- Click the next arrow: About Us (02/04), Market (03/04),
+  Historical Connection (04/04), then Introduction (01/04).
+- Navigate to Market, then menu -> Portal, then re-enter -> Introduction.
+- Scroll back at crystals should NOT leave for Portal.
+- Refresh on GitHub Pages should NOT show 404.
+- About should no longer scroll into Contact.
 
-PERFORMANCE NOTE: WebP cuts transfer size, but the GPU will still decode four
-textures at their original resolution. This is safe asset optimization, NOT a
-claim that the website is fully optimized across every device or GPU.
-WebGPU renders, crystal physics and post-processing remain intentionally
-untouched to preserve the approved visual effects. Contact assets remaining
-in the existing repository can be reviewed later before deletion.
-
-REGRESSION CHECKLIST
-[ ] Site loads at /ByzantineEmpireWebsite/; starts on Portal
-[ ] Go through portal; see crystal 1 Introduction
-[ ] Switch to crystal 3, select Portal menu, re-enter: crystal 1
-[ ] Crystal transitions, background textures and mountains still work
-[ ] Up-scroll in crystals cannot re-enter Portal
-[ ] No Contact or Lite Version menu entries
-[ ] Scroll through About without entering Contact
-[ ] Refresh site, no 404
+Only 3 JavaScript files are in this patch; do NOT delete other site files.

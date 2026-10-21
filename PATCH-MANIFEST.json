@@ -1,55 +1,18 @@
 {
-  "version": "V5.8.7",
-  "requires": "V5.8.6",
-  "files": {
-    "_next/static/chunks/0it~jto.lpwlw.js": [
-      45073,
-      45468
-    ],
-    "_next/static/chunks/0iwslgx3.9rzg.js": [
-      45073,
-      45468
-    ],
-    "_next/static/chunks/01ay6y4_-9myt.js": [
-      69907,
-      70179
-    ],
-    "_next/static/chunks/01n9.x1x734yf.js": [
-      30636,
-      30557
-    ],
-    "_next/static/chunks/07t.dc2agnmbw.js": [
-      30636,
-      30557
-    ],
-    "_next/static/chunks/05jnh5ihg9x9-.js": [
-      33094,
-      33088
-    ],
-    "_next/static/chunks/1502ibkr~cu.4.js": [
-      260380,
-      260259
-    ],
-    "index.html": [
-      163916,
-      162702
-    ],
-    "pp-byzantine/hagia-sophia-shadow.webp": [
-      2028643,
-      1355674
-    ],
-    "pp-byzantine/hippodrome.webp": [
-      1814794,
-      1075516
-    ],
-    "pp-byzantine/great-palace.webp": [
-      2894396,
-      1809242
-    ],
-    "pp-byzantine/theodosian-walls.webp": [
-      2414089,
-      1649434
-    ]
-  },
-  "notes": "Patch contains updated/new files only"
+  "version": "V5.8.8",
+  "requires": "V5.8.7",
+  "changed_files": {
+    "_next/static/chunks/0it~jto.lpwlw.js": {
+      "old_sha256": "0e656f4185baf0d76298250b5162803662dcc246fe6f03b349cd84cde86a9e7d",
+      "new_sha256": "c189402a4e596c004fdb30cbca8e2797019a7d235a446afb0cda20caaaeb8c69"
+    },
+    "_next/static/chunks/0iwslgx3.9rzg.js": {
+      "old_sha256": "db673a5d75cbdfd81fde580b70156a7002a57accaf630351bcbc632bef335b1a",
+      "new_sha256": "a97cf0e7047aa4a9f0257aa76f4db2007edde7fd631120f0f20bb109c511754d"
+    },
+    "_next/static/chunks/01ay6y4_-9myt.js": {
+      "old_sha256": "e6163deb08ed786fc93ad501a22a2197b18ccb39236bf1a0537b77c842132ba6",
+      "new_sha256": "49d980beecff594d35ab3dcd943dd3dac34316580af12e5f4b0d526b13e042bd"
+    }
+  }
 }

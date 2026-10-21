@@ -53,6 +53,10 @@
  };
  const capAfterAbout=()=>{
    if(correcting)return;
+   // Contact is beyond About. Never clamp scroll inside the portal or
+   // four-crystal experience: doing so breaks crystal advancement.
+   const nav=s.useNavigationStore.getState();
+   if(nav.phase!=="idle"||nav.route.scene!=="about")return;
    const cap=getAboutEnd();
    if(cap!==null&&P.scroll>cap+.5){
      correcting=true;
@@ -60,6 +64,8 @@
    }
  };
  const stopForwardPastAbout=data=>{
+   const nav=s.useNavigationStore.getState();
+   if(nav.phase!=="idle"||nav.route.scene!=="about")return;
    const cap=getAboutEnd();
    if(cap!==null&&data.deltaY>0&&P.scroll>=cap-3)
      data.event?.preventDefault?.();
