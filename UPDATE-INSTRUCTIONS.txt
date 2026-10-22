@@ -1,28 +1,21 @@
-V5.8.16 — Live landmark visibility guard
-OFFICIAL GITHUB UPDATE ONLY — apply after V5.8.15
+BYZANTINE V5.8.17 — BLACK FLASH PREVENTION
+OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.16
 
-INSTALL:
 1. Extract this ZIP.
-2. Copy _next/static/chunks/1502ibkr~cu.4.js into the same location in
-   your existing GitHub repository, replacing only this file.
-3. Commit and Push origin; after Pages deployment, use Ctrl + Shift + R.
+2. Copy _next into the ROOT of your existing GitHub repository.
+3. Replace the single matching _next/static/chunks/1502ibkr~cu.4.js file.
+4. Commit and push to GitHub.
+5. After GitHub Pages deploys, test in a fresh/private browser window
+   or press Ctrl+Shift+R to bypass stale cached JavaScript.
 
-CHANGES:
-- The landmark renderer now reads the currently selected crystal and its
-  interior/morph state in the render loop, rather than relying on React's
-  one-frame-delayed state capture.
-- Outside a genuine exterior crystal-to-crystal morph, exactly one landmark
-  mesh is allowed to draw. Old meshes are explicitly made invisible rather
-  than just given zero opacity.
-- Any interrupted image morph is stopped and its original mesh geometry
-  restored at the time the renderer detects the state change.
-- Existing return-from-page opacity transitions are left unchanged.
+This patch changes only the landmark backdrop transition code:
+- Removes the 'hide every image' operation between React state changes and GPU frames.
+- Permits the existing exterior image morph to continue smoothly while the
+  crystal status store catches up with the animation.
+- Holds the last valid landmark for an exterior-only selection handoff.
+- During interior entry/exit still permits ONLY the selected landmark, so
+  the previously fixed overlap bug does not return.
 
-TEST:
-Blue page > back > Purple crystal > enter > back > Green crystal > enter,
-then repeat quickly in a different order. You should not see the image from
-any previous crystal behind the current crystal while zooming into its page.
+No favicon, portal, pages, 3D crystal/terrain, or other code is changed.
 
-Verified: JS syntax, exclusive visibility condition over four pages and all
-state combinations, no changes outside the landmark renderer, ZIP integrity.
-A deployed browser WebGPU test remains necessary.
+Visual WebGPU rendering should be checked on your deployed website.

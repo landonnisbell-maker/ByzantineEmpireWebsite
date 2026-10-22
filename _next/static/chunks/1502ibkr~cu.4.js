@@ -141,9 +141,10 @@ function ppByzantineLandmarkBackdrop(){
         pos.needsUpdate=true;
         uv.needsUpdate=true;
         mesh.position.y=config[i].y;
-        // The frame renderer owns opacity. Never show an old image here.
-        mesh.material.opacity=0;
-        mesh.visible=false;
+        // Do not blank every landmark in this React effect: doing so can
+        // produce a black frame before useFrame commits the selected texture.
+        // The frame callback below updates selected-only mesh visibility
+        // atomically on the next renderer tick.
       });
       return;
     }
@@ -199,7 +200,12 @@ function ppByzantineLandmarkBackdrop(){
     // Two-image blending is allowed ONLY while the stone is genuinely morphing
     // between exterior projects. It is forbidden during crystal zoom, inside a
     // project and during the return (and when its React state has gone stale).
-    const morphing=liveStatus==="exterior"&&liveMorph==="morphing"&&data.active&&data.to===selected;
+    const morphing=liveStatus==="exterior"&&data.active&&data.to===selected;
+    // The selection can update before React starts the new exterior morph.
+    // Hold the LAST VALID exterior landmark for that short handoff, instead of
+    // displaying a blank frame or snapping to a not-yet-configured mesh.
+    // During crystal entry this fallback is forbidden: only selected renders.
+    const awaitingExteriorMorph=liveStatus==="exterior"&&data.to!==selected;
     if(!morphing&&data.active){
       sequence.current?.kill();
       sequence.current=null;
@@ -226,7 +232,8 @@ function ppByzantineLandmarkBackdrop(){
         // Explicit mesh visibility, not just transparent opacity: prevents
         // stale frames / maps from participating in render passes at all.
         // Crucially this uses the LIVE selected index, never the morph's from/to.
-        const sole=i===selected&&!!mesh.userData.textureLoaded;
+        const displayIndex=awaitingExteriorMorph?data.to:selected;
+        const sole=i===displayIndex&&!!mesh.userData.textureLoaded;
         mesh.visible=sole;
         mesh.material.opacity=sole?cfg.opacity*reveal:0;
         return;

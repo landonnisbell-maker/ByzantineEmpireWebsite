@@ -1,13 +1,9 @@
 {
-  "version": "V5.8.16",
-  "base": "V5.8.15",
-  "kind": "official-existing-GitHub-repository-update-only",
-  "files": [
+  "version": "5.8.17",
+  "type": "Official GitHub update \u2014 changed file only",
+  "base": "V5.8.16",
+  "updated_files": [
     "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "changes": [
-    "Live render-frame project selection",
-    "Explicitly disable stale landmark meshes outside exterior morph",
-    "Stop interrupted image-morph tweens"
-  ]
+  "scope": "Fix brief black frame when switching crystals/pages. No changes to portal, page UI, favicon, or 3D mountain/crystal code."
 }
