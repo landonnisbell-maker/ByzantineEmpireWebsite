@@ -1,18 +1,23 @@
-BYZANTINE V5.8.18 — NAV TRANSITION BRANDING
-OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.17
+BYZANTINE V5.8.19 — ACTUAL MENU TRANSITION FIX
+OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.18
 
-1. Extract this ZIP.
-2. Copy the included files into the ROOT of your existing GitHub repository.
-3. Replace the matching index.html file.
-4. Add nav-transition-logo.png to the same root level as index.html.
-5. Commit and push to GitHub.
-6. After GitHub Pages deploys, hard refresh with Ctrl+Shift+R.
+WHY V5.8.18 DIDN'T WORK
+It added an independent overlay; the original 3D transition and old logo still rendered.
+This update edits the actual navigation veil component and its WebGPU color.
 
-What this update changes:
-- Adds a custom full-screen navigation overlay for internal menu/page transitions.
-- Uses an almost-black transition background instead of the lighter grey one.
-- Uses the supplied monochrome Byzantine logo in the center of the transition.
-- Leaves the working crystal logic, landmark fixes, favicon, and page content untouched.
+INSTALLATION
+1. Extract the ZIP.
+2. Copy index.html, byzantine-menu-logo-v5819.png and _next into the ROOT of your existing GitHub repository.
+3. Replace the matching files; keep your other website files in place.
+4. Commit and push to GitHub.
+5. After GitHub Pages deploys, hard refresh (Ctrl+Shift+R) or test in a private window.
 
-This update does NOT alter the existing page transition routing logic.
-It visually replaces the menu transition by covering it with the new branded overlay.
+CHANGES (5 website files)
+- index.html: removes the unsuccessful V5.8.18 injected overlay.
+- _next/static/chunks/01ay6y4_-9myt.js: replaces the ORIGINAL navigation veil LogoIcon with supplied white Byzantine logo.
+- _next/static/chunks/09ufu_y.2nj-7.css: changes the ORIGINAL veil's DOM background to #07080A.
+- _next/static/chunks/1502ibkr~cu.4.js: changes the WebGPU veil color #262626 to #07080A (preserving V5.8.17 fixes).
+- byzantine-menu-logo-v5819.png: cropped original supplied image, preserves pixels and proportions.
+
+Existing page-entry and crystal morph animations are not modified.
+This patch does not update the actual remote repository; it provides changed files to copy into it.

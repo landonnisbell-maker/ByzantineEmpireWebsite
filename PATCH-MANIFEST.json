@@ -1,10 +1,23 @@
 {
-  "version": "5.8.18",
-  "type": "Official GitHub update — navigation transition branding only",
-  "base": "V5.8.17",
+  "version": "5.8.19",
+  "type": "Official GitHub update only \u2014 fixes actual native navigation veil and removes V5.8.18 overlay",
+  "base": "V5.8.18 with V5.8.17 animation fixes",
   "updated_files": [
     "index.html",
-    "nav-transition-logo.png"
+    "byzantine-menu-logo-v5819.png",
+    "_next/static/chunks/01ay6y4_-9myt.js",
+    "_next/static/chunks/09ufu_y.2nj-7.css",
+    "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "scope": "Replace the top-right menu navigation transition with an almost-black overlay and the supplied monochrome logo. No changes to crystal logic, landmark transitions, favicon, or page content."
+  "scope": "Actual navbar transition LogoIcon replaced with user logo; DOM and WebGPU veil colors darkened; redundant V5.8.18 overlay removed. No crystal, landmark, portal, favicon or project data changes.",
+  "checks": {
+    "logo_shape": [
+      1001,
+      1325
+    ],
+    "nav_component_matches": 1,
+    "renderer_veil_color_matches": 1,
+    "css_selector_matches": 1,
+    "old_overlay_removed": true
+  }
 }
