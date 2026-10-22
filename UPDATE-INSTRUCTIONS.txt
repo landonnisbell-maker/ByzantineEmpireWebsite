@@ -1,21 +1,18 @@
-BYZANTINE V5.8.17 — BLACK FLASH PREVENTION
-OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.16
+BYZANTINE V5.8.18 — NAV TRANSITION BRANDING
+OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.17
 
 1. Extract this ZIP.
-2. Copy _next into the ROOT of your existing GitHub repository.
-3. Replace the single matching _next/static/chunks/1502ibkr~cu.4.js file.
-4. Commit and push to GitHub.
-5. After GitHub Pages deploys, test in a fresh/private browser window
-   or press Ctrl+Shift+R to bypass stale cached JavaScript.
+2. Copy the included files into the ROOT of your existing GitHub repository.
+3. Replace the matching index.html file.
+4. Add nav-transition-logo.png to the same root level as index.html.
+5. Commit and push to GitHub.
+6. After GitHub Pages deploys, hard refresh with Ctrl+Shift+R.
 
-This patch changes only the landmark backdrop transition code:
-- Removes the 'hide every image' operation between React state changes and GPU frames.
-- Permits the existing exterior image morph to continue smoothly while the
-  crystal status store catches up with the animation.
-- Holds the last valid landmark for an exterior-only selection handoff.
-- During interior entry/exit still permits ONLY the selected landmark, so
-  the previously fixed overlap bug does not return.
+What this update changes:
+- Adds a custom full-screen navigation overlay for internal menu/page transitions.
+- Uses an almost-black transition background instead of the lighter grey one.
+- Uses the supplied monochrome Byzantine logo in the center of the transition.
+- Leaves the working crystal logic, landmark fixes, favicon, and page content untouched.
 
-No favicon, portal, pages, 3D crystal/terrain, or other code is changed.
-
-Visual WebGPU rendering should be checked on your deployed website.
+This update does NOT alter the existing page transition routing logic.
+It visually replaces the menu transition by covering it with the new branded overlay.

@@ -1,9 +1,10 @@
 {
-  "version": "5.8.17",
-  "type": "Official GitHub update \u2014 changed file only",
-  "base": "V5.8.16",
+  "version": "5.8.18",
+  "type": "Official GitHub update — navigation transition branding only",
+  "base": "V5.8.17",
   "updated_files": [
-    "_next/static/chunks/1502ibkr~cu.4.js"
+    "index.html",
+    "nav-transition-logo.png"
   ],
-  "scope": "Fix brief black frame when switching crystals/pages. No changes to portal, page UI, favicon, or 3D mountain/crystal code."
+  "scope": "Replace the top-right menu navigation transition with an almost-black overlay and the supplied monochrome logo. No changes to crystal logic, landmark transitions, favicon, or page content."
 }
