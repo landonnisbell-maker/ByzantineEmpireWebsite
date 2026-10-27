@@ -1,9 +1,11 @@
 {
-  "version": "5.8.21",
-  "type": "Official GitHub update \u2014 changed file only",
-  "base": "V5.8.20",
+  "version": "5.8.22",
+  "type": "Official GitHub update \u2014 content only",
+  "base": "V5.8.21",
   "updated_files": [
-    "_next/static/chunks/1502ibkr~cu.4.js"
+    "index.html",
+    "_next/static/chunks/1502ibkr~cu.4.js",
+    "byzantine-about-us-content.js"
   ],
-  "scope": "Replace the moving 3D CLOSE hit target with a screen-fixed DOM close button that invokes the existing exitInterior action. Do not change crystal effects, rendering, or navigation."
+  "scope": "Populate About Us crystal page with provided educational text. Keep existing placeholders and animations."
 }

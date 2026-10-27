@@ -1,20 +1,20 @@
-BYZANTINE V5.8.21 — TRUE SCREEN-FIXED CLOSE BUTTON
-OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.20
+BYZANTINE V5.8.22 — ABOUT US CONTENT ONLY
+OFFICIAL GITHUB UPDATE — APPLY AFTER V5.8.21
 
 1. Extract this ZIP.
-2. Copy its _next folder into the ROOT of your existing GitHub repository.
-3. Replace ONLY the matching _next/static/chunks/1502ibkr~cu.4.js file.
-4. Commit and push to GitHub.
-5. Once deployed, hard refresh with Ctrl+Shift+R (or open a private window).
+2. Copy index.html, _next/, and byzantine-about-us-content.js into the ROOT of
+   your existing GitHub repository (the folder containing index.html).
+3. Replace only the matching files.
+4. Commit and push. Once GitHub Pages deploys, hard-refresh with Ctrl+Shift+R.
 
-This patch ONLY changes the CLOSE control in all four crystal interiors.
-- Removes the old 3D CLOSE plane from the rendered scene.
-- Removes its camera-dependent raycast target.
-- Adds a real, fixed-position DOM button with a large click area.
-- Uses the existing store exitInterior() action to keep the original transition.
-- Shows the button only when a crystal interior is fully active.
+HOW TO EDIT THE TEXT LATER:
+Open byzantine-about-us-content.js in a normal text editor.
+Change the writing between backticks under each heading, save, commit, and push.
+There is NO need to edit minified _next JavaScript or index.html again.
 
-Does not modify landmark images, crystal geometry, mouse movement of the page,
-portal, titles, favicon, navigation veil, or any other UI.
-
-IMPORTANT: The live WebGPU site still needs a quick manual click test after deployment.
+WHAT CHANGES:
+Only Crystal 2 (About Us) receives the new nine topic sections (10 heading
+items, because Time Frame is counted separately). All supplied wording is kept
+as given. Existing image placeholders, crystal scenes, animations, and other
+crystal pages remain unchanged. Section text wraps onto the site's original
+scrolling 3D canvas, which automatically grows vertically.
