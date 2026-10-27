@@ -1,23 +1,15 @@
-BYZANTINE V5.8.19 — ACTUAL MENU TRANSITION FIX
-OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.18
+BYZANTINE V5.8.20 — FIX CRYSTAL PAGE CLOSE BUTTON
+OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.19
 
-WHY V5.8.18 DIDN'T WORK
-It added an independent overlay; the original 3D transition and old logo still rendered.
-This update edits the actual navigation veil component and its WebGPU color.
-
-INSTALLATION
 1. Extract the ZIP.
-2. Copy index.html, byzantine-menu-logo-v5819.png and _next into the ROOT of your existing GitHub repository.
-3. Replace the matching files; keep your other website files in place.
-4. Commit and push to GitHub.
-5. After GitHub Pages deploys, hard refresh (Ctrl+Shift+R) or test in a private window.
+2. Copy its _next folder into the ROOT of your existing GitHub repository.
+3. Overwrite ONLY _next/static/chunks/1502ibkr~cu.4.js.
+4. Commit and push to GitHub, then refresh with Ctrl+Shift+R after deployment.
 
-CHANGES (5 website files)
-- index.html: removes the unsuccessful V5.8.18 injected overlay.
-- _next/static/chunks/01ay6y4_-9myt.js: replaces the ORIGINAL navigation veil LogoIcon with supplied white Byzantine logo.
-- _next/static/chunks/09ufu_y.2nj-7.css: changes the ORIGINAL veil's DOM background to #07080A.
-- _next/static/chunks/1502ibkr~cu.4.js: changes the WebGPU veil color #262626 to #07080A (preserving V5.8.17 fixes).
-- byzantine-menu-logo-v5819.png: cropped original supplied image, preserves pixels and proportions.
+Change:
+- CLOSE now stays stationary on-screen when the mouse moves, instead of shifting with the 3D interior camera.
+- Keeps the same CLOSE texture, location, active click target and raycast handler.
+- Applies automatically to all four crystal destination pages.
 
-Existing page-entry and crystal morph animations are not modified.
-This patch does not update the actual remote repository; it provides changed files to copy into it.
+No other files or parts of the website are intentionally changed.
+Runtime WebGPU visual behavior still requires browser testing on your deployed site.
