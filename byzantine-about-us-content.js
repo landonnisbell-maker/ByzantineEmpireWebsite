@@ -79,3 +79,11 @@
     challenges: format(sections.slice(6))
   };
 })();
+
+/* Shared four-page editor registration. Keep these lines if changing the text above. */
+window.BYZANTINE_CRYSTAL_CONTENT = window.BYZANTINE_CRYSTAL_CONTENT || {};
+window.BYZANTINE_CRYSTAL_CONTENT[1] = {
+  ...window.BYZANTINE_ABOUT_US_CONTENT,
+  roleHeading: 'GOVERNMENT, ECONOMY & RELIGION',
+  challengesHeading: 'ACHIEVEMENTS, RESOURCES & CULTURE'
+};

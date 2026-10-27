@@ -1,26 +1,13 @@
-BYZANTINE V5.8.23 — ABOUT US CONTENT HYDRATION FIX
-OFFICIAL GITHUB UPDATE — APPLY AFTER V5.8.22
+BYZANTINE V5.8.24 — EDITABLE CONTENT FOR ALL FOUR CRYSTAL PAGES
+OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.23
 
-The previous patch installed a separate content file, but the original
-serialized React/Next.js data still contained the old gibberish. This update
-writes the About Us content directly to the actual Page 2 project record, so
-it renders without depending on a separate runtime content override.
+1. Extract this ZIP.
+2. Copy index.html, _next, and all four byzantine-*-content.js files into
+   the ROOT of your EXISTING GitHub repository (the directory containing index.html).
+3. Replace the matching index.html, existing About Us content JS, and the matching _next JavaScript file.
+4. Commit and push your repository, then refresh with Ctrl+Shift+R.
+5. For later text edits, open ONLY the corresponding byzantine-*-content.js file.
 
-HOW TO INSTALL
-1. Extract the ZIP.
-2. Copy index.html and byzantine-about-us-content.js into the ROOT of
-   your existing GitHub repository, next to the existing index.html.
-3. Copy _next over the existing _next directory (replace the matching JS).
-4. Commit and push. Use a private browser window after deployment to rule
-   out old cached content. A hard refresh is Ctrl+Shift+R.
-
-HOW TO EDIT CONTENT LATER
-Edit byzantine-about-us-content.js under its ten section headings, then
-commit and push. The patched renderer picks this file up at runtime.
-For the best reliability, refresh the browser with Ctrl+Shift+R after editing.
-
-NOTE: index.html also now contains a copy of the supplied About Us content
-inside Next.js's initial hydration data, for reliability when a browser has
-cached the older 3D renderer. For consistency, if you edit the content file,
-consider updating that stored initial data as well or using the updated
-renderer path. All "No image supplied yet" image paths are unchanged.
+See EDITING-GUIDE.txt for instructions and examples.
+This package does not contain stand-alone files or changes to media, crystals,
+landmarks, portal, favicon or navigation animation.

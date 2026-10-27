@@ -1,0 +1,40 @@
+BYZANTINE V5.8.24 — FOUR EDITABLE CRYSTAL PAGES
+OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.23
+
+EDIT THE TEXT IN THESE FILES, LOCATED AT THE ROOT OF YOUR REPOSITORY:
+
+Crystal 1 / Introduction:
+    byzantine-introduction-content.js
+Crystal 2 / About Us:
+    byzantine-about-us-content.js
+Crystal 3 / Market:
+    byzantine-market-content.js
+Crystal 4 / Historical Connection:
+    byzantine-historical-connection-content.js
+
+HOW TO EDIT A PAGE:
+1. Open the corresponding .js file in VS Code or GitHub's file editor.
+2. Edit the text between quotes or backticks. For long paragraphs, edit
+   ONLY the words between the opening and closing backticks (` ... `).
+3. Save and commit/push your changes.
+4. Refresh the website (Ctrl+Shift+R or use a private browser window).
+
+WHAT YOU CAN EDIT:
+- Page title, subtitle/overline, date/year, introduction tagline
+- Main body text above the first image
+- Section heading, subheading text, and keywords between images
+- Section heading and text after the gallery
+- About Us: continue editing the ten clearly named sections just like before.
+
+DO NOT CHANGE:
+- The JavaScript object names or page indexes [0]–[3].
+- The last lines that register each page in window.BYZANTINE_CRYSTAL_CONTENT.
+- File names, unless you also update their <script> references in index.html.
+
+The images marked "No image supplied yet" stay in exactly the same locations.
+The layout is the original scrolling 3D page and content length may affect
+scroll height. Crystal animations and the menu transition are not modified.
+
+On initial static HTML, index.html retains a fallback snapshot of the text
+that existed when this package was created. In a WebGPU-enabled browser the
+actual interactive page reads the corresponding editable .js file on load.
