@@ -1,20 +1,26 @@
-BYZANTINE V5.8.22 — ABOUT US CONTENT ONLY
-OFFICIAL GITHUB UPDATE — APPLY AFTER V5.8.21
+BYZANTINE V5.8.23 — ABOUT US CONTENT HYDRATION FIX
+OFFICIAL GITHUB UPDATE — APPLY AFTER V5.8.22
 
-1. Extract this ZIP.
-2. Copy index.html, _next/, and byzantine-about-us-content.js into the ROOT of
-   your existing GitHub repository (the folder containing index.html).
-3. Replace only the matching files.
-4. Commit and push. Once GitHub Pages deploys, hard-refresh with Ctrl+Shift+R.
+The previous patch installed a separate content file, but the original
+serialized React/Next.js data still contained the old gibberish. This update
+writes the About Us content directly to the actual Page 2 project record, so
+it renders without depending on a separate runtime content override.
 
-HOW TO EDIT THE TEXT LATER:
-Open byzantine-about-us-content.js in a normal text editor.
-Change the writing between backticks under each heading, save, commit, and push.
-There is NO need to edit minified _next JavaScript or index.html again.
+HOW TO INSTALL
+1. Extract the ZIP.
+2. Copy index.html and byzantine-about-us-content.js into the ROOT of
+   your existing GitHub repository, next to the existing index.html.
+3. Copy _next over the existing _next directory (replace the matching JS).
+4. Commit and push. Use a private browser window after deployment to rule
+   out old cached content. A hard refresh is Ctrl+Shift+R.
 
-WHAT CHANGES:
-Only Crystal 2 (About Us) receives the new nine topic sections (10 heading
-items, because Time Frame is counted separately). All supplied wording is kept
-as given. Existing image placeholders, crystal scenes, animations, and other
-crystal pages remain unchanged. Section text wraps onto the site's original
-scrolling 3D canvas, which automatically grows vertically.
+HOW TO EDIT CONTENT LATER
+Edit byzantine-about-us-content.js under its ten section headings, then
+commit and push. The patched renderer picks this file up at runtime.
+For the best reliability, refresh the browser with Ctrl+Shift+R after editing.
+
+NOTE: index.html also now contains a copy of the supplied About Us content
+inside Next.js's initial hydration data, for reliability when a browser has
+cached the older 3D renderer. For consistency, if you edit the content file,
+consider updating that stored initial data as well or using the updated
+renderer path. All "No image supplied yet" image paths are unchanged.

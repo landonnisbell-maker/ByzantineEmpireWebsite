@@ -1,11 +1,11 @@
 {
-  "version": "5.8.22",
-  "type": "Official GitHub update \u2014 content only",
-  "base": "V5.8.21",
+  "version": "5.8.23",
+  "type": "Official GitHub update \u2014 About Us content hydration fix",
+  "base": "V5.8.22",
   "updated_files": [
     "index.html",
-    "_next/static/chunks/1502ibkr~cu.4.js",
-    "byzantine-about-us-content.js"
+    "byzantine-about-us-content.js",
+    "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "scope": "Populate About Us crystal page with provided educational text. Keep existing placeholders and animations."
+  "scope": "Fix old gibberish About Us content by replacing the canonical Next.js project editorial data, preserve images and other pages."
 }
