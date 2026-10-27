@@ -1,9 +1,9 @@
 {
-  "version": "5.8.20",
-  "type": "Official GitHub update \u2014 changed JavaScript file only",
-  "base": "V5.8.19",
+  "version": "5.8.21",
+  "type": "Official GitHub update \u2014 changed file only",
+  "base": "V5.8.20",
   "updated_files": [
     "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "scope": "Keep the CLOSE label fixed relative to the interior camera while retaining the original mesh, label style, raycast click behavior, other interior content mouse movement, crystal transitions, landmark behavior and menu styling."
+  "scope": "Replace the moving 3D CLOSE hit target with a screen-fixed DOM close button that invokes the existing exitInterior action. Do not change crystal effects, rendering, or navigation."
 }

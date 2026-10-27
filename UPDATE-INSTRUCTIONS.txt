@@ -1,15 +1,20 @@
-BYZANTINE V5.8.20 — FIX CRYSTAL PAGE CLOSE BUTTON
-OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.19
+BYZANTINE V5.8.21 — TRUE SCREEN-FIXED CLOSE BUTTON
+OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.20
 
-1. Extract the ZIP.
+1. Extract this ZIP.
 2. Copy its _next folder into the ROOT of your existing GitHub repository.
-3. Overwrite ONLY _next/static/chunks/1502ibkr~cu.4.js.
-4. Commit and push to GitHub, then refresh with Ctrl+Shift+R after deployment.
+3. Replace ONLY the matching _next/static/chunks/1502ibkr~cu.4.js file.
+4. Commit and push to GitHub.
+5. Once deployed, hard refresh with Ctrl+Shift+R (or open a private window).
 
-Change:
-- CLOSE now stays stationary on-screen when the mouse moves, instead of shifting with the 3D interior camera.
-- Keeps the same CLOSE texture, location, active click target and raycast handler.
-- Applies automatically to all four crystal destination pages.
+This patch ONLY changes the CLOSE control in all four crystal interiors.
+- Removes the old 3D CLOSE plane from the rendered scene.
+- Removes its camera-dependent raycast target.
+- Adds a real, fixed-position DOM button with a large click area.
+- Uses the existing store exitInterior() action to keep the original transition.
+- Shows the button only when a crystal interior is fully active.
 
-No other files or parts of the website are intentionally changed.
-Runtime WebGPU visual behavior still requires browser testing on your deployed site.
+Does not modify landmark images, crystal geometry, mouse movement of the page,
+portal, titles, favicon, navigation veil, or any other UI.
+
+IMPORTANT: The live WebGPU site still needs a quick manual click test after deployment.
