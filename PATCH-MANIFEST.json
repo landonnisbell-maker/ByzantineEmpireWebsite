@@ -1,16 +1,14 @@
 {
-  "version": "v22-github-native-market-trigger",
+  "version": "v23-crystal-three-native-page-replacement",
   "kind": "update-only",
   "modified_existing": [
     "index.html",
-    "_next/static/chunks/1502ibkr~cu.4.js"
+    "_next/static/chunks/1502ibkr~cu.4.js",
+    "byzantine-market-content.js"
   ],
-  "added_or_updated": [
-    "market-runtime/market-bridge.js",
-    "market-runtime/VERIFY-DEPLOYMENT.html",
-    "market-runtime/* static assets"
-  ],
-  "unchanged": "other crystal navigation, loader and other site chunks",
-  "purpose": "Native Market crystal store -> persistent V19 marketplace overlay",
-  "note": "Test official live site before treating as production ready"
+  "replaced_existing_market_code": "Interior canvas renderer for project index 2; old Market description, placeholder images, role summary and other sections are no longer drawn",
+  "new_integration": "Direct state published by the active WebGL interior component: byz:market:real-page",
+  "updated_runtime": ["market-runtime/market-bridge.js", "market-runtime/VERIFY-DEPLOYMENT.html", "market-runtime/*"],
+  "preserved": ["other three crystals", "original portal", "Enter the Experience", "V19 five-product gallery and transitions"],
+  "testing": "static source checks and simulated browser bridge interaction; full live WebGL test still required"
 }

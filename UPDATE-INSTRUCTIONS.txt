@@ -1,29 +1,36 @@
-BYZANTINE MARKET V22 — NATIVE CRYSTAL TRIGGER (UPDATE ONLY)
-===========================================================
-This is NOT a new website. It updates your existing GitHub repository.
+BYZANTINE MARKET V23 — DIRECTLY REPLACES CRYSTAL 3 PAGE (UPDATE ONLY)
+======================================================================
+The original Market text/image page is now removed from the WebGL interior
+rendering path for Crystal 3. The original three OTHER crystal pages remain.
 
-1. EXTRACT the ZIP and copy its CONTENTS to the ROOT of ByzantineEmpireWebsite.
-2. OVERWRITE index.html and _next/static/chunks/1502ibkr~cu.4.js.
-3. MERGE market-runtime/ into your existing market-runtime/ folder.
-4. Keep your original portal, _next/ files, content files, and other assets.
-5. Commit & wait for GitHub Pages. Hard-refresh Ctrl+Shift+R.
-6. Go to Crystal 3 (Market). The cloth gallery should open automatically.
+1. EXTRACT the entire ZIP first (do not copy files from inside a ZIP preview).
+2. COPY EVERY FILE/FOLDER inside the extracted ZIP to the ROOT of your
+   existing ByzantineEmpireWebsite GitHub repository.
+3. When File Explorer asks, REPLACE files in the destination.
+4. Make sure these 4 important files are committed:
+   - index.html
+   - _next/static/chunks/1502ibkr~cu.4.js
+   - byzantine-market-content.js
+   - market-runtime/market-bridge.js
+   And the market-runtime/gallery, palia and product folders remain present.
+5. Commit, push and wait for GitHub Pages deployment; hard-refresh the website.
+6. Open /ByzantineEmpireWebsite/market-runtime/VERIFY-DEPLOYMENT.html on the
+   published site. ALL EIGHT tests should be green, not just HTTP 200.
+7. Enter Crystal 3. Its original project page is suppressed at its renderer;
+   the five-cloth gallery is opened by the same renderer.
 
-WHY V21.1 DID NOT ACTIVATE:
-The main _next JavaScript that publishes the authoritative 3D crystal state
-was not part of its ZIP, and DOM/title fallbacks are unreliable for WebGL content.
-V22 includes the corrected core chunk AND a matching bridge.
+WHY THIS IS DIFFERENT FROM V20-V22:
+Previously we relied on watching navigation state from outside the interior
+renderer. V23 changes the actual code that paints the old Market page. When
+that renderer displays Crystal 3, it instead paints a blank texture and emits
+an explicit activation event that the gallery consumes.
 
-CHECKS:
-Open https://YOURUSER.github.io/ByzantineEmpireWebsite/market-runtime/VERIFY-DEPLOYMENT.html
-(all checks should have check marks). Open /market-runtime/index.html directly to
-verify the cloth gallery itself separately.
+FOR DEBUGGING:
+On the main site in DevTools > Console, run:
+  window.__BYZ_MARKET_DEBUG__?.()
+Expected while Crystal 3 is open: visible:true, state.active:true, index:2,
+status:'interior'.
 
-If Market still doesn't activate, on live home URL append ?byzmarketdebug=1,
-open Chrome Developer Tools > Console, enter:
-  window.__BYZ_MARKET_BRIDGE?.debug()
-This reports active crystal state and whether the frame was shown.
-
-This update preserves Enter the Experience. It never disables or blocks clicks.
-The main site and market runtime both run as independent WebGL renderers.
-Publish only if you have rights to reuse the third-party gallery/product assets.
+This is an update-only package and does not overwrite the other site assets.
+The complete graphical WebGL interaction could not be verified here.
+Only publish third-party code/media if you have permission to reuse it.
