@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Market V28 - Deployment Check</title><style>body{margin:30px auto;padding:0 20px;max-width:760px;background:#0b0d12;color:#f5f6fa;font:16px/1.6 system-ui}a{color:#8fcafd}li{margin:.6em 0}.yes{color:#85e9af}.no{color:#ff9c9c}code{color:#b8c5da}</style><h1>Market V28 deployment check</h1><p>This checks files deployed by the V28 repair. It cannot test the real 3D click in your browser.</p><ol id="out"><li>Checking...</li></ol><p><a href="./">Open the dedicated Market page directly</a> · <a href="../">Open main website</a></p><p>If these checks pass but a click fails, open Chrome F12 → Console and evaluate <code>window.__BYZ_V28_LAST_ACTION__</code> and <code>window.__BYZ_V24_STATUS__?.()</code>.</p><script>
+(async()=>{const checks=[
+['Main index references V28 bridge','../index.html','market-entry-v24.js?v=28.0'],
+['Direct Market click in UI chunk','../_next/static/chunks/01ay6y4_-9myt.js','__BYZ_V28_LAST_ACTION__'],
+['Legacy store patch removed','../_next/static/chunks/00o~3wxtljh6z.js','BYZ-V25:',true],
+['V24 gallery bridge present','./market-entry-v24.js','__BYZ_V24_OPEN_MARKET__'],
+['Dedicated Market available','./index.html','byz-gallery'],
+['Cloth gallery available','../market-runtime/gallery/index.html','html'],
+['Palia page available','../market-runtime/palia/work/palia/','html']
+];const out=[];for(const [label,url,marker,absent] of checks){try{const response=await fetch(url+'?v28check='+Date.now(),{cache:'no-store'});let good=response.ok;let note='';if(good){const source=await response.text();if(marker==='html')good=source.toLowerCase().includes('<html');else good=absent?!source.includes(marker):source.includes(marker)}else note='HTTP '+response.status;out.push({label,good,note})}catch(err){out.push({label,good:false,note:String(err)})}}document.querySelector('#out').innerHTML=out.map(x=>`<li class="${x.good?'yes':'no'}">${x.good?'✓':'✗'} ${x.label} ${x.note?'<small>('+x.note+')</small>':''}</li>`).join('')})();
+</script></html>
