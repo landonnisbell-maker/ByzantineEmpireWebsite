@@ -23,7 +23,7 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 @media(max-width:600px){#byz-new-page-return{top:10px;left:10px;padding:11px 13px}}
 </style>
 </head><body>
-<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1" allow="autoplay;fullscreen" loading="eager"></iframe>
+<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=32" allow="autoplay;fullscreen" loading="eager"></iframe>
 <iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
 <div id="byz-status" role="status" aria-live="polite">Preparing product experience…</div>
 <button id="byz-retry" type="button">RETRY PRODUCT PAGE</button>
@@ -141,10 +141,10 @@ function preparePalia(){
 }
 window.addEventListener('message',ev=>{
   if(ev.origin===location.origin && ev.source===window.parent){
-    if(ev.data?.type==='byz:market:prewarm'||ev.data?.type==='byz:market:enter'){
+    if(['byz:market:prewarm','byz:market:enter','byz:market:ping'].includes(ev.data?.type)){
       window.__BYZ_MARKET_SHOULD_ENTER__=true;
       gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);
-      ensurePaliaLoaded();reportReady();
+      ensurePaliaLoaded();reportReady(true);
     }
     if(ev.data?.type==='byz:market:close'){gallery.contentWindow?.postMessage({type:'byz:market:close'},location.origin);exitProduct({fromHistory:true});}
     return;
@@ -155,16 +155,6 @@ window.addEventListener('message',ev=>{
   if(ev.source===gallery.contentWindow){
     if(type==='byz:market:gallery-ready'){
       galleryReady=true;
-      // If Palia's scene cannot report readiness, still allow Market to open
-      // using the fully loaded cloth gallery after a bounded initial preload.
-      // Product selection will keep the gallery visible until Palia is ready.
-      fallbackJob=setTimeout(()=>{
-        if(!shellReadySignalled && galleryReady){
-          shellReadySignalled=true;
-          report('partial-ready','cloth gallery ready; product renderer still preparing');
-          window.parent!==window && window.parent.postMessage({type:'byz:market:ready',partial:true},location.origin);
-        }
-      },16000);
       window.parent!==window && window.parent.postMessage({type:'byz:market:gallery-ready'},location.origin);
       reportReady();
     }
@@ -203,7 +193,13 @@ palia.addEventListener('load',()=>{
 let galleryReady=false;
 let shellReadySignalled=false;
 let fallbackJob=null;
-function reportReady(){
+function reportReady(replay=false){
+  if(replay && galleryReady && window.parent!==window){
+    window.parent.postMessage({type:'byz:market:gallery-ready'},location.origin);
+  }
+  if(replay && shellReadySignalled && window.parent!==window){
+    window.parent.postMessage({type:'byz:market:ready'},location.origin);
+  }
   if(galleryReady && visualReady && !shellReadySignalled){
     shellReadySignalled=true;clearTimeout(fallbackJob);
     window.parent!==window && window.parent.postMessage({type:'byz:market:ready'},location.origin);
@@ -244,6 +240,7 @@ function returnToCrystals(){
 }
 returnBtn.addEventListener('click',returnToCrystals);
 window.addEventListener('keydown',e=>{if(e.key==='Escape' && !document.body.classList.contains('byz-product-open'))returnToCrystals()});
+window.__BYZ_MARKET_STATUS__=()=>({version:'32.0',galleryReady,visualReady,productRequested,activeProductIndex});
 window.__BYZ_MARKET_SHOULD_ENTER__=true;
 report('host-loaded','V24: new dedicated Market page, five product routes');
 })();

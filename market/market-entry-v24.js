@@ -1,17 +1,18 @@
 (()=>{
 'use strict';
-// V31: Market prewarms alongside the site's original loader.
+// V32: React may replace <body> during hydration recovery. Keep the external
+// Market host connected, and replay readiness instead of waiting on a dead frame.
 // No changes to the React loader, crystal click handlers, router or core chunks.
-if(window.__BYZ_MARKET_V31__)return;
-window.__BYZ_MARKET_V31__=true;
+if(window.__BYZ_MARKET_V32__)return;
+window.__BYZ_MARKET_V32__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
-const SHELL='/ByzantineEmpireWebsite/market/index.html?embedded=1&v=31';
+const SHELL=new URL('index.html?embedded=1&v=32',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
-const log=(...a)=>{if(DEBUG)console.info('[BYZ Market V31]',...a)};
+const log=(...a)=>{if(DEBUG)console.info('[BYZ Market V32]',...a)};
 let overlay,frame,marketReady=false,frameLoaded=false,opened=false,wanted=false,preloadRequested=false;
 let zoomAnim=null,zoomCanvas=null,hideTimer=0;
-let mainLoaderAtBoot=true;
+let recoveries=0,reconnectScheduled=false,feedback,deadline=0;
 const STYLES=`
 #byz-v31-market{
  position:fixed;inset:0;z-index:2147483000;opacity:0;pointer-events:none;
@@ -26,7 +27,19 @@ const STYLES=`
 `;
 function emit(type){try{frame?.contentWindow?.postMessage({type},ORIGIN)}catch(e){log('message',e)}}
 function mount(){
- if(overlay||!document.body)return;
+ if(!document.body)return;
+ if(overlay){
+   if(!overlay.isConnected){
+     // Reconnecting an iframe starts a new document. Discard its old ready flag.
+     marketReady=false;frameLoaded=false;recoveries++;
+     const wasOpen=opened;opened=false;wanted=wanted||wasOpen;
+     overlay.classList.remove('byz-v31-open');
+     overlay.setAttribute('aria-hidden','true');
+     document.body.appendChild(overlay);
+     log('restored Market frame after React replaced its host',recoveries);
+   }
+   return;
+ }
  const style=document.createElement('style');style.id='byz-v31-market-style';style.textContent=STYLES;document.head.appendChild(style);
  overlay=document.createElement('section');overlay.id='byz-v31-market';
  overlay.setAttribute('aria-label','Byzantine marketplace');
@@ -36,12 +49,35 @@ function mount(){
  frame=document.createElement('iframe');frame.id='byz-v31-market-frame';
  frame.title='ta pánta pazári — Market';frame.allow='autoplay; fullscreen';frame.loading='eager';
  frame.tabIndex=-1;overlay.appendChild(frame);document.body.appendChild(overlay);
- frame.addEventListener('load',()=>{frameLoaded=true;log('market shell loaded');emit('byz:market:prewarm');if(wanted)requestOpen()});
+ frame.addEventListener('load',()=>{
+   if(!frame.isConnected)return;
+   frameLoaded=true;log('market shell loaded');
+   emit('byz:market:prewarm');emit('byz:market:ping');
+ });
  // Start early enough to share initial loading period, but yield the first paint to the primary scene.
  const begin=()=>{if(preloadRequested)return;preloadRequested=true;frame.src=SHELL;log('background preload started');};
  if('requestIdleCallback'in window){window.requestIdleCallback(begin,{timeout:900});}
  else setTimeout(begin,250);
 }
+function showFeedback(message,retry=false){
+ if(!feedback){
+   feedback=document.createElement('div');feedback.id='byz-market-feedback';
+   feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');
+   feedback.style.cssText='position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:2147483002;background:#101014ee;color:white;padding:12px 18px;border:1px solid #ffffff40;font:13px system-ui;text-align:center;max-width:85vw';
+ }
+ feedback.replaceChildren(document.createTextNode(message));
+ if(retry){
+   const button=document.createElement('button');button.textContent='Retry Market';
+   button.style.cssText='margin-left:14px;padding:7px 12px;cursor:pointer';
+   button.onclick=()=>{
+     marketReady=false;frameLoaded=false;mount();
+     frame.src=SHELL+'&retry='+Date.now();requestOpen();
+   };
+   feedback.appendChild(button);
+ }
+ if(!feedback.isConnected)document.body.appendChild(feedback);
+}
+function clearFeedback(){clearTimeout(deadline);deadline=0;feedback?.remove();}
 function findMainScene(){
  let best=null,area=0;
  for(const c of document.querySelectorAll('canvas')){
@@ -66,7 +102,8 @@ function reverseZoom(){
 }
 function reveal(){
  if(!wanted||opened||!marketReady)return;
- if(!overlay)mount();if(!overlay)return;
+ mount();if(!overlay?.isConnected||!marketReady)return;
+ clearFeedback();
  opened=true;clearTimeout(hideTimer);
  overlay.style.pointerEvents='';
  overlay.setAttribute('aria-hidden','false');
@@ -79,13 +116,22 @@ function reveal(){
 }
 function requestOpen(){
  wanted=true;
- if(!overlay)mount();
+ mount();
  if(marketReady)reveal();
- else {if(frameLoaded)emit('byz:market:prewarm');log('entry queued until prewarmed — original crystal scene stays visible');}
+ else {
+   if(frameLoaded){emit('byz:market:prewarm');emit('byz:market:ping');}
+   showFeedback('Preparing Market…');
+   // Never silently swallow both entry actions if a child renderer fails.
+   if(!deadline)deadline=setTimeout(()=>{
+     deadline=0;if(wanted&&!marketReady)showFeedback('Market could not finish loading.',true);
+   },30000);
+   log('entry queued until prewarmed — original crystal scene stays visible');
+ }
  return true;
 }
 function closeMarket(){
  wanted=false;
+ clearFeedback();deadline=0;
  if(!opened)return true;
  opened=false;emit('byz:market:close');
  overlay.classList.remove('byz-v31-open');
@@ -98,17 +144,28 @@ function closeMarket(){
 }
 window.__BYZ_V24_OPEN_MARKET__=requestOpen;
 window.__BYZ_V24_CLOSE_MARKET__=closeMarket;
-window.__BYZ_V24_STATUS__=()=>({version:'31.0',marketReady,frameLoaded,open:opened,requested:wanted,preloadRequested,pathname:location.pathname});
+window.__BYZ_V24_STATUS__=()=>({version:'32.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,open:opened,requested:wanted,preloadRequested,pathname:location.pathname});
 window.addEventListener('message',event=>{
- if(event.origin!==ORIGIN||event.source!==frame?.contentWindow)return;
+ if(event.origin!==ORIGIN||!frame?.isConnected||event.source!==frame.contentWindow)return;
  const type=event.data?.type;
  if(type==='byz:market:ready'){
    marketReady=true;log('market gallery and Palia confirmed prepared');
    if(wanted)reveal();
  }
- if(type==='byz:market:gallery-ready')log('gallery entered, pending Palia');
+ // The product renderer has its own readiness gate. A ready cloth gallery can
+ // open independently; a slow product renderer must not disable Market entry.
+ if(type==='byz:market:gallery-ready'){
+   marketReady=true;log('cloth gallery ready');if(wanted)reveal();
+ }
+ if(type==='byz:market:error'&&wanted)showFeedback('Market could not finish loading.',true);
  if(type==='byz:v24:exit-market')closeMarket();
 });
-window.addEventListener('keydown',ev=>{if(opened&&ev.key==='Escape'){ev.preventDefault();closeMarket()}});
+window.addEventListener('keydown',ev=>{if((opened||wanted)&&ev.key==='Escape'){ev.preventDefault();closeMarket()}});
+// React owns the body contents; module-level references alone do not establish
+// that our DOM still exists. Reattach once after each actual removal.
+new MutationObserver(()=>{
+ if(!overlay||overlay.isConnected||reconnectScheduled)return;
+ reconnectScheduled=true;queueMicrotask(()=>{reconnectScheduled=false;mount()});
+}).observe(document.documentElement,{childList:true,subtree:true});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();

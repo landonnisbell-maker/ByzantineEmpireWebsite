@@ -1,0 +1,51 @@
+BYZANTINE MARKET V32 — STARTUP FRAME RECOVERY
+
+Apply this update to your current website (the uploaded V31 installation).
+1. Extract the ZIP.
+2. Copy index.html, market/, and market-runtime/ into your existing repository
+   root, merging folders and replacing the four matching files.
+3. Commit and push. Once GitHub Pages finishes deploying, refresh with
+   Ctrl + Shift + R.
+
+This contains only four replacement website files. No _next chunks,
+navigation stores, content-editor files, or product assets are changed.
+
+WHY BOTH ENTRY CONTROLS STOPPED WORKING
+React's hydration recovery removed the Market iframe from the document.
+V31 retained a JavaScript reference to that disconnected frame and waited
+forever for it to report readiness. This was observed on the live site and
+reproduced with the supplied ZIP in Chromium.
+
+WHAT V32 CHANGES
+- Restores the Market frame if React removes it during startup.
+- Checks the actual frame connection, not just an existing reference.
+- Replays readiness messages after loading, reconnecting, and reopening.
+- Confirms the gallery loader has exited before reporting readiness.
+- Allows a prepared gallery to open while Palia finishes separately.
+- Shows an actionable retry if an entry request cannot finish.
+- Keeps background preloading, the existing zoom/reveal, persistent frames,
+  product scroll resets, and the main website URL.
+
+TESTS
+The actual uploaded page and cloth gallery ran in local Chromium using
+software WebGL. Startup removal/recovery, gallery entry, the Return to
+Crystals button, Escape, reopening without replacing the iframe, a second
+host removal/recovery, repeated ready messages, and an unchanged root URL
+passed. The delayed-product test intentionally held Palia unavailable;
+Market still opened. A separate run with the real Palia files reached
+product readiness.
+
+Both compiled native entry functions were also executed for crystal
+indices 0 through 3: only index 2 calls the Market controller. Every inline
+script in the replacement HTML and the entry JavaScript passed syntax
+checks. The archive was checked against the uploaded source; only the four
+listed website files differ.
+
+LIMITS
+The full native crystal camera interaction requires WebGPU and could not
+be verified graphically in this environment. The local integration test
+therefore opened Market through its controller after testing the two native
+handlers separately. This ZIP has not been deployed to your live site.
+
+Optional diagnostic, if needed: window.__BYZ_V24_STATUS__()
+The corrected controller reports version 32.0 and connected: true.
