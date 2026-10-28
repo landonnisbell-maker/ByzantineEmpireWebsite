@@ -7,7 +7,8 @@ function ppByzantineEnterSelectedOrNewMarket(){
   const store=ei.useProjectStore.getState();
   if(store.currentProjectIndex===2){
     if(typeof window!=="undefined"){
-      if(typeof window.__BYZ_V24_OPEN_MARKET__==="function") window.__BYZ_V24_OPEN_MARKET__();
+      if(typeof window.__BYZ_V25_OPEN_MARKET__==="function") window.__BYZ_V25_OPEN_MARKET__();
+      else if(typeof window.__BYZ_V24_OPEN_MARKET__==="function") window.__BYZ_V24_OPEN_MARKET__();
       else window.location.assign("/ByzantineEmpireWebsite/market/");
     }
     return;

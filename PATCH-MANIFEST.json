@@ -1,15 +1,12 @@
 {
-  "version": "24.0",
-  "kind": "GitHub update-only",
-  "strategy": "native Crystal 3 click directly opens a separate dedicated Market page",
-  "url": "/ByzantineEmpireWebsite/market/",
-  "replaced": [
+  "version": 25,
+  "purpose": "Directly open dedicated Market page from all native crystal and Discover actions",
+  "critical_files": [
     "index.html",
+    "_next/static/chunks/00o~3wxtljh6z.js",
+    "_next/static/chunks/01ay6y4_-9myt.js",
     "_next/static/chunks/1502ibkr~cu.4.js",
-    "byzantine-market-content.js"
-  ],
-  "added": [
-    "market/index.html",
-    "market/market-entry-v24.js"
+    "market/market-entry-v25.js",
+    "market/index.html"
   ]
 }

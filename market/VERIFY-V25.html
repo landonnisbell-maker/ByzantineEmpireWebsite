@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Marketplace V25 deployment checks</title>
+<style>body{background:#11141a;color:#e9edf2;font:16px/1.65 system-ui;max-width:850px;margin:36px auto;padding:0 18px}.pass{color:#82eab7}.fail{color:#ff9999}li{padding:7px 0;border-bottom:1px solid #ffffff18}a{color:#8dcbff}</style>
+<h1>Market V25 — deployment test</h1><p>These tests must all be green. If not, the ZIP files were not copied into the published GitHub Pages branch, or GitHub's deployment hasn't finished.</p>
+<ol id="checks"><li>Checking…</li></ol>
+<p><a href="./">Open the dedicated Market page directly</a> · <a href="../">Back to main site</a></p>
+<script>
+const checks=[
+ ['Native project-store entrance patch','../_next/static/chunks/00o~3wxtljh6z.js','BYZ-V25'],
+ ['Discover Page button patch','../_next/static/chunks/01ay6y4_-9myt.js','__BYZ_V25_OPEN_MARKET__'],
+ ['Native crystal-click patch','../_next/static/chunks/1502ibkr~cu.4.js','__BYZ_V25_OPEN_MARKET__'],
+ ['New marketplace entry bridge','./market-entry-v25.js','__BYZ_V25_OPEN_MARKET__'],
+ ['Main site uses V25 bridge','../index.html','market-entry-v25.js'],
+ ['Market page itself','./index.html','byz-market-version'],
+ ['Original gallery assets','../market-runtime/gallery/index.html','byz:market:enter'],
+ ['Palia product assets','../market-runtime/palia/work/palia/','html'],
+ ['Five product definitions','../market-runtime/products/coins.json','Coins']];
+(async()=>{let results=[];for(const [name,url,marker] of checks){try{let r=await fetch(url+(url.includes('?')?'&':'?')+'v25='+Date.now(),{cache:'no-store'});let text=r.ok?await r.text():'';results.push({name,ok:r.ok&&text.includes(marker),info:r.status});}catch(e){results.push({name,ok:false,info:String(e)});}}document.getElementById('checks').innerHTML=results.map(r=>`<li class="${r.ok?'pass':'fail'}">${r.ok?'✓':'✗'} ${r.name} <small>(${r.info})</small></li>`).join('')})();</script></html>

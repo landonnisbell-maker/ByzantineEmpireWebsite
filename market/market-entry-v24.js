@@ -4,7 +4,7 @@ if(window.__BYZ_V24_PAGE_INSTALLED__)return;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ROOT='/ByzantineEmpireWebsite/';
 const MARKET=ROOT+'market/';
-const log=(...a)=>{if(new URLSearchParams(location.search).has('byzmarketdebug'))console.log('[BYZ V24]',...a)};
+const log=(...a)=>{if(new URLSearchParams(location.search).has('byzmarketdebug'))console.log('[BYZ V25]',...a)};
 let overlay=null,frame=null,open=false,frameReady=false,originalUrl=location.href;
 function send(type){try{frame?.contentWindow?.postMessage({type},location.origin)}catch(e){log('send',e)}}
 function mount(){
@@ -65,7 +65,10 @@ function closeMarket({fromHistory=false}={}){
  log('return-to-crystals');
 }
 window.__BYZ_V24_OPEN_MARKET__=openMarket;
+window.__BYZ_V25_OPEN_MARKET__=openMarket;
+window.__BYZ_V25_MARKET_STATUS__=()=>({open,frameReady,hasOverlay:!!overlay,currentUrl:location.href});
 window.__BYZ_V24_CLOSE_MARKET__=closeMarket;
+window.__BYZ_V25_CLOSE_MARKET__=closeMarket;
 window.addEventListener('popstate',()=>{
  if(location.pathname===MARKET)reveal();
  else closeMarket({fromHistory:true});
