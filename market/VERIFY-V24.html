@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Market V24 — Deployment Check</title>
+<style>body{background:#101218;color:#f4f4f4;font:15px/1.6 system-ui;margin:36px auto;max-width:850px;padding:0 22px}h1{font-size:26px}.ok{color:#86efac}.fail{color:#fda4af}li{padding:7px 0}code{color:#93c5fd}a{color:#7dd3fc}small{color:#9ca3af}</style>
+<h1>Market V24 — Deployment Check</h1><p>This checks whether the new <strong>dedicated Market page</strong> and its direct Crystal 3 click handler reached GitHub Pages. <strong>All checks should be green.</strong></p><ol id="results"><li>Checking…</li></ol><p><a href="./">Open the dedicated Market page</a> · <a href="../">Back to the original website</a></p><small>This checks deployed files, not full 3D GPU interaction. If any check is red, the update is missing, stale, or copied to the wrong folder.</small>
+<script>
+const tests=[
+['Main site loads V24 entry script','../index.html','market-entry-v24.js'],
+['Crystal selection invokes the new Market page','../_next/static/chunks/1502ibkr~cu.4.js','ppByzantineEnterSelectedOrNewMarket'],
+['Market launcher exists','./market-entry-v24.js','__BYZ_V24_OPEN_MARKET__'],
+['Dedicated page exists','./index.html','byz-new-page-return'],
+['Five-card gallery exists','../market-runtime/gallery/index.html','byz:market:enter'],
+['Palia experience exists','../market-runtime/palia/work/palia/','html'],
+['Paramerion route exists','../market-runtime/products/paramerion-sword/','byz:open-product'],
+['Gold Jewelry route exists','../market-runtime/products/gold-jewelry/','byz:open-product'],
+['Food Items route exists','../market-runtime/products/food-items/','byz:open-product'],
+['Coins route exists','../market-runtime/products/coins/','byz:open-product'],
+['Silk Textiles route exists','../market-runtime/products/silk-textiles/','byz:open-product']
+];
+(async()=>{
+const out=[];
+for(const [label,path,marker] of tests){
+  try{const url=path+(path.includes('?')?'&':'?')+'v24verify='+Date.now();const r=await fetch(url,{cache:'no-store'});const t=await r.text();const ok=r.ok&&t.includes(marker);out.push(`<li class="${ok?'ok':'fail'}">${ok?'✓':'✗'} ${label} <small>(${ok?'verified':`HTTP ${r.status}, missing marker`})</small></li>`)}catch(e){out.push(`<li class="fail">✗ ${label} <small>(${String(e)})</small></li>`)}}
+document.querySelector('#results').innerHTML=out.join('');
+})();</script></html>

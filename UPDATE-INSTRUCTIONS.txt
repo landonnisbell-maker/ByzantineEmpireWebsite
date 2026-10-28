@@ -1,36 +1,44 @@
-BYZANTINE MARKET V23 — DIRECTLY REPLACES CRYSTAL 3 PAGE (UPDATE ONLY)
-======================================================================
-The original Market text/image page is now removed from the WebGL interior
-rendering path for Crystal 3. The original three OTHER crystal pages remain.
+BYZANTINE V24 — NEW DEDICATED MARKET PAGE
 
-1. EXTRACT the entire ZIP first (do not copy files from inside a ZIP preview).
-2. COPY EVERY FILE/FOLDER inside the extracted ZIP to the ROOT of your
-   existing ByzantineEmpireWebsite GitHub repository.
-3. When File Explorer asks, REPLACE files in the destination.
-4. Make sure these 4 important files are committed:
-   - index.html
-   - _next/static/chunks/1502ibkr~cu.4.js
-   - byzantine-market-content.js
-   - market-runtime/market-bridge.js
-   And the market-runtime/gallery, palia and product folders remain present.
-5. Commit, push and wait for GitHub Pages deployment; hard-refresh the website.
-6. Open /ByzantineEmpireWebsite/market-runtime/VERIFY-DEPLOYMENT.html on the
-   published site. ALL EIGHT tests should be green, not just HTTP 200.
-7. Enter Crystal 3. Its original project page is suppressed at its renderer;
-   the five-cloth gallery is opened by the same renderer.
+This is an UPDATE-ONLY package for your existing GitHub repository.
 
-WHY THIS IS DIFFERENT FROM V20-V22:
-Previously we relied on watching navigation state from outside the interior
-renderer. V23 changes the actual code that paints the old Market page. When
-that renderer displays Crystal 3, it instead paints a blank texture and emits
-an explicit activation event that the gallery consumes.
+1) Extract this ZIP.
+2) Copy ALL enclosed files/folders to the ROOT of ByzantineEmpireWebsite.
+3) Allow File Explorer to merge folders and replace matching files.
+4) Commit/push the modified files. GitHub Pages needs to finish deploying.
+5) Hard-refresh the main site and select Crystal 3 (Market).
 
-FOR DEBUGGING:
-On the main site in DevTools > Console, run:
-  window.__BYZ_MARKET_DEBUG__?.()
-Expected while Crystal 3 is open: visible:true, state.active:true, index:2,
-status:'interior'.
+NEW: /ByzantineEmpireWebsite/market/ is a real standalone Market page.
+Crystal 3's ORIGINAL click handler now opens that separate page instead of
+entering the old Market interior. Other crystals still enter their native interiors.
 
-This is an update-only package and does not overwrite the other site assets.
-The complete graphical WebGL interaction could not be verified here.
-Only publish third-party code/media if you have permission to reuse it.
+The Market page is preloaded inside a full-screen iframe while the main site loads.
+Returning to Crystals hides the page instead of restarting the portal.
+
+IMPORTANT REPLACED FILES:
+- index.html
+- _next/static/chunks/1502ibkr~cu.4.js
+- byzantine-market-content.js
+
+NEW FILES:
+- market/index.html
+- market/market-entry-v24.js
+- market-runtime/ (keep all its files)
+
+SMOKE CHECKS:
+A) Open https://landonnisbell-maker.github.io/ByzantineEmpireWebsite/market/
+   This should show the standalone gallery even without going through crystals.
+B) Open the main site, enter portal/crystals, select Crystal 3.
+   It should fade to the new Market page, not draw the old interior.
+C) Select a product, return to gallery, then Return to Crystals.
+   Other crystals must retain their original behavior.
+
+The original loader/entry button is NOT intercepted by this update.
+If the live site still shows the old Market interior after V24:
+- Check network tab: /_next/static/chunks/1502ibkr~cu.4.js must include
+  ppByzantineEnterSelectedOrNewMarket.
+- Check console window.__BYZ_V24_STATUS__() to verify the market page loaded.
+
+Note: Only publish third-party code/assets you have permission to use.
+
+Five static deep-link entry pages are included at market-runtime/products/<slug>/index.html, so product URLs do not require the local Python server.

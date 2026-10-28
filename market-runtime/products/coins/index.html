@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="theme-color" content="#0a0b0d"><title>Coins · ta pánta pazári</title>
+<meta name="theme-color" content="#0a0b0d"><title>ta pánta pazári · Market</title>
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#0c0d0f;color:#fff;font-family:Arial,sans-serif}
 #byz-gallery,#byz-palia{position:fixed;inset:0;display:block;width:100%;height:100%;height:100dvh;border:0;overflow:hidden;}
@@ -17,12 +17,17 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 #byz-retry{display:none;position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:5;border:1px solid #a5abb3;background:#161921;color:white;padding:12px 16px;cursor:pointer;font:600 11px system-ui,sans-serif}
 #byz-retry.visible{display:block}
 @media(prefers-reduced-motion:reduce){#byz-palia,#byz-gallery{transition-duration:.2s!important}}
+
+#byz-new-page-return{position:fixed;top:14px;left:15px;z-index:30;display:flex;align-items:center;gap:10px;padding:12px 15px;background:rgba(9,11,15,.88);border:1px solid rgba(255,255,255,.25);color:#fff;font:600 10px/1.2 Arial,sans-serif;letter-spacing:.13em;cursor:pointer;transition:background .2s}
+#byz-new-page-return:hover{background:rgba(40,44,52,.95)}
+@media(max-width:600px){#byz-new-page-return{top:10px;left:10px;padding:11px 13px}}
 </style>
 </head><body>
-<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1" allow="autoplay;fullscreen"></iframe>
-<iframe id="byz-palia" title="Palia interactive product page" src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1" allow="autoplay;fullscreen"></iframe>
+<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1" allow="autoplay;fullscreen" loading="eager"></iframe>
+<iframe id="byz-palia" title="Palia interactive product page" src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1" allow="autoplay;fullscreen" loading="eager"></iframe>
 <div id="byz-status" role="status" aria-live="polite">Preparing product experience…</div>
 <button id="byz-retry" type="button">RETRY PRODUCT PAGE</button>
+<button type="button" id="byz-new-page-return" aria-label="Return to Crystals">← RETURN TO CRYSTALS</button>
 <script>
 (()=>{
 'use strict';
@@ -49,7 +54,7 @@ let activeProductIndex=initialIndex>=0?initialIndex:0;
 let enteredPalia=false, sceneStarted=false, visualReady=false, productRequested=false, leaving=false, failing=false;
 let loadDeadline=null, startTime=performance.now(), lastReadyEvent='initial';
 function report(action,detail=''){
-  try{navigator.sendBeacon('/ByzantineEmpireWebsite/market-runtime/telemetry-disabled',new Blob([JSON.stringify({kind:'v17-'+action,detail:String(detail),path:location.href,time:new Date().toISOString()})],{type:'application/json'}));}catch(_){}
+  if(new URLSearchParams(location.search).has('byzdebug'))console.debug('[Market]',action,detail);
 }
 function selectProduct(selection){
   let index = null;
@@ -129,7 +134,7 @@ function preparePalia(){
 window.addEventListener('message',ev=>{
   if(ev.origin===location.origin && ev.source===window.parent){
     if(ev.data?.type==='byz:market:enter'){window.__BYZ_MARKET_SHOULD_ENTER__=true;gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);}
-    if(ev.data?.type==='byz:market:close'){exitProduct({fromHistory:true});}
+    if(ev.data?.type==='byz:market:close'){gallery.contentWindow?.postMessage({type:'byz:market:close'},location.origin);exitProduct({fromHistory:true});}
     return;
   }
 
@@ -168,13 +173,13 @@ palia.addEventListener('load',()=>{
   palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin);
   setTimeout(()=>{if(!sceneStarted)palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin)},1400);
 });
-gallery.addEventListener('load',()=>{report('gallery-iframe-loaded'); if(window.__BYZ_MARKET_SHOULD_ENTER__)gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);});
+gallery.addEventListener('load',()=>{report('gallery-iframe-loaded');gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);});
 retry.addEventListener('click',()=>{
   retry.classList.remove('visible');showStatus(true);
   // A retry is only needed if WebGL initialization truly stalled.
   // Never disturb the gallery or its Enter the Experience button.
   enteredPalia=false;sceneStarted=false;visualReady=false;
-  palia.src='/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&retry='+Date.now();
+  palia.src='/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&retry='+Date.now();
   report('retry');openProduct();
 });
 window.addEventListener('popstate',()=>{
@@ -188,6 +193,17 @@ if(initialIndex>=0){
   showStatus(true);
   report('deep-link',PRODUCTS[initialIndex].slug);
 }
-report('host-loaded','V19: five dedicated product routes; per-product scroll reset');
+const returnBtn=document.getElementById('byz-new-page-return');
+function returnToCrystals(){
+ if(window.parent!==window){
+   window.parent.postMessage({type:'byz:v24:exit-market'},location.origin);
+ }else{
+   location.href='/ByzantineEmpireWebsite/';
+ }
+}
+returnBtn.addEventListener('click',returnToCrystals);
+window.addEventListener('keydown',e=>{if(e.key==='Escape' && !document.body.classList.contains('byz-product-open'))returnToCrystals()});
+window.__BYZ_MARKET_SHOULD_ENTER__=true;
+report('host-loaded','V24: new dedicated Market page, five product routes');
 })();
 </script><script>window.parent!==window && window.parent.postMessage({type:'byz:market:shell-ready'},location.origin);</script></body></html>
