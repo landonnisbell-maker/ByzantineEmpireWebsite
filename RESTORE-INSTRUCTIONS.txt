@@ -1,0 +1,20 @@
+V26 EMERGENCY RESTORE — MAIN WEBSITE LOADER
+
+PURPOSE
+Restore the last working pre-Market-integration site. This recovery intentionally prioritizes getting the original website loading and its original crystal interiors working again. The new cloth Market gallery is NOT activated by this rollback.
+
+INSTALL
+1. Make a backup copy of your current repository folder (recommended).
+2. Extract this ZIP.
+3. Copy these FIVE files from the extracted folder into your existing GitHub repository's root. Keep the _next/static/chunks/ folders intact.
+4. Choose Replace the files in the destination.
+5. Commit and push these five changed files to the branch used by GitHub Pages.
+6. After GitHub Pages finishes deploying, test the home page in a new private/incognito window. If necessary, hard-refresh with Ctrl+Shift+R.
+
+DO NOT DELETE OTHER FILES, including the market/ and market-runtime/ folders. Those are not used by this restore and can remain in the repository until the new marketplace is integrated safely.
+
+EXPECTED RESULT
+Your original portal, crystal scene, and original Market content should return. This intentionally removes the V25 click handlers and the V23/V24 empty Market interior modifications. Do not attempt to reapply V20 through V25 over this recovery.
+
+IF IT STILL STAYS AT 0
+In Chrome, press F12 > Console and copy the first red error. Check the Network tab for failed JS requests. Send the errors and GitHub Actions/Pages deployment status.

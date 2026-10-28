@@ -1,0 +1,33 @@
+{
+  "name": "Emergency restore of last working pre-market-integration site",
+  "baseline": "V5.8.24 content editors with original V5.8.2 core startup chunks",
+  "mode": "UPDATE ONLY; five files replaced, all other files left untouched",
+  "note": "Temporarily restores the original Market page. New marketplace files are left in the repository but no longer wired into site startup.",
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "d5fe9d81983c1b07ad9f4c8fb154a63740cf06fa8c7cc9491ee2a5be50d4e5cd",
+      "bytes": 154616
+    },
+    {
+      "path": "_next/static/chunks/00o~3wxtljh6z.js",
+      "sha256": "f8762d80bcff174fbe512f371d57f42c023fef6bc80538bccd0c7a00bf662141",
+      "bytes": 67667
+    },
+    {
+      "path": "_next/static/chunks/01ay6y4_-9myt.js",
+      "sha256": "3a49f5ed701873311f7d1edfb951dfeec4f69fad692c5459f110c7d143f5f511",
+      "bytes": 67875
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "sha256": "6a5b98766cf5ac901229c7cc940a42b9c26265204ed4875dd5cc4a0689a3a7f6",
+      "bytes": 269717
+    },
+    {
+      "path": "byzantine-market-content.js",
+      "sha256": "64731f4c82f2bbeb3383b6378ad4669341917b13486f524b5767614a21ad949e",
+      "bytes": 1957
+    }
+  ]
+}
