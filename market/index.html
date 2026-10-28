@@ -18,16 +18,20 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 #byz-retry.visible{display:block}
 @media(prefers-reduced-motion:reduce){#byz-palia,#byz-gallery{transition-duration:.2s!important}}
 
-#byz-new-page-return{position:fixed;top:14px;left:15px;z-index:30;display:flex;align-items:center;gap:10px;padding:12px 15px;background:rgba(9,11,15,.88);border:1px solid rgba(255,255,255,.25);color:#fff;font:600 10px/1.2 Arial,sans-serif;letter-spacing:.13em;cursor:pointer;transition:background .2s}
-#byz-new-page-return:hover{background:rgba(40,44,52,.95)}
-@media(max-width:600px){#byz-new-page-return{top:10px;left:10px;padding:11px 13px}}
+#byz-new-page-return{position:fixed;left:calc(8.2vw - 14px);top:calc(8.1vh - 16px);z-index:30;display:inline-flex;justify-content:center;align-items:center;min-width:95px;min-height:44px;padding:12px 14px;background:transparent;border:0;border-radius:4px;color:rgba(255,255,255,.90);font:600 clamp(10px,.75vw,13px)/1.15 Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;pointer-events:auto;white-space:nowrap;text-align:center;transform:none!important;transition:color .18s ease,background-color .18s ease;touch-action:manipulation}
+#byz-new-page-return:hover{color:#fff;background:rgba(255,255,255,.075)}
+#byz-new-page-return:focus-visible{outline:2px solid #fff;outline-offset:3px}
+/* The product page has its OWN close control, so the Market close must not overlap it. */
+body.byz-product-open #byz-new-page-return,
+body.byz-product-leaving #byz-new-page-return{visibility:hidden;pointer-events:none}
+@media(max-width:680px){#byz-new-page-return{left:3vw;top:4vh;min-width:88px;min-height:48px}}
 </style>
 </head><body>
 <iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=34" allow="autoplay;fullscreen" loading="eager"></iframe>
 <iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
 <div id="byz-status" role="status" aria-live="polite">Preparing product experience…</div>
 <button id="byz-retry" type="button">RETRY PRODUCT PAGE</button>
-<button type="button" id="byz-new-page-return" aria-label="Return to Crystals">← RETURN TO CRYSTALS</button>
+<button type="button" id="byz-new-page-return" aria-label="Close Market and return to crystals" title="Return to crystals">C L O S E</button>
 <script>
 (()=>{
 'use strict';
