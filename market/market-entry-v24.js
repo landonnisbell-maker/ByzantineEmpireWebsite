@@ -3,11 +3,11 @@
 // V33: Use the SAME 3D project interior camera animation as all other crystals.
 // The old Market canvas remains only as an interior-transition surface; the
 // ready cloth gallery replaces it at the original "interior" completion event.
-if(window.__BYZ_MARKET_V33__)return;
-window.__BYZ_MARKET_V33__=true;
+if(window.__BYZ_MARKET_V34__)return;
+window.__BYZ_MARKET_V34__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
-const SHELL=new URL('index.html?embedded=1&v=33',document.currentScript.src).href;
+const SHELL=new URL('index.html?embedded=1&v=34',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
 const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V33]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
@@ -18,6 +18,18 @@ const STYLES=`
  pointer-events:none;overflow:hidden;background:#090a0d;transition:opacity .16s ease-out}
 #byz-v33-market.byz-v33-open{opacity:1;pointer-events:auto}
 #byz-v33-market>iframe{display:block;width:100%;height:100%;border:0;background:#090a0d}
+/* Keep the ORIGINAL website sound/menu controls over the Market frame.
+   Do not copy or re-create any buttons: these are the live React controls. */
+html.byz-v34-market-active nav[data-navbar][class*="Navbar-module_"]{
+ position:fixed!important;inset:auto 0 auto 0!important;top:0!important;
+ z-index:2147483400!important;opacity:1!important;visibility:visible!important;
+ transform:translateY(0)!important;pointer-events:none!important;
+ transition:opacity .2s ease!important;
+}
+html.byz-v34-market-active nav[data-navbar][class*="Navbar-module_"] button[class*="__sound"],
+html.byz-v34-market-active nav[data-navbar][class*="Navbar-module_"] button[class*="__menu"]{
+ opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+}
 @media(prefers-reduced-motion:reduce){#byz-v33-market{transition-duration:0s!important}}
 `;
 function emit(type){try{frame?.contentWindow?.postMessage({type},ORIGIN)}catch(e){log('postMessage',e)}}
@@ -53,7 +65,7 @@ function clearStatus(){if(deadline){clearTimeout(deadline);deadline=0;}feedback?
 function reveal(){
  if(!wanted||!nativeReached||!marketReady||opened)return;
  mount();if(!overlay?.isConnected)return;
- clearStatus();opened=true;overlay.setAttribute('aria-hidden','false');emit('byz:market:enter');
+ clearStatus();opened=true;document.documentElement.classList.add('byz-v34-market-active');overlay.setAttribute('aria-hidden','false');emit('byz:market:enter');
  requestAnimationFrame(()=>{if(opened)overlay.classList.add('byz-v33-open')});
  log('native interior COMPLETE — gallery revealed');
 }
@@ -67,7 +79,7 @@ function prepareMarket(){
  }
 }
 function conceal(){
- opened=false;overlay?.classList.remove('byz-v33-open');overlay?.setAttribute('aria-hidden','true');emit('byz:market:close');clearStatus();
+ opened=false;document.documentElement.classList.remove('byz-v34-market-active');overlay?.classList.remove('byz-v33-open');overlay?.setAttribute('aria-hidden','true');emit('byz:market:close');clearStatus();
 }
 function closeMarket(options={}){
  wanted=false;nativeReached=false;conceal();
@@ -86,7 +98,7 @@ window.__BYZ_V24_OPEN_MARKET__=()=>{
  prepareMarket();return false;
 };
 window.__BYZ_V24_CLOSE_MARKET__=()=>closeMarket();
-window.__BYZ_V24_STATUS__=()=>({version:'33.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
+window.__BYZ_V24_STATUS__=()=>({version:'34.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
 function applyNative(detail){
  if(!detail)return;
  // Native store drives every one of the original camera transitions:
