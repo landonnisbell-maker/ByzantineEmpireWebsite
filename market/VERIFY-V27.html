@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market V27 install check</title><style>body{margin:35px auto;max-width:850px;padding:0 20px;background:#10141b;color:#eee;font:16px/1.6 system-ui}h1{font-size:1.5em}.ok{color:#90e5b1}.err{color:#ffb3a7}code{color:#a2d5fa;overflow-wrap:anywhere}a{color:#a2d5fa}li{margin:.6em 0}</style><h1>Market V27 — installation check</h1><p>This is a file-deployment check, not a WebGL runtime test. It verifies the new Discover Page handler and standalone marketplace are published.</p><ol id="checks"><li>Checking files...</li></ol><p><a href="./">Open the marketplace directly</a> · <a href="../">Back to the main website</a></p><script>
+const root='/ByzantineEmpireWebsite/';const checks=[
+ ['Main index loads V27 handler',root+'index.html','market-entry-v27.js?v=27.0'],
+ ['Market-only click handler deployed',root+'market/market-entry-v27.js','v27DiscoverMarketTarget'],
+ ['Marketplace page deployed',root+'market/index.html','byz-gallery'],
+ ['Five-product gallery deployed',root+'market-runtime/gallery/index.html','Paramerion Sword'],
+ ['Palia product page deployed',root+'market-runtime/palia/work/palia/','html'],
+ ['Paramerion product data deployed',root+'market-runtime/products/paramerion-sword.json','Paramerion Sword'],
+ ['Gold Jewelry product data deployed',root+'market-runtime/products/gold-jewelry.json','Gold Jewelry'],
+ ['Food Items product data deployed',root+'market-runtime/products/food-items.json','Food Items'],
+ ['Coins product data deployed',root+'market-runtime/products/coins.json','Coins'],
+ ['Silk Textiles product data deployed',root+'market-runtime/products/silk-textiles.json','Silk Textiles']
+];(async()=>{const out=[];for(const [name,url,marker] of checks){try{const res=await fetch(url+(url.includes('?')?'&':'?')+'_nocache='+Date.now(),{cache:'no-store'});const body=res.ok?await res.text():'';out.push({name,ok:res.ok&&body.includes(marker),detail:res.status})}catch(e){out.push({name,ok:false,detail:String(e)})}}document.getElementById('checks').innerHTML=out.map(x=>`<li class="${x.ok?'ok':'err'}">${x.ok?'PASS':'FAIL'} — ${x.name} <small>(${x.detail})</small></li>`).join('')})();
+</script></html>
