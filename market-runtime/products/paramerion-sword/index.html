@@ -18,21 +18,29 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 #byz-retry.visible{display:block}
 @media(prefers-reduced-motion:reduce){#byz-palia,#byz-gallery{transition-duration:.2s!important}}
 
-#byz-new-page-return{position:fixed;top:14px;left:15px;z-index:30;display:flex;align-items:center;gap:10px;padding:12px 15px;background:rgba(9,11,15,.88);border:1px solid rgba(255,255,255,.25);color:#fff;font:600 10px/1.2 Arial,sans-serif;letter-spacing:.13em;cursor:pointer;transition:background .2s}
-#byz-new-page-return:hover{background:rgba(40,44,52,.95)}
-@media(max-width:600px){#byz-new-page-return{top:10px;left:10px;padding:11px 13px}}
+#byz-new-page-return{position:fixed;left:calc(8.2vw - 14px);top:calc(8.1vh - 16px);z-index:40;display:inline-flex;justify-content:center;align-items:center;min-width:95px;min-height:44px;padding:12px 14px;background:transparent;border:0;border-radius:4px;color:rgba(255,255,255,.9);font:600 clamp(10px,.75vw,13px)/1.15 Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;pointer-events:auto;white-space:nowrap;transition:color .18s ease,background-color .18s ease}
+#byz-new-page-return:hover{color:#fff;background:rgba(255,255,255,.075)}
+#byz-new-page-return:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:680px){#byz-new-page-return{left:3vw;top:4vh;min-width:88px;min-height:48px}}
 </style>
 </head><body>
-<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1" allow="autoplay;fullscreen" loading="eager"></iframe>
-<iframe id="byz-palia" title="Palia interactive product page" src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1" allow="autoplay;fullscreen" loading="eager"></iframe>
+<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=36.0" allow="autoplay;fullscreen" loading="eager"></iframe>
+<iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&v=36.0" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
 <div id="byz-status" role="status" aria-live="polite">Preparing product experience…</div>
 <button id="byz-retry" type="button">RETRY PRODUCT PAGE</button>
-<button type="button" id="byz-new-page-return" aria-label="Return to Crystals">← RETURN TO CRYSTALS</button>
+<button type="button" id="byz-new-page-return" aria-label="Close Market or product" title="Close">CLOSE</button>
 <script>
 (()=>{
 'use strict';
 const gallery=document.getElementById('byz-gallery');
 const palia=document.getElementById('byz-palia');
+let paliaStartedLoading=false;
+function ensurePaliaLoaded(){
+ if(paliaStartedLoading)return;
+ paliaStartedLoading=true;
+ palia.src=palia.getAttribute('data-src');
+}
+
 const status=document.getElementById('byz-status');
 const retry=document.getElementById('byz-retry');
 // Separate dedicated product routes, backed by individual products/*.json files.
@@ -89,13 +97,13 @@ function activateProductScroll(){
 }
 function openProduct(selection,options={}){
   if(leaving)return;
+  ensurePaliaLoaded();
   selectProduct(selection);
   productRequested=true;
   const product=PRODUCTS[activeProductIndex];
-  // SPA route with its own URL: refresh, bookmarks and deep links work.
-  if(!options.fromHistory && location.pathname!==PRODUCT_PATH_PREFIX+product.slug){
-    history.pushState({byzProduct:product.slug},'',PRODUCT_PATH_PREFIX+product.slug+'/');
-  }
+  // Keep the frame on its real HTML URL. The dedicated product URLs still
+  // exist for direct visits, but iframe history must never point at a virtual SPA route.
+  report('product-selected',product.slug);
   report('card-click',`product=${product.slug} ready=${visualReady}, entered=${enteredPalia}, event=${lastReadyEvent}`);
   if(visualReady){makeVisible();return;}
   // Keep the live gallery visible while the product renderer finishes.
@@ -111,10 +119,8 @@ function openProduct(selection,options={}){
 function exitProduct(options={}){
   if(!productRequested && !document.body.classList.contains('byz-product-open'))return;
   productRequested=false;clearTimeout(loadDeadline);loadDeadline=null;
-  // /lite is the gallery route; the original gallery iframe is NEVER reloaded.
-  if(!options.fromHistory && location.pathname.startsWith(PRODUCT_PATH_PREFIX)){
-    history.replaceState({byzGallery:true},'','/ByzantineEmpireWebsite/market-runtime/index.html');
-  }
+  // No frame-level history rewrite: keep the gallery instance alive.
+  report('product-returned');
   retry.classList.remove('visible');showStatus(false);
   if(!document.body.classList.contains('byz-product-open'))return;
   leaving=true;
@@ -133,7 +139,11 @@ function preparePalia(){
 }
 window.addEventListener('message',ev=>{
   if(ev.origin===location.origin && ev.source===window.parent){
-    if(ev.data?.type==='byz:market:enter'){window.__BYZ_MARKET_SHOULD_ENTER__=true;gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);}
+    if(['byz:market:prewarm','byz:market:enter','byz:market:ping'].includes(ev.data?.type)){
+      window.__BYZ_MARKET_SHOULD_ENTER__=true;
+      gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);
+      ensurePaliaLoaded();reportReady(true);
+    }
     if(ev.data?.type==='byz:market:close'){gallery.contentWindow?.postMessage({type:'byz:market:close'},location.origin);exitProduct({fromHistory:true});}
     return;
   }
@@ -141,6 +151,11 @@ window.addEventListener('message',ev=>{
   if(ev.origin!==location.origin || !ev.data || typeof ev.data!=='object')return;
   const type=ev.data.type;
   if(ev.source===gallery.contentWindow){
+    if(type==='byz:market:gallery-ready'){
+      galleryReady=true;
+      window.parent!==window && window.parent.postMessage({type:'byz:market:gallery-ready'},location.origin);
+      reportReady();
+    }
     if(type==='byz:open-product')openProduct(ev.data);
     return;
   }
@@ -154,7 +169,7 @@ window.addEventListener('message',ev=>{
     Promise.resolve(palia.contentDocument?.fonts?.ready).catch(()=>{}).then(()=>{
       setTimeout(()=>{
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          visualReady=true;lastReadyEvent='visual-ready';
+          visualReady=true;lastReadyEvent='visual-ready';reportReady();
           selectProduct({index:activeProductIndex});
           report('visual-ready',Math.round(performance.now()-startTime)+'ms after host boot');
           makeVisible();
@@ -173,13 +188,33 @@ palia.addEventListener('load',()=>{
   palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin);
   setTimeout(()=>{if(!sceneStarted)palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin)},1400);
 });
-gallery.addEventListener('load',()=>{report('gallery-iframe-loaded');gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);});
+let galleryReady=false;
+let shellReadySignalled=false;
+let fallbackJob=null;
+function reportReady(replay=false){
+  if(replay && galleryReady && window.parent!==window){
+    window.parent.postMessage({type:'byz:market:gallery-ready'},location.origin);
+  }
+  if(replay && shellReadySignalled && window.parent!==window){
+    window.parent.postMessage({type:'byz:market:ready'},location.origin);
+  }
+  if(galleryReady && visualReady && !shellReadySignalled){
+    shellReadySignalled=true;clearTimeout(fallbackJob);
+    window.parent!==window && window.parent.postMessage({type:'byz:market:ready'},location.origin);
+    report('all-ready','gallery + Palia already running; safe to reveal');
+  }
+}
+gallery.addEventListener('load',()=>{
+  report('gallery-iframe-loaded');
+  gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);
+  setTimeout(ensurePaliaLoaded,350);
+});
 retry.addEventListener('click',()=>{
   retry.classList.remove('visible');showStatus(true);
   // A retry is only needed if WebGL initialization truly stalled.
   // Never disturb the gallery or its Enter the Experience button.
   enteredPalia=false;sceneStarted=false;visualReady=false;
-  palia.src='/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&retry='+Date.now();
+  palia.src=palia.getAttribute('data-src')+'&retry='+Date.now();
   report('retry');openProduct();
 });
 window.addEventListener('popstate',()=>{
@@ -201,8 +236,13 @@ function returnToCrystals(){
    location.href='/ByzantineEmpireWebsite/';
  }
 }
-returnBtn.addEventListener('click',returnToCrystals);
+returnBtn.addEventListener('click',()=>{
+  if(productRequested || document.body.classList.contains('byz-product-open') || document.body.classList.contains('byz-product-leaving')){
+    if(!leaving)exitProduct();
+  }else returnToCrystals();
+});
 window.addEventListener('keydown',e=>{if(e.key==='Escape' && !document.body.classList.contains('byz-product-open'))returnToCrystals()});
+window.__BYZ_MARKET_STATUS__=()=>({version:'32.0',galleryReady,visualReady,productRequested,activeProductIndex});
 window.__BYZ_MARKET_SHOULD_ENTER__=true;
 report('host-loaded','V24: new dedicated Market page, five product routes');
 })();
