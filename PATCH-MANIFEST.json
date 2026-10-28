@@ -1,29 +1,26 @@
 {
-  "version": "v20-github-static-market-update-validated",
-  "type": "official GitHub update-only",
-  "source": "V19 standalone + V5.8.24 official",
-  "modified_files": [
+  "version": "21.1-github-market-activation",
+  "kind": "update-only",
+  "modified_existing_files": [
     "index.html",
-    "_next/static/chunks/1502ibkr~cu.4.js"
+    "market-runtime/market-bridge.js"
   ],
-  "added_dir": "market-runtime/",
-  "market_products": [
+  "added_or_reused": "market-runtime/ static assets and .nojekyll",
+  "intentionally_untouched": [
+    "existing _next chunks",
+    "portal",
+    "Introduction",
+    "About Us",
+    "Historical Connection",
+    "site entrance button"
+  ],
+  "product_names": [
     "Paramerion Sword",
     "Gold Jewelry",
     "Food Items",
     "Coins",
     "Silk Textiles"
   ],
-  "asset_counts": {
-    "gallery": 48,
-    "palia": 163
-  },
-  "notes": [
-    "Does not alter preexisting GitHub files other than modified_files",
-    "All assets served static, may differ from local proxy replay",
-    "Original site loader not blocked; eager preloading begins at DOM ready",
-    "Market gallery auto-entry is scoped to Market only, and main Enter button is never intercepted",
-    "Palia retry uses static GitHub Pages route and no replay telemetry",
-    "No full graphical browser test is available in this environment"
-  ]
+  "change_reason": "V20 exact interior-status check prevented market overlay activation",
+  "validation": "static routes and synthetic integration checks; live GitHub WebGL behavior not verified"
 }

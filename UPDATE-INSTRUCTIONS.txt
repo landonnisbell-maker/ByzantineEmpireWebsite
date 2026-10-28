@@ -1,46 +1,35 @@
-BYZANTINE MARKET V20 — OFFICIAL GITHUB UPDATE-ONLY PACKAGE
-===========================================================
-Source: your working V19 Aengel × Palia standalone + official V5.8.24 update files.
+BYZANTINE MARKET V21.1 — FIX MARKET CRYSTAL ACTIVATION
+======================================================
+This is an UPDATE-ONLY package, NOT a complete replacement website.
+It contains your current index.html, the market-runtime/ folder and .nojekyll.
+It does NOT overwrite your main _next static chunk or any other crystal content.
 
-DO NOT DELETE THE REST OF YOUR REPOSITORY.
-1. Extract this ZIP.
-2. Copy `index.html`, `_next/`, and `market-runtime/` INTO THE ROOT of your existing
-   ByzantineEmpireWebsite GitHub repository, preserving nested paths.
-3. Replace the existing `index.html` and `_next/static/chunks/1502ibkr~cu.4.js`.
-4. Commit and push. The other pages, 3D portal and original art remain untouched.
-5. Open the existing site normally. Market crystal 3 should show the gallery after
-   the original crystal entrance, including the cloth entrance animation.
-   Gallery and Palia begin preloading during the original site startup screen.
-6. Use Return to Crystals in the gallery to leave; Palia's Return to Gallery
-   returns to the preloaded five-cloth gallery.
+1. Extract the ZIP.
+2. Copy index.html and the market-runtime/ folder into the ROOT of the
+   existing ByzantineEmpireWebsite GitHub repository, merging/replacing files.
+3. Add .nojekyll at repository root if it is not already present.
+4. Keep all your existing _next/, __assets__/, portal, About Us and crystal files.
+5. Commit, wait for GitHub Pages to deploy, and refresh with Ctrl+Shift+R.
+6. Enter the site normally, go to Crystal 3 (Market). After its original crystal
+   transition, the five-cloth gallery should fade in over the original Market page.
 
-IMPLEMENTATION NOTE: This is a STATIC conversion of a local replay whose origin
-was captured from third-party sites. It does not include private APIs or live
-fallback proxies. Chrome/WebGL graphical validation on actual GitHub Pages is
-still required. Confirm you have permission before publishing third-party
-frontend code, imagery, or audio publicly.
+WHY V20 FAILED:
+Its bridge required the Market crystal to report an exact internal
+`interiorStatus === "interior"`. This can disagree with the displayed page.
+V21.1 independently checks the crystal state, the existing page title, the
+visible Market heading and the route. It also derives its asset URL from
+its own script path rather than hard-coding the repository prefix.
 
-STATIC ROOT: /ByzantineEmpireWebsite/ (repo published as GitHub Pages project).
-If your site publishes from a different path, every absolute URL must be updated.
+TROUBLESHOOTING:
+Add ?byzmarketdebug=1 to the official site URL to log Market bridge
+messages in DevTools. In the Console run:
+window.__BYZ_MARKET_BRIDGE?.debug()
+This will report whether the bridge sees the Market page, whether the gallery
+is displayed and where its iframe was loaded from.
 
-PRELOADING: Market gallery & Palia iframe resources begin loading from the original
-page's startup; your site's existing Enter button is NEVER disabled or intercepted.
-Their WebGL readiness is separate: slow devices may still take longer. Because
-this is static GitHub Pages, extra assets not captured by the original grabber
-cannot be auto-fetched by a local proxy. If a resource is missing, inspect DevTools.
+The five product pages, images, preloading and scroll-reset system are
+unchanged from the working V19 / previous V20 package. No changes to the
+main site's Enter button or original crystal animations.
 
-PRODUCTION RIGHTS: Captured Aengel and Overworld Audio code may be copyrighted.
-Ensure appropriate permission/licensing before public deployment.
-
-VALIDATION NOTE: The two embedded WebGL apps are initialized in parallel with the
-existing main-site loading process, NOT forcibly gated by its Enter button.
-On slower hardware, initial GPU compilation can outlast the main loader, and
-the product may briefly continue preparing after entering Market. Blocking the
-Enter button was intentionally avoided because it caused failures in earlier tests.
-
-GITHUB PAGES: Add `.nojekyll` to the repository root (included) so `_next/` and
-`_nuxt/` folders serve normally. Commit the full `market-runtime/` directory.
-Do not copy this ZIP over an unrelated repository, and do not delete any other files.
-
-If your GitHub Pages project base path is not `/ByzantineEmpireWebsite/`,
-this preconfigured package will need URL adjustments.
+The embedded gallery and product scenes are third-party captured code and
+assets: make sure you have publishing/reuse rights before public deployment.
