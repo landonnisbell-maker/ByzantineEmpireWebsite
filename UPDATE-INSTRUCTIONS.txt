@@ -1,28 +1,44 @@
-V25 - MARKET NAVIGATION FIX - UPDATE-ONLY FILES
+BYZANTINE V24 — NEW DEDICATED MARKET PAGE
 
-This fixes the two real, separate click paths on Crystal 3:
-  1. The 3D crystal click (native scene chunk).
-  2. Discover Page button (different native UI chunk).
-It also patches the shared project-store enterInterior action so neither path can open the old Market interior.
+This is an UPDATE-ONLY package for your existing GitHub repository.
 
-INSTALL:
-  1. Extract this ZIP.
-  2. Copy ALL contents into the ROOT of your existing ByzantineEmpireWebsite repository.
-  3. Merge folders and REPLACE existing files. Do not copy only files that already exist.
-  4. COMMIT and PUSH the changes to your GitHub Pages publishing branch.
-  5. Open https://landonnisbell-maker.github.io/ByzantineEmpireWebsite/market/VERIFY-V25.html
-     All checks should be GREEN before testing the crystal.
-  6. Open the main site in a PRIVATE/INCOGNITO Chrome window (avoids old cached chunk scripts).
-  7. Enter crystals, select Market (third), and test clicking the crystal AND Discover Page.
+1) Extract this ZIP.
+2) Copy ALL enclosed files/folders to the ROOT of ByzantineEmpireWebsite.
+3) Allow File Explorer to merge folders and replace matching files.
+4) Commit/push the modified files. GitHub Pages needs to finish deploying.
+5) Hard-refresh the main site and select Crystal 3 (Market).
 
-CRITICAL FILES:
-  index.html
-  _next/static/chunks/00o~3wxtljh6z.js  (shared navigation state)
-  _next/static/chunks/01ay6y4_-9myt.js (Discover Page button)
-  _next/static/chunks/1502ibkr~cu.4.js (3D crystal click)
-  market/market-entry-v25.js (new page overlay)
-  market/index.html and market-runtime/ (new marketplace page)
+NEW: /ByzantineEmpireWebsite/market/ is a real standalone Market page.
+Crystal 3's ORIGINAL click handler now opens that separate page instead of
+entering the old Market interior. Other crystals still enter their native interiors.
 
-For Crystal 3, the old interior is not used. The dedicated market page is opened over the live 3D site. Clicking Return to Crystals closes it without reloading. All other crystals preserve their original behavior.
+The Market page is preloaded inside a full-screen iframe while the main site loads.
+Returning to Crystals hides the page instead of restarting the portal.
 
-NOTE: This is not a live GitHub-verified deployment. The new checker verifies the exact patched files after you upload them. Please ensure permission to reuse third-party frontend/assets before publishing publicly.
+IMPORTANT REPLACED FILES:
+- index.html
+- _next/static/chunks/1502ibkr~cu.4.js
+- byzantine-market-content.js
+
+NEW FILES:
+- market/index.html
+- market/market-entry-v24.js
+- market-runtime/ (keep all its files)
+
+SMOKE CHECKS:
+A) Open https://landonnisbell-maker.github.io/ByzantineEmpireWebsite/market/
+   This should show the standalone gallery even without going through crystals.
+B) Open the main site, enter portal/crystals, select Crystal 3.
+   It should fade to the new Market page, not draw the old interior.
+C) Select a product, return to gallery, then Return to Crystals.
+   Other crystals must retain their original behavior.
+
+The original loader/entry button is NOT intercepted by this update.
+If the live site still shows the old Market interior after V24:
+- Check network tab: /_next/static/chunks/1502ibkr~cu.4.js must include
+  ppByzantineEnterSelectedOrNewMarket.
+- Check console window.__BYZ_V24_STATUS__() to verify the market page loaded.
+
+Note: Only publish third-party code/assets you have permission to use.
+
+Five static deep-link entry pages are included at market-runtime/products/<slug>/index.html, so product URLs do not require the local Python server.
