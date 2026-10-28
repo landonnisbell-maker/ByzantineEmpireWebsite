@@ -1,0 +1,32 @@
+/* Byzantine Market V37 product typography; original Palia visual effects remain intact. */
+html.byz-market-copy-ready .work-detail .hero__intro>.hero__text,
+html.byz-market-copy-ready .work-detail .blocks.content,
+html.byz-market-copy-ready .work-detail .page>.next,
+html.byz-market-copy-ready .work-detail .page>.footer {display:none!important}
+.byz-market-tagline{grid-column:6/11; align-self:start; margin-top:-.25rem; max-width:35rem;
+ color:#eeeef4; font-family:var(--font-serif,'Georgia',serif); font-size:clamp(1.1rem,1.9vw,1.55rem);
+ font-style:italic; font-weight:500; line-height:1.55; letter-spacing:-.012em}
+.byz-market-product-copy{padding:0 max(5%,calc((100% - 1330px)/2)) clamp(8rem,13vw,14rem);
+ max-width:100%; color:#e9eaf0; font-family:var(--font-sans,Arial,sans-serif); letter-spacing:.008em}
+.byz-market-reading{width:min(790px,100%);margin:0 auto}
+.byz-market-reading .byz-offering-title{font-family:var(--font-serif,Georgia,serif);font-size:clamp(2rem,3.4vw,3.65rem);
+ font-weight:500;line-height:1.2;letter-spacing:-.02em;margin:5rem 0 1.25rem;scroll-margin-top:8rem}
+.byz-market-reading .byz-offering-title:first-child{margin-top:0}
+.byz-market-reading .byz-offering-title:not(:first-child){border-top:1px solid rgba(231,236,247,.23);padding-top:4.4rem;margin-top:6.5rem}
+.byz-market-reading .byz-section-title{font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.6rem,2.2vw,2.3rem);
+ font-weight:500;line-height:1.35;letter-spacing:-.015em;margin:4rem 0 1.5rem;color:#faf8f6}
+.byz-market-reading p{font-size:clamp(.95rem,1.16vw,1.05rem);line-height:1.85;margin:0 0 1.35em;
+ color:#d6d9e2;max-width:72ch}
+.byz-market-reading p:has(>em:only-child){font-family:var(--font-serif,Georgia,serif);
+ color:#f0ece7;font-size:clamp(1.15rem,1.55vw,1.43rem);line-height:1.65;margin-bottom:2rem}
+.byz-market-reading strong{color:#fff;font-weight:600}
+.byz-market-reading em{font-style:italic}
+.byz-market-purchase{width:min(790px,100%);margin:5rem auto 0;border-top:1px solid rgba(231,236,247,.35);
+ padding:2.1rem 0 0;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.1rem,1.5vw,1.45rem);
+ line-height:1.6;color:#fff}
+@media(max-width:850px){
+ .byz-market-tagline{grid-column:2/12;margin-top:1.25rem}
+ .byz-market-product-copy{padding:1rem 8% 8rem}
+ .byz-market-reading .byz-section-title{margin-top:3rem}
+}
+@media(prefers-reduced-motion:reduce){.byz-market-product-copy{scroll-behavior:auto}}
