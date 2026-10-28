@@ -1,0 +1,26 @@
+{
+  "version": "V33",
+  "base": "V32 working website",
+  "paths": [
+    {
+      "path": "index.html",
+      "size": 154730,
+      "sha256": "21d7f2c1d0d7af278d42f28e9d583c96bfa8bb1b197df9e96693ebed20860bac"
+    },
+    {
+      "path": "market/market-entry-v24.js",
+      "size": 7349,
+      "sha256": "00ef4e5e119fa6c0e028f0df53a589a32a99172d9a05e8a8d997ee70bc1174f0"
+    },
+    {
+      "path": "_next/static/chunks/01ay6y4_-9myt.js",
+      "size": 67877,
+      "sha256": "e2ef956eb4e5b62c7614e62b9efd4197ffae14e495a20400a15a4f407e017be2"
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "size": 272363,
+      "sha256": "69888744ae918a0a5a8146cc0a0f293a75c4c5b8b3137932840e2838d2fc753c"
+    }
+  ]
+}
