@@ -1,0 +1,19 @@
+BYZANTINE MARKET V29 — UPDATE ONLY
+
+BASELINE: V28 working GitHub site (Market opens successfully).
+
+1. Back up your working index.html and market folder.
+2. Copy ONLY the three files in this ZIP into your existing GitHub repo,
+   preserving folder paths; replace the destination files.
+3. Commit and push, wait for GitHub Pages to deploy, then hard refresh.
+4. Open Market via the existing Crystal 3 button or Discover Page.
+
+Expected:
+- Gallery opens with a zoom / radial reveal after Crystal 3.
+- Aengel footer and top-right navigation are hidden.
+- The existing GitHub site menu and sound control remain visible and functional.
+- Return to Crystals works without reloading.
+
+This update NEVER replaces _next/static/chunks files, the loader, or product data.
+
+Rollback: restore the 3 original files from your V28 backup.

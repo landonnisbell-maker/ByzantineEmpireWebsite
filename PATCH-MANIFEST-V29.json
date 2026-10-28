@@ -1,0 +1,14 @@
+{
+  "version": "V29",
+  "base": "V28 working Market",
+  "files": [
+    "index.html",
+    "market/market-entry-v24.js",
+    "market-runtime/gallery/index.html"
+  ],
+  "notes": [
+    "Reuses native GitHub navbar; no core JS chunk changes",
+    "Adds Market-only crystal-style zoom/reveal on the dedicated page",
+    "Hides Aengel gallery navbar and footer inside gallery iframe only"
+  ]
+}
