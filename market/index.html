@@ -141,7 +141,11 @@ function preparePalia(){
 }
 window.addEventListener('message',ev=>{
   if(ev.origin===location.origin && ev.source===window.parent){
-    if(ev.data?.type==='byz:market:enter'){window.__BYZ_MARKET_SHOULD_ENTER__=true;gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);}
+    if(ev.data?.type==='byz:market:prewarm'||ev.data?.type==='byz:market:enter'){
+      window.__BYZ_MARKET_SHOULD_ENTER__=true;
+      gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);
+      ensurePaliaLoaded();reportReady();
+    }
     if(ev.data?.type==='byz:market:close'){gallery.contentWindow?.postMessage({type:'byz:market:close'},location.origin);exitProduct({fromHistory:true});}
     return;
   }
@@ -149,6 +153,21 @@ window.addEventListener('message',ev=>{
   if(ev.origin!==location.origin || !ev.data || typeof ev.data!=='object')return;
   const type=ev.data.type;
   if(ev.source===gallery.contentWindow){
+    if(type==='byz:market:gallery-ready'){
+      galleryReady=true;
+      // If Palia's scene cannot report readiness, still allow Market to open
+      // using the fully loaded cloth gallery after a bounded initial preload.
+      // Product selection will keep the gallery visible until Palia is ready.
+      fallbackJob=setTimeout(()=>{
+        if(!shellReadySignalled && galleryReady){
+          shellReadySignalled=true;
+          report('partial-ready','cloth gallery ready; product renderer still preparing');
+          window.parent!==window && window.parent.postMessage({type:'byz:market:ready',partial:true},location.origin);
+        }
+      },16000);
+      window.parent!==window && window.parent.postMessage({type:'byz:market:gallery-ready'},location.origin);
+      reportReady();
+    }
     if(type==='byz:open-product')openProduct(ev.data);
     return;
   }
@@ -162,7 +181,7 @@ window.addEventListener('message',ev=>{
     Promise.resolve(palia.contentDocument?.fonts?.ready).catch(()=>{}).then(()=>{
       setTimeout(()=>{
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          visualReady=true;lastReadyEvent='visual-ready';
+          visualReady=true;lastReadyEvent='visual-ready';reportReady();
           selectProduct({index:activeProductIndex});
           report('visual-ready',Math.round(performance.now()-startTime)+'ms after host boot');
           makeVisible();
@@ -181,7 +200,21 @@ palia.addEventListener('load',()=>{
   palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin);
   setTimeout(()=>{if(!sceneStarted)palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin)},1400);
 });
-gallery.addEventListener('load',()=>{report('gallery-iframe-loaded');gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);setTimeout(ensurePaliaLoaded,2500);});
+let galleryReady=false;
+let shellReadySignalled=false;
+let fallbackJob=null;
+function reportReady(){
+  if(galleryReady && visualReady && !shellReadySignalled){
+    shellReadySignalled=true;clearTimeout(fallbackJob);
+    window.parent!==window && window.parent.postMessage({type:'byz:market:ready'},location.origin);
+    report('all-ready','gallery + Palia already running; safe to reveal');
+  }
+}
+gallery.addEventListener('load',()=>{
+  report('gallery-iframe-loaded');
+  gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);
+  setTimeout(ensurePaliaLoaded,350);
+});
 retry.addEventListener('click',()=>{
   retry.classList.remove('visible');showStatus(true);
   // A retry is only needed if WebGL initialization truly stalled.

@@ -1,0 +1,11 @@
+{
+  "version": "31.0",
+  "base": "V30",
+  "files": [
+    "index.html",
+    "market/market-entry-v24.js",
+    "market/index.html",
+    "market-runtime/gallery/index.html"
+  ],
+  "touchesCoreJs": false
+}
