@@ -24,7 +24,7 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 </style>
 </head><body>
 <iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1" allow="autoplay;fullscreen" loading="eager"></iframe>
-<iframe id="byz-palia" title="Palia interactive product page" src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1" allow="autoplay;fullscreen" loading="eager"></iframe>
+<iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
 <div id="byz-status" role="status" aria-live="polite">Preparing product experience…</div>
 <button id="byz-retry" type="button">RETRY PRODUCT PAGE</button>
 <button type="button" id="byz-new-page-return" aria-label="Return to Crystals">← RETURN TO CRYSTALS</button>
@@ -33,6 +33,13 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 'use strict';
 const gallery=document.getElementById('byz-gallery');
 const palia=document.getElementById('byz-palia');
+let paliaStartedLoading=false;
+function ensurePaliaLoaded(){
+ if(paliaStartedLoading)return;
+ paliaStartedLoading=true;
+ palia.src=palia.getAttribute('data-src');
+}
+
 const status=document.getElementById('byz-status');
 const retry=document.getElementById('byz-retry');
 // Separate dedicated product routes, backed by individual products/*.json files.
@@ -89,6 +96,7 @@ function activateProductScroll(){
 }
 function openProduct(selection,options={}){
   if(leaving)return;
+  ensurePaliaLoaded();
   selectProduct(selection);
   productRequested=true;
   const product=PRODUCTS[activeProductIndex];
@@ -173,7 +181,7 @@ palia.addEventListener('load',()=>{
   palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin);
   setTimeout(()=>{if(!sceneStarted)palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin)},1400);
 });
-gallery.addEventListener('load',()=>{report('gallery-iframe-loaded');gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);});
+gallery.addEventListener('load',()=>{report('gallery-iframe-loaded');gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);setTimeout(ensurePaliaLoaded,2500);});
 retry.addEventListener('click',()=>{
   retry.classList.remove('visible');showStatus(true);
   // A retry is only needed if WebGL initialization truly stalled.

@@ -1,0 +1,16 @@
+{
+  "version": "V30",
+  "base": "V28 + V24",
+  "modified_files": [
+    "index.html",
+    "market/market-entry-v24.js",
+    "market/index.html"
+  ],
+  "core_next_chunks_modified": false,
+  "changes": [
+    "do not rewrite main browser URL",
+    "lazy mount market frame",
+    "sequence gallery and Palia renderer startup",
+    "persistent iframe for instant return"
+  ]
+}
