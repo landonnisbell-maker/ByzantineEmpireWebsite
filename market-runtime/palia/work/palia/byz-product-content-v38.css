@@ -1,0 +1,103 @@
+/* V38 — product editorial layout only. Original WebGL and navigation are unchanged. */
+html.byz-market-copy-ready .work-detail .hero__intro > .hero__text,
+html.byz-market-copy-ready .work-detail .blocks.content,
+html.byz-market-copy-ready .work-detail .page > .next,
+html.byz-market-copy-ready .work-detail .page > .footer {display:none!important}
+/* One center-aligned title beneath the hero artwork, subtly overlapping its lower edge. */
+html.byz-market-copy-ready .work-detail .hero__media {margin-bottom:-3.4rem!important}
+html.byz-market-copy-ready .work-detail .hero__intro.grid {
+ display:flex!important; flex-direction:column!important; align-items:center!important;
+ justify-content:center!important; text-align:center!important; position:relative!important;
+ z-index:4!important; padding:0 5% 2rem!important; gap:0!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading {
+ display:flex!important; flex-direction:column!important; align-items:center!important;
+ justify-content:center!important; text-align:center!important; width:min(96%,1000px)!important;
+ max-width:1000px!important; margin:0 auto!important; grid-column:auto!important;
+}
+html.byz-market-copy-ready .work-detail h1.hero__title {
+ margin:0!important; text-align:center!important; font-family:var(--font-serif,Georgia,serif);
+ font-size:clamp(2.4rem,4.5vw,5.5rem)!important; font-weight:500!important;
+ letter-spacing:-.028em!important; line-height:1.12!important;
+ color:#fff!important; text-shadow:0 3px 35px rgba(0,0,0,.62);
+}
+.byz-market-tagline {
+ display:block; width:100%; text-align:center!important; margin:.75rem auto 0!important;
+ color:#f0edf0; font:italic 500 clamp(1.03rem,1.55vw,1.55rem)/1.55 var(--font-serif,Georgia,serif);
+ letter-spacing:-.01em; text-shadow:0 3px 22px rgba(0,0,0,.75);
+}
+/* Readable independent product content. */
+.byz-market-product-copy {
+ box-sizing:border-box; padding:clamp(3.5rem,6vw,7rem) max(5%,calc((100% - 1360px)/2)) clamp(8rem,13vw,14rem);
+ max-width:100%; color:#e9eaf0; font-family:var(--font-sans,Arial,sans-serif);
+ letter-spacing:.008em; position:relative; z-index:1;
+}
+.byz-market-reading{width:min(790px,100%);margin:0 auto}
+.byz-market-reading .byz-offering-title {
+ font-family:var(--font-serif,Georgia,serif);font-size:clamp(2rem,3.35vw,3.65rem);
+ font-weight:500;line-height:1.2;letter-spacing:-.02em; margin:5rem 0 1.5rem;
+}
+.byz-market-reading .byz-offering-title:first-child{margin-top:0}
+.byz-market-reading .byz-offering-title:not(:first-child){border-top:1px solid rgba(231,236,247,.23);padding-top:4.5rem;margin-top:6.5rem}
+.byz-market-reading .byz-section-title {
+ font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.6rem,2.2vw,2.3rem);
+ font-weight:500;line-height:1.35;letter-spacing:-.015em;margin:4rem 0 1.5rem;color:#faf8f6;
+}
+.byz-market-reading p{font-size:clamp(.95rem,1.16vw,1.05rem);line-height:1.85;margin:0 0 1.35em;color:#d6d9e2;max-width:72ch}
+.byz-market-reading p:has(>em:only-child){font-family:var(--font-serif,Georgia,serif);color:#f0ece7;font-size:clamp(1.15rem,1.55vw,1.43rem);line-height:1.65;margin-bottom:2rem}
+.byz-market-reading strong{color:#fff;font-weight:600}.byz-market-reading em{font-style:italic}
+.byz-market-purchase {
+ width:min(790px,100%);margin:5rem auto 0;border-top:1px solid rgba(231,236,247,.35);
+ padding:2.1rem 0 0;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.1rem,1.5vw,1.45rem);
+ line-height:1.6;color:#fff;
+}
+/* Empty editorial image spaces, with an actual irregular feathered mask (not a rectangular border). */
+.byz-market-scratch-figure {
+ position:relative; width:min(1080px,calc(100% + 13vw)); max-width:calc(100vw - 7vw);
+ margin:clamp(3.5rem,7vw,7rem) 0; left:50%; transform:translateX(-50%);
+ aspect-ratio:16/9; padding:0; overflow:visible; isolation:isolate;
+}
+.byz-market-scratch-surface {
+ display:flex; align-items:center; justify-content:center; position:absolute;
+ inset:0; background:radial-gradient(ellipse at 45% 36%,rgba(50,77,103,.55),rgba(13,19,30,.79) 60%,rgba(3,5,10,.04) 90%);
+ -webkit-mask-image:url('./byz-scratch-edge-v38.png');mask-image:url('./byz-scratch-edge-v38.png');
+ -webkit-mask-size:100% 100%;mask-size:100% 100%;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
+.byz-market-scratch-surface::after {
+ content:''; position:absolute;inset:0;opacity:.24;
+ background:repeating-linear-gradient(131deg,transparent 0 9px,rgba(255,255,255,.025) 10px 11px,transparent 13px 24px);
+ pointer-events:none;
+}
+.byz-market-image-placeholder {
+ position:relative;z-index:1;font:500 clamp(.7rem,.85vw,.88rem)/1.5 var(--font-sans,Arial,sans-serif);
+ color:rgba(229,235,243,.67);letter-spacing:.2em;text-transform:uppercase;text-align:center;
+}
+.byz-market-scratch-surface img.byz-market-supplied-photo {
+ position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+}
+.byz-market-scratch-figure:has(img.byz-market-supplied-photo[src]) .byz-market-image-placeholder{display:none}
+/* Subtle text reveals for scrolling, each element animates once. */
+html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready,
+html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready {
+ opacity:0; translate:0 28px; filter:blur(3px);
+ transition:opacity .85s cubic-bezier(.22,1,.36,1),translate .9s cubic-bezier(.22,1,.36,1),filter .8s ease;
+}
+html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready.byz-revealed,
+html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready.byz-revealed {
+ opacity:1; translate:0 0; filter:blur(0);
+}
+@media(max-width:850px){
+ html.byz-market-copy-ready .work-detail .hero__media{margin-bottom:-2.3rem!important}
+ html.byz-market-copy-ready .work-detail .hero__intro.grid{padding:0 5% 1.3rem!important}
+ .byz-market-tagline{margin-top:.45rem!important}
+ .byz-market-product-copy{padding:3rem 7% 8rem}
+ .byz-market-reading .byz-section-title{margin-top:3rem}
+ .byz-market-scratch-figure{width:calc(100% + 12vw);max-width:96vw;margin-block:3.2rem}
+}
+@media(prefers-reduced-motion:reduce){
+ html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready,
+ html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready {
+ opacity:1!important;translate:none!important;filter:none!important;transition:none!important;
+ }
+}
