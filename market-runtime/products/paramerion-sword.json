@@ -1,0 +1,14 @@
+{
+  "id": 0,
+  "slug": "paramerion-sword",
+  "title": "Paramerion Sword",
+  "route": "/products/paramerion-sword",
+  "template": "palia",
+  "heroTitle": "Paramerion Sword",
+  "imagePlaceholder": "No Image Supplied",
+  "editorial": {
+    "overview": null,
+    "details": null,
+    "images": []
+  }
+}

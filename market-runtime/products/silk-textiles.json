@@ -1,0 +1,14 @@
+{
+  "id": 4,
+  "slug": "silk-textiles",
+  "title": "Silk Textiles",
+  "route": "/products/silk-textiles",
+  "template": "palia",
+  "heroTitle": "Silk Textiles",
+  "imagePlaceholder": "No Image Supplied",
+  "editorial": {
+    "overview": null,
+    "details": null,
+    "images": []
+  }
+}

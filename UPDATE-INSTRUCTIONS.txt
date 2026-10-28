@@ -1,13 +1,46 @@
-BYZANTINE V5.8.24 — EDITABLE CONTENT FOR ALL FOUR CRYSTAL PAGES
-OFFICIAL GITHUB UPDATE ONLY — APPLY AFTER V5.8.23
+BYZANTINE MARKET V20 — OFFICIAL GITHUB UPDATE-ONLY PACKAGE
+===========================================================
+Source: your working V19 Aengel × Palia standalone + official V5.8.24 update files.
 
+DO NOT DELETE THE REST OF YOUR REPOSITORY.
 1. Extract this ZIP.
-2. Copy index.html, _next, and all four byzantine-*-content.js files into
-   the ROOT of your EXISTING GitHub repository (the directory containing index.html).
-3. Replace the matching index.html, existing About Us content JS, and the matching _next JavaScript file.
-4. Commit and push your repository, then refresh with Ctrl+Shift+R.
-5. For later text edits, open ONLY the corresponding byzantine-*-content.js file.
+2. Copy `index.html`, `_next/`, and `market-runtime/` INTO THE ROOT of your existing
+   ByzantineEmpireWebsite GitHub repository, preserving nested paths.
+3. Replace the existing `index.html` and `_next/static/chunks/1502ibkr~cu.4.js`.
+4. Commit and push. The other pages, 3D portal and original art remain untouched.
+5. Open the existing site normally. Market crystal 3 should show the gallery after
+   the original crystal entrance, including the cloth entrance animation.
+   Gallery and Palia begin preloading during the original site startup screen.
+6. Use Return to Crystals in the gallery to leave; Palia's Return to Gallery
+   returns to the preloaded five-cloth gallery.
 
-See EDITING-GUIDE.txt for instructions and examples.
-This package does not contain stand-alone files or changes to media, crystals,
-landmarks, portal, favicon or navigation animation.
+IMPLEMENTATION NOTE: This is a STATIC conversion of a local replay whose origin
+was captured from third-party sites. It does not include private APIs or live
+fallback proxies. Chrome/WebGL graphical validation on actual GitHub Pages is
+still required. Confirm you have permission before publishing third-party
+frontend code, imagery, or audio publicly.
+
+STATIC ROOT: /ByzantineEmpireWebsite/ (repo published as GitHub Pages project).
+If your site publishes from a different path, every absolute URL must be updated.
+
+PRELOADING: Market gallery & Palia iframe resources begin loading from the original
+page's startup; your site's existing Enter button is NEVER disabled or intercepted.
+Their WebGL readiness is separate: slow devices may still take longer. Because
+this is static GitHub Pages, extra assets not captured by the original grabber
+cannot be auto-fetched by a local proxy. If a resource is missing, inspect DevTools.
+
+PRODUCTION RIGHTS: Captured Aengel and Overworld Audio code may be copyrighted.
+Ensure appropriate permission/licensing before public deployment.
+
+VALIDATION NOTE: The two embedded WebGL apps are initialized in parallel with the
+existing main-site loading process, NOT forcibly gated by its Enter button.
+On slower hardware, initial GPU compilation can outlast the main loader, and
+the product may briefly continue preparing after entering Market. Blocking the
+Enter button was intentionally avoided because it caused failures in earlier tests.
+
+GITHUB PAGES: Add `.nojekyll` to the repository root (included) so `_next/` and
+`_nuxt/` folders serve normally. Commit the full `market-runtime/` directory.
+Do not copy this ZIP over an unrelated repository, and do not delete any other files.
+
+If your GitHub Pages project base path is not `/ByzantineEmpireWebsite/`,
+this preconfigured package will need URL adjustments.

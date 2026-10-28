@@ -13,6 +13,17 @@ function ppByzantineTitleFromStores(){
     const i=nav?.route?.projectIndex??project?.currentProjectIndex??0;
     name=isInside?(names[i]||"Pages"):"Pages";
   }
+  // MARKET V20: share the EXISTING crystal state; do not change portal,
+  // project navigation, loader timing, or any other crystal.
+  if(typeof window!=="undefined"){
+    const idx=nav?.route?.projectIndex??project?.currentProjectIndex??-1;
+    const status=project?.interiorStatus||"exterior";
+    const inside=scene==="projectInterior"||["entering","interior","exiting"].includes(status);
+    const detail={scene,index:idx,status,inside};
+    window.__BYZ_MARKET_CURRENT_ROUTE=detail;
+    window.dispatchEvent(new CustomEvent("byz:market:route",{detail}));
+    window.__BYZ_MARKET_EXIT_TO_CRYSTALS=()=>ei.useProjectStore.getState().exitInterior();
+  }
   if(typeof window.__BYZANTINE_SET_TITLE__==="function")window.__BYZANTINE_SET_TITLE__(name);
   else if(typeof document!=="undefined")document.title="Byzantine · "+name;
 }

@@ -1,0 +1,14 @@
+{
+  "id": 1,
+  "slug": "gold-jewelry",
+  "title": "Gold Jewelry",
+  "route": "/products/gold-jewelry",
+  "template": "palia",
+  "heroTitle": "Gold Jewelry",
+  "imagePlaceholder": "No Image Supplied",
+  "editorial": {
+    "overview": null,
+    "details": null,
+    "images": []
+  }
+}

@@ -1,14 +1,29 @@
 {
-  "version": "5.8.24",
-  "type": "Official GitHub update \u2014 four editable crystal content sources",
-  "base": "V5.8.23",
-  "updated_files": [
+  "version": "v20-github-static-market-update-validated",
+  "type": "official GitHub update-only",
+  "source": "V19 standalone + V5.8.24 official",
+  "modified_files": [
     "index.html",
-    "_next/static/chunks/1502ibkr~cu.4.js",
-    "byzantine-introduction-content.js",
-    "byzantine-about-us-content.js",
-    "byzantine-market-content.js",
-    "byzantine-historical-connection-content.js"
+    "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "scope": "Allow future changes to all four crystal-page texts through readable .js editor files; preserve images, transition state, and existing About Us prose."
+  "added_dir": "market-runtime/",
+  "market_products": [
+    "Paramerion Sword",
+    "Gold Jewelry",
+    "Food Items",
+    "Coins",
+    "Silk Textiles"
+  ],
+  "asset_counts": {
+    "gallery": 48,
+    "palia": 163
+  },
+  "notes": [
+    "Does not alter preexisting GitHub files other than modified_files",
+    "All assets served static, may differ from local proxy replay",
+    "Original site loader not blocked; eager preloading begins at DOM ready",
+    "Market gallery auto-entry is scoped to Market only, and main Enter button is never intercepted",
+    "Palia retry uses static GitHub Pages route and no replay telemetry",
+    "No full graphical browser test is available in this environment"
+  ]
 }

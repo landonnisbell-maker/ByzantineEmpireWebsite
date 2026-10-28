@@ -1,0 +1,14 @@
+{
+  "id": 2,
+  "slug": "food-items",
+  "title": "Food Items",
+  "route": "/products/food-items",
+  "template": "palia",
+  "heroTitle": "Food Items",
+  "imagePlaceholder": "No Image Supplied",
+  "editorial": {
+    "overview": null,
+    "details": null,
+    "images": []
+  }
+}

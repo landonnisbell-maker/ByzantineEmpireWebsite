@@ -1,0 +1,14 @@
+{
+  "id": 3,
+  "slug": "coins",
+  "title": "Coins",
+  "route": "/products/coins",
+  "template": "palia",
+  "heroTitle": "Coins",
+  "imagePlaceholder": "No Image Supplied",
+  "editorial": {
+    "overview": null,
+    "details": null,
+    "images": []
+  }
+}
