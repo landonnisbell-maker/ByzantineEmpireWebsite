@@ -13,14 +13,21 @@ function ppByzantineTitleFromStores(){
     const i=nav?.route?.projectIndex??project?.currentProjectIndex??0;
     name=isInside?(names[i]||"Pages"):"Pages";
   }
-  // MARKET V20: share the EXISTING crystal state; do not change portal,
-  // project navigation, loader timing, or any other crystal.
+  // MARKET V22: report the real 3D crystal stores to the market host.
+  // Subscribe using the existing title listeners. Never intercept the entrance button.
   if(typeof window!=="undefined"){
-    const idx=nav?.route?.projectIndex??project?.currentProjectIndex??-1;
     const status=project?.interiorStatus||"exterior";
-    const inside=scene==="projectInterior"||["entering","interior","exiting"].includes(status);
-    const detail={scene,index:idx,status,inside};
+    // The project store is authoritative for the currently selected crystal.
+    const projectIndex=Number(project?.currentProjectIndex??-1);
+    const routeIndex=Number(nav?.route?.projectIndex??-1);
+    const index=(scene==="projectInterior"&&routeIndex>=0)?routeIndex:(projectIndex>=0?projectIndex:routeIndex);
+    const inside=(scene==="projectInterior"||["entering","interior"].includes(status));
+    const active=inside && status!=="exiting" && (index===2 || name==="Market");
+    const detail={scene,index,projectIndex,routeIndex,status,inside,active};
     window.__BYZ_MARKET_CURRENT_ROUTE=detail;
+    if(typeof window.__BYZ_MARKET_NATIVE_UPDATE__==="function"){
+      try{window.__BYZ_MARKET_NATIVE_UPDATE__(detail);}catch(error){console.warn("Market bridge update",error);}
+    }
     window.dispatchEvent(new CustomEvent("byz:market:route",{detail}));
     window.__BYZ_MARKET_EXIT_TO_CRYSTALS=()=>ei.useProjectStore.getState().exitInterior();
   }

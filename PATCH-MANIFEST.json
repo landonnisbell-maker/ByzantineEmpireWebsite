@@ -1,26 +1,16 @@
 {
-  "version": "21.1-github-market-activation",
+  "version": "v22-github-native-market-trigger",
   "kind": "update-only",
-  "modified_existing_files": [
+  "modified_existing": [
     "index.html",
-    "market-runtime/market-bridge.js"
+    "_next/static/chunks/1502ibkr~cu.4.js"
   ],
-  "added_or_reused": "market-runtime/ static assets and .nojekyll",
-  "intentionally_untouched": [
-    "existing _next chunks",
-    "portal",
-    "Introduction",
-    "About Us",
-    "Historical Connection",
-    "site entrance button"
+  "added_or_updated": [
+    "market-runtime/market-bridge.js",
+    "market-runtime/VERIFY-DEPLOYMENT.html",
+    "market-runtime/* static assets"
   ],
-  "product_names": [
-    "Paramerion Sword",
-    "Gold Jewelry",
-    "Food Items",
-    "Coins",
-    "Silk Textiles"
-  ],
-  "change_reason": "V20 exact interior-status check prevented market overlay activation",
-  "validation": "static routes and synthetic integration checks; live GitHub WebGL behavior not verified"
+  "unchanged": "other crystal navigation, loader and other site chunks",
+  "purpose": "Native Market crystal store -> persistent V19 marketplace overlay",
+  "note": "Test official live site before treating as production ready"
 }

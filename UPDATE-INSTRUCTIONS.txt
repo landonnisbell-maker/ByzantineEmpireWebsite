@@ -1,35 +1,29 @@
-BYZANTINE MARKET V21.1 — FIX MARKET CRYSTAL ACTIVATION
-======================================================
-This is an UPDATE-ONLY package, NOT a complete replacement website.
-It contains your current index.html, the market-runtime/ folder and .nojekyll.
-It does NOT overwrite your main _next static chunk or any other crystal content.
+BYZANTINE MARKET V22 — NATIVE CRYSTAL TRIGGER (UPDATE ONLY)
+===========================================================
+This is NOT a new website. It updates your existing GitHub repository.
 
-1. Extract the ZIP.
-2. Copy index.html and the market-runtime/ folder into the ROOT of the
-   existing ByzantineEmpireWebsite GitHub repository, merging/replacing files.
-3. Add .nojekyll at repository root if it is not already present.
-4. Keep all your existing _next/, __assets__/, portal, About Us and crystal files.
-5. Commit, wait for GitHub Pages to deploy, and refresh with Ctrl+Shift+R.
-6. Enter the site normally, go to Crystal 3 (Market). After its original crystal
-   transition, the five-cloth gallery should fade in over the original Market page.
+1. EXTRACT the ZIP and copy its CONTENTS to the ROOT of ByzantineEmpireWebsite.
+2. OVERWRITE index.html and _next/static/chunks/1502ibkr~cu.4.js.
+3. MERGE market-runtime/ into your existing market-runtime/ folder.
+4. Keep your original portal, _next/ files, content files, and other assets.
+5. Commit & wait for GitHub Pages. Hard-refresh Ctrl+Shift+R.
+6. Go to Crystal 3 (Market). The cloth gallery should open automatically.
 
-WHY V20 FAILED:
-Its bridge required the Market crystal to report an exact internal
-`interiorStatus === "interior"`. This can disagree with the displayed page.
-V21.1 independently checks the crystal state, the existing page title, the
-visible Market heading and the route. It also derives its asset URL from
-its own script path rather than hard-coding the repository prefix.
+WHY V21.1 DID NOT ACTIVATE:
+The main _next JavaScript that publishes the authoritative 3D crystal state
+was not part of its ZIP, and DOM/title fallbacks are unreliable for WebGL content.
+V22 includes the corrected core chunk AND a matching bridge.
 
-TROUBLESHOOTING:
-Add ?byzmarketdebug=1 to the official site URL to log Market bridge
-messages in DevTools. In the Console run:
-window.__BYZ_MARKET_BRIDGE?.debug()
-This will report whether the bridge sees the Market page, whether the gallery
-is displayed and where its iframe was loaded from.
+CHECKS:
+Open https://YOURUSER.github.io/ByzantineEmpireWebsite/market-runtime/VERIFY-DEPLOYMENT.html
+(all checks should have check marks). Open /market-runtime/index.html directly to
+verify the cloth gallery itself separately.
 
-The five product pages, images, preloading and scroll-reset system are
-unchanged from the working V19 / previous V20 package. No changes to the
-main site's Enter button or original crystal animations.
+If Market still doesn't activate, on live home URL append ?byzmarketdebug=1,
+open Chrome Developer Tools > Console, enter:
+  window.__BYZ_MARKET_BRIDGE?.debug()
+This reports active crystal state and whether the frame was shown.
 
-The embedded gallery and product scenes are third-party captured code and
-assets: make sure you have publishing/reuse rights before public deployment.
+This update preserves Enter the Experience. It never disables or blocks clicks.
+The main site and market runtime both run as independent WebGL renderers.
+Publish only if you have rights to reuse the third-party gallery/product assets.
