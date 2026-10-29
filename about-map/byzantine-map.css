@@ -210,3 +210,17 @@
  height:min(calc(100dvh - 2 * var(--hm-dialog-pad)),calc((100vw - 2 * var(--hm-dialog-pad)) / 1.639 + 92px))!important;
 }
 @media(prefers-reduced-motion:reduce){#byz-history-map .hm-card,#byz-map-screen-veil{transition:none!important;animation:none!important;}}
+
+/* V48: remove SVG letterboxes, synchronize with the native page compositor. */
+#byz-history-map .hm-stage img{object-fit:fill!important;background:transparent!important}
+#byz-history-map[data-active="true"]{opacity:1;} /* live opacity driven inline by native uniform */
+#byz-history-map[data-expanded="true"]{opacity:1!important;visibility:visible!important}
+#byz-history-map[data-expanded="true"] .hm-card{opacity:1}
+/* The native WebGPU canvas contains the About Us text. It fades away alongside
+   the small map before the expanded map appears, and returns on collapse. */
+body.byz-map-modal-open canvas{opacity:0!important;pointer-events:none!important;transition:opacity .34s ease!important}
+body canvas{transition:opacity .34s ease}
+body.byz-map-modal-open #byzantine-fixed-crystal-close{opacity:0!important;pointer-events:none!important;transition:opacity .34s ease!important}
+html.byz-map-modal-open,body.byz-map-modal-open{overflow:hidden!important;overscroll-behavior:none!important}
+#byz-map-screen-veil{z-index:2147479998!important}
+#byz-history-map[data-expanded="true"]{z-index:2147480001!important}

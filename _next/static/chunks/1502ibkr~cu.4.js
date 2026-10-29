@@ -344,7 +344,7 @@ function o9(){let{awaken:e}=(0,oh.useProjectsContext)(),t=(0,i.useDebug)();retur
     const hero=p.current?.hero;
     const mesh=C?.mesh;
     let rect=null;
-    if(n===1&&state.currentProjectIndex===1&&state.interiorStatus==='interior'&&hero&&mesh&&o){
+    if(n===1&&state.currentProjectIndex===1&&['entering','interior','exiting'].includes(state.interiorStatus)&&hero&&mesh&&o){
       try{
         const g=mesh.geometry?.parameters;
         if(g?.width>0&&g?.height>0){
@@ -358,7 +358,7 @@ function o9(){let{awaken:e}=(0,oh.useProjectsContext)(),t=(0,i.useDebug)();retur
           const xs=projected.map(q=>q.x),ys=projected.map(q=>q.y);
           const left=Math.min(...xs),top=Math.min(...ys),width=Math.max(...xs)-left,height=Math.max(...ys)-top;
           if(Number.isFinite(left+top+width+height)&&width>60&&height>40){
-            rect={left,top,width,height};
+            rect={left,top,width,height,opacity:Number.isFinite(N.value)?N.value:1,phase:state.interiorStatus};
           }
         }
       }catch(_e){}

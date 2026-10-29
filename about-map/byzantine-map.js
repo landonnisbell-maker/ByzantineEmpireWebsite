@@ -33,22 +33,52 @@ function capPan(){
 function draw(immediate=false){capPan();stage.style.transition=immediate?'none':'transform 180ms cubic-bezier(.18,.72,.25,1)';stage.style.transform=`translate3d(${panX}px,${panY}px,0) scale(${zoom})`;}
 function setZoom(next){zoom=clamp(next,1,1.55);draw()}
 function reset(){zoom=1;panX=panY=0;draw()}
-// The veil is separate from the fixed map frame, so that the actual WebGPU
-// About Us text and background dissolve together during map expansion.
+// The map is tracked against the native crystal opacity uniform. Expansion
+// temporarily hides the WebGPU canvas instead of relying on a separate overlay
+// to mask native text that can be in a higher GPU compositing layer.
 const screenVeil=document.createElement('div');
 screenVeil.id='byz-map-screen-veil';
 if(document.body)document.body.append(screenVeil);
 else document.addEventListener('DOMContentLoaded',()=>document.body.append(screenVeil),{once:true});
 let swapBusy=false;
-const nap=(ms)=>new Promise(resolve=>setTimeout(resolve,ms));
+const nap=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const insideMap=target=>!!target&&(viewport.contains(target)||frame.querySelector('.hm-tools').contains(target));
+function modalCapture(event){
+ if(frame.dataset.expanded!=='true'&&!swapBusy)return;
+ if(event.type==='keydown'&&event.key==='Escape')return;
+ if(event.type==='wheel'&&viewport.contains(event.target))return; // map zoom still works
+ if(event.type==='pointerdown'&&insideMap(event.target))return;
+ if(event.type==='pointermove'&&insideMap(event.target))return;
+ if(event.type==='pointerup'&&insideMap(event.target))return;
+ if(event.type==='touchstart'&&insideMap(event.target))return;
+ if(event.type==='touchmove'&&insideMap(event.target))return;
+ if(event.type==='keydown'&&['Tab','Shift'].includes(event.key))return;
+ if(event.cancelable)event.preventDefault();
+ event.stopImmediatePropagation();
+}
+// Register on window in capture, before any application's bubbling listeners.
+for(const type of ['wheel','touchstart','touchmove','keydown'])window.addEventListener(type,modalCapture,{capture:true,passive:false});
+function holdPage(yes){
+ document.body?.classList.toggle('byz-map-modal-open',yes);
+ document.documentElement.classList.toggle('byz-map-modal-open',yes);
+ window.__BYZ_ABOUT_MAP_MODAL__=yes;
+}
+function collapseImmediately(){
+ frame.dataset.expanded='false';
+ frame.dataset.swapping='';delete frame.dataset.swapping;
+ screenVeil.classList.remove('is-on');
+ holdPage(false);swapBusy=false;
+ expandButton.textContent='ENLARGE ↗';
+ expandButton.setAttribute('aria-label','Expand map');
+}
 async function toggleExpand(force){
  const want=typeof force==='boolean'?force:frame.dataset.expanded!=='true';
  if(swapBusy||want===(frame.dataset.expanded==='true'))return;
  swapBusy=true;
  frame.dataset.swapping='out';
- if(want)screenVeil.classList.add('is-on');
- // First dissolve both the original WebGPU text and the small map.
- await nap(320);
+ // Start fading the native About Us WebGPU content *with* the compact map.
+ if(want){holdPage(true);screenVeil.classList.add('is-on')}
+ await nap(350);
  frame.dataset.expanded=want?'true':'false';
  expandButton.textContent=want?'CLOSE ×':'ENLARGE ↗';
  expandButton.setAttribute('aria-label',want?'Close expanded map':'Expand map');
@@ -56,9 +86,8 @@ async function toggleExpand(force){
  await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
  draw(true);
  frame.dataset.swapping='in';
- if(!want)screenVeil.classList.remove('is-on');
- // Fade in the newly sized map (and reveal the original About Us on closing).
- await nap(410);
+ if(!want){screenVeil.classList.remove('is-on');holdPage(false)}
+ await nap(420);
  delete frame.dataset.swapping;
  swapBusy=false;
  if(want)viewport.focus({preventScroll:true});
@@ -113,13 +142,7 @@ function setMapActive(active){
     // It persists as long as the original media rectangle exists.
     frame.dataset.active='false';
     frame.dataset.visible='false';
-    if(frame.dataset.expanded==='true'){
-      frame.dataset.expanded='false';
-      screenVeil.classList.remove('is-on');
-      expandButton.textContent='ENLARGE ↗';
-      swapBusy=false;
-      delete frame.dataset.swapping;
-    }
+    if(frame.dataset.expanded==='true'||swapBusy)collapseImmediately();
   }
 }
 function layout(){
@@ -130,15 +153,29 @@ function layout(){
   if(valid!==wasActive){
     wasActive=valid;
     if(valid){reset();setMapActive(true)}
-    else setMapActive(false);
+    else {setMapActive(false);prevRect=''}
   }
   if(valid){
+    // Follow the original About Us WebGPU content fade uniform, including
+    // entering and exiting. Avoid independent DOM animation timing.
+    frame.style.opacity=String(clamp(Number(r.opacity??1),0,1));
     const vals=[r.left,r.top,r.width,r.height].map(n=>Math.round(n*2)/2);
     const key=vals.join(',');
+    // Make the original SVG's 296.93:181.17 aspect fit the media slot *without*
+    // cropping or injecting gray letterbox columns at 1x zoom.
+    // The actual book/scroll geometry stays untouched; its map is centered.
     if(key!==prevRect){
       prevRect=key;
-      frame.style.left=vals[0]+'px';frame.style.top=vals[1]+'px';
-      frame.style.width=vals[2]+'px';frame.style.height=vals[3]+'px';
+      // Measure header after giving it the full available width; otherwise
+      // a narrow default frame makes the heading wrap and distorts the ratio.
+      frame.style.width=vals[2]+'px';
+      const header=frame.querySelector('.hm-header').offsetHeight||54;
+      const foot=frame.querySelector('.hm-foot').offsetHeight||27;
+      const availableHeight=Math.max(40,vals[3]-header-foot);
+      const desiredWidth=Math.min(vals[2],availableHeight*(296.92649/181.17015)+2);
+      frame.style.left=(vals[0]+(vals[2]-desiredWidth)/2)+'px';
+      frame.style.top=vals[1]+'px';
+      frame.style.width=desiredWidth+'px';frame.style.height=vals[3]+'px';
     }
   }
   requestAnimationFrame(layout);

@@ -1,0 +1,15 @@
+{
+  "version": "48.0",
+  "baseline": "V47",
+  "changes": [
+    "SVG map viewport aspect corrected without crop/letterboxes",
+    "Expanded map hides native WebGPU content and blocks page scrolling",
+    "Map opacity follows native WebGPU interior reveal uniform during entry and exit"
+  ],
+  "files": [
+    "index.html",
+    "about-map/byzantine-map.css",
+    "about-map/byzantine-map.js",
+    "_next/static/chunks/1502ibkr~cu.4.js"
+  ]
+}
