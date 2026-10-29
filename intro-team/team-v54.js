@@ -1,5 +1,5 @@
 /*
- * ta pánta pazári — Crystal 1 / Introduction team, V57 full four-edge feather + scroll reveal.
+ * ta pánta pazári — Crystal 1 / Introduction team, V58 left-edge feather + original native reveal only.
  * Edit role and quote fields below; the five portraits and text are painted
  * directly into the native WebGPU page canvas, not placed in an HTML overlay.
  * The order deliberately ends with Landon.
@@ -81,9 +81,18 @@
     ctx.globalCompositeOperation = 'destination-in';
     var fadeX = ctx.createLinearGradient(dx, 0, dx + dw, 0);
     fadeX.addColorStop(0, 'rgba(0,0,0,0)');
-    fadeX.addColorStop(.055, 'rgba(0,0,0,.35)');
-    fadeX.addColorStop(.12, 'rgba(0,0,0,.85)');
-    fadeX.addColorStop(.18, 'rgba(0,0,0,1)');
+    // Yusrah's shirt is cut straight along the far-left side of the source.
+    // Blend that edge across a wider span so it disappears into the GPU wall.
+    if (person.name === 'Yusrah') {
+      fadeX.addColorStop(.07, 'rgba(0,0,0,.10)');
+      fadeX.addColorStop(.15, 'rgba(0,0,0,.42)');
+      fadeX.addColorStop(.25, 'rgba(0,0,0,.84)');
+      fadeX.addColorStop(.34, 'rgba(0,0,0,1)');
+    } else {
+      fadeX.addColorStop(.055, 'rgba(0,0,0,.35)');
+      fadeX.addColorStop(.12, 'rgba(0,0,0,.85)');
+      fadeX.addColorStop(.18, 'rgba(0,0,0,1)');
+    }
     fadeX.addColorStop(.82, 'rgba(0,0,0,1)');
     fadeX.addColorStop(.88, 'rgba(0,0,0,.85)');
     fadeX.addColorStop(.945, 'rgba(0,0,0,.35)');
@@ -105,41 +114,12 @@
     return canvas;
   }
 
-  // Native WebGPU per-row animation. Called from the original renderer's
-  // frame loop; only ten scalar uniforms are updated. No huge texture reuploads.
-  var lastActive = false;
-  var startTimes = Array(5).fill(-1);
-  function eased(t) {
-    t = Math.max(0, Math.min(1, t));
-    return 1 - Math.pow(1 - t, 3);
-  }
+  // V58: Let the ORIGINAL crystal's native WebGPU reveal be the only entrance.
+  // V56 added a second row-mask animation that resets opacity after the first
+  // reveal and makes portraits/text vanish, then reappear with a plain fade-up.
+  // Keep that extra shader layer disabled on every frame, including re-entry.
   window.__BYZ_INTRO_TEAM_TICK_V56__ = function (scrollY, viewportHeight, active, shader) {
-    if (!shader || !shader.images || !shader.texts) return;
-    if (!active) {
-      shader.enabled.value = 0;
-      lastActive = false;
-      return;
-    }
-    if (!lastActive) {
-      startTimes.fill(-1);
-      shader.images.forEach(function (u) { u.value = 0; });
-      shader.texts.forEach(function (u) { u.value = 0; });
-      lastActive = true;
-    }
-    shader.enabled.value = 1;
-    var now = performance.now();
-    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    for (var i = 0; i < 5; i++) {
-      var rowY = 437 + i * 910;
-      if (startTimes[i] < 0 && rowY <= scrollY + viewportHeight * .88) startTimes[i] = now;
-      if (startTimes[i] < 0) continue;
-      if (reduced) {
-        shader.images[i].value = shader.texts[i].value = 1;
-        continue;
-      }
-      shader.images[i].value = eased((now - startTimes[i]) / 760);
-      shader.texts[i].value = eased((now - startTimes[i] - 140) / 820);
-    }
+    if (shader && shader.enabled) shader.enabled.value = 0;
   };
 
   // The host will execute these draw commands while generating its original
@@ -164,7 +144,7 @@
     people.forEach(function (person, idx) {
       var y = rowStart + idx * rowHeight;
       var photoOnLeft = idx % 2 === 0;
-      var photoX = photoOnLeft ? 277 : 1160;
+      var photoX = photoOnLeft ? 355 : 1160;
       var textX = photoOnLeft ? 1125 : 355;
       var textWidth = 725;
       commands.push(function (ctx) {

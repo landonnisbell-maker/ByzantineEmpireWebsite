@@ -1,0 +1,21 @@
+{
+  "version": "V58",
+  "type": "update-only",
+  "base": "V57",
+  "changes": [
+    "Yusrah feathered left edge",
+    "single native entrance reveal"
+  ],
+  "files": [
+    {
+      "path": "index.html",
+      "size": 155217,
+      "sha256": "bb0dbc843ded628a09d3f46d48eda32921d464800174ce92a99a772957abe7d3"
+    },
+    {
+      "path": "intro-team/team-v54.js",
+      "size": 8462,
+      "sha256": "de2d7c14e4f9802378b5454e4d69960efdd48da1a55ab705b6bb0ffe081acba8"
+    }
+  ]
+}
