@@ -1,0 +1,20 @@
+{
+  "version": "46.0",
+  "base": "V45.1 (with V38 product content)",
+  "changes": [
+    "map fades in/out as About Us enters/exits using native media slot",
+    "Byzantine-inspired gold/parchment cartographic frame",
+    "map expanded view constrained by viewport and image aspect ratio, not 1100px or 550px",
+    "only gallery and Palia iframes are audio-silenced at startup"
+  ],
+  "files": [
+    "index.html",
+    "about-map/byzantine-map.js",
+    "about-map/byzantine-map.css",
+    "market-runtime/byz-market-silence-v46.js",
+    "market-runtime/gallery/index.html",
+    "market-runtime/palia/work/palia/index.html"
+  ],
+  "core_js_modified": false,
+  "main_site_audio_modified": false
+}

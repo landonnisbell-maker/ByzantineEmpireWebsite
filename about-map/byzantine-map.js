@@ -6,15 +6,16 @@ const BASE='/ByzantineEmpireWebsite/about-map/';
 const frame=document.createElement('aside');
 frame.id='byz-history-map';
 frame.dataset.active='false';
+frame.dataset.visible='false';
 frame.dataset.expanded='false';
 frame.setAttribute('aria-label','Interactive historical map of the Byzantine Empire');
 frame.innerHTML=`<div class="hm-shade" data-close="1" aria-hidden="true"></div>
 <section class="hm-card"><div class="hm-header">
- <div><span class="hm-eyebrow">Historic geography · Map</span><h2 class="hm-heading">The Byzantine Empire</h2></div>
- <div class="hm-tools"><button class="hm-icon" data-zoom="out" aria-label="Zoom out" title="Zoom out">−</button><button class="hm-icon" data-zoom="in" aria-label="Zoom in" title="Zoom in">+</button><button class="hm-icon" data-reset="1" aria-label="Reset map" title="Reset view">↺</button><button class="hm-expand" data-expand="1" aria-label="Expand map">Expand ↗</button></div>
+ <div><span class="hm-eyebrow">HISTORICAL ATLAS · EASTERN ROMAN EMPIRE</span><h2 class="hm-heading">The Byzantine Empire</h2></div>
+ <div class="hm-tools"><button class="hm-icon" data-zoom="out" aria-label="Zoom out" title="Zoom out">−</button><button class="hm-icon" data-zoom="in" aria-label="Zoom in" title="Zoom in">+</button><button class="hm-icon" data-reset="1" aria-label="Reset map" title="Reset view">↺</button><button class="hm-expand" data-expand="1" aria-label="Expand map">ENLARGE ↗</button></div>
 </div><div class="hm-viewport" role="region" aria-label="Drag map to pan; scroll to zoom; press plus or minus keys to zoom" tabindex="0">
  <div class="hm-stage"><img src="${BASE}Byzantine-Empire.webp" alt="Historical comparison of the Byzantine Empire in about 1020, about 1360, and under Justinian I, 527 to 565" draggable="false"><img class="hm-highlight" src="${BASE}empire-pulse.png" alt="" aria-hidden="true" draggable="false"></div>
-</div><div class="hm-foot"><span>Drag to explore · Scroll to zoom</span><a href="https://www.britannica.com/place/Byzantine-Empire" target="_blank" rel="noopener noreferrer">Map © Encyclopaedia Britannica</a></div></section>`;
+</div><div class="hm-foot"><span>Drag to explore · Scroll to magnify</span><a href="https://www.britannica.com/place/Byzantine-Empire" target="_blank" rel="noopener noreferrer">Map © Encyclopaedia Britannica</a></div></section>`;
 const mount=()=>{if(!frame.isConnected)document.body.append(frame)};
 if(document.body)mount();else document.addEventListener('DOMContentLoaded',mount,{once:true});
 const viewport=frame.querySelector('.hm-viewport');
@@ -35,7 +36,7 @@ function reset(){zoom=1;panX=panY=0;draw()}
 function toggleExpand(force){
  const want=typeof force==='boolean'?force:frame.dataset.expanded!=='true';
  frame.dataset.expanded=want?'true':'false';
- expandButton.textContent=want?'Close ×':'Expand ↗';
+ expandButton.textContent=want?'CLOSE ×':'ENLARGE ↗';
  expandButton.setAttribute('aria-label',want?'Close expanded map':'Expand map');
  if(!want)reset();else{zoom=1;panX=panY=0;requestAnimationFrame(()=>{draw();viewport.focus({preventScroll:true})})}
 }
@@ -77,7 +78,27 @@ window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&frame.dataset.expan
 window.addEventListener('resize',()=>{if(frame.dataset.active==='true')draw()});
 // V45 — Only show the panel over the native WebGPU About Us image slot.
 // No additional floating map; this follows the original placeholder when scrolling.
-let wasActive=false,prevRect='';
+let wasActive=false,prevRect='',revealRaf=0,hideTimer=0;
+function setMapActive(active){
+  clearTimeout(hideTimer);
+  cancelAnimationFrame(revealRaf);
+  if(active){
+    mount();
+    frame.dataset.visible='true';
+    frame.dataset.active='false';
+    // A double frame starts the reveal only after the original crystal's
+    // WebGPU camera/stone entrance has completed and the real media slot exists.
+    revealRaf=requestAnimationFrame(()=>{revealRaf=requestAnimationFrame(()=>{
+      if(wasActive)frame.dataset.active='true';
+    })});
+  }else{
+    frame.dataset.active='false';
+    if(frame.dataset.expanded==='true')toggleExpand(false);
+    // Keep the last projected rectangle during the native reverse animation,
+    // allowing the map to dissolve instead of being removed mid-frame.
+    hideTimer=setTimeout(()=>{if(!wasActive)frame.dataset.visible='false'},650);
+  }
+}
 function layout(){
   const r=window.__BYZ_ABOUT_MAP_SLOT_V45__;
   const valid=!!r&&r.width>60&&r.height>40&&
@@ -85,9 +106,8 @@ function layout(){
     r.left+r.width>0&&r.top+r.height>0;
   if(valid!==wasActive){
     wasActive=valid;
-    frame.dataset.active=valid?'true':'false';
-    if(valid){mount();reset()}
-    else if(frame.dataset.expanded==='true'){toggleExpand(false)}
+    if(valid){reset();setMapActive(true)}
+    else setMapActive(false);
   }
   if(valid){
     const vals=[r.left,r.top,r.width,r.height].map(n=>Math.round(n*2)/2);
