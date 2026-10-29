@@ -1,0 +1,24 @@
+{
+  "version": "V41",
+  "format": "update-only",
+  "files": {
+    "README-V41.txt": {
+      "sha256": "fb695205ecef9a58fbd332f1119c2208af616220c4def825ae99e8a7252e367c",
+      "bytes": 1979
+    },
+    "index.html": {
+      "sha256": "37975cb8d4a8d44bd3c976f16b586ede15000331aedde84cdffd052f417bdb20",
+      "bytes": 154889
+    },
+    "_next/static/chunks/1502ibkr~cu.4.js": {
+      "sha256": "a1cacaab956d97ab846248f06774604a6ba5f9b7a730ebfe8413e7d53b41c801",
+      "bytes": 273435
+    }
+  },
+  "checks": {
+    "about_gradient_shader": true,
+    "v40_overlay_removed": true,
+    "native_lightmesh_unchanged": true,
+    "other_crystal_wall_shader_preserved": true
+  }
+}
