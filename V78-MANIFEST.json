@@ -1,0 +1,61 @@
+{
+  "version": "V78",
+  "base": "V77",
+  "files": [
+    {
+      "path": "ByzantineEmpireWebsite/README-V78.txt",
+      "bytes": 1271,
+      "sha256": "e914ddc3ccac095e0746be3641ac553ce6ff61d7fcade85ae090f7a32008cca7"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/byz-product-content-v78.css",
+      "bytes": 26680,
+      "sha256": "80034427548819df880b52e191e958659fd729380ed674266f928835ca0963eb"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/byz-product-content-v78.js",
+      "bytes": 39639,
+      "sha256": "4afa5be599fe9497b3e319b8d46362c8b39fc1e5383bb65ae3867abcb147567e"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/silk-textiles/index.html",
+      "bytes": 61831,
+      "sha256": "f960be2a50a78c519a74c2178e557e1d5b1ffcb75414c264b801139ddf326067"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/silk-v78-cloak-colors.png",
+      "bytes": 2998160,
+      "sha256": "a549c7cf66101d51025d981a4a82d22cb49d9f8c7cdbc997fdd375e40c7bf9bc"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/silk-v78-cloak-embroidery.png",
+      "bytes": 3230782,
+      "sha256": "f28bb800b0de36d2a0c576d1689db63334995fb9e6e7e155855b4cc21b75cea6"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/silk-v78-cloak-full.png",
+      "bytes": 1995521,
+      "sha256": "c47ad63a68d274e6c86d3dddea35a3011634ae385c7ff3f477f14aa58b30a666"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/silk-v78-rug-detail.png",
+      "bytes": 4173527,
+      "sha256": "40a68cb4c363881f07cef23f9b3d5657bcdf3e6cdba4f91247f67799a00ca802"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/silk-v78-rug-floating.png",
+      "bytes": 3958114,
+      "sha256": "023f3bdfe40aad69261e53d59e6b75f1cbc89099cdb0ca1b666da59e983745f3"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/silk-v78-rug-main.png",
+      "bytes": 4587120,
+      "sha256": "933a487a06cb40620527e9af9b09f4de5e6c6f160b5a90eac140ded6a8f76183"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/pp-loader/market-preload-v71.js",
+      "bytes": 3109,
+      "sha256": "e14bcb1221e10330dca176df07e61d1d5b011aa01d057a9f6812a4b23ce50a8e"
+    }
+  ]
+}

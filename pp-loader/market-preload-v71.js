@@ -21,12 +21,14 @@
   'market-runtime/palia/_nuxt/entry.B6zjpOmH.css',
   'market-runtime/palia/work/palia/byz-product-content-v77.css?v=77.0',
   'market-runtime/palia/work/palia/byz-product-content-v77.js?v=77.0',
+  'market-runtime/palia/work/palia/byz-product-content-v78.css?v=78.0',
+  'market-runtime/palia/work/palia/byz-product-content-v78.js?v=78.0',
   'market-runtime/palia/fonts/IvarHeadline-Regular.woff2',
   'market-runtime/palia/fonts/PPFrama-Regular.woff2'
  ].map(s=>base+s);
  const mobile=matchMedia('(max-width:720px)').matches?'mobile':'desktop';
  const imageUrls=slugs.map(s=>base+'market-runtime/product-images/banners/'+s+'-'+mobile+'.webp');
- imageUrls.push(base+'market-runtime/product-images/details/silk-cloak-feature-v77.png');
+ imageUrls.push(base+'market-runtime/product-images/details/silk-v78-cloak-full.png');
  let complete=0;const total=docs.length+shared.length+imageUrls.length;
  const state={started:true,done:false,complete:0,total,errors:0};
  window.__BYZ_MARKET_PRELOAD_STATE__=state;
