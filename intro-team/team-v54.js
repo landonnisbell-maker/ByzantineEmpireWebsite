@@ -1,5 +1,5 @@
 /*
- * ta pánta pazári — Crystal 1 / Introduction team, V56 full portraits + scroll reveal.
+ * ta pánta pazári — Crystal 1 / Introduction team, V57 full four-edge feather + scroll reveal.
  * Edit role and quote fields below; the five portraits and text are painted
  * directly into the native WebGPU page canvas, not placed in an HTML overlay.
  * The order deliberately ends with Landon.
@@ -73,28 +73,33 @@
     var dw = iw * scale, dh = ih * scale;
     var dx = (width - dw) / 2, dy = (height - dh) / 2;
     ctx.drawImage(image, 0, 0, iw, ih, dx, dy, dw, dh);
-    // Feather all four boundaries without throwing away the person's body.
-    // Source portraits are already transparent; the mask removes any hard
-    // rectangular edge from the very ends of the frame.
+    // V57: feather relative to the actual CONTAIN-fitted image bounds,
+    // not the 760x858 host frame. Several portraits have sizeable transparent
+    // margins within that frame, which made their shirt and side edges square.
+    // Multiplying horizontal and vertical masks removes ALL four hard edges.
+    // The central 64%+ of the image remains unchanged and fully opaque.
     ctx.globalCompositeOperation = 'destination-in';
-    var fadeX = ctx.createLinearGradient(0, 0, width, 0);
+    var fadeX = ctx.createLinearGradient(dx, 0, dx + dw, 0);
     fadeX.addColorStop(0, 'rgba(0,0,0,0)');
-    fadeX.addColorStop(.045, 'rgba(0,0,0,.78)');
-    fadeX.addColorStop(.12, 'rgba(0,0,0,1)');
-    fadeX.addColorStop(.88, 'rgba(0,0,0,1)');
-    fadeX.addColorStop(.955, 'rgba(0,0,0,.78)');
+    fadeX.addColorStop(.055, 'rgba(0,0,0,.35)');
+    fadeX.addColorStop(.12, 'rgba(0,0,0,.85)');
+    fadeX.addColorStop(.18, 'rgba(0,0,0,1)');
+    fadeX.addColorStop(.82, 'rgba(0,0,0,1)');
+    fadeX.addColorStop(.88, 'rgba(0,0,0,.85)');
+    fadeX.addColorStop(.945, 'rgba(0,0,0,.35)');
     fadeX.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = fadeX;
-    ctx.fillRect(0,0,width,height);
-    var fadeY = ctx.createLinearGradient(0, 0, 0, height);
+    ctx.fillRect(0, 0, width, height);
+    var fadeY = ctx.createLinearGradient(0, dy, 0, dy + dh);
     fadeY.addColorStop(0, 'rgba(0,0,0,0)');
-    fadeY.addColorStop(.035, 'rgba(0,0,0,.82)');
-    fadeY.addColorStop(.105, 'rgba(0,0,0,1)');
-    fadeY.addColorStop(.835, 'rgba(0,0,0,1)');
-    fadeY.addColorStop(.955, 'rgba(0,0,0,.55)');
+    fadeY.addColorStop(.04, 'rgba(0,0,0,.4)');
+    fadeY.addColorStop(.115, 'rgba(0,0,0,1)');
+    fadeY.addColorStop(.72, 'rgba(0,0,0,1)');
+    fadeY.addColorStop(.84, 'rgba(0,0,0,.70)');
+    fadeY.addColorStop(.93, 'rgba(0,0,0,.22)');
     fadeY.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = fadeY;
-    ctx.fillRect(0,0,width,height);
+    ctx.fillRect(0, 0, width, height);
     ctx.globalCompositeOperation = 'source-over';
     person._portraitCache = canvas;
     return canvas;

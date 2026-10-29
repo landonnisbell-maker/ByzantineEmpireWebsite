@@ -17,12 +17,12 @@
     // The large page title. Keep it matched to Crystal 1 unless intentionally renaming it.
     title: "Introduction",
 
-    // Small label and date underneath/near the title.
+    // Small label and subtitle underneath/near the title.
     overline: "Page 1",
-    year: "—",
+    year: "Welcome to the Byzantine Empire",
 
     // Introductory highlighted line near the top.
-    tagline: "Varoni seltrum nexara vellarum.",
+    tagline: "", // Intentionally blank: native renderer uses year as the entire subtitle, without an extra dash.
 
     // Main text ABOVE the first "No image supplied yet" image.
     description: `Brenvola caren stralis enova. Trinora felum veda noravis, pelora vintus grevon. Zernali corvast elundra primel, dorvena limora navento. Raveli nistora velina tarsum.`,

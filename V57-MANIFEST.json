@@ -1,0 +1,19 @@
+{
+  "version": "V57",
+  "base": "V56",
+  "type": "update-only",
+  "changed_files": [
+    {
+      "path": "byzantine-introduction-content.js",
+      "sha256": "1b73d80fa218e0fce2340c7a495cb0bff00c1da3eea18bed471e06a09ab124fd"
+    },
+    {
+      "path": "index.html",
+      "sha256": "a0e38826aaff1dd99f37254ff605a01948b561f78822a247df7785bc49e21ec2"
+    },
+    {
+      "path": "intro-team/team-v54.js",
+      "sha256": "9f80bbf14c27524698df1f20245b3692557613762020ee5677c4597e6ce9b0dc"
+    }
+  ]
+}
