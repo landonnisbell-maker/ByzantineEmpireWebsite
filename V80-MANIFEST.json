@@ -1,0 +1,76 @@
+{
+  "version": "V80",
+  "base": "V79",
+  "files": [
+    {
+      "path": "ByzantineEmpireWebsite/README-V80.txt",
+      "bytes": 1903,
+      "sha256": "101c8eace8e23635384b09c9b2f34eb35f06b39d88d87660e22f21f30017e2f5"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/byz-product-content-v80.css",
+      "bytes": 37092,
+      "sha256": "02026d899fa82b2af827e3461acb9b5486ad5e498197dd8e96afd1e7c4307b80"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/byz-product-content-v80.js",
+      "bytes": 46664,
+      "sha256": "a5334a3bacc8e8f49c56ec0b4247b15f2630fe9e63ec92122858b0b783acadf0"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/food-items/index.html",
+      "bytes": 61825,
+      "sha256": "2acab5dc631b1d964eb4b154fa48c6efb1231cdeae29c28d9ae0f9e1c15bd935"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/gold-jewelry/index.html",
+      "bytes": 61829,
+      "sha256": "d71f60c3f36f92e8745957482ac22815643aa00d6f97eeb9f9ea1c268a9ac11d"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/food-v80-apaki-hanging.png",
+      "bytes": 3407558,
+      "sha256": "5276de1ba8915b825ab879f35bb0de6a8d692c571dd3594deb296d7ec1180ff9"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/food-v80-apaki-sliced.png",
+      "bytes": 3481559,
+      "sha256": "7d8747e61544bda10e38e0e86e8bf4a467ccdc96cc34191502658cce3bbc6fe9"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/food-v80-garos-apaki-combo.png",
+      "bytes": 3856846,
+      "sha256": "10aadd2edf855dc038d837ccb5d392c4bf72205452317dceb13247928675919f"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/food-v80-garos-bottle.png",
+      "bytes": 3849597,
+      "sha256": "c328ab35d49f8bf62fb472395d32502fcf9a825192d27ad6ac9a710ec17ea7ab"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/jewelry-v80-earrings.png",
+      "bytes": 2976540,
+      "sha256": "7963039e9ca95b4c47efd9606c383b2ba64a6265eedf7d06f4ba666f6f2a935f"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/jewelry-v80-necklace.png",
+      "bytes": 3522500,
+      "sha256": "d2205ba122032de446b2a0c5594d5662e9b52225bf2277b1506d25e5d6e00d64"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/jewelry-v80-pendants.png",
+      "bytes": 3462849,
+      "sha256": "600ed8e95ebd68bdc0bffa7288c35b4fb9e7346bed6a271c2857fed5cbdb2cf5"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/jewelry-v80-ring.png",
+      "bytes": 3062941,
+      "sha256": "d3cbae0a9e2dd4aa768b4bb877290e88a827ec94370100e8b7899be80903a6b9"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/pp-loader/market-preload-v71.js",
+      "bytes": 3670,
+      "sha256": "3736ddd66d868b5a5f0c83db93f512c24906e7b53c75047aefb6c3901eeac013"
+    }
+  ]
+}
