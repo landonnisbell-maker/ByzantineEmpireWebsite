@@ -25,19 +25,19 @@
     tagline: "", // Intentionally blank: native renderer uses year as the entire subtitle, without an extra dash.
 
     // Main text ABOVE the first "No image supplied yet" image.
-    description: `Brenvola caren stralis enova. Trinora felum veda noravis, pelora vintus grevon. Zernali corvast elundra primel, dorvena limora navento. Raveli nistora velina tarsum.`,
+    description: ``,
 
     // Section AFTER the first image (before the image gallery).
     roleHeading: 'ROLE SUMMARY',
-    roleTitles: ["VONTERA ELIS MORANT"],
-    roleDescription: `Teralis vintra montavel serondi. Norella quinis palvora demendra. Veltora sentris colaver enaro.`,
+    roleTitles: [],
+    roleDescription: ``,
 
     // Optional small tags / keywords (delete words or add more in quotes).
-    stack: ["ZENDORA MAVEN"],
+    stack: [],
 
     // Section AFTER the image gallery.
     challengesHeading: 'TECHNICAL CONSTRAINTS',
-    challenges: `Quentera morsalis venora; tristel corova falendis, nerava morentis silora. Calen verto lisendra noram.`
+    challenges: ``
   };
 
   window.BYZANTINE_CRYSTAL_CONTENT = window.BYZANTINE_CRYSTAL_CONTENT || {};

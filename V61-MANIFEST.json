@@ -1,0 +1,132 @@
+{
+  "version": "V61",
+  "base": "V60",
+  "update_only": true,
+  "files": [
+    {
+      "path": "README-V61.txt",
+      "bytes": 1064,
+      "sha256": "615c6dba088f6344c04c7997d5463a1bf0c1a1a94f27fb7b76dac9ffccc1d3f2"
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "bytes": 284593,
+      "sha256": "990587c3389c4aa7e5ce6157bc9cc6d753318f61e1f7c5873ea080c1a73fc32b"
+    },
+    {
+      "path": "byzantine-introduction-content.js",
+      "bytes": 1667,
+      "sha256": "2b458012227d1e3c462967b184a430a9d8612216f7cf38dd7e47078c8e153fbf"
+    },
+    {
+      "path": "index.html",
+      "bytes": 155217,
+      "sha256": "21fc241f7dc62d0343373f630d56b9016f702b6d8b4df5944beab0f8714d7374"
+    },
+    {
+      "path": "intro-team/team-v54.js",
+      "bytes": 15005,
+      "sha256": "9c7120f1f1c77ab0d63a5286a11abdde47e8f0dd20892d1cc5ba2059b50e968b"
+    },
+    {
+      "path": "market/index.html",
+      "bytes": 14569,
+      "sha256": "003589e08e2eb5ed4d1548f7c4597330bfb8e0b063db50016a602d53e02c7766"
+    },
+    {
+      "path": "market-runtime/gallery/index.html",
+      "bytes": 94517,
+      "sha256": "4e80d9bf6da70bedc5ea5fab759b5b1f14aa14c47582627a447ec11e8bd262e4"
+    },
+    {
+      "path": "market-runtime/index.html",
+      "bytes": 11748,
+      "sha256": "e95b362726c72509c4da4fcf5827e688a3cd8bb380f16783b3c71829f7c6319c"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v38.css",
+      "bytes": 6703,
+      "sha256": "295bc263f3c9b15effa6e3fcf0d9347f93bc814418fe36ef996633f48ac94f22"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v38.js",
+      "bytes": 28584,
+      "sha256": "25bba441d17c6615c32de4af281b5a6f603678a06b74dc370aeb50e383e2e415"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/index.html",
+      "bytes": 59245,
+      "sha256": "20459c26e3844c7be34cca92c6a1a589210e0781cf70ad3a44e1c63ba75c7746"
+    },
+    {
+      "path": "market-runtime/product-images/coins.webp",
+      "bytes": 380134,
+      "sha256": "f8f27bd5fbb0af318ddbfcabd7f2c3e72abef8801093f80023024b43b80b83d9"
+    },
+    {
+      "path": "market-runtime/product-images/food-items.webp",
+      "bytes": 268150,
+      "sha256": "90abdd4de281878d063d07a5f93990933d0cad3c441337cdcb496c52174af74d"
+    },
+    {
+      "path": "market-runtime/product-images/gold-jewelry.webp",
+      "bytes": 149600,
+      "sha256": "95f18442410b48edc7221b6eb96a8913cda84165ffb589dbd45089ed8191d612"
+    },
+    {
+      "path": "market-runtime/product-images/silk-textiles.webp",
+      "bytes": 218024,
+      "sha256": "a9988ccb0717c96ab155f80067f128435a06c746470eefde953dff7ffa4df6a4"
+    },
+    {
+      "path": "market-runtime/products/coins/index.html",
+      "bytes": 14569,
+      "sha256": "003589e08e2eb5ed4d1548f7c4597330bfb8e0b063db50016a602d53e02c7766"
+    },
+    {
+      "path": "market-runtime/products/coins.json",
+      "bytes": 412,
+      "sha256": "5eb16aa24d7ceca5f99fe51644f6b2ecfbd6f00c67de545701eeb6b15c6957cf"
+    },
+    {
+      "path": "market-runtime/products/food-items/index.html",
+      "bytes": 14569,
+      "sha256": "003589e08e2eb5ed4d1548f7c4597330bfb8e0b063db50016a602d53e02c7766"
+    },
+    {
+      "path": "market-runtime/products/food-items.json",
+      "bytes": 410,
+      "sha256": "39f01505413f3b1041fe90054d47be5690423765b84e9f67eecace2cffdf01c4"
+    },
+    {
+      "path": "market-runtime/products/gold-jewelry/index.html",
+      "bytes": 14569,
+      "sha256": "003589e08e2eb5ed4d1548f7c4597330bfb8e0b063db50016a602d53e02c7766"
+    },
+    {
+      "path": "market-runtime/products/gold-jewelry.json",
+      "bytes": 422,
+      "sha256": "69179d267828e47426793e5b53cc3049dfc1c99cc7e4ee33a0beb2834023c531"
+    },
+    {
+      "path": "market-runtime/products/paramerion-sword/index.html",
+      "bytes": 14569,
+      "sha256": "003589e08e2eb5ed4d1548f7c4597330bfb8e0b063db50016a602d53e02c7766"
+    },
+    {
+      "path": "market-runtime/products/paramerion-sword.json",
+      "bytes": 299,
+      "sha256": "37538f172eafca560076684acf7c08dfb46fc11953ef3b3e5f078b4f7b22ee3f"
+    },
+    {
+      "path": "market-runtime/products/silk-textiles/index.html",
+      "bytes": 14569,
+      "sha256": "003589e08e2eb5ed4d1548f7c4597330bfb8e0b063db50016a602d53e02c7766"
+    },
+    {
+      "path": "market-runtime/products/silk-textiles.json",
+      "bytes": 428,
+      "sha256": "1ffbf8cc38934b113195a56d65d225b096848ffeb12c0a05967792e27ae26828"
+    }
+  ]
+}

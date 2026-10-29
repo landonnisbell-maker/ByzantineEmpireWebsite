@@ -101,3 +101,12 @@ html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready.byz-revealed {
  opacity:1!important;translate:none!important;filter:none!important;transition:none!important;
  }
 }
+
+/* V61 product photography: native hero area, no extra page overlay. */
+.work-detail .hero__media{position:relative!important}
+.work-detail .hero__media .byz-product-hero-photo-v61{
+ display:block!important;position:absolute!important;inset:0!important;
+ width:100%!important;height:100%!important;object-fit:cover!important;
+ object-position:center!important;z-index:5!important;opacity:1!important;
+ pointer-events:none!important;filter:none!important;
+}

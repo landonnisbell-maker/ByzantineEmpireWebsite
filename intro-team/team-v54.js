@@ -1,7 +1,7 @@
 /*
  * ta pánta pazári — Crystal 1 / Introduction team + galleries, V59.
  * Native canvas/WebGPU content only: team portraits, full names, roles/quotes,
- * and three GPU-animated gallery sliders for Architecture, Jewelry, Artifacts.
+ * and three continuous sliding galleries for Architecture, Jewelry, Artifacts.
  */
 (function () {
   'use strict';
@@ -38,7 +38,7 @@
       name: 'Landon Isbell',
       portrait: 'landon.webp',
       role: 'Website Creator/Designer & CMO',
-      quote: ''
+      quote: 'Pay close attention to the finer details of this website. From the placement of each element to the purpose behind its design, every choice has been made with intention. Nothing is there by accident. Just as with the art, architecture, and craftsmanship of the Byzantine Empire, even the smallest details have meaning.'
     }
   ];
 
@@ -209,110 +209,72 @@
     if (shader && shader.enabled) shader.enabled.value = 0;
   };
 
-  // V60 gallery atlas. One image upload, then the native WebGPU shader
-  // moves across its slide cells on every animation frame. The large text
-  // texture is not re-rendered and no HTML carousel is layered over the page.
-  var GALLERY_CELL_W = 900;
-  var GALLERY_CELL_H = 500;
-  var GALLERY_ATLAS_COLUMNS = 5;
-  var GALLERY_ATLAS_ROWS = 3;
-  var galleryAtlas = null;
-
-  function roundedRect(ctx, x, y, w, h, r) {
-    roundedPath(ctx,x,y,w,h,r);
-    ctx.clip();
-  }
+  // V61: The original large page texture is static, but this much smaller
+  // three-row gallery texture is repainted continuously. Unlike V60, we do
+  // not depend on slide-position shader uniforms being invalidated by WebGPU.
+  var GALLERY_CELL_W = 900, GALLERY_CELL_H = 480;
+  var galleryAtlas = null, galleryFrames = null, galleryLastRender = -1;
   function drawGalleryImage(ctx, img, x, y, w, h) {
     if (!img || !img.naturalWidth || !img.naturalHeight) {
-      ctx.fillStyle='#102238';ctx.fillRect(x,y,w,h);return;
+      ctx.fillStyle = '#081b2a'; ctx.fillRect(x, y, w, h); return;
     }
-    var iw=img.naturalWidth, ih=img.naturalHeight, aspect=iw/ih;
-    if (aspect < 1.11) {
-      // Only square/portrait imagery gets blurred side-fill. Preserve
-      // the original artifact or building centered and uncropped.
-      var cover=Math.max((w+80)/iw,(h+80)/ih);
-      var bw=iw*cover,bh=ih*cover;
-      ctx.save();
-      ctx.filter='blur(35px) brightness(.42) saturate(.75)';
-      ctx.drawImage(img,x+(w-bw)/2,y+(h-bh)/2,bw,bh);
-      ctx.restore();
-      ctx.fillStyle='rgba(2,9,22,.33)';ctx.fillRect(x,y,w,h);
-      var contain=Math.min((w-35)/iw,(h-20)/ih);
-      var fw=iw*contain,fh=ih*contain;
-      // Blend the sharp inset into its soft backdrop so no rectangular
-      // photo edges appear around white/gray artifact backgrounds.
-      var front=document.createElement('canvas');
-      front.width=Math.max(1,Math.round(fw));
-      front.height=Math.max(1,Math.round(fh));
-      var fctx=front.getContext('2d');
-      fctx.drawImage(img,0,0,front.width,front.height);
-      fctx.globalCompositeOperation='destination-in';
-      var edge=fctx.createLinearGradient(0,0,front.width,0);
-      edge.addColorStop(0,'rgba(0,0,0,0)');
-      edge.addColorStop(.065,'rgba(0,0,0,.75)');
-      edge.addColorStop(.15,'rgba(0,0,0,1)');
-      edge.addColorStop(.85,'rgba(0,0,0,1)');
-      edge.addColorStop(.935,'rgba(0,0,0,.75)');
-      edge.addColorStop(1,'rgba(0,0,0,0)');
-      fctx.fillStyle=edge;
-      fctx.fillRect(0,0,front.width,front.height);
-      fctx.globalCompositeOperation='source-over';
-      ctx.drawImage(front,x+(w-fw)/2,y+(h-fh)/2,fw,fh);
+    var iw=img.naturalWidth,ih=img.naturalHeight,ratio=iw/ih;
+    // Only portrait/square formats need a blurred fill. Normal landscape
+    // photographs are rendered as a single sharp image.
+    if (ratio < 1.14) {
+      var cover=Math.max(w/iw,h/ih), bw=iw*cover,bh=ih*cover;
+      ctx.save();ctx.filter='blur(26px) brightness(.51) saturate(.8)';
+      ctx.drawImage(img,x+(w-bw)/2,y+(h-bh)/2,bw,bh);ctx.restore();
+      var contain=Math.min((w-16)/iw,(h-12)/ih),fw=iw*contain,fh=ih*contain;
+      ctx.drawImage(img,x+(w-fw)/2,y+(h-fh)/2,fw,fh);
     } else {
-      // Landscape images use ordinary cover fitting, not blurry duplicates.
-      var scale=Math.max(w/iw,h/ih);
-      var dw=iw*scale,dh=ih*scale;
+      var scale=Math.max(w/iw,h/ih),dw=iw*scale,dh=ih*scale;
       ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
     }
   }
-  function buildGalleryAtlas() {
-    if (galleryAtlas) return galleryAtlas;
+  function buildGalleryAtlas(){
+    if(galleryAtlas)return galleryAtlas;
     var c=document.createElement('canvas');
-    c.width=GALLERY_CELL_W*GALLERY_ATLAS_COLUMNS;
-    c.height=GALLERY_CELL_H*GALLERY_ATLAS_ROWS;
-    var ctx=c.getContext('2d');
-    if (!ctx) return null;
-    for (var row=0;row<galleries.length;row++) {
-      var gal=galleries[row];
-      var imgs=gal._images;
-      if (!imgs || !imgs.length) continue;
-      for (var col=0;col<Math.min(GALLERY_ATLAS_COLUMNS,imgs.length+1);col++) {
-        var img=imgs[col % imgs.length];
-        var x=col*GALLERY_CELL_W,y=row*GALLERY_CELL_H;
-        ctx.save();
-        roundedRect(ctx,x,y,GALLERY_CELL_W,GALLERY_CELL_H,19);
-        drawGalleryImage(ctx,img,x,y,GALLERY_CELL_W,GALLERY_CELL_H);
-        ctx.restore();
-      }
-    }
+    c.width=GALLERY_CELL_W;c.height=GALLERY_CELL_H*galleries.length;
+    var ctx=c.getContext('2d');if(!ctx)return null;
+    galleryFrames=galleries.map(function(g){return g._images.map(function(img){
+      var tile=document.createElement('canvas');tile.width=GALLERY_CELL_W;tile.height=GALLERY_CELL_H;
+      var tc=tile.getContext('2d');
+      tc.fillStyle='#081728';tc.fillRect(0,0,tile.width,tile.height);
+      drawGalleryImage(tc,img,0,0,tile.width,tile.height);
+      return tile;
+    });});
     galleryAtlas=c;
     return c;
   }
   window.__BYZ_INTRO_GALLERY_ATLAS_V60__=function(){return galleryAtlas;};
-  var gallerySequenceStart=null;
-  window.__BYZ_INTRO_GALLERY_TICK_V60__=function(active, shader){
-    if (!shader || !shader.enabled || !shader.slides || !shader.texture) return;
-    var c=galleryAtlas;
-    if (!c || !active) {
-      shader.enabled.value=0;
-      return;
-    }
-    if (shader.texture.image!==c) {
-      shader.texture.image=c;
-      shader.texture.needsUpdate=true;
-    }
+  window.__BYZ_INTRO_GALLERY_TICK_V60__=function(active,shader){
+    if(!shader || !shader.enabled || !shader.texture)return;
+    if(!galleryAtlas || !active){shader.enabled.value=0;return;}
+    if(shader.texture.image!==galleryAtlas){shader.texture.image=galleryAtlas;shader.texture.needsUpdate=true;}
     shader.enabled.value=1;
-    if(gallerySequenceStart===null) gallerySequenceStart=performance.now();
-    var elapsed=(performance.now()-gallerySequenceStart)/4400;
+    if(shader.slides)shader.slides.forEach(function(u){u.value=0;});
+    var now=performance.now();
+    if(now-galleryLastRender<33)return; // up to 30 visual frames per second
+    galleryLastRender=now;
+    var ctx=galleryAtlas.getContext('2d');
     for(var k=0;k<galleries.length;k++){
-      var count=galleries[k].images.length;
-      var unit=(elapsed + k*.32) % count;
-      var index=Math.floor(unit),frac=unit-index;
-      var slide=frac<=.78?0:(frac-.78)/.22;
-      // smootherstep: no sudden velocity at either end of the slide.
-      slide=slide*slide*slide*(slide*(slide*6-15)+10);
-      shader.slides[k].value=index+slide;
+      var frames=galleryFrames[k];if(!frames || !frames.length)continue;
+      var count=frames.length;
+      var pos=(now/4400+k*.29)%count;
+      var current=Math.floor(pos),local=pos-current;
+      var move=local<.74?0:(local-.74)/.26;
+      move=Math.min(1,Math.max(0,move));
+      move=move*move*(3-2*move); // smoothstep
+      var row=k*GALLERY_CELL_H;
+      ctx.save();ctx.beginPath();ctx.rect(0,row,GALLERY_CELL_W,GALLERY_CELL_H);ctx.clip();
+      ctx.fillStyle='#071524';ctx.fillRect(0,row,GALLERY_CELL_W,GALLERY_CELL_H);
+      ctx.drawImage(frames[current],-move*GALLERY_CELL_W,row);
+      if(move>0)ctx.drawImage(frames[(current+1)%count],(1-move)*GALLERY_CELL_W,row);
+      ctx.restore();
     }
+    // This is the crucial difference from V60: actively upload changed pixels.
+    shader.texture.needsUpdate=true;
   };
 
   function drawCarouselFrame(ctx,gallery,x,y,w,h){
@@ -392,7 +354,7 @@
           ctx.fillStyle = '#93d4ed';
           ctx.font = '700 18px Manrope, sans-serif';
           ctx.fillText('IN THEIR WORDS', textX, y + 444);
-          line(ctx, '\u201c' + person.quote + '\u201d', textX, y + 493, textWidth, 'italic 28px Georgia, serif', '#e5f3ff', 40, 5);
+          line(ctx, '\u201c' + person.quote + '\u201d', textX, y + 493, textWidth, 'italic 26px Georgia, serif', '#e5f3ff', 38, 10);
         }
         ctx.restore();
       });
@@ -417,11 +379,11 @@
     });
 
     var galleryStart = gallerySectionY + 170;
-    var gallerySpacing = 850;
+    var gallerySpacing = 690;
     galleries.forEach(function (gallery, idx) {
       var gy = galleryStart + idx * gallerySpacing;
       commands.push(function (ctx) {
-        drawCarouselFrame(ctx, gallery, 468, gy + 48, 1310, 710);
+        drawCarouselFrame(ctx, gallery, 530, gy + 48, 1134, 600);
       });
     });
 

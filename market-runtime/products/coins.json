@@ -1,14 +1,16 @@
 {
   "id": 3,
   "slug": "coins",
-  "title": "Coins",
+  "title": "Coin Exchange Service",
   "route": "/products/coins",
   "template": "palia",
-  "heroTitle": "Coins",
-  "imagePlaceholder": "No Image Supplied",
+  "heroTitle": "Coin Exchange Service",
+  "imagePlaceholder": "/ByzantineEmpireWebsite/market-runtime/product-images/coins.webp",
   "editorial": {
     "overview": null,
     "details": null,
-    "images": []
+    "images": [
+      "/ByzantineEmpireWebsite/market-runtime/product-images/coins.webp"
+    ]
   }
 }

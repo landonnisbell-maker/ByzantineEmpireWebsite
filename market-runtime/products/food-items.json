@@ -5,10 +5,12 @@
   "route": "/products/food-items",
   "template": "palia",
   "heroTitle": "Food Items",
-  "imagePlaceholder": "No Image Supplied",
+  "imagePlaceholder": "/ByzantineEmpireWebsite/market-runtime/product-images/food-items.webp",
   "editorial": {
     "overview": null,
     "details": null,
-    "images": []
+    "images": [
+      "/ByzantineEmpireWebsite/market-runtime/product-images/food-items.webp"
+    ]
   }
 }
