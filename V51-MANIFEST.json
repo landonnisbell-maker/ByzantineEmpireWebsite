@@ -1,0 +1,21 @@
+{
+  "version": "51.0",
+  "baseline": "V50",
+  "type": "UPDATE ONLY",
+  "files": [
+    "index.html",
+    "about-map/byzantine-map.js",
+    "about-map/byzantine-map.css",
+    "_next/static/chunks/1502ibkr~cu.4.js"
+  ],
+  "changes": [
+    "Compact map left-aligns with native 336px text column",
+    "Fullscreen atlas keeps original live WebGPU shader background, hiding only the native text",
+    "Remove duplicate timeframe section in embedded and override CMS descriptions"
+  ],
+  "preserved": [
+    "Existing V50 crystal entry/exit fades",
+    "SVG drag/zoom and expanded controls",
+    "Existing 404.html and all other site files"
+  ]
+}

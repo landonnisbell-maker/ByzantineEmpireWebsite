@@ -218,7 +218,7 @@
 #byz-history-map[data-expanded="true"] .hm-card{opacity:1}
 /* The native WebGPU canvas contains the About Us text. It fades away alongside
    the small map before the expanded map appears, and returns on collapse. */
-body.byz-map-modal-open canvas{opacity:0!important;pointer-events:none!important;transition:opacity .34s ease!important}
+body.byz-map-modal-open canvas{pointer-events:none!important} /* Keep live WebGPU background visible; GPU text fades separately. */
 body canvas{transition:opacity .34s ease}
 body.byz-map-modal-open #byzantine-fixed-crystal-close{opacity:0!important;pointer-events:none!important;transition:opacity .34s ease!important}
 html.byz-map-modal-open,body.byz-map-modal-open{overflow:hidden!important;overscroll-behavior:none!important}
@@ -246,3 +246,13 @@ html.byz-map-modal-open,body.byz-map-modal-open{overflow:hidden!important;oversc
 }
 #byz-map-screen-veil.is-on{opacity:1!important;visibility:visible!important;}
 #byz-history-map[data-expanded="true"] .hm-viewport{background:#c4e9f9!important;}
+
+/* V51 — Expanded atlas uses EXACTLY the same live background shader as the
+   regular About Us page. The clear veil catches modal clicks without replacing
+   the WebGPU grain, color motion, or scroll-position-dependent visuals. */
+#byz-history-map[data-expanded="true"]{background:transparent!important;}
+#byz-map-screen-veil.is-on{
+  background:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}

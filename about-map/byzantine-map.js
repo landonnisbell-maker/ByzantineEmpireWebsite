@@ -77,7 +77,11 @@ async function toggleExpand(force){
  swapBusy=true;
  frame.dataset.swapping='out';
  // Start fading the native About Us WebGPU content *with* the compact map.
- if(want){holdPage(true);screenVeil.classList.add('is-on')}
+ if(want){
+   holdPage(true);
+   screenVeil.classList.add('is-on');
+   window.__BYZ_ABOUT_MODAL_TEXT__?.(true);
+ }
  await nap(350);
  frame.dataset.expanded=want?'true':'false';
  expandButton.textContent=want?'CLOSE ×':'ENLARGE ↗';
@@ -86,7 +90,11 @@ async function toggleExpand(force){
  await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
  draw(true);
  frame.dataset.swapping='in';
- if(!want){screenVeil.classList.remove('is-on');holdPage(false)}
+ if(!want){
+   window.__BYZ_ABOUT_MODAL_TEXT__?.(false);
+   screenVeil.classList.remove('is-on');
+   holdPage(false);
+ }
  await nap(420);
  delete frame.dataset.swapping;
  swapBusy=false;
@@ -155,8 +163,11 @@ function setMapActive(active){
 function layout(){
   const r=window.__BYZ_ABOUT_MAP_SLOT_V45__;
   const reveal=clamp(Number(r?.opacity)||0,0,1);
+  // During fullscreen, native text opacity is zero. Keep the real map mounted
+  // instead of allowing the native opacity guard to dismiss the modal.
+  const modalActive=frame.dataset.expanded==='true'||swapBusy;
   const valid=!!r&&r.phase==='interior'&&!window.__BYZ_ABOUT_ENTER_LOCK__&&
-    reveal>0.001&&r.width>60&&r.height>40&&
+    (reveal>0.001||modalActive)&&r.width>60&&r.height>40&&
     r.left<window.innerWidth&&r.top<window.innerHeight&&
     r.left+r.width>0&&r.top+r.height>0;
   // This is the actual native text shader reveal, not a separate CSS timer.
@@ -183,7 +194,7 @@ function layout(){
       const foot=frame.querySelector('.hm-foot').offsetHeight||27;
       const availableHeight=Math.max(40,vals[3]-header-foot);
       const desiredWidth=Math.min(vals[2],availableHeight*(296.92649/181.17015)+2);
-      frame.style.left=(vals[0]+(vals[2]-desiredWidth)/2)+'px';
+      frame.style.left=vals[0]+'px';
       frame.style.top=vals[1]+'px';
       frame.style.width=desiredWidth+'px';frame.style.height=vals[3]+'px';
     }
