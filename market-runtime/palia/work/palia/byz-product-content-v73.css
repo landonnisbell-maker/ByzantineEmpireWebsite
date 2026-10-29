@@ -323,3 +323,72 @@ html.byz-market-copy-ready .byz-market-product-copy{
  .byz-market-scratch-figure--portrait{width:min(100%,520px)}
  .byz-silk-card,.byz-silk-price-card,.byz-silk-story-panel{padding:1.15rem 1.05rem}
 }
+
+
+/* V75 — dedicated product experiences with exact existing copy preserved. */
+.byz-market-product-copy--experience .byz-market-reading{width:min(1240px,100%);max-width:1240px}
+.byz-market-product-copy--experience .byz-market-reading .byz-offering-title{margin:0 0 1.15rem;font-size:clamp(2rem,3.4vw,4.15rem)}
+.byz-market-product-copy--experience .byz-market-reading .byz-section-title{margin:0 0 1rem}
+.byz-market-product-copy--experience .byz-market-reading p{max-width:none}
+.byz-exp,.byz-food-exp{display:grid;gap:clamp(1.4rem,2.7vw,2.6rem)}
+.byz-exp-hero,.byz-exp-grid,.byz-exp-pair,.byz-exp-single,.byz-exp-story,.byz-food-offering,.byz-food-columns,.byz-food-grid,.byz-exp-pricing{
+  content-visibility:auto;contain-intrinsic-size:900px;
+}
+.byz-exp-hero,.byz-exp-pair{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(1rem,2.5vw,2.4rem);align-items:center}
+.byz-exp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1rem,2vw,2rem)}
+.byz-exp-grid--coin{grid-template-columns:repeat(3,minmax(0,1fr))}
+.byz-exp-copy,.byz-exp-card,.byz-exp-pricing-copy,.byz-food-head,.byz-market-product-copy--experience .byz-market-purchase{
+  background:linear-gradient(180deg,rgba(13,18,31,.82),rgba(8,12,22,.72));
+  border:1px solid rgba(226,214,188,.10); border-radius:28px; padding:clamp(1.35rem,2.2vw,2.35rem);
+  box-shadow:0 20px 54px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.03);
+}
+.byz-exp-copy--wide{max-width:none}
+.byz-exp-story .byz-exp-copy{max-width:980px;margin:0 auto}
+.byz-exp-figure{position:relative;margin:0;min-height:380px;border-radius:30px;overflow:hidden;border:1px solid rgba(226,214,188,.10);background:rgba(0,0,0,.4);box-shadow:0 18px 48px rgba(0,0,0,.24)}
+.byz-exp-image{width:100%;height:100%;display:block;object-fit:cover;object-position:center center}
+.byz-exp-image--contain{object-fit:contain;padding:0;background:#000}
+.byz-exp-figure--hero{grid-column:7 / -1;min-height:560px}
+.byz-exp-copy{grid-column:1 / span 6}
+.byz-exp-hero--reverse .byz-exp-copy{grid-column:7 / -1}
+.byz-exp-hero--reverse .byz-exp-figure{grid-column:1 / span 5}
+.byz-exp-card{height:100%}
+.byz-exp-pair .byz-exp-card:first-child{grid-column:1 / span 6}
+.byz-exp-pair .byz-exp-card:last-child{grid-column:7 / -1}
+.byz-exp-single .byz-exp-card{max-width:980px;margin:0 auto}
+.byz-exp-pricing{display:grid;grid-template-columns:minmax(280px,.95fr) minmax(0,1.05fr);gap:clamp(1rem,2vw,2rem);align-items:start}
+.byz-exp-price-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.85rem,1.7vw,1.25rem)}
+.byz-exp-price-card{background:rgba(255,255,255,.03);border:1px solid rgba(226,214,188,.12);border-radius:22px;padding:1.15rem 1.2rem}
+.byz-exp-price-card p:last-child,.byz-exp-card p:last-child,.byz-exp-copy p:last-child,.byz-food-head p:last-child{margin-bottom:0}
+.byz-food-offering{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(1rem,2.3vw,2.3rem);align-items:start}
+.byz-food-offering--garos .byz-food-head{grid-column:1 / span 5}
+.byz-food-offering--garos .byz-exp-figure{grid-column:6 / -1;min-height:520px}
+.byz-food-grid{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(.9rem,1.8vw,1.4rem)}
+.byz-food-offering--apaki .byz-food-head{grid-column:1 / -1;max-width:900px}
+.byz-food-columns{grid-column:1 / -1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.95rem,1.8vw,1.4rem)}
+.byz-market-product-copy--experience .byz-market-purchase{width:min(1240px,100%);margin:2rem auto 0}
+.byz-market-product-copy--silk-exp .byz-exp-figure--silk{min-height:780px}
+.byz-market-product-copy--silk-exp .byz-exp-hero--silk .byz-exp-copy{grid-column:1 / span 5}
+.byz-market-product-copy--silk-exp .byz-exp-hero--silk .byz-exp-figure{grid-column:7 / -1}
+.byz-market-product-copy--coin .byz-exp-hero--coin .byz-exp-copy{grid-column:1 / span 5}
+.byz-market-product-copy--coin .byz-exp-hero--coin .byz-exp-figure{grid-column:7 / -1;min-height:440px}
+.byz-market-product-copy--sword .byz-exp-card--price,.byz-market-product-copy--coin .byz-exp-card--coin-fee{background:linear-gradient(180deg,rgba(48,28,24,.55),rgba(11,15,24,.88));}
+.byz-market-product-copy--jewelry .byz-exp-pricing--jewelry .byz-exp-price-card,.byz-market-product-copy--silk-exp .byz-exp-pricing--silk .byz-exp-price-card{background:linear-gradient(180deg,rgba(243,223,170,.06),rgba(255,255,255,.03))}
+.byz-market-product-copy--food .byz-food-offering--garos .byz-exp-card--garos-c,.byz-market-product-copy--food .byz-exp-card--apaki-e{background:linear-gradient(180deg,rgba(71,42,26,.42),rgba(10,13,21,.82));}
+.byz-exp-figure.byz-reveal-ready{opacity:0;transform:translate3d(0,32px,0) scale(.975)}
+.byz-exp-figure.byz-reveal-ready.byz-revealed{opacity:1;transform:translate3d(0,0,0) scale(1);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+@media (max-width: 1120px){
+ .byz-exp-grid--coin,.byz-food-grid{grid-template-columns:1fr}
+ .byz-food-columns,.byz-exp-grid,.byz-exp-pricing{grid-template-columns:1fr}
+}
+@media (max-width: 900px){
+ .byz-exp-hero,.byz-exp-pair,.byz-food-offering{grid-template-columns:1fr}
+ .byz-exp-copy,.byz-exp-hero--reverse .byz-exp-copy,.byz-exp-figure,.byz-exp-hero--reverse .byz-exp-figure,
+ .byz-market-product-copy--silk-exp .byz-exp-hero--silk .byz-exp-copy,.byz-market-product-copy--silk-exp .byz-exp-hero--silk .byz-exp-figure,
+ .byz-market-product-copy--coin .byz-exp-hero--coin .byz-exp-copy,.byz-market-product-copy--coin .byz-exp-hero--coin .byz-exp-figure,
+ .byz-food-offering--garos .byz-food-head,.byz-food-offering--garos .byz-exp-figure,.byz-food-offering--apaki .byz-food-head{grid-column:auto}
+ .byz-exp-figure--hero,.byz-market-product-copy--silk-exp .byz-exp-figure--silk{min-height:440px}
+ .byz-exp-price-grid,.byz-food-columns,.byz-food-grid,.byz-exp-grid,.byz-exp-grid--coin{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion: reduce){
+ .byz-exp-figure.byz-reveal-ready,.byz-exp-figure.byz-reveal-ready.byz-revealed{transform:none!important;transition:none!important;opacity:1!important}
+}

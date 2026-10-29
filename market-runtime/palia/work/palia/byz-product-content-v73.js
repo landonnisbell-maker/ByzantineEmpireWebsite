@@ -33,157 +33,160 @@
    if(config.reveal!==false)classes.push('byz-reveal-ready');
    return '<figure class="'+classes.join(' ')+'"><div class="'+surfaceClasses.join(' ')+'">'+img+placeholder+'</div>'+caption+'</figure>';
  }
- function buildDefaultArticle(article,item){
-   article.classList.remove('byz-market-product-copy--silk');
-   if(revealObserver){revealObserver.disconnect();revealObserver=null;}
+ 
+function nodesHtml(nodes){return (nodes||[]).join('');}
+ function parseOfferings(item){
    const source=document.createElement('div');
-   // Product descriptions are pre-authored static content, never user-supplied HTML.
    source.innerHTML=item.html.replace(/(<h2[^>]*>[^<]*)<\/h3>/g,'$1</h2>');
-   const first=source.firstElementChild;
-   if(first && first.classList.contains('byz-offering-title') && SINGLE_OFFERINGS.has(activeProduct))first.remove();
-   // The first slogan now appears under the single hero heading, not again in the article.
-   const firstP=source.querySelector('p');
-   if(firstP && firstP.textContent.trim()===item.tagline)firstP.remove();
-   const reading=document.createElement('div');reading.className='byz-market-reading';
-   const children=Array.from(source.children);
-   let paragraphs=0,photos=0;
-   for(let i=0;i<children.length;i++){
-     const node=children[i], next=children[i+1];
-     reading.appendChild(node);
-     if(node.tagName==='P' && !node.querySelector('strong:only-child'))paragraphs++;
-     const nextHeading=!!(next && /^H[23]$/.test(next.tagName));
-     const hasMore=children.slice(i+1).some(e=>e.tagName==='P'&&!e.querySelector('strong:only-child'));
-     // Put illustrations between passages or section boundaries, never in pricing lists.
-     if(hasMore && ((nextHeading && paragraphs>=3)||(paragraphs>=5 && !nextHeading))){
-       photos++;var slot=makePhotoSlot(photos);if(slot)reading.appendChild(slot);paragraphs=0;
+   const offerings=[]; let offering=null; let section=null;
+   Array.from(source.children).forEach(node=>{
+     if(node.matches('h2.byz-offering-title')){
+       offering={title:node.textContent.trim(),titleHtml:node.outerHTML,taglineHtml:'',intro:[],sections:[]};
+       offerings.push(offering); section=null; return;
      }
-   }
-   const purchase=document.createElement('aside');purchase.className='byz-market-purchase';
-   purchase.setAttribute('aria-label','How to buy');purchase.textContent=PURCHASE;
-   article.replaceChildren(reading,purchase);
-   article.dataset.product=activeProduct;
-   startReveals(article);
+     if(!offering){offering={title:'',titleHtml:'',taglineHtml:'',intro:[],sections:[]}; offerings.push(offering);}
+     if(!section && !offering.taglineHtml && node.matches('p') && node.querySelector('em:only-child')){offering.taglineHtml=node.outerHTML;return;}
+     if(node.matches('h3.byz-section-title')){section={title:node.textContent.trim(),headingHtml:node.outerHTML,nodes:[]};offering.sections.push(section);return;}
+     (section?section.nodes:offering.intro).push(node.outerHTML);
+   });
+   return offerings;
+ }
+ function imageFigureMarkup(src, alt, className, contain, loading){
+   if(!src)return '';
+   const fig=['byz-exp-figure','byz-reveal-ready',className||''].filter(Boolean).join(' ');
+   const img=['byz-exp-image',contain?'byz-exp-image--contain':''].filter(Boolean).join(' ');
+   return '<figure class="'+fig+'"><img class="'+img+'" src="'+src+'" alt="'+escapeHtml(alt||'')+'" loading="'+(loading||'lazy')+'" decoding="async"'+((loading||'lazy')==='eager'?' fetchpriority="high"':'')+' /></figure>';
+ }
+ function renderSectionCard(section, extraClass){
+   return '<section class="'+(['byz-exp-card','byz-reveal-ready',extraClass||''].filter(Boolean).join(' '))+'">'+section.headingHtml+nodesHtml(section.nodes)+'</section>';
+ }
+ function renderPriceCards(section, extraClass){
+   const strongOnly=(section.nodes||[]).filter(html=>/^<p>\s*<strong>[\s\S]*<\/strong>\s*<\/p>$/.test(html));
+   const rest=(section.nodes||[]).filter(html=>!/^<p>\s*<strong>[\s\S]*<\/strong>\s*<\/p>$/.test(html));
+   return '<section class="'+(['byz-exp-pricing','byz-reveal-ready',extraClass||''].filter(Boolean).join(' '))+'">'
+    +'<div class="byz-exp-pricing-copy">'+section.headingHtml+nodesHtml(rest)+'</div>'
+    +'<div class="byz-exp-price-grid">'+strongOnly.map(html=>'<article class="byz-exp-price-card byz-reveal-ready">'+html+'</article>').join('')+'</div>'
+    +'</section>';
+ }
+ function buildSwordArticle(article,item){
+   const off=parseOfferings(item)[0], s=off.sections;
+   article.className='byz-market-product-copy byz-market-product-copy--experience byz-market-product-copy--sword';
+   const root=document.createElement('div');
+   root.className='byz-exp byz-exp--sword byz-market-reading';
+   root.innerHTML=''
+    +'<section class="byz-exp-hero byz-reveal-ready">'
+      +'<div class="byz-exp-copy">'+off.titleHtml+nodesHtml(off.intro)+'</div>'
+      +imageFigureMarkup(BYZ_PRODUCT_IMAGE['Paramerion Sword'],'Paramerion sword and scabbard','byz-exp-figure--hero',false,'eager')
+    +'</section>'
+    +'<section class="byz-exp-pair byz-exp-pair--sword">'
+      +renderSectionCard(s[0],'byz-exp-card--story')
+      +renderSectionCard(s[1],'byz-exp-card--forge')
+    +'</section>'
+    +'<section class="byz-exp-single">'+renderSectionCard(s[2],'byz-exp-card--royal')+'</section>'
+    +'<section class="byz-exp-single">'+renderSectionCard(s[3],'byz-exp-card--price')+'</section>';
+   const purchase=document.createElement('aside');purchase.className='byz-market-purchase byz-reveal-ready';purchase.setAttribute('aria-label','How to buy');purchase.textContent=PURCHASE;
+   article.replaceChildren(root,purchase); article.dataset.product=activeProduct; startReveals(article);
+ }
+ function buildJewelryArticle(article,item){
+   const off=parseOfferings(item)[0], s=off.sections;
+   article.className='byz-market-product-copy byz-market-product-copy--experience byz-market-product-copy--jewelry';
+   const root=document.createElement('div'); root.className='byz-exp byz-exp--jewelry byz-market-reading';
+   root.innerHTML=''
+    +'<section class="byz-exp-hero byz-exp-hero--reverse byz-reveal-ready">'
+      +imageFigureMarkup(BYZ_PRODUCT_IMAGE['Gold Jewelry'],'Gold jewelry products','byz-exp-figure--hero',false,'eager')
+      +'<div class="byz-exp-copy">'+off.titleHtml+nodesHtml(off.intro)+'</div>'
+    +'</section>'
+    +'<section class="byz-exp-grid byz-exp-grid--jewelry">'
+      +renderSectionCard(s[0],'byz-exp-card--occasion')
+      +renderSectionCard(s[1],'byz-exp-card--gold')
+    +'</section>'
+    +'<section class="byz-exp-pair byz-exp-pair--jewelry">'
+      +renderSectionCard(s[2],'byz-exp-card--detail')
+      +renderSectionCard(s[3],'byz-exp-card--custom')
+    +'</section>'
+    +renderPriceCards(s[4],'byz-exp-pricing--jewelry');
+   const purchase=document.createElement('aside');purchase.className='byz-market-purchase byz-reveal-ready';purchase.setAttribute('aria-label','How to buy');purchase.textContent=PURCHASE;
+   article.replaceChildren(root,purchase); article.dataset.product=activeProduct; startReveals(article);
+ }
+ function buildFoodArticle(article,item){
+   const offerings=parseOfferings(item);
+   article.className='byz-market-product-copy byz-market-product-copy--experience byz-market-product-copy--food';
+   const root=document.createElement('div'); root.className='byz-food-exp byz-market-reading';
+   const garos=offerings[0], apaki=offerings[1];
+   root.innerHTML=''
+    +'<section class="byz-food-offering byz-food-offering--garos byz-reveal-ready">'
+      +'<div class="byz-food-head">'+garos.titleHtml+nodesHtml(garos.intro)+'</div>'
+      +imageFigureMarkup(BYZ_PRODUCT_IMAGE['Food Items'],'Food items display','byz-exp-figure--food',false,'eager')
+      +'<div class="byz-food-grid">'
+         +renderSectionCard(garos.sections[0],'byz-exp-card--garos-a')
+         +renderSectionCard(garos.sections[1],'byz-exp-card--garos-b')
+         +renderSectionCard(garos.sections[2],'byz-exp-card--garos-c')
+      +'</div>'
+    +'</section>'
+    +'<section class="byz-food-offering byz-food-offering--apaki">'
+      +'<div class="byz-food-head byz-reveal-ready">'+apaki.titleHtml+apaki.taglineHtml+nodesHtml(apaki.intro)+'</div>'
+      +'<div class="byz-food-columns">'
+         +renderSectionCard(apaki.sections[0],'byz-exp-card--apaki-a')
+         +renderSectionCard(apaki.sections[1],'byz-exp-card--apaki-b')
+         +renderSectionCard(apaki.sections[2],'byz-exp-card--apaki-c')
+         +renderSectionCard(apaki.sections[3],'byz-exp-card--apaki-d')
+         +renderSectionCard(apaki.sections[4],'byz-exp-card--apaki-e')
+      +'</div>'
+    +'</section>';
+   const purchase=document.createElement('aside');purchase.className='byz-market-purchase byz-reveal-ready';purchase.setAttribute('aria-label','How to buy');purchase.textContent=PURCHASE;
+   article.replaceChildren(root,purchase); article.dataset.product=activeProduct; startReveals(article);
+ }
+ function buildCoinArticle(article,item){
+   const off=parseOfferings(item)[0], s=off.sections;
+   article.className='byz-market-product-copy byz-market-product-copy--experience byz-market-product-copy--coin';
+   const root=document.createElement('div'); root.className='byz-exp byz-exp--coin byz-market-reading';
+   root.innerHTML=''
+    +'<section class="byz-exp-hero byz-exp-hero--coin byz-reveal-ready">'
+      +'<div class="byz-exp-copy">'+off.titleHtml+nodesHtml(off.intro)+'</div>'
+      +imageFigureMarkup(BYZ_PRODUCT_IMAGE['Coin Exchange Service'],'Coin exchange product image','byz-exp-figure--coin',false,'eager')
+    +'</section>'
+    +'<section class="byz-exp-grid byz-exp-grid--coin">'
+      +renderSectionCard(s[0],'byz-exp-card--coin-a')
+      +renderSectionCard(s[1],'byz-exp-card--coin-b')
+      +renderSectionCard(s[2],'byz-exp-card--coin-c')
+    +'</section>'
+    +'<section class="byz-exp-single">'+renderSectionCard(s[3],'byz-exp-card--coin-fee')+'</section>';
+   const purchase=document.createElement('aside');purchase.className='byz-market-purchase byz-reveal-ready';purchase.setAttribute('aria-label','How to buy');purchase.textContent=PURCHASE;
+   article.replaceChildren(root,purchase); article.dataset.product=activeProduct; startReveals(article);
  }
  function buildSilkArticle(article,item){
-   article.classList.add('byz-market-product-copy--silk');
-   if(revealObserver){revealObserver.disconnect();revealObserver=null;}
-   const cloak=(EXTRA_MEDIA['Silk Textiles']||{}).cloak||'';
-   const introFigure=scratchFigureMarkup({
-     src:cloak,alt:'Purple and red Byzantine silk cloak on a mannequin',loading:'eager',fetchpriority:'high',
-     className:'byz-market-scratch-figure--portrait',
-     surfaceClass:'byz-market-scratch-surface--contain byz-market-scratch-surface--feather-strong',
-     imgClass:'byz-market-supplied-photo--contain',
-     caption:'Handcrafted silk cloak featuring deep purple outer silk, crimson lining, and gold Byzantine-inspired detailing.'
-   });
-   const bannerFigure=scratchFigureMarkup({
-     title:'Placeholder — Lifestyle Silk Cloak Banner',
-     body:'Need image: a person wearing the silk cloak in a refined Byzantine interior, with elegant architecture and warm ceremonial lighting. Recommended aspect ratio: 21:9. Placement: full-width story banner.',
-     meta:'Image needed · 21:9 · full-width banner',
-     className:'byz-market-scratch-figure--wide'
-   });
-   const rugFigure=scratchFigureMarkup({
-     title:'Placeholder — Silk Rug in Interior',
-     body:'Need image: the silk rug styled inside a luxurious Byzantine room, shown in a three-quarter room view with the rug clearly visible. Recommended aspect ratio: 5:4. Placement: split rug showcase section.',
-     meta:'Image needed · 5:4 · rug showcase',
-     className:'byz-market-scratch-figure--room'
-   });
-   const closeupCloak=scratchFigureMarkup({
-     title:'Placeholder — Cloak Embroidery Close-Up',
-     body:'Need image: close crop of the gold architectural embroidery along the cloak collar. Recommended aspect ratio: 1:1. Placement: craftsmanship gallery.',
-     meta:'Image needed · 1:1 · close-up detail',
-     className:'byz-market-scratch-figure--square byz-market-scratch-figure--gallery'
-   });
-   const silkMacro=scratchFigureMarkup({
-     title:'Placeholder — Silk Weave Macro',
-     body:'Need image: a macro shot showing the silk weave, sheen, and fine surface pattern. Recommended aspect ratio: 1:1. Placement: craftsmanship gallery.',
-     meta:'Image needed · 1:1 · material macro',
-     className:'byz-market-scratch-figure--square byz-market-scratch-figure--gallery'
-   });
-   const rugDetail=scratchFigureMarkup({
-     title:'Placeholder — Rug Border Detail',
-     body:'Need image: close-up of the silk rug border and stitching, showing its intricate pattern. Recommended aspect ratio: 1:1. Placement: craftsmanship gallery.',
-     meta:'Image needed · 1:1 · rug detail',
-     className:'byz-market-scratch-figure--square byz-market-scratch-figure--gallery'
-   });
-   const root=document.createElement('div');
-   root.className='byz-silk-experience byz-market-reading';
+   const off=parseOfferings(item)[0], s=off.sections;
+   const cloak=(EXTRA_MEDIA['Silk Textiles']||{}).cloak||BYZ_PRODUCT_IMAGE['Silk Textiles']||'';
+   const banner='/ByzantineEmpireWebsite/market-runtime/product-images/banners/silk-textiles-desktop.webp';
+   article.className='byz-market-product-copy byz-market-product-copy--experience byz-market-product-copy--silk-exp';
+   const root=document.createElement('div'); root.className='byz-exp byz-exp--silk byz-market-reading';
    root.innerHTML=''
-   +'<section class="byz-silk-section byz-reveal-ready">'
-     +'<div class="byz-silk-copy">'
-       +'<span class="byz-silk-eyebrow">Wearable Luxury</span>'
-       +'<h2>Our Silk Cloak: Elegance You Can Wear</h2>'
-       +'<p>Looking for something that makes an impression the moment you enter a room? Our beautiful silk cloaks are perfect for special occasions, important gatherings, ceremonies, or simply adding an unmistakable touch of luxury to your everyday wardrobe.</p>'
-       +'<p>The smooth, finely woven silk drapes comfortably around your shoulders, offering a light and elegant outer layer without the heavy feeling of thicker garments. Its rich colors and delicate golden-colored silk accents make it a wonderful choice for anyone wishing to express personal style, prosperity, or an appreciation for fine Byzantine fashion.</p>'
-       +'<p>Because beautiful clothing deserves to be worn more than once, we design our cloaks to be pieces you will want to bring out for many special occasions to come.</p>'
-       +'<div class="byz-silk-quote">Why simply dress for an occasion when you can make the occasion memorable?</div>'
-     +'</div>'
-     +'<div class="byz-silk-visual">'+introFigure+'</div>'
-   +'</section>'
-   +'<section class="byz-silk-banner byz-reveal-ready">'
-      +bannerFigure
-      +'<div class="byz-silk-banner-copy">'
-        +'<h3>From Silk Road rarity to local prestige</h3>'
-        +'<p>For centuries, the finest silks traveled from distant lands before reaching Constantinople. Now, luxury does not have to feel distant. This section is designed for a cinematic lifestyle banner that introduces the cloak as an object of beauty, status, and atmosphere.</p>'
-      +'</div>'
-   +'</section>'
-   +'<section class="byz-silk-section byz-silk-section--reverse byz-reveal-ready">'
-     +'<div class="byz-silk-copy">'
-       +'<span class="byz-silk-eyebrow">For the Home</span>'
-       +'<h2>Silk rugs that transform a room</h2>'
-       +'<p>If you want something in your home that guests will notice immediately, our silk rugs are made for exactly that purpose. Whether placed in a reception room, private chamber, or used as a decorative centerpiece, their rich patterns transform a space into something remarkable.</p>'
-       +'<p>The delicate weaving and carefully selected colors create details for guests to admire, while the silk’s natural sheen catches the light and brings the patterns to life. A fine rug is not simply something to place on the floor — it is a reflection of your home, your hospitality, and the care you put into the things you own.</p>'
-       +'<p><strong>A beautiful home deserves beautiful craftsmanship.</strong></p>'
-     +'</div>'
-     +'<div class="byz-silk-visual">'+rugFigure+'</div>'
-   +'</section>'
-   +'<section class="byz-silk-feature-grid">'
-      +'<article class="byz-silk-card byz-reveal-ready"><span class="byz-silk-card-number">01</span><h3>Woven locally</h3><p>We carefully select fine silk from trusted merchants and bring it directly to our own local workshops.</p><p>No more waiting on the Silk Road for every finished luxury garment. The weaving and finishing happen close to home, where every stage can be personally inspected.</p></article>'
-      +'<article class="byz-silk-card byz-reveal-ready"><span class="byz-silk-card-number">02</span><h3>Golden accents, careful details</h3><p>Every cloak and rug is thoughtfully crafted with attention to the smallest visual details, including golden-colored silk accents that add a refined, premium finish.</p></article>'
-      +'<article class="byz-silk-card byz-reveal-ready"><span class="byz-silk-card-number">03</span><h3>Luxury handled properly</h3><p>Our merchants also take care of required declarations for qualifying luxury silk garments, following the regulations of Constantinople’s trade officials.</p></article>'
-   +'</section>'
-   +'<section class="byz-silk-gallery">'
-      +'<div class="byz-reveal-ready">'+closeupCloak+'</div>'
-      +'<div class="byz-reveal-ready">'+silkMacro+'</div>'
-      +'<div class="byz-reveal-ready">'+rugDetail+'</div>'
-   +'</section>'
-   +'<section class="byz-silk-pricing">'
-      +'<div class="byz-silk-pricing-copy byz-reveal-ready">'
-         +'<span class="byz-silk-eyebrow">Value & Comparison</span>'
-         +'<h2>Beautiful craftsmanship at a fair price</h2>'
-         +'<p>Our handcrafted silk products are offered at competitive prices, while merchants selling comparable luxury fabrics may charge more for work that lacks the same attention to detail. At <em>ta pánta pazári</em>, we believe in a simple rule: quality over quantity. Always.</p>'
-      +'</div>'
-      +'<div class="byz-silk-price-grid">'
-         +'<article class="byz-silk-price-card byz-reveal-ready"><span class="byz-silk-price-kicker">Featured garment</span><h3>Silk cloak</h3><span class="byz-silk-price">12 gold nomismata</span><p>Approximately $6,720 USD.</p><ul><li>Competitor price: 14 gold nomismata (approximately $7,840 USD)</li><li>Lightweight, ceremonial, and designed to be worn repeatedly</li><li>Ideal for gatherings, celebrations, and standout presentation</li></ul></article>'
-         +'<article class="byz-silk-price-card byz-reveal-ready"><span class="byz-silk-price-kicker">Featured home piece</span><h3>Silk rug</h3><span class="byz-silk-price">15 gold nomismata</span><p>Approximately $8,400 USD.</p><ul><li>Competitor price: 18 gold nomismata (approximately $10,080 USD)</li><li>Decorative centerpiece for high-status interiors</li><li>Designed to add warmth, richness, and visual prestige</li></ul></article>'
-      +'</div>'
-   +'</section>'
-   +'<section class="byz-silk-story">'
-      +'<div class="byz-silk-story-copy byz-reveal-ready">'
-         +'<span class="byz-silk-eyebrow">Why it matters</span>'
-         +'<h2>Designed like a premium shopping experience</h2>'
-         +'<p>This product page is intentionally structured as a visual journey rather than a plain block of text. Visitors move from wearable luxury, to home styling, to craftsmanship, to pricing, and finally to the historical and practical value behind the product.</p>'
-         +'<p>Where additional imagery would strengthen the experience, the page now reserves clear placeholders so you can create the missing visuals without weakening the design.</p>'
-      +'</div>'
-      +'<aside class="byz-silk-story-panel byz-reveal-ready">'
-          +'<h3>Images still needed for the final silk page</h3>'
-          +'<p>The page is now designed for richer storytelling. To finish it, these visual slots still need artwork or product photos:</p>'
-          +'<ul class="byz-needed-assets">'
-             +'<li>Lifestyle cloak banner — 21:9, cloak worn in a Byzantine interior</li>'
-             +'<li>Silk rug showcase — 5:4, rug placed in an elegant room</li>'
-             +'<li>Cloak embroidery close-up — 1:1, collar and gold details</li>'
-             +'<li>Silk weave macro — 1:1, texture and sheen</li>'
-             +'<li>Rug border detail — 1:1, stitching and patterned edge</li>'
-          +'</ul>'
-      +'</aside>'
-   +'</section>';
-   const purchase=document.createElement('aside');purchase.className='byz-market-purchase byz-reveal-ready';
-   purchase.setAttribute('aria-label','How to buy');purchase.textContent=PURCHASE;
-   article.replaceChildren(root,purchase);
-   article.dataset.product=activeProduct;
-   startReveals(article);
+    +'<section class="byz-exp-story byz-reveal-ready">'
+      +'<div class="byz-exp-copy byz-exp-copy--wide">'+off.titleHtml+nodesHtml(off.intro)+'</div>'
+    +'</section>'
+    +'<section class="byz-exp-hero byz-exp-hero--silk">'
+      +'<div class="byz-exp-copy byz-reveal-ready">'+s[0].headingHtml+nodesHtml(s[0].nodes)+'</div>'
+      +imageFigureMarkup(cloak,'Purple and red Byzantine silk cloak on a mannequin','byz-exp-figure--silk byz-exp-figure--contain',true,'eager')
+    +'</section>'
+    +'<section class="byz-exp-hero byz-exp-hero--reverse byz-reveal-ready">'
+      +imageFigureMarkup(banner,'Silk textiles banner','byz-exp-figure--banner',false,'lazy')
+      +'<div class="byz-exp-copy">'+s[1].headingHtml+nodesHtml(s[1].nodes)+'</div>'
+    +'</section>'
+    +'<section class="byz-exp-single">'+renderSectionCard(s[2],'byz-exp-card--silk-craft')+'</section>'
+    +renderPriceCards(s[3],'byz-exp-pricing--silk');
+   const purchase=document.createElement('aside');purchase.className='byz-market-purchase byz-reveal-ready';purchase.setAttribute('aria-label','How to buy');purchase.textContent=PURCHASE;
+   article.replaceChildren(root,purchase); article.dataset.product=activeProduct; startReveals(article);
+ }
+ function buildDefaultArticle(article,item){
+   switch(activeProduct){
+     case 'Paramerion Sword': return buildSwordArticle(article,item);
+     case 'Gold Jewelry': return buildJewelryArticle(article,item);
+     case 'Food Items': return buildFoodArticle(article,item);
+     case 'Coin Exchange Service': return buildCoinArticle(article,item);
+     case 'Silk Textiles': return buildSilkArticle(article,item);
+   }
  }
  function buildArticle(article,item){
-   if(activeProduct==='Silk Textiles')return buildSilkArticle(article,item);
    return buildDefaultArticle(article,item);
  }
  function startReveals(article){
