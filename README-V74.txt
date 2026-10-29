@@ -1,0 +1,1 @@
+V74 update-only patch: smoother silk page scrolling, full cloak image display, and stronger feathered image edges. Copy these files into your existing ByzantineEmpireWebsite folder and replace the old ones.

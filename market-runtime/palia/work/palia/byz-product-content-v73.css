@@ -76,16 +76,29 @@ html.byz-market-copy-ready .work-detail h1.hero__title {
 .byz-market-scratch-surface img.byz-market-supplied-photo {
  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
 }
+.byz-market-scratch-surface--contain img.byz-market-supplied-photo,
+img.byz-market-supplied-photo--contain {
+ object-fit:contain;
+ object-position:center center;
+ padding:clamp(8px,1.2vw,14px);
+}
+.byz-market-scratch-surface--feather-strong::after {
+ content:'';position:absolute;inset:0;pointer-events:none;opacity:1;
+ background:
+   radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.22) 80%, rgba(0,0,0,.72) 100%),
+   linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 32%, rgba(0,0,0,.16) 100%);
+}
 .byz-market-scratch-figure:has(img.byz-market-supplied-photo[src]) .byz-market-image-placeholder{display:none}
 /* Subtle text reveals for scrolling, each element animates once. */
 html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready,
 html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready {
- opacity:0; translate:0 28px; filter:blur(3px);
- transition:opacity .85s cubic-bezier(.22,1,.36,1),translate .9s cubic-bezier(.22,1,.36,1),filter .8s ease;
+ opacity:0; transform:translate3d(0,22px,0);
+ transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1);
+ will-change:opacity,transform;
 }
 html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready.byz-revealed,
 html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready.byz-revealed {
- opacity:1; translate:0 0; filter:blur(0);
+ opacity:1; transform:translate3d(0,0,0);
 }
 @media(max-width:850px){
  html.byz-market-copy-ready .work-detail .hero__media{margin-bottom:-2.3rem!important}
@@ -194,11 +207,10 @@ html.byz-market-copy-ready .byz-market-product-copy{
 .byz-silk-section--reverse .byz-silk-copy{order:2}
 .byz-silk-section--reverse .byz-silk-visual{order:1}
 .byz-silk-copy{
- background:linear-gradient(180deg,rgba(15,20,33,.62),rgba(9,13,22,.2));
+ background:linear-gradient(180deg,rgba(15,20,33,.78),rgba(9,13,22,.42));
  border:1px solid rgba(236,220,191,.11);
  border-radius:28px;padding:clamp(1.35rem,2.4vw,2.3rem);
- box-shadow:0 22px 60px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.03);
- backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+ box-shadow:0 22px 60px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.03);
 }
 .byz-silk-eyebrow{display:block;margin:0 0 .8rem;color:#d2b889;font:600 .77rem/1.4 var(--font-sans,Arial,sans-serif);letter-spacing:.22em;text-transform:uppercase}
 .byz-silk-copy h2{font-family:var(--font-serif,Georgia,serif);font-size:clamp(2rem,3.4vw,4rem);font-weight:500;line-height:1.04;letter-spacing:-.03em;color:#fff;margin:0 0 1rem}
@@ -218,17 +230,17 @@ html.byz-market-copy-ready .byz-market-product-copy{
 .byz-market-scratch-figure--short{aspect-ratio:16/10}
 .byz-market-scratch-surface::before{
  content:'';position:absolute;inset:0;z-index:0;
- background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.14),transparent 28%),
- linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.18));pointer-events:none;
+ background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.12),transparent 28%),
+ linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.14));pointer-events:none;
 }
-.byz-market-scratch-surface img.byz-market-supplied-photo{z-index:0;transition:transform .7s var(--expo-out, cubic-bezier(.14,1,.34,1)), filter .55s ease}
-.byz-market-scratch-figure:hover .byz-market-supplied-photo{transform:scale(1.03);filter:saturate(1.04)}
+.byz-market-scratch-surface img.byz-market-supplied-photo{z-index:0;transition:transform .35s ease}
+.byz-market-scratch-figure:hover .byz-market-supplied-photo{transform:scale(1.015)}
 .byz-market-scratch-caption{
  margin-top:.95rem;color:#bfc5d0;font:500 .84rem/1.7 var(--font-sans,Arial,sans-serif);letter-spacing:.03em
 }
 .byz-market-image-placeholder{
  width:min(85%,720px);padding:1.2rem 1.3rem;border:1px solid rgba(255,255,255,.12);border-radius:18px;
- background:rgba(13,19,30,.34);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)
+ background:rgba(13,19,30,.5)
 }
 .byz-market-image-placeholder strong{display:block;font-size:.86rem;letter-spacing:.26em;color:#f2ead9;margin-bottom:.75rem}
 .byz-market-image-placeholder span{display:block;font-size:.77rem;letter-spacing:.12em;line-height:1.8;text-transform:none;color:rgba(229,235,243,.78)}
@@ -241,8 +253,8 @@ html.byz-market-copy-ready .byz-market-product-copy{
 .byz-silk-banner-copy{
  position:absolute;left:clamp(18px,3vw,42px);bottom:clamp(18px,3vw,42px);z-index:3;
  width:min(640px,calc(100% - 32px));padding:clamp(1rem,2vw,1.55rem);
- background:linear-gradient(180deg,rgba(8,12,20,.2),rgba(8,12,20,.76));
- border:1px solid rgba(255,255,255,.08);border-radius:24px;backdrop-filter:blur(10px);
+ background:linear-gradient(180deg,rgba(8,12,20,.34),rgba(8,12,20,.82));
+ border:1px solid rgba(255,255,255,.08);border-radius:24px;
 }
 .byz-silk-banner-copy h3{margin:0 0 .55rem;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.55rem,2.2vw,2.4rem);font-weight:500;line-height:1.08;color:#fff}
 .byz-silk-banner-copy p{margin:0;color:#dde3eb;font-size:clamp(.92rem,1.02vw,1rem);line-height:1.8;max-width:54ch}
@@ -276,6 +288,9 @@ html.byz-market-copy-ready .byz-market-product-copy{
 .byz-silk-price-card li+li{margin-top:.45rem}
 .byz-silk-story{
  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);gap:clamp(1.2rem,2.4vw,2.75rem);align-items:start
+}
+.byz-silk-section,.byz-silk-banner,.byz-silk-feature-grid,.byz-silk-gallery,.byz-silk-pricing,.byz-silk-story{
+ content-visibility:auto;contain-intrinsic-size:900px;
 }
 .byz-silk-story-panel{
  padding:1.35rem 1.3rem;border-radius:24px;border:1px solid rgba(237,226,207,.1);

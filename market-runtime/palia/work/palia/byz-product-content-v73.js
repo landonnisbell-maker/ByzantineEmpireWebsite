@@ -21,13 +21,17 @@
    const title=config.title?'<strong>'+escapeHtml(config.title)+'</strong>':'';
    const body=config.body?'<span>'+escapeHtml(config.body)+'</span>':'';
    const meta=config.meta?'<em>'+escapeHtml(config.meta)+'</em>':'';
-   const img=config.src?'<img class="byz-market-supplied-photo" src="'+config.src+'" alt="'+escapeHtml(config.alt||config.title||'')+'" loading="'+(config.loading||'lazy')+'" decoding="async"'+(config.fetchpriority?' fetchpriority="'+config.fetchpriority+'"':'')+' />':'';
+   const imgClass=['byz-market-supplied-photo'];
+   if(config.imgClass)imgClass.push(config.imgClass);
+   const img=config.src?'<img class="'+imgClass.join(' ')+'" src="'+config.src+'" alt="'+escapeHtml(config.alt||config.title||'')+'" loading="'+(config.loading||'lazy')+'" decoding="async"'+(config.fetchpriority?' fetchpriority="'+config.fetchpriority+'"':'')+' />':'';
    const placeholder=!config.src?'<div class="byz-market-image-placeholder">'+title+body+meta+'</div>':'';
    const caption=config.caption?'<figcaption class="byz-market-scratch-caption">'+config.caption+'</figcaption>':'';
    const classes=['byz-market-scratch-figure'];
+   const surfaceClasses=['byz-market-scratch-surface'];
    if(config.className)classes.push(config.className);
+   if(config.surfaceClass)surfaceClasses.push(config.surfaceClass);
    if(config.reveal!==false)classes.push('byz-reveal-ready');
-   return '<figure class="'+classes.join(' ')+'"><div class="byz-market-scratch-surface">'+img+placeholder+'</div>'+caption+'</figure>';
+   return '<figure class="'+classes.join(' ')+'"><div class="'+surfaceClasses.join(' ')+'">'+img+placeholder+'</div>'+caption+'</figure>';
  }
  function buildDefaultArticle(article,item){
    article.classList.remove('byz-market-product-copy--silk');
@@ -67,6 +71,8 @@
    const introFigure=scratchFigureMarkup({
      src:cloak,alt:'Purple and red Byzantine silk cloak on a mannequin',loading:'eager',fetchpriority:'high',
      className:'byz-market-scratch-figure--portrait',
+     surfaceClass:'byz-market-scratch-surface--contain byz-market-scratch-surface--feather-strong',
+     imgClass:'byz-market-supplied-photo--contain',
      caption:'Handcrafted silk cloak featuring deep purple outer silk, crimson lining, and gold Byzantine-inspired detailing.'
    });
    const bannerFigure=scratchFigureMarkup({
@@ -183,25 +189,32 @@
  function startReveals(article){
    const nodes=[...article.querySelectorAll('.byz-reveal-ready, .byz-market-reading > p, .byz-market-reading > h2, .byz-market-reading > h3, .byz-market-reading > figure, .byz-market-purchase')];
    const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-   if(reduced || !('IntersectionObserver' in window))return;
    for(const n of nodes)n.classList.add('byz-reveal-ready');
-   function check(){
-     const limit=window.innerHeight*.95;
+   if(reduced || !('IntersectionObserver' in window)){
+     for(const n of nodes)n.classList.add('byz-revealed');
+     return;
+   }
+   function revealVisible(){
+     const limit=window.innerHeight*.96;
      for(const n of nodes){
        if(n.classList.contains('byz-revealed'))continue;
        const r=n.getBoundingClientRect();
-       if(r.top<limit && r.bottom>0){n.classList.add('byz-revealed');if(revealObserver)revealObserver.unobserve(n);}
+       if(r.top<limit && r.bottom>0){
+         n.classList.add('byz-revealed');
+         if(revealObserver)revealObserver.unobserve(n);
+       }
      }
    }
    revealObserver=new IntersectionObserver(entries=>{
-     for(const e of entries){if(e.isIntersecting){e.target.classList.add('byz-revealed');revealObserver.unobserve(e.target);}}
-   },{threshold:.04,rootMargin:'0px 0px -5% 0px'});
+     for(const e of entries){
+       if(e.isIntersecting){
+         e.target.classList.add('byz-revealed');
+         revealObserver.unobserve(e.target);
+       }
+     }
+   },{threshold:.06,rootMargin:'0px 0px -8% 0px'});
    nodes.forEach(n=>revealObserver.observe(n));
-   requestAnimationFrame(()=>requestAnimationFrame(check));
-   // Works with Lenis and native scrolling; no continuous animation loop.
-   const passiveCheck=()=>{if(article.isConnected)requestAnimationFrame(check);};
-   window.addEventListener('scroll',passiveCheck,{passive:true,signal:article._byzSignal?.signal});
-   // Cleanup on product change is managed via AbortController in apply().
+   requestAnimationFrame(()=>requestAnimationFrame(revealVisible));
  }
  const BYZ_PRODUCT_IMAGE={
    'Paramerion Sword':'/ByzantineEmpireWebsite/market-runtime/product-images/paramerion-sword.webp',
