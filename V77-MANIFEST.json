@@ -1,0 +1,55 @@
+{
+  "version": 77,
+  "files": [
+    {
+      "path": "README-V77.txt",
+      "bytes": 1445,
+      "sha256": "d911b3b44d228a7794ef78633d07990fd024719a279e89040c5ce650d666af7f"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v77.css",
+      "bytes": 22422,
+      "sha256": "81d0c35c73490c763a220cf2452b2ef0c6670ecd3979766b6908b685cd7871c3"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v77.js",
+      "bytes": 36156,
+      "sha256": "efe8c8066b6afd74d3edb81d9ccae33fe73cbc1f12dcd5f6dc89712eac69f67b"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/coins/index.html",
+      "bytes": 61831,
+      "sha256": "246f3a41004fc20f7e8d06816ef8bf9823d99fb550d08ee7b44d43bd0b2eb0d3"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/food-items/index.html",
+      "bytes": 61825,
+      "sha256": "e4be305012d8a46649c0c45c12ac31739440dddc62962d457e350f3f3fe1a622"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/gold-jewelry/index.html",
+      "bytes": 61829,
+      "sha256": "24a050c839b79f8daa8255c78276b4d7996569709b5e5788352fa8d4de0e4f0c"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/paramerion-sword/index.html",
+      "bytes": 61837,
+      "sha256": "734fedbfd82495ab06c40f737cb8800cfa7c659b239c2407edd8468e17f53050"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/silk-textiles/index.html",
+      "bytes": 61831,
+      "sha256": "2fe7fb057aa55a9a38aaf78153af0312eb09f2dde0a7d450e17d015a4009b2c1"
+    },
+    {
+      "path": "market-runtime/product-images/details/silk-cloak-feature-v77.png",
+      "bytes": 2070471,
+      "sha256": "597f19dfe3afbc1e29088b1d935f31c11ede40f85f355897c1f1cebd8318b952"
+    },
+    {
+      "path": "pp-loader/market-preload-v71.js",
+      "bytes": 2969,
+      "sha256": "9a7ad96b1db9d09234efee4a2ef14580a57a452079086f94624a78d471a444d6"
+    }
+  ]
+}
