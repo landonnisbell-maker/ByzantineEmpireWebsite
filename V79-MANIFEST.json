@@ -1,0 +1,46 @@
+{
+  "version": "V79",
+  "base": "V78",
+  "files": [
+    {
+      "path": "ByzantineEmpireWebsite/README-V79.txt",
+      "bytes": 1219,
+      "sha256": "73e9c430a1de483ba7727c491f8b46e0c9f1fdd42be3c0839fb60824407e3382"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/byz-product-content-v79.css",
+      "bytes": 31364,
+      "sha256": "65b8612e65e20fc4f08f1d85e22cf56ecc36ca8fa6b95d32fc1a731eb58d0b31"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/byz-product-content-v79.js",
+      "bytes": 43176,
+      "sha256": "a0c6a168e2f1d31068d550b5a07d5f6ba1ce11b0ba97f52c640bca0ce619895f"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/paramerion-sword/index.html",
+      "bytes": 61837,
+      "sha256": "6c6b274d0057a46dc9ad3436bbe8b48faf51dfa462989eb7331952377c142e7e"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/sword-v79-complete-sword.png",
+      "bytes": 3481559,
+      "sha256": "7d8747e61544bda10e38e0e86e8bf4a467ccdc96cc34191502658cce3bbc6fe9"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/sword-v79-leather-harness.png",
+      "bytes": 1608840,
+      "sha256": "876dbc42eef5e98424f4646fe29f0e8608a333ce87fa65da7b913eb82383d373"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/sword-v79-scabbard-detail.png",
+      "bytes": 3223615,
+      "sha256": "0696b68110f68ce7e3caebc42bd38886a777b2a9e2e6912e3aa8a707b6401d0d"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/pp-loader/market-preload-v71.js",
+      "bytes": 3345,
+      "sha256": "b2f39e76b7cd2711eec4d16fa9e80b3571e3515b0e17f3b0d77c7b23a0d7efc8"
+    }
+  ]
+}
