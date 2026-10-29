@@ -22,7 +22,7 @@
     year: "—",
 
     // Introductory highlighted line near the top.
-    tagline: "Solentra carium vintaro meralis.",
+    tagline: "How everything is connected",
 
     // Main text ABOVE the first "No image supplied yet" image.
     description: `Glavora serentis norvella cintara. Trivolis nerman avendi, salvento morena varicus. Talorin vencata filera quendo, straveli cimora pranelis. Delvora fintrus mavento lorelis.`,
