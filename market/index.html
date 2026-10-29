@@ -30,7 +30,7 @@ body.byz-product-open #byz-gallery-guide,body.byz-product-leaving #byz-gallery-g
 <link rel="stylesheet" href="/ByzantineEmpireWebsite/brand/market-flower-v39.css"/>
 </head><body><img class="byz-market-flower-mark" src="/ByzantineEmpireWebsite/brand/pazari-flower-v39.png" alt="ta pánta pazári" aria-hidden="true" decoding="async"/>
 <iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=64.0" allow="autoplay;fullscreen" loading="eager"></iframe>
-<iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&v=65.0" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
+<iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&v=66.0" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
 <p id="byz-gallery-guide">Because this is a simulation, we have created cards for you to click on and view our products. Scroll to look at different cards, and click to enter a product.</p>
 <div id="byz-status" role="status" aria-live="polite">Preparing product experience…</div>
 <button id="byz-retry" type="button">RETRY PRODUCT PAGE</button>
@@ -63,27 +63,38 @@ const initialRoute=location.pathname.startsWith(PRODUCT_PATH_PREFIX)
   ? location.pathname.slice(PRODUCT_PATH_PREFIX.length).replace(/\/$/,'').replace(/\/index\.html$/,'') : null;
 const initialIndex=PRODUCTS.findIndex(p=>p.slug===initialRoute);
 
-const PRODUCT_SLUGS=Object.freeze({'cgtrader':0,'w3r-one':1,'presti':2,'grandir':3,'reaali':4});
+const PRODUCT_SLUGS=Object.freeze({'cgtrader':0,'w3r-one':1,'presti':2,'grandir':3,'reaali':4,'coins':3,'coin-exchange-service':3});
 let activeProductIndex=initialIndex>=0?initialIndex:0;
+let confirmedV66Product=null;
+let v66ProductCheck=null;
 let enteredPalia=false, sceneStarted=false, visualReady=false, productRequested=false, leaving=false, failing=false;
 let loadDeadline=null, startTime=performance.now(), lastReadyEvent='initial';
 function report(action,detail=''){
   if(new URLSearchParams(location.search).has('byzdebug'))console.debug('[Market]',action,detail);
 }
-function selectProduct(selection){
-  let index = null;
-  if(selection && Number.isInteger(selection.index) && selection.index>=0 && selection.index<PRODUCT_NAMES.length){
-    index=selection.index;
-  }else if(selection && typeof selection.slug==='string' && Object.prototype.hasOwnProperty.call(PRODUCT_SLUGS,selection.slug)){
-    index=PRODUCT_SLUGS[selection.slug];
-  }
-  if(index!==null)activeProductIndex=index;
+function enforceV66Product(activate){
   const chosen=PRODUCTS[activeProductIndex];
-  // Each selected cloth has a dedicated URL and independent product definition.
-  // Only one WebGL renderer stays alive: switching pages resets its presentation
-  // and scroll state instead of reloading several heavyweight Nuxt runtimes.
-  if(palia.contentWindow) palia.contentWindow.postMessage({type:'byz:palia:set-product',title:chosen.title,slug:chosen.slug,index:activeProductIndex},location.origin);
-  report('product-title',chosen.slug+' '+chosen.title);
+  const data={type:activate?'byz:palia:activate-product':'byz:palia:set-product',
+    title:chosen.title,slug:chosen.slug,index:activeProductIndex,resetScroll:!!activate};
+  try{
+    const child=palia.contentWindow;
+    // Same-origin direct selection avoids timing races during iframe activation.
+    child?.__BYZ_PALIA_SELECT_PRODUCT_V66__?.(data);
+    child?.postMessage(data,location.origin);
+  }catch(e){palia.contentWindow?.postMessage(data,location.origin);}
+}
+function selectProduct(selection){
+  let index=null;
+  if(selection && Number.isInteger(Number(selection.index)) && Number(selection.index)>=0 && Number(selection.index)<PRODUCT_NAMES.length)
+    index=Number(selection.index);
+  else if(selection && typeof selection.slug==='string' && Object.prototype.hasOwnProperty.call(PRODUCT_SLUGS,selection.slug))
+    index=PRODUCT_SLUGS[selection.slug];
+  else if(selection && typeof selection.title==='string')
+    index=PRODUCTS.findIndex(p=>p.title===selection.title);
+  if(index!==null&&index>=0)activeProductIndex=index;
+  confirmedV66Product=null;
+  enforceV66Product(false);
+  report('product-title',PRODUCTS[activeProductIndex].slug+' '+PRODUCTS[activeProductIndex].title);
 }
 function showStatus(show){status.classList.toggle('visible',show);}
 function makeVisible(){
@@ -97,10 +108,7 @@ function makeVisible(){
   document.body.classList.add('byz-product-open');
   report('reveal','Palia ready, unified compositor fade');
 }
-function activateProductScroll(){
-  const p=PRODUCTS[activeProductIndex];
-  if(palia.contentWindow) palia.contentWindow.postMessage({type:'byz:palia:activate-product',title:p.title,slug:p.slug,resetScroll:true,index:activeProductIndex},location.origin);
-}
+function activateProductScroll(){enforceV66Product(true);}
 function openProduct(selection,options={}){
   if(leaving)return;
   ensurePaliaLoaded();
@@ -111,7 +119,13 @@ function openProduct(selection,options={}){
   // exist for direct visits, but iframe history must never point at a virtual SPA route.
   report('product-selected',product.slug);
   report('card-click',`product=${product.slug} ready=${visualReady}, entered=${enteredPalia}, event=${lastReadyEvent}`);
-  if(visualReady){makeVisible();return;}
+  if(visualReady){
+    // Keep the gallery visible until the freshly requested product confirms its content.
+    showStatus(true);enforceV66Product(true);
+    clearTimeout(v66ProductCheck);
+    v66ProductCheck=setTimeout(()=>{if(productRequested && !leaving)makeVisible();},1400);
+    return;
+  }
   // Keep the live gallery visible while the product renderer finishes.
   // No gray or blue interim screen is ever presented.
   showStatus(true);
@@ -166,6 +180,13 @@ window.addEventListener('message',ev=>{
     return;
   }
   if(ev.source!==palia.contentWindow)return;
+  if(type==='byz:palia:v66-applied'){
+    if(ev.data.title===PRODUCTS[activeProductIndex].title){
+      confirmedV66Product=ev.data.title;
+      if(productRequested&&visualReady&&!leaving){clearTimeout(v66ProductCheck);makeVisible();}
+    }
+    return;
+  }
   if(type==='byz:palia:prepared')preparePalia();
   if(type==='byz:palia:started' && !sceneStarted){
     sceneStarted=true;lastReadyEvent='started';
@@ -248,7 +269,7 @@ returnBtn.addEventListener('click',()=>{
   }else returnToCrystals();
 });
 window.addEventListener('keydown',e=>{if(e.key==='Escape' && !document.body.classList.contains('byz-product-open'))returnToCrystals()});
-window.__BYZ_MARKET_STATUS__=()=>({version:'32.0',galleryReady,visualReady,productRequested,activeProductIndex});
+window.__BYZ_MARKET_STATUS__=()=>({version:'66.0',galleryReady,visualReady,productRequested,activeProductIndex});
 window.__BYZ_MARKET_SHOULD_ENTER__=true;
 report('host-loaded','V24: new dedicated Market page, five product routes');
 })();

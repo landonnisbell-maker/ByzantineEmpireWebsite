@@ -1,0 +1,70 @@
+{
+  "version": "V66",
+  "files": [
+    {
+      "path": "index.html",
+      "size": 155231,
+      "sha256": "43f403c8aa84923febcd765f0d4031067fc758c758cebbdad7ff26ecf64853bb"
+    },
+    {
+      "path": "README-V66.txt",
+      "size": 899,
+      "sha256": "63d7344aeb16cd1dfbb3328cd77f721dad996a32c51cb174f55feadeb7c468ac"
+    },
+    {
+      "path": "market-runtime/index.html",
+      "size": 16279,
+      "sha256": "eb309e57385f22e21e556b8f6421e2f5af8b5d6820daf27e2ff179c02ea2942f"
+    },
+    {
+      "path": "market/market-entry-v24.js",
+      "size": 8236,
+      "sha256": "dad148d8316f57609d11453abf2c80c85dc1291abb4ab93f0b07d3cf8fd58a92"
+    },
+    {
+      "path": "market/index.html",
+      "size": 16279,
+      "sha256": "eb309e57385f22e21e556b8f6421e2f5af8b5d6820daf27e2ff179c02ea2942f"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/index.html",
+      "size": 60320,
+      "sha256": "6a0107b7ace4c308930a2aff5e0e9598727a2167faa869b992bd7d7fca9f7f7c"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v38.css",
+      "size": 14146,
+      "sha256": "0629a7e2d33b5c8306fe9e7472a03fe6d1e412e917b6a347ebfeb8edb34aea4a"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v38.js",
+      "size": 30563,
+      "sha256": "23b01be0305f5c5f1371186efc77887a6dcf168aa15435262635590b75dfdca3"
+    },
+    {
+      "path": "market-runtime/products/gold-jewelry/index.html",
+      "size": 16279,
+      "sha256": "eb309e57385f22e21e556b8f6421e2f5af8b5d6820daf27e2ff179c02ea2942f"
+    },
+    {
+      "path": "market-runtime/products/food-items/index.html",
+      "size": 16279,
+      "sha256": "eb309e57385f22e21e556b8f6421e2f5af8b5d6820daf27e2ff179c02ea2942f"
+    },
+    {
+      "path": "market-runtime/products/silk-textiles/index.html",
+      "size": 16279,
+      "sha256": "eb309e57385f22e21e556b8f6421e2f5af8b5d6820daf27e2ff179c02ea2942f"
+    },
+    {
+      "path": "market-runtime/products/paramerion-sword/index.html",
+      "size": 16279,
+      "sha256": "eb309e57385f22e21e556b8f6421e2f5af8b5d6820daf27e2ff179c02ea2942f"
+    },
+    {
+      "path": "market-runtime/products/coins/index.html",
+      "size": 16279,
+      "sha256": "eb309e57385f22e21e556b8f6421e2f5af8b5d6820daf27e2ff179c02ea2942f"
+    }
+  ]
+}
