@@ -1,0 +1,18 @@
+{
+  "version": "V43",
+  "scope": "About Us historical map only",
+  "base": "V42",
+  "files": [
+    "index.html",
+    "about-map/byzantine-map.js",
+    "about-map/byzantine-map.css",
+    "about-map/Byzantine-Empire.webp",
+    "about-map/empire-pulse.png"
+  ],
+  "unchanged": [
+    "_next/static/chunks/1502ibkr~cu.4.js",
+    "byzantine-about-us-content.js",
+    "market/",
+    "market-runtime/"
+  ]
+}
