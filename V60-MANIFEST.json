@@ -1,0 +1,27 @@
+{
+  "version": "V60",
+  "base": "V59",
+  "type": "update-only",
+  "files": [
+    {
+      "path": "README-V60.txt",
+      "bytes": 944,
+      "sha256": "0831ef3d62fe15991bf042cb7913cbb07a80b458789a17ae473600a1bd96e09d"
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "bytes": 284477,
+      "sha256": "45acd5d78e41f7fda295f946d5de7936333ee76d4ee05fed44f2669250323c3e"
+    },
+    {
+      "path": "index.html",
+      "bytes": 155217,
+      "sha256": "a332d6bc57af7ae9c41149605be3a804e2914ec6c8b8e3b9de334b44cfa04b55"
+    },
+    {
+      "path": "intro-team/team-v54.js",
+      "bytes": 15590,
+      "sha256": "f3629f71a25b1f24a62b7fcdd809951fb8f259db232d9b0dee2bed65db697951"
+    }
+  ]
+}

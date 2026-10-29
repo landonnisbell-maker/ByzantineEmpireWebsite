@@ -1,7 +1,7 @@
 /*
  * ta pánta pazári — Crystal 1 / Introduction team + galleries, V59.
  * Native canvas/WebGPU content only: team portraits, full names, roles/quotes,
- * and three auto-cycling gallery sliders for Architecture, Jewelry, Artifacts.
+ * and three GPU-animated gallery sliders for Architecture, Jewelry, Artifacts.
  */
 (function () {
   'use strict';
@@ -106,6 +106,7 @@
   var ready = false;
   var readyCallbacks = [];
   Promise.all(loading).then(function () {
+    buildGalleryAtlas();
     ready = true;
     readyCallbacks.splice(0).forEach(function (callback) { callback(); });
   });
@@ -208,144 +209,134 @@
     if (shader && shader.enabled) shader.enabled.value = 0;
   };
 
-  function galleryTiming(gallery) {
-    var images = (gallery && gallery._images ? gallery._images : []).filter(Boolean);
-    var count = images.length;
-    if (!count) return { count: 0, current: 0, next: 0, t: 0, images: images };
-    var hold = 3400;
-    var slide = 900;
-    var total = hold + slide;
-    var now = (typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now()) + gallery.title.length * 171;
-    var phase = now % (total * count);
-    var current = Math.floor(phase / total);
-    var local = phase % total;
-    var t = local <= hold ? 0 : Math.min(1, (local - hold) / slide);
-    var next = (current + 1) % count;
-    return { count: count, current: current, next: next, t: t, images: images };
-  }
+  // V60 gallery atlas. One image upload, then the native WebGPU shader
+  // moves across its slide cells on every animation frame. The large text
+  // texture is not re-rendered and no HTML carousel is layered over the page.
+  var GALLERY_CELL_W = 900;
+  var GALLERY_CELL_H = 500;
+  var GALLERY_ATLAS_COLUMNS = 5;
+  var GALLERY_ATLAS_ROWS = 3;
+  var galleryAtlas = null;
 
-  function drawFramedMedia(ctx, img, x, y, w, h, radius) {
-    ctx.save();
-    roundedPath(ctx, x, y, w, h, radius);
+  function roundedRect(ctx, x, y, w, h, r) {
+    roundedPath(ctx,x,y,w,h,r);
     ctx.clip();
-
-    var iw = img.naturalWidth || img.width;
-    var ih = img.naturalHeight || img.height;
-    if (!iw || !ih) {
-      ctx.fillStyle = '#10263a';
-      ctx.fillRect(x, y, w, h);
+  }
+  function drawGalleryImage(ctx, img, x, y, w, h) {
+    if (!img || !img.naturalWidth || !img.naturalHeight) {
+      ctx.fillStyle='#102238';ctx.fillRect(x,y,w,h);return;
+    }
+    var iw=img.naturalWidth, ih=img.naturalHeight, aspect=iw/ih;
+    if (aspect < 1.11) {
+      // Only square/portrait imagery gets blurred side-fill. Preserve
+      // the original artifact or building centered and uncropped.
+      var cover=Math.max((w+80)/iw,(h+80)/ih);
+      var bw=iw*cover,bh=ih*cover;
+      ctx.save();
+      ctx.filter='blur(35px) brightness(.42) saturate(.75)';
+      ctx.drawImage(img,x+(w-bw)/2,y+(h-bh)/2,bw,bh);
       ctx.restore();
-      return;
-    }
-
-    var imageAspect = iw / ih;
-    var frameAspect = w / h;
-
-    if (imageAspect < frameAspect * 0.92) {
-      // Tall / squarer images: blurred side fill + sharp centered original.
-      var bgScale = Math.max(w / iw, h / ih);
-      var bgw = iw * bgScale;
-      var bgh = ih * bgScale;
-      var bgx = x + (w - bgw) / 2;
-      var bgy = y + (h - bgh) / 2;
-      ctx.filter = 'blur(22px) brightness(0.55) saturate(0.85)';
-      ctx.globalAlpha = 0.95;
-      ctx.drawImage(img, bgx, bgy, bgw, bgh);
-      ctx.filter = 'none';
-      ctx.globalAlpha = 1;
-      var bgShade = ctx.createLinearGradient(x, y, x + w, y + h);
-      bgShade.addColorStop(0, 'rgba(4,12,22,.34)');
-      bgShade.addColorStop(1, 'rgba(4,12,22,.20)');
-      ctx.fillStyle = bgShade;
-      ctx.fillRect(x, y, w, h);
-
-      var fgScale = Math.min((w - 56) / iw, (h - 44) / ih);
-      var fgw = iw * fgScale;
-      var fgh = ih * fgScale;
-      var fgx = x + (w - fgw) / 2;
-      var fgy = y + (h - fgh) / 2;
-      ctx.drawImage(img, fgx, fgy, fgw, fgh);
+      ctx.fillStyle='rgba(2,9,22,.33)';ctx.fillRect(x,y,w,h);
+      var contain=Math.min((w-35)/iw,(h-20)/ih);
+      var fw=iw*contain,fh=ih*contain;
+      // Blend the sharp inset into its soft backdrop so no rectangular
+      // photo edges appear around white/gray artifact backgrounds.
+      var front=document.createElement('canvas');
+      front.width=Math.max(1,Math.round(fw));
+      front.height=Math.max(1,Math.round(fh));
+      var fctx=front.getContext('2d');
+      fctx.drawImage(img,0,0,front.width,front.height);
+      fctx.globalCompositeOperation='destination-in';
+      var edge=fctx.createLinearGradient(0,0,front.width,0);
+      edge.addColorStop(0,'rgba(0,0,0,0)');
+      edge.addColorStop(.065,'rgba(0,0,0,.75)');
+      edge.addColorStop(.15,'rgba(0,0,0,1)');
+      edge.addColorStop(.85,'rgba(0,0,0,1)');
+      edge.addColorStop(.935,'rgba(0,0,0,.75)');
+      edge.addColorStop(1,'rgba(0,0,0,0)');
+      fctx.fillStyle=edge;
+      fctx.fillRect(0,0,front.width,front.height);
+      fctx.globalCompositeOperation='source-over';
+      ctx.drawImage(front,x+(w-fw)/2,y+(h-fh)/2,fw,fh);
     } else {
-      // Landscape images can fill the frame fully.
-      var scale = Math.max(w / iw, h / ih);
-      var dw = iw * scale;
-      var dh = ih * scale;
-      var dx = x + (w - dw) / 2;
-      var dy = y + (h - dh) / 2;
-      ctx.drawImage(img, dx, dy, dw, dh);
+      // Landscape images use ordinary cover fitting, not blurry duplicates.
+      var scale=Math.max(w/iw,h/ih);
+      var dw=iw*scale,dh=ih*scale;
+      ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);
     }
-
-    var topFade = ctx.createLinearGradient(0, y, 0, y + h);
-    topFade.addColorStop(0, 'rgba(5,10,18,.18)');
-    topFade.addColorStop(.14, 'rgba(5,10,18,0)');
-    topFade.addColorStop(.84, 'rgba(5,10,18,0)');
-    topFade.addColorStop(1, 'rgba(5,10,18,.22)');
-    ctx.fillStyle = topFade;
-    ctx.fillRect(x, y, w, h);
-
-    ctx.restore();
-
-    ctx.save();
-    roundedPath(ctx, x, y, w, h, radius);
-    ctx.strokeStyle = 'rgba(215,246,255,.18)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.restore();
   }
-
-  function drawCarousel(ctx, gallery, x, y, w, h) {
-    ctx.save();
-    var radius = 24;
-    roundedPath(ctx, x, y, w, h, radius);
-    ctx.clip();
-    ctx.fillStyle = 'rgba(5,12,20,.58)';
-    ctx.fillRect(x, y, w, h);
-
-    var timing = galleryTiming(gallery);
-    var currentImage = timing.images[timing.current];
-    var nextImage = timing.images[timing.next];
-    var t = timing.t;
-
-    if (currentImage && timing.count) {
-      drawFramedMedia(ctx, currentImage, x - t * w, y, w, h, radius);
-      if (nextImage && timing.count > 1 && t > 0) {
-        drawFramedMedia(ctx, nextImage, x + (1 - t) * w, y, w, h, radius);
+  function buildGalleryAtlas() {
+    if (galleryAtlas) return galleryAtlas;
+    var c=document.createElement('canvas');
+    c.width=GALLERY_CELL_W*GALLERY_ATLAS_COLUMNS;
+    c.height=GALLERY_CELL_H*GALLERY_ATLAS_ROWS;
+    var ctx=c.getContext('2d');
+    if (!ctx) return null;
+    for (var row=0;row<galleries.length;row++) {
+      var gal=galleries[row];
+      var imgs=gal._images;
+      if (!imgs || !imgs.length) continue;
+      for (var col=0;col<Math.min(GALLERY_ATLAS_COLUMNS,imgs.length+1);col++) {
+        var img=imgs[col % imgs.length];
+        var x=col*GALLERY_CELL_W,y=row*GALLERY_CELL_H;
+        ctx.save();
+        roundedRect(ctx,x,y,GALLERY_CELL_W,GALLERY_CELL_H,19);
+        drawGalleryImage(ctx,img,x,y,GALLERY_CELL_W,GALLERY_CELL_H);
+        ctx.restore();
       }
     }
+    galleryAtlas=c;
+    return c;
+  }
+  window.__BYZ_INTRO_GALLERY_ATLAS_V60__=function(){return galleryAtlas;};
+  var gallerySequenceStart=null;
+  window.__BYZ_INTRO_GALLERY_TICK_V60__=function(active, shader){
+    if (!shader || !shader.enabled || !shader.slides || !shader.texture) return;
+    var c=galleryAtlas;
+    if (!c || !active) {
+      shader.enabled.value=0;
+      return;
+    }
+    if (shader.texture.image!==c) {
+      shader.texture.image=c;
+      shader.texture.needsUpdate=true;
+    }
+    shader.enabled.value=1;
+    if(gallerySequenceStart===null) gallerySequenceStart=performance.now();
+    var elapsed=(performance.now()-gallerySequenceStart)/4400;
+    for(var k=0;k<galleries.length;k++){
+      var count=galleries[k].images.length;
+      var unit=(elapsed + k*.32) % count;
+      var index=Math.floor(unit),frac=unit-index;
+      var slide=frac<=.78?0:(frac-.78)/.22;
+      // smootherstep: no sudden velocity at either end of the slide.
+      slide=slide*slide*slide*(slide*(slide*6-15)+10);
+      shader.slides[k].value=index+slide;
+    }
+  };
 
-    var overlay = ctx.createLinearGradient(x, y, x + w, y + h);
-    overlay.addColorStop(0, 'rgba(4,11,19,.12)');
-    overlay.addColorStop(.55, 'rgba(4,11,19,0)');
-    overlay.addColorStop(1, 'rgba(4,11,19,.18)');
-    ctx.fillStyle = overlay;
-    ctx.fillRect(x, y, w, h);
+  function drawCarouselFrame(ctx,gallery,x,y,w,h){
+    ctx.save();
+    roundedPath(ctx,x,y,w,h,26);
+    ctx.fillStyle='rgba(7,20,36,.85)';
+    ctx.fill();
+    ctx.strokeStyle='rgba(189,235,255,.26)';
+    ctx.lineWidth=1.4;
+    ctx.stroke();
     ctx.restore();
 
-    // Labels and slide indicators.
     ctx.save();
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#f3fbff';
-    ctx.font = '700 40px "League Spartan", system-ui, sans-serif';
-    ctx.fillText(gallery.title, x, y - 20);
-    ctx.fillStyle = 'rgba(202,234,248,.88)';
-    ctx.font = '500 18px Manrope, sans-serif';
-    ctx.fillText(gallery.subtitle, x, y + h + 32);
-
-    var count = Math.max(1, timing.count);
-    var indicatorX = x + w - 190;
-    var indicatorY = y - 18;
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#99d8ed';
-    ctx.font = '700 16px Manrope, sans-serif';
-    ctx.fillText(String(timing.current + 1).padStart(2,'0') + '  /  ' + String(count).padStart(2,'0'), x + w, indicatorY);
-
-    var dotsX = x + w - (count * 22 + 8);
-    for (var i = 0; i < count; i++) {
-      ctx.beginPath();
-      ctx.arc(dotsX + i * 22, y + h + 24, i === timing.current ? 5.5 : 4, 0, Math.PI * 2);
-      ctx.fillStyle = i === timing.current ? '#d8f8ff' : 'rgba(174,224,244,.30)';
-      ctx.fill();
-    }
+    ctx.textAlign='left';
+    ctx.fillStyle='#f3fbff';
+    ctx.font='700 40px "League Spartan", system-ui, sans-serif';
+    ctx.fillText(gallery.title,x,y-25);
+    ctx.fillStyle='rgba(216,241,252,.88)';
+    ctx.font='500 18px Manrope, sans-serif';
+    ctx.fillText(gallery.subtitle,x,y+h+35);
+    ctx.textAlign='right';
+    ctx.fillStyle='#a7deee';
+    ctx.font='700 17px Manrope, sans-serif';
+    ctx.fillText('AUTO · '+String(gallery.images.length).padStart(2,'0')+' IMAGES',x+w,y-25);
     ctx.restore();
   }
 
@@ -426,11 +417,11 @@
     });
 
     var galleryStart = gallerySectionY + 170;
-    var gallerySpacing = 510;
+    var gallerySpacing = 850;
     galleries.forEach(function (gallery, idx) {
       var gy = galleryStart + idx * gallerySpacing;
       commands.push(function (ctx) {
-        drawCarousel(ctx, gallery, 336, gy + 34, 1574, 360);
+        drawCarouselFrame(ctx, gallery, 468, gy + 48, 1310, 710);
       });
     });
 
