@@ -1,0 +1,10 @@
+{
+  "version": "V45.1",
+  "base": "V45",
+  "patch": "Remove stale map handler cleanup references in captured JS bundle",
+  "changed_files": [
+    "_next/static/chunks/1502ibkr~cu.4.js"
+  ],
+  "removed_bytes": 270,
+  "sha256": "b6b06967b15bb6321763794285f4ebc456898b4a21aaa1444bc0fafeb2d2896a"
+}
