@@ -1,0 +1,17 @@
+/* V39 brand + menu changes only. All original transitions remain intact. */
+/* The native dotted menu contains ABOUT; keep the About Us crystal available. */
+nav[data-navbar] [class*="menuPanel"] li:has(a[href="/about"]),
+nav[data-navbar] [class*="menuPanel"] li:has(a[href$="/about"]) {display:none!important;}
+/* Keep the old svg invisible while preserving its animated inline opacity as a timing source. */
+[class*="veilOverlay-module_"][class*="__root"] > svg[class*="__logo"] {visibility:hidden!important;}
+[class*="veilOverlay-module_"][class*="__root"] > .byz-veiled-brand-logo {
+  display:block!important;
+  width:clamp(60px,6vw,98px);height:auto;max-height:132px;object-fit:contain;
+  opacity:0;will-change:opacity,transform;pointer-events:none;
+}
+[class*="resizeVeil-module_"][class*="__root"] > svg[class*="__logo"] {display:none!important;}
+[class*="resizeVeil-module_"][class*="__root"]:after {
+  content:"";display:block;width:clamp(60px,6vw,98px);height:clamp(75px,8vw,132px);
+  background:url("/ByzantineEmpireWebsite/brand/pazari-flower-v39.png") center / contain no-repeat;
+  pointer-events:none;
+}

@@ -1,0 +1,11 @@
+/* V39: this single shell is shared by gallery and all five dedicated product pages. */
+.byz-market-flower-mark{
+ position:fixed;z-index:45;left:clamp(16px,1.45vw,28px);top:clamp(12px,1.6vh,21px);
+ width:clamp(37px,3.25vw,53px);height:auto;max-height:78px;object-fit:contain;
+ pointer-events:none;user-select:none;-webkit-user-select:none;
+ filter:drop-shadow(0 2px 12px rgba(0,0,0,.38));
+}
+@media(max-width:680px){
+ .byz-market-flower-mark{width:35px;left:13px;top:12px}
+ #byz-new-page-return{left:68px!important;top:9px!important}
+}
