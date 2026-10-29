@@ -1,0 +1,11 @@
+{
+  "version": "V42",
+  "base": "V41 native shader",
+  "changed_site_files": [
+    "_next/static/chunks/1502ibkr~cu.4.js"
+  ],
+  "sha256": "80aa1e4726b5ddeca07e15d2aaeb2e8e62db1d76aacd8a2a85985ed3fdc7ee80",
+  "about_us_only": true,
+  "no_image_texture": true,
+  "browser_runtime_validated": false
+}
