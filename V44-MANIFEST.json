@@ -1,0 +1,13 @@
+{
+  "version": "V44",
+  "update_only": true,
+  "files_sha256": {
+    "index.html": "606a0a5d2c41d73745e2d7629f384e6f9c9cf8c03a36fb63ef903120787d9a5e",
+    "_next/static/chunks/1502ibkr~cu.4.js": "b214c1267302dd2c4c2b0312b0e86e9a2bdc9ed78f672d58bba3bff12c5e24c0",
+    "about-map/byzantine-map.js": "12d96abe6ebdeaede11e61f4de77e03c416d5dffcdf9c546c59fcd5fbfe05898",
+    "byz-portal-scroll-lock-v44.js": "3d89c3bca75b7bb34be635df9e0dd56b44ef514f67b76ba6b4a6f106f25f3ee5",
+    "about-map/Byzantine-Empire.webp": "aae54f369f21c9b458f3d41bd8c625c73b56a5f81c781cf5dec34293d24adaa7",
+    "about-map/empire-pulse.png": "7b70233a3acd2d54bf88cad2cbef8e7f52fef5eadf7045e51f75584aa64effc9",
+    "README-V44.txt": "77babd954042fa73f9586bcec9712c1da8048ed11fd40608fd6a0a6899bbe6af"
+  }
+}
