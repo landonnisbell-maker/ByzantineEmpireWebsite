@@ -1,0 +1,52 @@
+{
+  "version": 54,
+  "based_on": "V53",
+  "deployment": "update-only",
+  "files": [
+    {
+      "path": "README-V54.txt",
+      "bytes": 2270,
+      "sha256": "774638f2182d43ff588fe071e86ff5fb540f83c1b0a4470fbeeea8bc75034bcd"
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "bytes": 281869,
+      "sha256": "2404f00fcf155815168e144011c763ad3c53f7c73188dba5492a2625ba1b8e44"
+    },
+    {
+      "path": "index.html",
+      "bytes": 155210,
+      "sha256": "3c543affb03239596dc5b33ebe6a44d9824cb33ffc65d93b5d4a5ecccd36db82"
+    },
+    {
+      "path": "intro-team/portraits/fizza.webp",
+      "bytes": 112494,
+      "sha256": "0ba142e66f712abb9ea662bf0ef9081eab47334560695f172b1845ddde65db15"
+    },
+    {
+      "path": "intro-team/portraits/landon.webp",
+      "bytes": 92142,
+      "sha256": "4dd329829417a787a44188187d2764a167721c931fae2966897853e0e8a92ec2"
+    },
+    {
+      "path": "intro-team/portraits/lillyan.webp",
+      "bytes": 55970,
+      "sha256": "abe1a067921412df63fad4010f403ce78f07309836ae7c5c531273d78d1cafae"
+    },
+    {
+      "path": "intro-team/portraits/shamir.webp",
+      "bytes": 98896,
+      "sha256": "3252a02f0e674eb6649b11524d75bf03726f9de008f7f90ecab4875cafe13a15"
+    },
+    {
+      "path": "intro-team/portraits/yusrah.webp",
+      "bytes": 108734,
+      "sha256": "6410ff4bad0285ae6c6962e2db1083ab5baf941f5d32a826003b8f43c8c3f8f0"
+    },
+    {
+      "path": "intro-team/team-v54.js",
+      "bytes": 6882,
+      "sha256": "066bb18f722db6c9741a48831e5d3a46f03c203740e872413d958c97efea36a1"
+    }
+  ]
+}
