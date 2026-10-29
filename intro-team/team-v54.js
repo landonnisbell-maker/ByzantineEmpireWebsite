@@ -1,5 +1,5 @@
 /*
- * ta pánta pazári — Crystal 1 / Introduction team.
+ * ta pánta pazári — Crystal 1 / Introduction team, V56 full portraits + scroll reveal.
  * Edit role and quote fields below; the five portraits and text are painted
  * directly into the native WebGPU page canvas, not placed in an HTML overlay.
  * The order deliberately ends with Landon.
@@ -58,36 +58,40 @@
     if (person._portraitCache) return person._portraitCache;
     var image = person._image;
     if (!image || !image.complete || !image.naturalWidth) return null;
-    var width = 720, height = 610;
+    // V56: contain the ENTIRE source portrait, never crop or stretch it.
+    // A generous tall presentation region lets clothing, shoulders and torso
+    // stay visible, while the alpha edges blend directly into the GPU wall.
+    var width = 760, height = 858;
     var canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     var ctx = canvas.getContext('2d');
     if (!ctx) return null;
     var iw = image.naturalWidth, ih = image.naturalHeight;
-    // Crops to a head-and-shoulders portrait without distorting the photograph.
-    var scale = Math.max(width / iw, height / ih);
-    var sw = width / scale, sh = height / scale;
-    var sx = (iw - sw) / 2;
-    var sy = Math.max(0, Math.min(ih - sh, ih * .045));
-    ctx.drawImage(image, sx, sy, sw, sh, 0, 0, width, height);
-    // Feather ALL four sides so no rectangular photo frame can appear.
+    var insetX = 18, insetY = 8;
+    var scale = Math.min((width - insetX * 2) / iw, (height - insetY * 2) / ih);
+    var dw = iw * scale, dh = ih * scale;
+    var dx = (width - dw) / 2, dy = (height - dh) / 2;
+    ctx.drawImage(image, 0, 0, iw, ih, dx, dy, dw, dh);
+    // Feather all four boundaries without throwing away the person's body.
+    // Source portraits are already transparent; the mask removes any hard
+    // rectangular edge from the very ends of the frame.
     ctx.globalCompositeOperation = 'destination-in';
     var fadeX = ctx.createLinearGradient(0, 0, width, 0);
     fadeX.addColorStop(0, 'rgba(0,0,0,0)');
-    fadeX.addColorStop(.08, 'rgba(0,0,0,0.85)');
-    fadeX.addColorStop(.2, 'rgba(0,0,0,1)');
-    fadeX.addColorStop(.80, 'rgba(0,0,0,1)');
-    fadeX.addColorStop(.92, 'rgba(0,0,0,.85)');
+    fadeX.addColorStop(.045, 'rgba(0,0,0,.78)');
+    fadeX.addColorStop(.12, 'rgba(0,0,0,1)');
+    fadeX.addColorStop(.88, 'rgba(0,0,0,1)');
+    fadeX.addColorStop(.955, 'rgba(0,0,0,.78)');
     fadeX.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = fadeX;
     ctx.fillRect(0,0,width,height);
     var fadeY = ctx.createLinearGradient(0, 0, 0, height);
     fadeY.addColorStop(0, 'rgba(0,0,0,0)');
-    fadeY.addColorStop(.08, 'rgba(0,0,0,.85)');
-    fadeY.addColorStop(.19, 'rgba(0,0,0,1)');
-    fadeY.addColorStop(.70, 'rgba(0,0,0,1)');
-    fadeY.addColorStop(.92, 'rgba(0,0,0,.37)');
+    fadeY.addColorStop(.035, 'rgba(0,0,0,.82)');
+    fadeY.addColorStop(.105, 'rgba(0,0,0,1)');
+    fadeY.addColorStop(.835, 'rgba(0,0,0,1)');
+    fadeY.addColorStop(.955, 'rgba(0,0,0,.55)');
     fadeY.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = fadeY;
     ctx.fillRect(0,0,width,height);
@@ -95,6 +99,43 @@
     person._portraitCache = canvas;
     return canvas;
   }
+
+  // Native WebGPU per-row animation. Called from the original renderer's
+  // frame loop; only ten scalar uniforms are updated. No huge texture reuploads.
+  var lastActive = false;
+  var startTimes = Array(5).fill(-1);
+  function eased(t) {
+    t = Math.max(0, Math.min(1, t));
+    return 1 - Math.pow(1 - t, 3);
+  }
+  window.__BYZ_INTRO_TEAM_TICK_V56__ = function (scrollY, viewportHeight, active, shader) {
+    if (!shader || !shader.images || !shader.texts) return;
+    if (!active) {
+      shader.enabled.value = 0;
+      lastActive = false;
+      return;
+    }
+    if (!lastActive) {
+      startTimes.fill(-1);
+      shader.images.forEach(function (u) { u.value = 0; });
+      shader.texts.forEach(function (u) { u.value = 0; });
+      lastActive = true;
+    }
+    shader.enabled.value = 1;
+    var now = performance.now();
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (var i = 0; i < 5; i++) {
+      var rowY = 437 + i * 910;
+      if (startTimes[i] < 0 && rowY <= scrollY + viewportHeight * .88) startTimes[i] = now;
+      if (startTimes[i] < 0) continue;
+      if (reduced) {
+        shader.images[i].value = shader.texts[i].value = 1;
+        continue;
+      }
+      shader.images[i].value = eased((now - startTimes[i]) / 760);
+      shader.texts[i].value = eased((now - startTimes[i] - 140) / 820);
+    }
+  };
 
   // The host will execute these draw commands while generating its original
   // scrolling canvas texture, so images and text inherit native scroll/bend.
@@ -114,17 +155,17 @@
       ctx.restore();
     });
     var rowStart = sectionStart + 96;
-    var rowHeight = 628;
+    var rowHeight = 910;
     people.forEach(function (person, idx) {
       var y = rowStart + idx * rowHeight;
       var photoOnLeft = idx % 2 === 0;
-      var photoX = photoOnLeft ? 304 : 1190;
+      var photoX = photoOnLeft ? 277 : 1160;
       var textX = photoOnLeft ? 1125 : 355;
       var textWidth = 725;
       commands.push(function (ctx) {
         ctx.save();
         var image = preparedPortrait(person);
-        if (image) ctx.drawImage(image, photoX, y, 720, 610);
+        if (image) ctx.drawImage(image, photoX, y, 760, 858);
         ctx.fillStyle = '#86ceec';
         ctx.font = '700 18px Manrope, sans-serif';
         ctx.textAlign = 'left';
@@ -148,6 +189,6 @@
       });
     });
     // The pre-existing Introduction content begins only after the entire team.
-    return rowStart + rowHeight * people.length + 25;
+    return rowStart + rowHeight * people.length + 60;
   };
 })();

@@ -1,0 +1,27 @@
+{
+  "version": "V56",
+  "type": "update-only",
+  "base": "V55/V54",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 155210,
+      "sha256": "6ef9d0cf033bbb7f42e7f02de0b18ede19ded6d3689f495960bfe6efc42eb8ef"
+    },
+    {
+      "path": "intro-team/team-v54.js",
+      "bytes": 8615,
+      "sha256": "20ca8269c1a6faf62d9f6772ec926475dc34df54ef37d0f0ad1779b414bd4c2e"
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "bytes": 283171,
+      "sha256": "b4a7f25462510bc04a1e223192c21078482eb446b57e642acff5f88ccfb9d821"
+    }
+  ],
+  "changes": [
+    "uncropped contain-fit portraits",
+    "native row-based GPU pop-up animation",
+    "staggered text entrance"
+  ]
+}
