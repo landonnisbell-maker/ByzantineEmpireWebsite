@@ -1,0 +1,25 @@
+{
+  "version": "V55",
+  "base": "V54",
+  "files": {
+    "404.html": {
+      "sha256": "5edaaa6ccc26b305c14e19058e38a270b0e48c8c190936f04e7c49b27ed76f77",
+      "bytes": 155595
+    },
+    ".nojekyll": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  },
+  "features": [
+    "full SPA 404 fallback",
+    "canonical URL normalization before hydration",
+    "same loader as index.html"
+  ],
+  "unmodified": [
+    "index.html",
+    "WebGPU bundles",
+    "intro-team assets",
+    "all other files"
+  ]
+}
