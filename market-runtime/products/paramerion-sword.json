@@ -5,10 +5,12 @@
   "route": "/products/paramerion-sword",
   "template": "palia",
   "heroTitle": "Paramerion Sword",
-  "imagePlaceholder": "No Image Supplied",
+  "imagePlaceholder": "/ByzantineEmpireWebsite/market-runtime/product-images/paramerion-sword.webp",
   "editorial": {
     "overview": null,
     "details": null,
-    "images": []
+    "images": [
+      "/ByzantineEmpireWebsite/market-runtime/product-images/paramerion-sword.webp"
+    ]
   }
 }

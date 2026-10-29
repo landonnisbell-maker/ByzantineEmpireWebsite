@@ -1,0 +1,57 @@
+{
+  "version": "V62",
+  "name": "BYZANTINE-V62-HISTORICAL-CONNECTION-INTRO-SWORD-UPDATE-ONLY",
+  "file_count": 10,
+  "files": [
+    {
+      "path": "README-V62.txt",
+      "size": 866,
+      "sha256": "7fec1e3269a0e0ffbe01168ba0f539f07b01f0c9f2b4ef33b300019f865dba23"
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "size": 285709,
+      "sha256": "a1481ca7bd0f4968a30d394c577cb702abe4ab93caebdd6525983fd0304593b7"
+    },
+    {
+      "path": "byzantine-historical-connection-content.js",
+      "size": 6618,
+      "sha256": "0c75160e3799d587534337cbd29d2af9bf5de35345b013a84772afbb90718ba7"
+    },
+    {
+      "path": "index.html",
+      "size": 155224,
+      "sha256": "56917c15539f9a8a82c5e261db256be29e0ac218f25f869a306d59409ac4af2e"
+    },
+    {
+      "path": "intro-team/team-v54.js",
+      "size": 14644,
+      "sha256": "ffce2d5ede6e335c86fa2ec155b9f0b60ebce75d3a151bb964641b5ae4269f29"
+    },
+    {
+      "path": "market-runtime/gallery/index.html",
+      "size": 94577,
+      "sha256": "921b81a75dbdbab7b36b7faca217e5ff8e235f66583bcff942f36109ca58360f"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v38.js",
+      "size": 28354,
+      "sha256": "1124e55fc1f9ecf078e948688c808c5ce360f6a50b993da61317e91731fbc268"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/index.html",
+      "size": 59245,
+      "sha256": "5683b954b283142f57d2a14cd745fc7d0477b504dd819273d6fa792bf7af9293"
+    },
+    {
+      "path": "market-runtime/product-images/paramerion-sword.webp",
+      "size": 391042,
+      "sha256": "d4976daf976a49a6e5dbe8f7e09bef2ed50d13b9f83892b3fe276161c0396202"
+    },
+    {
+      "path": "market-runtime/products/paramerion-sword.json",
+      "size": 445,
+      "sha256": "090b039af3fd1efc7dbb0893120f9ed5bbd96df15d1283c66153b09e98a9a5dc"
+    }
+  ]
+}

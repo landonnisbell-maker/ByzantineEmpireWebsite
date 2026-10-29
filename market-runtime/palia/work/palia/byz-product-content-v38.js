@@ -9,12 +9,7 @@
  let currentArticle=null;
  let revealObserver=null;
  function makePhotoSlot(number){
-   const figure=document.createElement('figure');
-   figure.className='byz-market-scratch-figure';
-   figure.setAttribute('aria-label','Photograph placeholder '+number);
-   figure.dataset.imageSlot=String(number);
-   figure.innerHTML='<div class="byz-market-scratch-surface"><span class="byz-market-image-placeholder">No Image Supplied</span></div>';
-   return figure;
+   return null;
  }
  function buildArticle(article,item){
    if(revealObserver){revealObserver.disconnect();revealObserver=null;}
@@ -37,7 +32,7 @@
      const hasMore=children.slice(i+1).some(e=>e.tagName==='P'&&!e.querySelector('strong:only-child'));
      // Put illustrations between passages or section boundaries, never in pricing lists.
      if(hasMore && ((nextHeading && paragraphs>=3)||(paragraphs>=5 && !nextHeading))){
-       photos++;reading.appendChild(makePhotoSlot(photos));paragraphs=0;
+       photos++;var slot=makePhotoSlot(photos);if(slot)reading.appendChild(slot);paragraphs=0;
      }
    }
    const purchase=document.createElement('aside');purchase.className='byz-market-purchase';
@@ -70,6 +65,7 @@
    // Cleanup on product change is managed via AbortController in apply().
  }
  const BYZ_PRODUCT_IMAGE={
+   'Paramerion Sword':'/ByzantineEmpireWebsite/market-runtime/product-images/paramerion-sword.webp',
    'Gold Jewelry':'/ByzantineEmpireWebsite/market-runtime/product-images/gold-jewelry.webp',
    'Food Items':'/ByzantineEmpireWebsite/market-runtime/product-images/food-items.webp',
    'Coin Exchange Service':'/ByzantineEmpireWebsite/market-runtime/product-images/coins.webp',

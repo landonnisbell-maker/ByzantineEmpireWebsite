@@ -249,32 +249,7 @@
   }
   window.__BYZ_INTRO_GALLERY_ATLAS_V60__=function(){return galleryAtlas;};
   window.__BYZ_INTRO_GALLERY_TICK_V60__=function(active,shader){
-    if(!shader || !shader.enabled || !shader.texture)return;
-    if(!galleryAtlas || !active){shader.enabled.value=0;return;}
-    if(shader.texture.image!==galleryAtlas){shader.texture.image=galleryAtlas;shader.texture.needsUpdate=true;}
-    shader.enabled.value=1;
-    if(shader.slides)shader.slides.forEach(function(u){u.value=0;});
-    var now=performance.now();
-    if(now-galleryLastRender<33)return; // up to 30 visual frames per second
-    galleryLastRender=now;
-    var ctx=galleryAtlas.getContext('2d');
-    for(var k=0;k<galleries.length;k++){
-      var frames=galleryFrames[k];if(!frames || !frames.length)continue;
-      var count=frames.length;
-      var pos=(now/4400+k*.29)%count;
-      var current=Math.floor(pos),local=pos-current;
-      var move=local<.74?0:(local-.74)/.26;
-      move=Math.min(1,Math.max(0,move));
-      move=move*move*(3-2*move); // smoothstep
-      var row=k*GALLERY_CELL_H;
-      ctx.save();ctx.beginPath();ctx.rect(0,row,GALLERY_CELL_W,GALLERY_CELL_H);ctx.clip();
-      ctx.fillStyle='#071524';ctx.fillRect(0,row,GALLERY_CELL_W,GALLERY_CELL_H);
-      ctx.drawImage(frames[current],-move*GALLERY_CELL_W,row);
-      if(move>0)ctx.drawImage(frames[(current+1)%count],(1-move)*GALLERY_CELL_W,row);
-      ctx.restore();
-    }
-    // This is the crucial difference from V60: actively upload changed pixels.
-    shader.texture.needsUpdate=true;
+    if(shader && shader.enabled) shader.enabled.value=0;
   };
 
   function drawCarouselFrame(ctx,gallery,x,y,w,h){
@@ -378,15 +353,45 @@
       ctx.restore();
     });
 
-    var galleryStart = gallerySectionY + 170;
-    var gallerySpacing = 690;
+    var galleryStart = gallerySectionY + 148;
+    var cardW = 330;
+    var cardH = 215;
+    var cardGap = 28;
+    var sectionGap = 320;
+
+    function drawStaticGalleryCard(ctx, img, x, y, w, h) {
+      ctx.save();
+      roundedPath(ctx, x, y, w, h, 22);
+      ctx.fillStyle = 'rgba(7,20,36,.88)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(189,235,255,.24)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.clip();
+      drawGalleryImage(ctx, img, x, y, w, h);
+      ctx.restore();
+    }
+
     galleries.forEach(function (gallery, idx) {
-      var gy = galleryStart + idx * gallerySpacing;
+      var gy = galleryStart + idx * sectionGap;
       commands.push(function (ctx) {
-        drawCarouselFrame(ctx, gallery, 530, gy + 48, 1134, 600);
+        ctx.save();
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#f3fbff';
+        ctx.font = '700 42px "League Spartan", system-ui, sans-serif';
+        ctx.fillText(gallery.title, 336, gy + 24);
+        ctx.fillStyle = 'rgba(216,241,252,.88)';
+        ctx.font = '500 18px Manrope, sans-serif';
+        ctx.fillText(gallery.subtitle, 336, gy + 58);
+        var imgs = gallery._images.filter(Boolean);
+        imgs.forEach(function (img, i) {
+          var x = 336 + i * (cardW + cardGap);
+          drawStaticGalleryCard(ctx, img, x, gy + 88, cardW, cardH);
+        });
+        ctx.restore();
       });
     });
 
-    return galleryStart + gallerySpacing * galleries.length + 10;
+    return galleryStart + sectionGap * galleries.length - 32;
   };
 })();
