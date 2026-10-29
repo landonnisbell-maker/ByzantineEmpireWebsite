@@ -129,8 +129,10 @@ viewport.addEventListener('keydown',ev=>{
  });
 window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&frame.dataset.expanded==='true')toggleExpand(false)});
 window.addEventListener('resize',()=>{if(frame.dataset.active==='true')draw()});
-// V45 — Only show the panel over the native WebGPU About Us image slot.
-// No additional floating map; this follows the original placeholder when scrolling.
+// V49: the interactive HTML atlas only exists visually while the native
+// interior is fully open. A persistent WebGPU mesh (same material as the
+// text) carries the map through crystal entry, bend and exit. This avoids
+// both the entry-frame flash and the rigid rectangular exit overlay.
 let wasActive=false,prevRect='';
 function setMapActive(active){
   if(active){
@@ -147,7 +149,8 @@ function setMapActive(active){
 }
 function layout(){
   const r=window.__BYZ_ABOUT_MAP_SLOT_V45__;
-  const valid=!!r&&r.width>60&&r.height>40&&
+  const valid=!!r&&r.phase==='interior'&&Number(r.opacity)>=0.975&&
+    r.width>60&&r.height>40&&
     r.left<window.innerWidth&&r.top<window.innerHeight&&
     r.left+r.width>0&&r.top+r.height>0;
   if(valid!==wasActive){
@@ -156,9 +159,10 @@ function layout(){
     else {setMapActive(false);prevRect=''}
   }
   if(valid){
-    // Follow the original About Us WebGPU content fade uniform, including
-    // entering and exiting. Avoid independent DOM animation timing.
-    frame.style.opacity=String(clamp(Number(r.opacity??1),0,1));
+    // The widget is only activated once the native reveal is near-complete.
+    // It stays fully opaque while interactive. The native GPU map below it
+    // remains bendable and handles both transitions without a split frame.
+    frame.style.opacity='1';
     const vals=[r.left,r.top,r.width,r.height].map(n=>Math.round(n*2)/2);
     const key=vals.join(',');
     // Make the original SVG's 296.93:181.17 aspect fit the media slot *without*

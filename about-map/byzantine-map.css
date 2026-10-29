@@ -224,3 +224,14 @@ body.byz-map-modal-open #byzantine-fixed-crystal-close{opacity:0!important;point
 html.byz-map-modal-open,body.byz-map-modal-open{overflow:hidden!important;overscroll-behavior:none!important}
 #byz-map-screen-veil{z-index:2147479998!important}
 #byz-history-map[data-expanded="true"]{z-index:2147480001!important}
+
+/* V49 — UI map takes over ONLY after native bend/dissolve settles. */
+#byz-history-map[data-active="true"]:not([data-expanded="true"]){
+  opacity:1!important;
+  animation:none!important;
+}
+#byz-history-map[data-active="false"]:not([data-expanded="true"]){
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}

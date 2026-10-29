@@ -1,0 +1,19 @@
+{
+  "version": "49.0",
+  "baseline": "V48",
+  "type": "UPDATE ONLY \u2014 overwrite existing files",
+  "strategy": "Use native WebGPU hero mesh, shared bend/reveal shader on entry and exit; HTML map visible only once interior is open",
+  "files": [
+    "index.html",
+    "about-map/byzantine-map.css",
+    "about-map/byzantine-map.js",
+    "about-map/byzantine-map-native-v49.webp",
+    "_next/static/chunks/1502ibkr~cu.4.js"
+  ],
+  "changes": [
+    "Map now bends and grain-dissolves with the native text during crystal entry and exit",
+    "Immediate entry flash removed by gating DOM widget to interior-ready phase and resetting GPU reveal before enabling",
+    "Interactive map retains pan, zoom, expand while the page is fully open",
+    "No changes to Market or other crystals"
+  ]
+}
