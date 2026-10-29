@@ -8,8 +8,8 @@
   const page = {
     title: 'Historical Connection',
     overline: 'Page 4',
-    year: 'Context, Society & Symbolism',
-    tagline: 'How the market, its goods, and its design connect to the Byzantine Empire',
+    year: '',
+    tagline: 'THE HISTORY BEHIND THE BAZAAR',
     pageBackground: 'orange-black',
     heroMedia: null,
     gallery: [],

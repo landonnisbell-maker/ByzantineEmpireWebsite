@@ -110,3 +110,46 @@ html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready.byz-revealed {
  object-position:center!important;z-index:5!important;opacity:1!important;
  pointer-events:none!important;filter:none!important;
 }
+
+/* V64: image remains in the normal-size native hero box, above rather than overlapping the title. */
+html.byz-market-copy-ready .work-detail .hero__media {
+  position: relative!important;
+  display: block!important;
+  height: clamp(260px, 34vw, 510px)!important;
+  min-height: 0!important;
+  max-height: min(62vh, 510px)!important;
+  width: 100%!important;
+  overflow: hidden!important;
+  margin: 0!important;
+  isolation: isolate!important;
+}
+html.byz-market-copy-ready .work-detail .hero__media .byz-product-hero-photo-v61 {
+  inset: 0!important;
+  display:block!important;
+  width: 100%!important;
+  height: 100%!important;
+  object-fit:cover!important;
+  object-position:center 50%!important;
+  z-index: 1!important;
+  max-width:none!important;
+  max-height:none!important;
+}
+html.byz-market-copy-ready .work-detail .hero__intro.grid {
+  margin: 0!important;
+  padding: clamp(22px, 3vw, 46px) 5% clamp(22px, 3vw, 46px)!important;
+  position: relative!important;
+  z-index: 6!important;
+  min-height: 0!important;
+  transform: none!important;
+  clear: both!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading {
+  transform:none!important;
+  margin:0 auto!important;
+}
+html.byz-market-copy-ready .work-detail .hero__title{margin:0!important;line-height:1.1!important}
+html.byz-market-copy-ready .work-detail .byz-market-product-copy{position:relative!important;z-index:1!important}
+@media(max-width:800px){
+ html.byz-market-copy-ready .work-detail .hero__media { height:min(45vh,360px)!important; max-height:360px!important; }
+ html.byz-market-copy-ready .work-detail .hero__intro.grid{ padding:24px 6% 30px!important; }
+}

@@ -76,6 +76,7 @@
     roleTitles: [],
     roleDescription: format(sections.slice(2, 6)),
     stack: [],
+    gallery: [], // No cycling placeholder/gallery after the historical atlas
     challenges: format(sections.slice(6))
   };
 })();
