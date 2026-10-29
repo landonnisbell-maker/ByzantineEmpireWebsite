@@ -72,42 +72,24 @@
    'Silk Textiles':'/ByzantineEmpireWebsite/market-runtime/product-images/silk-textiles.webp'
  };
  function syncHeroMedia(page){
-   const hero=page.querySelector('.hero__media');if(!hero)return;
-   const src=BYZ_PRODUCT_IMAGE[activeProduct];
-   let image=hero.querySelector('.byz-product-hero-photo-v61');
-   let backdrop=hero.querySelector('.byz-product-hero-backdrop-v65');
-   if(!src){if(image)image.remove();if(backdrop)backdrop.remove();return;}
-   if(!backdrop){
-     backdrop=document.createElement('img');
-     backdrop.className='byz-product-hero-backdrop-v65';
-     backdrop.alt='';backdrop.setAttribute('aria-hidden','true');
-     backdrop.decoding='async';backdrop.loading='eager';
-     hero.appendChild(backdrop);
+   // V68: The original Palia WebGL banner owns the image and its feathering.
+   // Ensure old V61-V67 DOM-photo elements never cover the GPU surface.
+   page.querySelectorAll('.byz-product-hero-photo-v61,.byz-product-hero-backdrop-v65,.byz-hero-stage-v66').forEach(function(el){el.remove();});
+   const key=activeProduct==='Coins'?'Coin Exchange Service':activeProduct;
+   const slug=({
+     'Paramerion Sword':'paramerion-sword',
+     'Gold Jewelry':'gold-jewelry',
+     'Food Items':'food-items',
+     'Coin Exchange Service':'coins',
+     'Silk Textiles':'silk-textiles'
+   })[key];
+   if(!slug)return;
+   const mobile=window.innerWidth<=720;
+   const url='/ByzantineEmpireWebsite/market-runtime/product-images/banners/'+slug+'-'+(mobile?'mobile':'desktop')+'.webp';
+   if(window.__BYZ_NATIVE_PALIA_HERO_V68__!==url){
+     window.__BYZ_NATIVE_PALIA_HERO_V68__=url;
+     window.dispatchEvent(new Event('byz:palia:hero-source-v68'));
    }
-   if(!image){
-     image=document.createElement('img');image.className='byz-product-hero-photo-v61';
-     image.alt='Illustration of '+activeProduct;image.decoding='async';
-     image.loading='eager';hero.appendChild(image);
-   }
-   if(backdrop.getAttribute('src')!==src)backdrop.src=src;
-   function sizePortraitToHero(){
-     if(!image.isConnected||!image.naturalWidth||!image.naturalHeight)return;
-     const bounds=hero.getBoundingClientRect();
-     if(bounds.width<=0||bounds.height<=0)return;
-     const scale=Math.min(bounds.width/image.naturalWidth,bounds.height/image.naturalHeight);
-     image.style.setProperty('width',Math.max(1,Math.round(scale*image.naturalWidth))+'px','important');
-     image.style.setProperty('height',Math.max(1,Math.round(scale*image.naturalHeight))+'px','important');
-   }
-   if(!hero._byzHeroResizeV65 && 'ResizeObserver' in window){
-     hero._byzHeroResizeV65=new ResizeObserver(function(){sizePortraitToHero();});
-     hero._byzHeroResizeV65.observe(hero);
-   }
-   if(!image._byzHeroFittingV65){
-     image._byzHeroFittingV65=true;
-     image.addEventListener('load',sizePortraitToHero);
-   }
-   if(image.getAttribute('src')!==src){image.src=src;image.alt=activeProduct;}
-   if(image.complete)sizePortraitToHero();
  }
  function apply(){
    const item=PRODUCTS[activeProduct];if(!item)return;
@@ -144,6 +126,7 @@
    activeProduct=name;window.__BYZ_ACTIVE_PRODUCT_TITLE__=name;schedule();
  };
  function install(){
+   window.addEventListener('resize',schedule,{passive:true});
    schedule();const host=document.getElementById('__nuxt')||document.body;
    if(host)new MutationObserver(schedule).observe(host,{subtree:true,childList:true});
  }
