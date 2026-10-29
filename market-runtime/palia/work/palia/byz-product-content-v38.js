@@ -71,55 +71,43 @@
    'Coin Exchange Service':'/ByzantineEmpireWebsite/market-runtime/product-images/coins.webp',
    'Silk Textiles':'/ByzantineEmpireWebsite/market-runtime/product-images/silk-textiles.webp'
  };
- /* V66: full-size product media lives in an independent, flow-positioned stage.
-    It is not constrained by Palia's original 42rem WebGL hero crop. */
  function syncHeroMedia(page){
+   const hero=page.querySelector('.hero__media');if(!hero)return;
    const src=BYZ_PRODUCT_IMAGE[activeProduct];
-   const intro=page.querySelector('.hero__intro');
-   if(!intro)return;
-   const original=page.querySelector('.hero__media');
-   let stage=page.querySelector('.byz-v66-product-stage');
-   if(!src){if(stage)stage.remove();return;}
-   if(!stage){
-     stage=document.createElement('div');
-     stage.className='byz-v66-product-stage';
-     stage.setAttribute('aria-label','Full product photograph');
-     const backdrop=document.createElement('img');
-     backdrop.className='byz-v66-stage-blur';
+   let image=hero.querySelector('.byz-product-hero-photo-v61');
+   let backdrop=hero.querySelector('.byz-product-hero-backdrop-v65');
+   if(!src){if(image)image.remove();if(backdrop)backdrop.remove();return;}
+   if(!backdrop){
+     backdrop=document.createElement('img');
+     backdrop.className='byz-product-hero-backdrop-v65';
      backdrop.alt='';backdrop.setAttribute('aria-hidden','true');
-     const originalImage=document.createElement('img');
-     originalImage.className='byz-v66-stage-original';
-     originalImage.decoding='async';originalImage.loading='eager';
-     stage.append(backdrop,originalImage);
-     // Keep media in document flow, before the product title, at every viewport.
-     intro.insertAdjacentElement('beforebegin',stage);
+     backdrop.decoding='async';backdrop.loading='eager';
+     hero.appendChild(backdrop);
    }
-   const back=stage.querySelector('.byz-v66-stage-blur');
-   const front=stage.querySelector('.byz-v66-stage-original');
-   if(back.getAttribute('src')!==src)back.src=src;
-   if(front.getAttribute('src')!==src){front.src=src;front.alt=activeProduct;}
-   stage.dataset.product=activeProduct;
-   // Feather the real image bounds, not the wider hero box. This prevents
-   // a visible rectangular seam when the source is portrait or nearly square.
-   function fitImage(){
-     if(!front.isConnected || !front.naturalWidth || !front.naturalHeight)return;
-     const r=stage.getBoundingClientRect();
-     if(r.width<10||r.height<10)return;
-     const scale=Math.min(r.width/front.naturalWidth,r.height/front.naturalHeight)*.97;
-     front.style.setProperty('width',Math.round(scale*front.naturalWidth)+'px','important');
-     front.style.setProperty('height',Math.round(scale*front.naturalHeight)+'px','important');
+   if(!image){
+     image=document.createElement('img');image.className='byz-product-hero-photo-v61';
+     image.alt='Illustration of '+activeProduct;image.decoding='async';
+     image.loading='eager';hero.appendChild(image);
    }
-   if(!front._byzV66FitInstalled){
-     front._byzV66FitInstalled=true;
-     front.addEventListener('load',fitImage);
-     if('ResizeObserver' in window){
-       const observer=new ResizeObserver(fitImage);
-       observer.observe(stage);
-       stage._byzV66ResizeObserver=observer;
-     }
+   if(backdrop.getAttribute('src')!==src)backdrop.src=src;
+   function sizePortraitToHero(){
+     if(!image.isConnected||!image.naturalWidth||!image.naturalHeight)return;
+     const bounds=hero.getBoundingClientRect();
+     if(bounds.width<=0||bounds.height<=0)return;
+     const scale=Math.min(bounds.width/image.naturalWidth,bounds.height/image.naturalHeight);
+     image.style.setProperty('width',Math.max(1,Math.round(scale*image.naturalWidth))+'px','important');
+     image.style.setProperty('height',Math.max(1,Math.round(scale*image.naturalHeight))+'px','important');
    }
-   if(front.complete)fitImage();
-   if(original)original.setAttribute('aria-hidden','true');
+   if(!hero._byzHeroResizeV65 && 'ResizeObserver' in window){
+     hero._byzHeroResizeV65=new ResizeObserver(function(){sizePortraitToHero();});
+     hero._byzHeroResizeV65.observe(hero);
+   }
+   if(!image._byzHeroFittingV65){
+     image._byzHeroFittingV65=true;
+     image.addEventListener('load',sizePortraitToHero);
+   }
+   if(image.getAttribute('src')!==src){image.src=src;image.alt=activeProduct;}
+   if(image.complete)sizePortraitToHero();
  }
  function apply(){
    const item=PRODUCTS[activeProduct];if(!item)return;
@@ -143,9 +131,10 @@
      buildArticle(article,item);
    }
    document.documentElement.classList.add('byz-market-copy-ready');
-   // The parent does not expose this page until the correct product is mounted.
-   if(window.parent!==window && window.__BYZ_V66_REPORTED__!==activeProduct){
-     window.__BYZ_V66_REPORTED__=activeProduct;
+   // Notify the persistent market shell only after the actual product copy exists.
+   // This keeps V66's corrected coin-selection handshake without altering the Palia DOM.
+   if(window.parent!==window && window.__BYZ_V67_APPLIED_PRODUCT__!==activeProduct){
+     window.__BYZ_V67_APPLIED_PRODUCT__=activeProduct;
      window.parent.postMessage({type:'byz:palia:v66-applied',title:activeProduct},location.origin);
    }
  }

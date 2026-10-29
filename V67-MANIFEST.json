@@ -1,0 +1,73 @@
+{
+  "version": "V67",
+  "type": "update-only",
+  "based_on": "ByzantineEmpireWebsite-main (2).zip + V65 hero rollback",
+  "file_count": 13,
+  "files": [
+    {
+      "file": "README-V67.txt",
+      "bytes": 1180,
+      "sha256": "7fac4ba7beaa116232d148649d5682f1695304b062915298ee18644c0b31beba"
+    },
+    {
+      "file": "index.html",
+      "bytes": 155231,
+      "sha256": "d6ee5bda7b6f9a079574cc7fd9d8ee213370c230c65897d026e2e283b72f2ce8"
+    },
+    {
+      "file": "market/index.html",
+      "bytes": 16279,
+      "sha256": "c47258e59eeeb17b62ac5954eb595e56f2462afedfbcfa6fad261226454d8ce3"
+    },
+    {
+      "file": "market-runtime/index.html",
+      "bytes": 16279,
+      "sha256": "c47258e59eeeb17b62ac5954eb595e56f2462afedfbcfa6fad261226454d8ce3"
+    },
+    {
+      "file": "market-runtime/palia/work/palia/byz-hero-edge-mask-v65.png",
+      "bytes": 199271,
+      "sha256": "19a6270784015600a804ae8ac1ed7b8e125d69f2462bb217c5d24bfb9fdda92b"
+    },
+    {
+      "file": "market-runtime/palia/work/palia/byz-product-content-v38.css",
+      "bytes": 11333,
+      "sha256": "2620e6fff198c3732e226d10be183cbbdc3727b93ef86c339337680ef1194c29"
+    },
+    {
+      "file": "market-runtime/palia/work/palia/byz-product-content-v38.js",
+      "bytes": 30101,
+      "sha256": "17085c3bc1aa0a2f371fcd87d28266cb4714846da7f00763d9f54432fc0a5b85"
+    },
+    {
+      "file": "market-runtime/palia/work/palia/index.html",
+      "bytes": 60320,
+      "sha256": "3e52c2423679b7722f0e8cb0e4f0c03b1229e79a28616552957e1dace21abf45"
+    },
+    {
+      "file": "market-runtime/products/coins/index.html",
+      "bytes": 16279,
+      "sha256": "c47258e59eeeb17b62ac5954eb595e56f2462afedfbcfa6fad261226454d8ce3"
+    },
+    {
+      "file": "market-runtime/products/food-items/index.html",
+      "bytes": 16279,
+      "sha256": "c47258e59eeeb17b62ac5954eb595e56f2462afedfbcfa6fad261226454d8ce3"
+    },
+    {
+      "file": "market-runtime/products/gold-jewelry/index.html",
+      "bytes": 16279,
+      "sha256": "c47258e59eeeb17b62ac5954eb595e56f2462afedfbcfa6fad261226454d8ce3"
+    },
+    {
+      "file": "market-runtime/products/paramerion-sword/index.html",
+      "bytes": 16279,
+      "sha256": "c47258e59eeeb17b62ac5954eb595e56f2462afedfbcfa6fad261226454d8ce3"
+    },
+    {
+      "file": "market-runtime/products/silk-textiles/index.html",
+      "bytes": 16279,
+      "sha256": "c47258e59eeeb17b62ac5954eb595e56f2462afedfbcfa6fad261226454d8ce3"
+    }
+  ]
+}
