@@ -1,0 +1,40 @@
+{
+  "version": 71,
+  "files": [
+    {
+      "path": "README-V71.txt",
+      "bytes": 1108,
+      "sha256": "1508c913accff37a08f8173791086b23d4f544331d24cb5a9bfe587f1576295a"
+    },
+    {
+      "path": "index.html",
+      "bytes": 155478,
+      "sha256": "27d6b07acf999ba458d282fb38f9d83a54965157517d11c4f307f4fcef9fe223"
+    },
+    {
+      "path": "pp-loader/assets/pazari-color-v71.webp",
+      "bytes": 171028,
+      "sha256": "137b8fd0a0aef0dcc6b525ad60e79378b3e449ec62b9ef5b1fbfa43101230c93"
+    },
+    {
+      "path": "pp-loader/branding-v71.css",
+      "bytes": 5791,
+      "sha256": "d5ab1bc2cfcc2ef4017a46aaccb256533db46dde6a986fb97c5595db6062e72a"
+    },
+    {
+      "path": "pp-loader/branding-v71.js",
+      "bytes": 2753,
+      "sha256": "0027cfe40cade746342e8dc8ae3fc99858272f8df1c43b200bc99f0e5e855397"
+    },
+    {
+      "path": "pp-loader/index.html",
+      "bytes": 18470,
+      "sha256": "027c9c5d62170b1fcb0d7e6a816caca3f55f2ac676cd75f3ba1d49eedb0c6608"
+    },
+    {
+      "path": "pp-loader/market-preload-v71.js",
+      "bytes": 2879,
+      "sha256": "09cc8f143bccb0a796322a994260984eff85934fb3f302cf691c6605215dfca7"
+    }
+  ]
+}

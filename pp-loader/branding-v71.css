@@ -1,0 +1,37 @@
+/* V71: authentic bazaar identity on BOTH the native page loader and the PP integrated loader.
+   All changes sit above original loader CSS and do not interfere with its loading animations. */
+@font-face{font-family:ByzIvar;src:url('/ByzantineEmpireWebsite/market-runtime/palia/fonts/IvarHeadline-Regular.woff2') format('woff2');font-style:normal;font-display:swap}
+.loader-module__y9w63G__loaderContainer .loader-module__y9w63G__header{display:flex!important;flex-direction:column!important;gap:0!important;max-width:min(72vw,1000px)!important;z-index:12!important;pointer-events:none!important}
+.loader-module__y9w63G__header > .loader-module__y9w63G__brandName,
+.loader-module__y9w63G__header > .loader-module__y9w63G__brandRole{display:none!important}
+.loader-module__y9w63G__header::after{content:none!important;display:none!important}
+.byz-v71-brand{display:flex;align-items:center;gap:clamp(16px,2.4vw,48px);width:max-content;max-width:85vw;color:#f5e9d6;line-height:1}
+.byz-v71-brand-text{display:flex;flex-direction:column;gap:clamp(5px,.8vw,18px);flex:0 1 auto}
+.byz-v71-brand-name{font-family:ByzIvar,Georgia,'Times New Roman',serif!important;font-weight:400!important;font-size:clamp(33px,4.25vw,84px)!important;line-height:.97!important;letter-spacing:-.045em!important;text-transform:none!important;white-space:nowrap;color:#f5e9d7;text-shadow:0 4px 36px #0201048c}
+.byz-v71-brand-meaning{font-family:PP-Manrope,Manrope,Arial,sans-serif!important;font-weight:650!important;letter-spacing:.27em!important;text-transform:uppercase!important;font-size:clamp(9px,.74vw,14px)!important;line-height:1.55!important;color:#d5b783!important}
+.byz-v71-brand-logo{display:block;width:clamp(65px,7.8vw,165px)!important;height:clamp(82px,9.6vw,194px)!important;object-fit:contain!important;filter:drop-shadow(0 0 22px rgba(250,112,86,.14));flex-shrink:0}
+/* Retain the original ticket frame; replace only its outdated interior graphics/copy. */
+.loader-module__y9w63G__ticketCard{isolation:isolate;}
+.loader-module__y9w63G__ticketCard > :not(.byz-v71-ticket){visibility:hidden!important}
+.byz-v71-ticket{position:absolute!important;inset:0!important;z-index:10!important;display:block!important;color:#efe1c9!important;background:#100e12!important;font-family:PP-Manrope,Manrope,Arial,sans-serif!important;pointer-events:none!important;overflow:hidden!important}
+.byz-v71-ticket:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(198,154,92,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(198,154,92,.07) 1px,transparent 1px);background-size:calc(14 * var(--ticket-u)) calc(14 * var(--ticket-u));mask-image:linear-gradient(to bottom,#000,transparent 55%);pointer-events:none}
+.byz-v71-ticket-label{position:absolute;left:calc(15 * var(--ticket-u));top:calc(13 * var(--ticket-u));font-size:calc(8.2 * var(--ticket-u));font-weight:800;letter-spacing:.27em;color:#d8b778}
+.byz-v71-ticket-year{position:absolute;right:calc(16 * var(--ticket-u));top:calc(13 * var(--ticket-u));font-size:calc(7.4 * var(--ticket-u));font-weight:700;letter-spacing:.15em;color:#c29d68}
+.byz-v71-ticket-arch{position:absolute;top:calc(33 * var(--ticket-u));left:50%;transform:translateX(-50%);height:calc(143 * var(--ticket-u));width:calc(128 * var(--ticket-u));object-fit:contain;filter:sepia(.45) saturate(.45) brightness(1.1) drop-shadow(0 0 8px #c398293d);opacity:.8}
+.byz-v71-ticket-topline{position:absolute;top:calc(183 * var(--ticket-u));left:calc(17 * var(--ticket-u));right:calc(17 * var(--ticket-u));border-top:1px solid #bc98675e}
+.byz-v71-ticket-head{position:absolute;left:calc(17 * var(--ticket-u));top:calc(196 * var(--ticket-u));font-family:ByzIvar,Georgia,serif;font-size:calc(21 * var(--ticket-u));letter-spacing:-.04em;color:#f1e2c6}
+.byz-v71-ticket-subhead{position:absolute;left:calc(17 * var(--ticket-u));top:calc(225 * var(--ticket-u));font-size:calc(8 * var(--ticket-u));text-transform:uppercase;letter-spacing:.13em;color:#c09a6f}
+.byz-v71-ticket-items{list-style:none!important;position:absolute;top:calc(242 * var(--ticket-u));left:calc(16 * var(--ticket-u));right:calc(16 * var(--ticket-u));padding:0!important;margin:0!important;display:flex!important;flex-direction:column!important;gap:calc(5 * var(--ticket-u))!important}
+.byz-v71-ticket-items li{display:flex;align-items:center;gap:calc(7 * var(--ticket-u));font-size:calc(9.1 * var(--ticket-u));line-height:calc(14 * var(--ticket-u));letter-spacing:.03em;color:#e5d1b3;white-space:nowrap}
+.byz-v71-ticket-items li span{color:#c79e60;font-variant-numeric:tabular-nums;font-size:calc(7.5 * var(--ticket-u));letter-spacing:.06em}
+.byz-v71-ticket-footer{position:absolute;left:calc(17 * var(--ticket-u));right:calc(17 * var(--ticket-u));bottom:calc(10 * var(--ticket-u));border-top:1px solid #c1a07262;padding-top:calc(4 * var(--ticket-u));display:flex;align-items:center;justify-content:space-between}
+.byz-v71-ticket-footer b{color:#c4a574;letter-spacing:.11em;font-weight:700;font-size:calc(7.6 * var(--ticket-u))}
+.byz-v71-ticket-logo{width:calc(26 * var(--ticket-u));height:calc(34 * var(--ticket-u));object-fit:contain}
+/* Portrait layout doesn't leave room for the unusually wide typography; stay balanced. */
+@media(orientation:portrait){
+ .byz-v71-brand{gap:clamp(8px,2vw,18px);max-width:90vw}
+ .byz-v71-brand-name{font-size:clamp(24px,5.1vw,47px)!important}
+ .byz-v71-brand-logo{width:clamp(45px,10vw,90px)!important;height:clamp(56px,12vw,120px)!important}
+ .byz-v71-brand-meaning{font-size:clamp(7px,1.4vw,11px)!important;letter-spacing:.15em!important}
+}
+@media(max-width:620px){.byz-v71-brand-name{font-size:clamp(20px,5.4vw,35px)!important}.byz-v71-brand-logo{height:54px!important;width:44px!important}.byz-v71-brand-meaning{font-size:8px!important;letter-spacing:.08em!important}}
