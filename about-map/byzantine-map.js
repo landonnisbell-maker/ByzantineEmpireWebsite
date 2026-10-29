@@ -14,8 +14,8 @@ frame.innerHTML=`<div class="hm-shade" data-close="1" aria-hidden="true"></div>
  <div><span class="hm-eyebrow">HISTORICAL ATLAS · EASTERN ROMAN EMPIRE</span><h2 class="hm-heading">The Byzantine Empire</h2></div>
  <div class="hm-tools"><button class="hm-icon" data-zoom="out" aria-label="Zoom out" title="Zoom out">−</button><button class="hm-icon" data-zoom="in" aria-label="Zoom in" title="Zoom in">+</button><button class="hm-icon" data-reset="1" aria-label="Reset map" title="Reset view">↺</button><button class="hm-expand" data-expand="1" aria-label="Expand map">ENLARGE ↗</button></div>
 </div><div class="hm-viewport" role="region" aria-label="Drag map to pan; scroll to zoom; press plus or minus keys to zoom" tabindex="0">
- <div class="hm-stage"><img src="${BASE}Byzantine-Empire.webp" alt="Historical comparison of the Byzantine Empire in about 1020, about 1360, and under Justinian I, 527 to 565" draggable="false"><img class="hm-highlight" src="${BASE}empire-pulse.png" alt="" aria-hidden="true" draggable="false"></div>
-</div><div class="hm-foot"><span>Drag to explore · Scroll to magnify</span><a href="https://www.britannica.com/place/Byzantine-Empire" target="_blank" rel="noopener noreferrer">Map © Encyclopaedia Britannica</a></div></section>`;
+ <div class="hm-stage"><img src="${BASE}Byzantine_Empire_1025.svg" alt="Map of the Byzantine Empire in 1025 CE showing the imperial territory, cities, and the Mediterranean" draggable="false"><img class="hm-highlight" src="${BASE}territory-pulse-1025.png" alt="" aria-hidden="true" draggable="false"></div>
+</div><div class="hm-foot"><span>Drag to explore · Scroll to magnify</span><span>Byzantine Empire · 1025 CE</span></div></section>`;
 const mount=()=>{if(!frame.isConnected)document.body.append(frame)};
 if(document.body)mount();else document.addEventListener('DOMContentLoaded',mount,{once:true});
 const viewport=frame.querySelector('.hm-viewport');
@@ -33,17 +33,41 @@ function capPan(){
 function draw(immediate=false){capPan();stage.style.transition=immediate?'none':'transform 180ms cubic-bezier(.18,.72,.25,1)';stage.style.transform=`translate3d(${panX}px,${panY}px,0) scale(${zoom})`;}
 function setZoom(next){zoom=clamp(next,1,1.55);draw()}
 function reset(){zoom=1;panX=panY=0;draw()}
-function toggleExpand(force){
+// The veil is separate from the fixed map frame, so that the actual WebGPU
+// About Us text and background dissolve together during map expansion.
+const screenVeil=document.createElement('div');
+screenVeil.id='byz-map-screen-veil';
+if(document.body)document.body.append(screenVeil);
+else document.addEventListener('DOMContentLoaded',()=>document.body.append(screenVeil),{once:true});
+let swapBusy=false;
+const nap=(ms)=>new Promise(resolve=>setTimeout(resolve,ms));
+async function toggleExpand(force){
  const want=typeof force==='boolean'?force:frame.dataset.expanded!=='true';
+ if(swapBusy||want===(frame.dataset.expanded==='true'))return;
+ swapBusy=true;
+ frame.dataset.swapping='out';
+ if(want)screenVeil.classList.add('is-on');
+ // First dissolve both the original WebGPU text and the small map.
+ await nap(320);
  frame.dataset.expanded=want?'true':'false';
  expandButton.textContent=want?'CLOSE ×':'ENLARGE ↗';
  expandButton.setAttribute('aria-label',want?'Close expanded map':'Expand map');
- if(!want)reset();else{zoom=1;panX=panY=0;requestAnimationFrame(()=>{draw();viewport.focus({preventScroll:true})})}
+ zoom=1;panX=panY=0;
+ await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+ draw(true);
+ frame.dataset.swapping='in';
+ if(!want)screenVeil.classList.remove('is-on');
+ // Fade in the newly sized map (and reveal the original About Us on closing).
+ await nap(410);
+ delete frame.dataset.swapping;
+ swapBusy=false;
+ if(want)viewport.focus({preventScroll:true});
 }
 frame.querySelectorAll('[data-zoom]').forEach(el=>el.addEventListener('click',()=>setZoom(zoom+(el.dataset.zoom==='in'?.17:-.17))));
 frame.querySelector('[data-reset]').addEventListener('click',reset);
 expandButton.addEventListener('click',()=>toggleExpand());
 frame.querySelector('[data-close]').addEventListener('click',()=>toggleExpand(false));
+screenVeil.addEventListener('click',()=>toggleExpand(false));
 window.addEventListener('wheel',ev=>{
  if(frame.dataset.active!=='true'||frame.dataset.expanded==='true'&& !frame.contains(ev.target))return;
  if(!viewport.contains(ev.target))return;
@@ -78,25 +102,24 @@ window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&frame.dataset.expan
 window.addEventListener('resize',()=>{if(frame.dataset.active==='true')draw()});
 // V45 — Only show the panel over the native WebGPU About Us image slot.
 // No additional floating map; this follows the original placeholder when scrolling.
-let wasActive=false,prevRect='',revealRaf=0,hideTimer=0;
+let wasActive=false,prevRect='';
 function setMapActive(active){
-  clearTimeout(hideTimer);
-  cancelAnimationFrame(revealRaf);
   if(active){
     mount();
     frame.dataset.visible='true';
-    frame.dataset.active='false';
-    // A double frame starts the reveal only after the original crystal's
-    // WebGPU camera/stone entrance has completed and the real media slot exists.
-    revealRaf=requestAnimationFrame(()=>{revealRaf=requestAnimationFrame(()=>{
-      if(wasActive)frame.dataset.active='true';
-    })});
+    frame.dataset.active='true';
   }else{
+    // Do not animate the map away independently from the crystal text.
+    // It persists as long as the original media rectangle exists.
     frame.dataset.active='false';
-    if(frame.dataset.expanded==='true')toggleExpand(false);
-    // Keep the last projected rectangle during the native reverse animation,
-    // allowing the map to dissolve instead of being removed mid-frame.
-    hideTimer=setTimeout(()=>{if(!wasActive)frame.dataset.visible='false'},650);
+    frame.dataset.visible='false';
+    if(frame.dataset.expanded==='true'){
+      frame.dataset.expanded='false';
+      screenVeil.classList.remove('is-on');
+      expandButton.textContent='ENLARGE ↗';
+      swapBusy=false;
+      delete frame.dataset.swapping;
+    }
   }
 }
 function layout(){

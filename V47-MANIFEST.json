@@ -1,0 +1,34 @@
+{
+  "version": "V47",
+  "source": "V46 + V45.1",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 155155
+    },
+    {
+      "path": "README-V47.txt",
+      "bytes": 2134
+    },
+    {
+      "path": "about-map/byzantine-map.js",
+      "bytes": 7939
+    },
+    {
+      "path": "about-map/byzantine-map.css",
+      "bytes": 13739
+    },
+    {
+      "path": "about-map/territory-pulse-1025.png",
+      "bytes": 92327
+    },
+    {
+      "path": "about-map/Byzantine_Empire_1025.svg",
+      "bytes": 5354401
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "bytes": 275680
+    }
+  ]
+}
