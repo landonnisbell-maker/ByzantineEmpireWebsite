@@ -5,7 +5,7 @@
  const PURCHASE = "If you want to buy any of these products, talk to the market owners, who will help you complete your purchase.";
  const SINGLE_OFFERINGS=new Set(['Paramerion Sword','Gold Jewelry','Coin Exchange Service']);
  const EXTRA_MEDIA={
-   'Silk Textiles':{cloak:'/ByzantineEmpireWebsite/market-runtime/product-images/details/silk-cloak-feature-v73.webp'}
+   'Silk Textiles':{cloak:'/ByzantineEmpireWebsite/market-runtime/product-images/details/silk-cloak-feature-v76.png'}
  };
  let activeProduct=window.__BYZ_ACTIVE_PRODUCT_TITLE__||null;
  let scheduled=false;
