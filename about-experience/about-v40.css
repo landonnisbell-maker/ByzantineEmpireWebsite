@@ -1,0 +1,49 @@
+/* Crystal 2 About Us — isolated editorial treatment, v40 */
+#byz-about-v40 {position:fixed;inset:0;z-index:180000;overflow:hidden;isolation:isolate;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .55s cubic-bezier(.2,.7,.24,1),visibility 0s linear .55s;color:#fff;}
+#byz-about-v40.byz-about-open {visibility:visible;opacity:1;pointer-events:auto;transition:opacity .65s cubic-bezier(.2,.7,.24,1),visibility 0s;}
+#byz-about-v40 *,#byz-about-v40 *::before,#byz-about-v40 *::after {box-sizing:border-box;}
+#byz-about-v40 .byz-about-v40-bg {position:absolute;inset:-12%;z-index:-3;background: radial-gradient(ellipse 65% 63% at 18% 13%,#ab3dd5 0%,transparent 75%),radial-gradient(ellipse 56% 47% at 88% 16%,#f34caa 0%,transparent 76%),radial-gradient(ellipse 75% 75% at 57% 88%,#5e2fc9 0%,transparent 74%),linear-gradient(135deg,#170c44 0%,#551f91 42%,#210f60 100%);background-size:125% 125%;animation:byzAboutDrift 23s ease-in-out infinite alternate;transform:translateZ(0);}
+#byz-about-v40 .byz-about-aurora {position:absolute;width:62vw;height:55vw;min-width:460px;min-height:380px;border-radius:50%;filter:blur(74px);opacity:.37;mix-blend-mode:screen;pointer-events:none;}
+#byz-about-v40 .byz-about-aurora-one {left:-19%;top:17%;background:radial-gradient(circle,#ed5db6 0%,#b735b6 38%,transparent 70%);animation:byzAboutFloatA 19s ease-in-out infinite alternate;}
+#byz-about-v40 .byz-about-aurora-two {right:-17%;bottom:-30%;background:radial-gradient(circle,#9c57fd 0%,#6a2ad4 39%,transparent 71%);animation:byzAboutFloatB 26s ease-in-out infinite alternate;}
+#byz-about-v40 .byz-about-v40-grain {position:absolute;inset:-10%;z-index:4;pointer-events:none;opacity:.18;mix-blend-mode:soft-light;background-size:190px 190px;background-repeat:repeat;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.74' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.85'/%3E%3C/svg%3E");animation:byzAboutGrain .8s steps(5) infinite;}
+#byz-about-v40 .byz-about-v40-scroll {position:absolute;inset:0;z-index:6;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:auto;-webkit-overflow-scrolling:touch;padding:0 24px 110px;scrollbar-width:thin;scrollbar-color:rgba(255,207,249,.55) transparent;}
+#byz-about-v40 .byz-about-v40-scroll:focus{outline:none;}
+#byz-about-v40 .byz-about-v40-page {width:min(1060px,100%);margin:auto;padding-top:clamp(115px,14vh,190px);font-family:Manrope,Arial,sans-serif;}
+#byz-about-v40 .byz-about-header{padding-bottom:clamp(70px,10vh,135px);max-width:850px;}
+#byz-about-v40 .byz-about-kicker{font:700 11px/1.4 Manrope,Arial,sans-serif;letter-spacing:.28em;color:#f9cff8;}
+#byz-about-v40 .byz-about-main-heading {margin:25px 0 7px;font:400 clamp(88px,12vw,178px)/.94 Georgia,'Times New Roman',serif;letter-spacing:-.075em;color:#fff7fc;text-shadow:0 10px 60px rgba(48,8,88,.28);white-space:normal;}
+#byz-about-v40 .byz-about-main-heading em {font-weight:400;font-style:italic;letter-spacing:-.055em;color:#ffd6f1;}
+#byz-about-v40 .byz-about-heading-rule {height:1px;width:min(78%,590px);margin:40px 0 24px;background:linear-gradient(90deg,#fff4fb,rgba(255,255,255,.17),transparent);transform-origin:left;}
+#byz-about-v40 .byz-about-deck {font:500 clamp(13px,1.2vw,16px)/1.6 Manrope,Arial,sans-serif;letter-spacing:.08em;color:rgba(255,233,251,.91);text-transform:uppercase;}
+#byz-about-v40 .byz-about-story-grid {display:grid;grid-template-columns:1fr 1.7fr;gap:clamp(30px,6vw,100px);padding-bottom:60px;}
+#byz-about-v40 .byz-about-section {position:relative;display:grid;grid-template-columns:72px 1fr;gap:0 24px;max-width:940px;margin:0 0 clamp(64px,10vh,125px);padding:28px 0 0;border-top:1px solid rgba(255,244,254,.22);}
+#byz-about-v40 .byz-about-section-number {grid-column:1;grid-row:1;font:600 11px/1.6 Manrope,Arial,sans-serif;letter-spacing:.15em;color:#ffc8ee;margin-top:10px;}
+#byz-about-v40 .byz-about-section-title {grid-column:2;grid-row:1;margin:0 0 22px;font:400 clamp(33px,4.1vw,56px)/1.1 Georgia,'Times New Roman',serif;letter-spacing:-.043em;text-shadow:0 12px 28px rgba(0,0,0,.12);color:#fffafc;}
+#byz-about-v40 .byz-about-section-copy {grid-column:2;grid-row:2;max-width:740px;font:400 clamp(15px,1.25vw,17px)/1.9 Manrope,Arial,sans-serif;color:rgba(255,243,255,.91);letter-spacing:.005em;}
+#byz-about-v40 .byz-about-section-copy p{margin:0 0 20px;}
+#byz-about-v40 .byz-about-story-grid .byz-about-section {display:block;margin:0;padding-top:26px;}
+#byz-about-v40 .byz-about-story-grid .byz-about-section-number {display:block;margin:0 0 23px;}
+#byz-about-v40 .byz-about-story-grid .byz-about-section-title {font-size:clamp(29px,3vw,47px);margin-bottom:20px;}
+#byz-about-v40 .byz-about-story-grid .byz-about-section-copy{font-size:clamp(14px,1.15vw,16px);line-height:1.8;}
+#byz-about-v40 .byz-about-photo {position:relative;min-height:clamp(280px,43vw,520px);margin:12px 0 120px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(127deg,rgba(23,10,61,.35),rgba(255,169,229,.12) 58%,rgba(28,10,66,.4));border:1px solid rgba(255,219,255,.17);border-radius:3px;box-shadow:0 30px 110px rgba(24,5,58,.23);}
+#byz-about-v40 .byz-about-photo:before {content:"";position:absolute;inset:14px;border:1px solid rgba(255,245,255,.23);pointer-events:none;}
+#byz-about-v40 .byz-about-photo-wash{position:absolute;inset:0;background:radial-gradient(ellipse at 34% 35%,rgba(244,161,232,.10),transparent 58%);}
+#byz-about-v40 .byz-about-photo-caption {position:relative;font:400 clamp(18px,2vw,27px)/1.2 Georgia,serif;letter-spacing:.03em;color:#ffedf9;opacity:.85;text-align:center;}
+#byz-about-v40 .byz-about-endnote {padding:60px 0 10px;text-align:center;font:700 10px Manrope,Arial,sans-serif;letter-spacing:.35em;color:rgba(255,228,254,.65);border-top:1px solid rgba(255,255,255,.18);}
+/* Editorial reveal: masked horizontal ink-unfurl rather than the product pages' rising blur */
+#byz-about-v40 .byz-about-reveal{clip-path:inset(0 100% 0 0);opacity:.45;transition:clip-path 1.05s cubic-bezier(.22,1,.36,1),opacity .75s ease;}
+#byz-about-v40 .byz-about-reveal.byz-about-visible{clip-path:inset(0 0 0 0);opacity:1;}
+#byz-about-v40 .byz-about-header .byz-about-main-heading{animation:byzAboutTracking 1.5s cubic-bezier(.16,1,.3,1) both;}
+#byz-about-v40 .byz-about-header .byz-about-heading-rule{animation:byzAboutRule 1.3s cubic-bezier(.22,1,.36,1) both;}
+/* Keep original crystal Close and navigation above the About presentation */
+body.byz-about-is-active nav[data-navbar] {z-index:2147481000!important;}
+body.byz-about-is-active #byzantine-fixed-crystal-close{z-index:2147482000!important;}
+@keyframes byzAboutDrift {0%{transform:translate(-2%,1%) scale(1)}50%{transform:translate(3%,-3%) scale(1.06)}100%{transform:translate(-3%,2%) scale(1.1)}}
+@keyframes byzAboutFloatA{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(21%,12%,0) scale(1.2)}}
+@keyframes byzAboutFloatB{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(-21%,-14%,0) scale(1.12)}}
+@keyframes byzAboutGrain{0%{transform:translate(0,0)}25%{transform:translate(-2%,1%)}50%{transform:translate(1%,-2%)}75%{transform:translate(2%,2%)}100%{transform:translate(-1%,-1%)}}
+@keyframes byzAboutTracking{from{letter-spacing:-.12em;filter:brightness(.7)}to{letter-spacing:-.075em;filter:brightness(1)}}
+@keyframes byzAboutRule{from{transform:scaleX(.02)}to{transform:scaleX(1)}}
+@media(max-width:700px){#byz-about-v40 .byz-about-v40-page{padding-top:125px;}#byz-about-v40 .byz-about-main-heading{font-size:clamp(68px,17vw,112px)}#byz-about-v40 .byz-about-story-grid{display:block;}#byz-about-v40 .byz-about-story-grid .byz-about-section{margin-bottom:66px;}#byz-about-v40 .byz-about-section{grid-template-columns:42px 1fr;column-gap:12px;}#byz-about-v40 .byz-about-photo{margin-bottom:80px;}#byz-about-v40 .byz-about-section-title{font-size:clamp(30px,7vw,45px);}#byz-about-v40 .byz-about-v40-grain{opacity:.14;}}
+@media(prefers-reduced-motion:reduce){#byz-about-v40 *,#byz-about-v40 *:before,#byz-about-v40 *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}#byz-about-v40 .byz-about-reveal{opacity:1;clip-path:none!important;}}
