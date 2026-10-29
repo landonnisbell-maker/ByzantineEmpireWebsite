@@ -1,0 +1,61 @@
+{
+  "version": "V72",
+  "source": "ByzantineEmpireWebsite-main (3).zip (current uploaded website)",
+  "files": [
+    {
+      "path": "README-V72.txt",
+      "size": 1501,
+      "sha256": "ddae3cf3b708b9d816be864eadcf18d1e8d2e7cba48fcf0c857c16571d173df6"
+    },
+    {
+      "path": "index.html",
+      "size": 155478,
+      "sha256": "ac9d4c915ccf045b4351bd784b89a9898a66a944bf461367b3434c08c530978e"
+    },
+    {
+      "path": "market/index.html",
+      "size": 6023,
+      "sha256": "0ac11e0f5e0df708b0f8726f6f7c3b84ccaf479b19d3e5c57ca759a539bed4c8"
+    },
+    {
+      "path": "market/market-entry-v24.js",
+      "size": 8236,
+      "sha256": "3d657d67e3e9d648633b67aad4fe04366ecef9324764a2fb89d63576bd2700aa"
+    },
+    {
+      "path": "market-runtime/index.html",
+      "size": 6023,
+      "sha256": "0ac11e0f5e0df708b0f8726f6f7c3b84ccaf479b19d3e5c57ca759a539bed4c8"
+    },
+    {
+      "path": "market-runtime/product-pool-v72.js",
+      "size": 11736,
+      "sha256": "325b30e2dc3361a40ead84a8864a771e0aee431960021458d0e9418f9f752609"
+    },
+    {
+      "path": "market-runtime/products/coins/index.html",
+      "size": 6023,
+      "sha256": "0ac11e0f5e0df708b0f8726f6f7c3b84ccaf479b19d3e5c57ca759a539bed4c8"
+    },
+    {
+      "path": "market-runtime/products/food-items/index.html",
+      "size": 6023,
+      "sha256": "0ac11e0f5e0df708b0f8726f6f7c3b84ccaf479b19d3e5c57ca759a539bed4c8"
+    },
+    {
+      "path": "market-runtime/products/gold-jewelry/index.html",
+      "size": 6023,
+      "sha256": "0ac11e0f5e0df708b0f8726f6f7c3b84ccaf479b19d3e5c57ca759a539bed4c8"
+    },
+    {
+      "path": "market-runtime/products/paramerion-sword/index.html",
+      "size": 6023,
+      "sha256": "0ac11e0f5e0df708b0f8726f6f7c3b84ccaf479b19d3e5c57ca759a539bed4c8"
+    },
+    {
+      "path": "market-runtime/products/silk-textiles/index.html",
+      "size": 6023,
+      "sha256": "0ac11e0f5e0df708b0f8726f6f7c3b84ccaf479b19d3e5c57ca759a539bed4c8"
+    }
+  ]
+}
