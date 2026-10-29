@@ -316,61 +316,59 @@ function o9(){let{awaken:e}=(0,oh.useProjectsContext)(),t=(0,i.useDebug)();retur
  window.__BYZ_MARKET_RENDER_PAGE__?.(detail);
  window.dispatchEvent(new CustomEvent("byz:market:real-page",{detail}));
 },[n,s]),
+// V45: project the exact native About Us media plane to screen coordinates for
+// the original interactive HTML map panel. It scrolls with the page and never
+// intercepts the remaining interior or crystal controls.
+(0,x.useEffect)(()=>{
+  if(typeof window==='undefined')return;
+  let running=true,raf=0;
+  const tick=()=>{
+    if(!running)return;
+    const state=ei.useProjectStore.getState();
+    const hero=p.current?.hero;
+    const mesh=C?.mesh;
+    let rect=null;
+    if(n===1&&state.currentProjectIndex===1&&state.interiorStatus==='interior'&&hero&&mesh&&o){
+      try{
+        const g=mesh.geometry?.parameters;
+        if(g?.width>0&&g?.height>0){
+          mesh.updateWorldMatrix(true,false);
+          o.updateWorldMatrix(true,false);
+          const projected=[[-1,-1],[-1,1],[1,-1],[1,1]].map(([a,b])=>{
+            let q=new P.Vector3(a*g.width/2,b*g.height/2,0);
+            mesh.localToWorld(q);q.project(o);
+            return{x:(q.x+1)*window.innerWidth/2,y:(1-q.y)*window.innerHeight/2};
+          });
+          const xs=projected.map(q=>q.x),ys=projected.map(q=>q.y);
+          const left=Math.min(...xs),top=Math.min(...ys),width=Math.max(...xs)-left,height=Math.max(...ys)-top;
+          if(Number.isFinite(left+top+width+height)&&width>60&&height>40){
+            rect={left,top,width,height};
+          }
+        }
+      }catch(_e){}
+    }
+    window.__BYZ_ABOUT_MAP_SLOT_V45__=rect;
+    raf=requestAnimationFrame(tick);
+  };
+  tick();
+  return()=>{running=false;cancelAnimationFrame(raf);window.__BYZ_ABOUT_MAP_SLOT_V45__=null};
+},[n,o,C]),
 (0,x.useEffect)(()=>{let e=t[n];if(!e)return;if("undefined"!=typeof window){let q=window.BYZANTINE_CRYSTAL_CONTENT?.[n]??(n===1?window.BYZANTINE_ABOUT_US_CONTENT:null);if(q)e={...e,interior:{...e.interior,...q}}}let r=!1,byzMapTexture=null,o=t=>{
-// V44: render the actual interactive historical map onto About Us's native hero-media plane.
-// The rest of the WebGPU interior and every other crystal retain their existing materials.
-let byzMap=typeof window!=="undefined"?window.__BYZ_MAP_V44__:null;
-if(u&&t.hero&&e.interior.heroMedia){
- if(n===1&&byzMap){
-  if(!byzMapTexture){byzMapTexture=new P.CanvasTexture(byzMap.canvas);byzMapTexture.colorSpace=P.SRGBColorSpace;byzMapTexture.minFilter=P.LinearMipmapLinearFilter;byzMapTexture.magFilter=P.LinearFilter;byzMapTexture.anisotropy=4;byzMap.attachTexture(byzMapTexture)}
-  C.hide();C.place(t.hero,t.height);C.setTexture(byzMapTexture,16/9);byzMap.setActive(true);
- }else{byzMap?.setActive(false);C.place(t.hero,t.height);C.show(e.interior.heroMedia)}
-}else{byzMap?.setActive(false);C.hide()}
-T.setContent(u?e.interior.gallery??[]:[],t.carousel,t.progress,t.height)
+// V45: reserve the native About Us hero-media box for the original V43 HTML map widget.
+// The geometry still tracks interior scrolling, but the old placeholder and the V44
+ // rasterized map are hidden; no DOM overlay covers unrelated text.
+ if(u&&t.hero&&e.interior.heroMedia){
+   C.place(t.hero,t.height);
+   if(n===1){C.hide()}else{C.show(e.interior.heroMedia)}
+ }else{C.hide()}
+ T.setContent(u?e.interior.gallery??[]:[],t.carousel,t.progress,t.height)
 },a=a=>{if(r)return;let l=function(e,t,r){
 // V23: Crystal 3 has no legacy Market page. Its cloth Market is its page.
 // The empty canvas is deliberate: it prevents the old title/text/media from
 // ever being painted behind the Market renderer while keeping its close and
 // crystal-navigation logic intact for the other three crystals.
 if(t===2){let canvas=document.createElement("canvas");canvas.width=1573;canvas.height=e6.DESIGN_REFERENCE_HEIGHT;return{canvas,height:e6.DESIGN_REFERENCE_HEIGHT,hero:null,carousel:null,progress:null,liveLink:null,next:null}}
-let o=e.interior,a=document.createElement("canvas").getContext("2d"),n=[],l=(e,t,r=aS)=>{a.font=t;let o=e.split(/\s+/).filter(Boolean),n=[],l="";for(let e of o){let t=l?`${l} ${e}`:e;l&&a.measureText(t).width>r?(n.push(l),l=e):l=t}return l&&n.push(l),n},s=(e,t,r,o,a,l="left")=>{n.push(n=>{n.textAlign=l,n.font=o,n.fillStyle=a,n.fillText(e,t,r)})},i=(e,t,r)=>{let o=t;for(let t of e.split(/\n{2,}/).filter(e=>e.trim())){let h=t.trim(),b=["Time Frame","Location","Government","Economy","Religion","Important Cities","Major Achievements","Important Resources","Trade connections","Cultural Characteristics"].includes(h);if(b){o+=10,s(h.toUpperCase(),336,o,aF,ak),o+=44}else{for(let e of l(t.replace(/\n/g," "),aV))s(e,336,o,aV,r),o+=32;o+=18}}return o-18};s(aY((o.overline??`PROJET — ${String(t+1).padStart(2,"0")}`).toUpperCase()),1909,202,aE,aD,"right"),s(o.title.toUpperCase(),336,231,aC,ak),s((o.tagline?`${o.tagline} - ${o.year}`:`${o.year}`).toUpperCase(),336,277,aj,aD);let u=315;o.description&&(u=i(o.description,u,aD));let m=null;if(o.liveUrl){let e=u+44,t=aY("LIVE LINK");a.font=a_;let r=a.measureText(t).width,o=" ↘",n=a.measureText(o).width;s(t+o,336,e,a_,ak),m={x:324,y:e-30,w:r+n+24,h:46},u=e}let c=null;if(o.heroMedia){let e=u+22;c={x:336,y:e,w:1573,h:aA},u=e+aA}if((o.roleTitles?.length||o.roleDescription)&&(s(o.roleHeading??(o.title==="About Us"?"GOVERNMENT, ECONOMY & RELIGION":"ROLE SUMMARY"),336,u+=72,aT,ak),o.roleTitles?.length&&(u+=36,s(o.roleTitles.join(" · ").toUpperCase(),336,u,aF,"#c0c0c0")),o.roleDescription&&(u=i(o.roleDescription,u+44,aD))),o.stack?.length){u+=46,a.font=aL;let e=336;for(let t of o.stack){let r=`[ ${t.toUpperCase()} ]`,o=a.measureText(r).width;e>336&&e+o>336+aS&&(e=336,u+=32),s(r,e,u,aL,aD),e+=o+24}}let d=null,f=null;if(o.gallery?.length){let e=u+26;d={x:336,y:e,w:1134,h:aR},u=(f={x:1340,y:e+aR+14,w:130,h:2}).y+f.h}o.challenges&&(s(o.challengesHeading??(o.title==="About Us"?"ACHIEVEMENTS, RESOURCES & CULTURE":"TECHNICAL CONSTRAINTS"),336,u+=66,aT,ak),u=i(o.challenges,u+44,aD));let p=null;if(r>1){let e=u+96;n.push(t=>{t.fillStyle="rgba(255, 255, 255, 0.35)",t.fillRect(996.66,e,912.3399999999999,1)});let t=e+46,r=aY("NEXT PAGE");a.font=a_;let o=a.measureText(r).width;s(r,1909,t,a_,ak,"right"),p={x:1909-o-20,y:t-32,w:o+32,h:50},u=t+60}else u+=80;let h=Math.max(Math.ceil(u),e6.DESIGN_REFERENCE_HEIGHT),g=Math.min(2,8192/h,5.207883026064844),v=document.createElement("canvas");v.width=Math.ceil(1573*g),v.height=Math.ceil(h*g);let x=v.getContext("2d");return x.scale(g,g),x.translate(-336,0),x.textBaseline="alphabetic",n.forEach(e=>e(x)),{canvas:v,height:h,hero:c,carousel:d,progress:f,liveLink:m,next:p}}(e,n,t.length);p.current=l;let s=new P.CanvasTexture(l.canvas);s.colorSpace=P.SRGBColorSpace,s.minFilter=P.LinearMipmapLinearFilter,s.magFilter=P.LinearFilter,s.anisotropy=4;let i=l.height*aw,u=Math.min(256,Math.max(8,Math.round(7*i))),c=new P.PlaneGeometry(1573*aw,i,1,u),h=A.value,g=w.geometry;A.value=s,w.geometry=c,h&&h!==aK&&h.dispose(),g.dispose(),d.current=aM/2-i/2,f.current=Math.max(0,i-aM),w.position.y=d.current+m.current,a&&o(l),V()};if(h.current===n&&p.current)return void o(p.current);h.current=n;let l="u">typeof document?document.fonts:void 0,s=!!l&&!aI.every(e=>l.check(e));return a(!s),l&&s&&Promise.all(aI.map(e=>l.load(e))).then(()=>{r||(a(!0),E.repaint())}).catch(()=>{}),g.current&&(g.current=!1,ab.useInteriorScrollStore.getState().reset(),m.current=0,w.position.y=d.current,ea.gsap.to(N,{value:1,duration:1.1,ease:"power2.out"})),()=>{r=!0;window.__BYZ_MAP_V44__?.setActive(false);window.__BYZ_MAP_V44__?.attachTexture(null);byzMapTexture?.dispose()}},[n,t,u,w,A,N,V,C,T,E]);let I=(0,x.useCallback)(e=>{let t=ei.useProjectStore.getState();g.current||"interior"===t.interiorStatus&&"idle"===t.morphStatus&&(g.current=!0,ea.gsap.to(N,{value:0,duration:.65,ease:"power2.in",onComplete:()=>{let t=ei.useProjectStore.getState(),r=t.currentProjectIndex;1===e?t.setProjectNext():t.setProjectPrev(),ei.useProjectStore.getState().currentProjectIndex===r&&(g.current=!1,ea.gsap.to(N,{value:1,duration:.65,ease:"power2.out"}))}}))},[N]);return(0,x.useEffect)(()=>{if(!a)return;let e=new P.Raycaster;e.layers.set(30);let r=new P.Vector2,n=!1,l=e=>{e!==n&&(n=e,document.body.style.cursor=e?"pointer":"")},s=(t,a)=>{r.set(t/window.innerWidth*2-1,-(2*(a/window.innerHeight))+1),e.setFromCamera(r,o)},i=(t,r)=>{let o=p.current;if(!o)return null;s(t,r);let a=e.intersectObject(w,!1)[0];return a?.uv?{x:336+1573*a.uv.x,y:(1-a.uv.y)*o.height}:null},u=()=>!1,m=(e,t)=>!!t&&e.x>=t.x&&e.x<=t.x+t.w&&e.y>=t.y&&e.y<=t.y+t.h,c=()=>"interior"===ei.useProjectStore.getState().interiorStatus,d=e=>{if(!c()||g.current)return;let t=i(e.clientX,e.clientY);t&&T.contains(t)&&T.beginDrag(t.x)},f=0,h=0,x=!1,y=e=>{f=e.clientX,h=e.clientY,x=!0},b=()=>{x&&(x=!1,((e,t)=>{if(!c())return l(!1);if(T.dragging){let r=i(e,t);r&&T.moveDrag(r.x);return}if(g.current)return l(!1);if(u(e,t))return l(!0);let r=i(e,t),o=p.current;l(!!r&&(m(r,o?.next??null)||m(r,o?.liveLink??null)||T.contains(r)))})(f,h))};v.current=b;let M=()=>{T.dragging&&(b(),T.endDrag())},S=e=>{if(!c()||g.current)return;if(u(e.clientX,e.clientY))return void ei.useProjectStore.getState().exitInterior();let r=i(e.clientX,e.clientY);if(!r)return;let o=p.current;if(m(r,o?.next??null))I(1);else if(m(r,o?.liveLink??null)){let e=ei.useProjectStore.getState().currentProjectIndex,r=t[e]?.interior.liveUrl;r&&(0,ay.isSafeExternalUrl)(r)&&window.open(r,"_blank","noopener,noreferrer")}};// V44: drag/zoom the map through the native interior image UVs.
-let mapPointers=new Set();
-const mapApi=()=>window.__BYZ_MAP_V44__;
-const mapPoint=(clientX,clientY,insideOnly=true)=>{
- if(!c()||ei.useProjectStore.getState().currentProjectIndex!==1)return null;
- let box=p.current?.hero;if(!box)return null;
- let hit=i(clientX,clientY);if(!hit||insideOnly&&!m(hit,box))return null;
- return{x:(hit.x-box.x)/box.w,y:(hit.y-box.y)/box.h};
-};
-const downMap=ev=>{
- let pt=mapPoint(ev.clientX,ev.clientY);if(!pt||ev.button>0&&!ev.pointerType?.includes("touch"))return;
- if(mapApi()?.start(ev.pointerId,pt.x,pt.y)){
-  mapPointers.add(ev.pointerId);ev.preventDefault();ev.stopImmediatePropagation();
- }
-};
-const moveMap=ev=>{
- if(!mapPointers.has(ev.pointerId))return;
- let pt=mapPoint(ev.clientX,ev.clientY,false);
- if(pt)mapApi()?.move(ev.pointerId,pt.x,pt.y);
- ev.preventDefault();ev.stopImmediatePropagation();
-};
-const upMap=ev=>{
- if(!mapPointers.has(ev.pointerId))return;
- mapApi()?.end(ev.pointerId);mapPointers.delete(ev.pointerId);
- ev.preventDefault();ev.stopImmediatePropagation();
-};
-const wheelMap=ev=>{
- let pt=mapPoint(ev.clientX,ev.clientY);
- if(!pt||ev.ctrlKey)return;
- mapApi()?.wheel(ev.deltaY);
- ev.preventDefault();ev.stopImmediatePropagation();
-};
-window.addEventListener("pointerdown",downMap,{capture:true,passive:false});
-window.addEventListener("pointermove",moveMap,{capture:true,passive:false});
-window.addEventListener("pointerup",upMap,{capture:true,passive:false});
-window.addEventListener("pointercancel",upMap,{capture:true,passive:false});
-window.addEventListener("wheel",wheelMap,{capture:true,passive:false});
-return window.addEventListener("pointerdown",d),window.addEventListener("pointermove",y),window.addEventListener("pointerup",M),window.addEventListener("click",S),()=>{
+let o=e.interior,a=document.createElement("canvas").getContext("2d"),n=[],l=(e,t,r=aS)=>{a.font=t;let o=e.split(/\s+/).filter(Boolean),n=[],l="";for(let e of o){let t=l?`${l} ${e}`:e;l&&a.measureText(t).width>r?(n.push(l),l=e):l=t}return l&&n.push(l),n},s=(e,t,r,o,a,l="left")=>{n.push(n=>{n.textAlign=l,n.font=o,n.fillStyle=a,n.fillText(e,t,r)})},i=(e,t,r)=>{let o=t;for(let t of e.split(/\n{2,}/).filter(e=>e.trim())){let h=t.trim(),b=["Time Frame","Location","Government","Economy","Religion","Important Cities","Major Achievements","Important Resources","Trade connections","Cultural Characteristics"].includes(h);if(b){o+=10,s(h.toUpperCase(),336,o,aF,ak),o+=44}else{for(let e of l(t.replace(/\n/g," "),aV))s(e,336,o,aV,r),o+=32;o+=18}}return o-18};s(aY((o.overline??`PROJET — ${String(t+1).padStart(2,"0")}`).toUpperCase()),1909,202,aE,aD,"right"),s(o.title.toUpperCase(),336,231,aC,ak),s((o.tagline?`${o.tagline} - ${o.year}`:`${o.year}`).toUpperCase(),336,277,aj,aD);let u=315;o.description&&(u=i(o.description,u,aD));let m=null;if(o.liveUrl){let e=u+44,t=aY("LIVE LINK");a.font=a_;let r=a.measureText(t).width,o=" ↘",n=a.measureText(o).width;s(t+o,336,e,a_,ak),m={x:324,y:e-30,w:r+n+24,h:46},u=e}let c=null;if(o.heroMedia){let e=u+22;c={x:336,y:e,w:1573,h:aA},u=e+aA}if((o.roleTitles?.length||o.roleDescription)&&(s(o.roleHeading??(o.title==="About Us"?"GOVERNMENT, ECONOMY & RELIGION":"ROLE SUMMARY"),336,u+=72,aT,ak),o.roleTitles?.length&&(u+=36,s(o.roleTitles.join(" · ").toUpperCase(),336,u,aF,"#c0c0c0")),o.roleDescription&&(u=i(o.roleDescription,u+44,aD))),o.stack?.length){u+=46,a.font=aL;let e=336;for(let t of o.stack){let r=`[ ${t.toUpperCase()} ]`,o=a.measureText(r).width;e>336&&e+o>336+aS&&(e=336,u+=32),s(r,e,u,aL,aD),e+=o+24}}let d=null,f=null;if(o.gallery?.length){let e=u+26;d={x:336,y:e,w:1134,h:aR},u=(f={x:1340,y:e+aR+14,w:130,h:2}).y+f.h}o.challenges&&(s(o.challengesHeading??(o.title==="About Us"?"ACHIEVEMENTS, RESOURCES & CULTURE":"TECHNICAL CONSTRAINTS"),336,u+=66,aT,ak),u=i(o.challenges,u+44,aD));let p=null;if(r>1){let e=u+96;n.push(t=>{t.fillStyle="rgba(255, 255, 255, 0.35)",t.fillRect(996.66,e,912.3399999999999,1)});let t=e+46,r=aY("NEXT PAGE");a.font=a_;let o=a.measureText(r).width;s(r,1909,t,a_,ak,"right"),p={x:1909-o-20,y:t-32,w:o+32,h:50},u=t+60}else u+=80;let h=Math.max(Math.ceil(u),e6.DESIGN_REFERENCE_HEIGHT),g=Math.min(2,8192/h,5.207883026064844),v=document.createElement("canvas");v.width=Math.ceil(1573*g),v.height=Math.ceil(h*g);let x=v.getContext("2d");return x.scale(g,g),x.translate(-336,0),x.textBaseline="alphabetic",n.forEach(e=>e(x)),{canvas:v,height:h,hero:c,carousel:d,progress:f,liveLink:m,next:p}}(e,n,t.length);p.current=l;let s=new P.CanvasTexture(l.canvas);s.colorSpace=P.SRGBColorSpace,s.minFilter=P.LinearMipmapLinearFilter,s.magFilter=P.LinearFilter,s.anisotropy=4;let i=l.height*aw,u=Math.min(256,Math.max(8,Math.round(7*i))),c=new P.PlaneGeometry(1573*aw,i,1,u),h=A.value,g=w.geometry;A.value=s,w.geometry=c,h&&h!==aK&&h.dispose(),g.dispose(),d.current=aM/2-i/2,f.current=Math.max(0,i-aM),w.position.y=d.current+m.current,a&&o(l),V()};if(h.current===n&&p.current)return void o(p.current);h.current=n;let l="u">typeof document?document.fonts:void 0,s=!!l&&!aI.every(e=>l.check(e));return a(!s),l&&s&&Promise.all(aI.map(e=>l.load(e))).then(()=>{r||(a(!0),E.repaint())}).catch(()=>{}),g.current&&(g.current=!1,ab.useInteriorScrollStore.getState().reset(),m.current=0,w.position.y=d.current,ea.gsap.to(N,{value:1,duration:1.1,ease:"power2.out"})),()=>{r=!0;window.__BYZ_ABOUT_MAP_SLOT_V45__=null}},[n,t,u,w,A,N,V,C,T,E]);let I=(0,x.useCallback)(e=>{let t=ei.useProjectStore.getState();g.current||"interior"===t.interiorStatus&&"idle"===t.morphStatus&&(g.current=!0,ea.gsap.to(N,{value:0,duration:.65,ease:"power2.in",onComplete:()=>{let t=ei.useProjectStore.getState(),r=t.currentProjectIndex;1===e?t.setProjectNext():t.setProjectPrev(),ei.useProjectStore.getState().currentProjectIndex===r&&(g.current=!1,ea.gsap.to(N,{value:1,duration:.65,ease:"power2.out"}))}}))},[N]);return(0,x.useEffect)(()=>{if(!a)return;let e=new P.Raycaster;e.layers.set(30);let r=new P.Vector2,n=!1,l=e=>{e!==n&&(n=e,document.body.style.cursor=e?"pointer":"")},s=(t,a)=>{r.set(t/window.innerWidth*2-1,-(2*(a/window.innerHeight))+1),e.setFromCamera(r,o)},i=(t,r)=>{let o=p.current;if(!o)return null;s(t,r);let a=e.intersectObject(w,!1)[0];return a?.uv?{x:336+1573*a.uv.x,y:(1-a.uv.y)*o.height}:null},u=()=>!1,m=(e,t)=>!!t&&e.x>=t.x&&e.x<=t.x+t.w&&e.y>=t.y&&e.y<=t.y+t.h,c=()=>"interior"===ei.useProjectStore.getState().interiorStatus,d=e=>{if(!c()||g.current)return;let t=i(e.clientX,e.clientY);t&&T.contains(t)&&T.beginDrag(t.x)},f=0,h=0,x=!1,y=e=>{f=e.clientX,h=e.clientY,x=!0},b=()=>{x&&(x=!1,((e,t)=>{if(!c())return l(!1);if(T.dragging){let r=i(e,t);r&&T.moveDrag(r.x);return}if(g.current)return l(!1);if(u(e,t))return l(!0);let r=i(e,t),o=p.current;l(!!r&&(m(r,o?.next??null)||m(r,o?.liveLink??null)||T.contains(r)))})(f,h))};v.current=b;let M=()=>{T.dragging&&(b(),T.endDrag())},S=e=>{if(!c()||g.current)return;if(u(e.clientX,e.clientY))return void ei.useProjectStore.getState().exitInterior();let r=i(e.clientX,e.clientY);if(!r)return;let o=p.current;if(m(r,o?.next??null))I(1);else if(m(r,o?.liveLink??null)){let e=ei.useProjectStore.getState().currentProjectIndex,r=t[e]?.interior.liveUrl;r&&(0,ay.isSafeExternalUrl)(r)&&window.open(r,"_blank","noopener,noreferrer")}};return window.addEventListener("pointerdown",d),window.addEventListener("pointermove",y),window.addEventListener("pointerup",M),window.addEventListener("click",S),()=>{
  window.removeEventListener("pointerdown",downMap,true);window.removeEventListener("pointermove",moveMap,true);
  window.removeEventListener("pointerup",upMap,true);window.removeEventListener("pointercancel",upMap,true);window.removeEventListener("wheel",wheelMap,true);
  window.removeEventListener("pointerdown",d),window.removeEventListener("pointermove",y),window.removeEventListener("pointerup",M),window.removeEventListener("click",S),v.current=null,l(!1)

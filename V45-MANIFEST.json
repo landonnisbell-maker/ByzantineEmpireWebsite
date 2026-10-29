@@ -1,0 +1,39 @@
+{
+  "version": "45",
+  "base": "V44",
+  "purpose": "Replace native-rendered map with anchored original HTML map panel; block both scroll directions at crystal selector",
+  "files": {
+    "index.html": {
+      "bytes": 155155,
+      "sha256": "a178301f3bc776fbd01e5a4ef237cf57597823e9823d169252e40a001837ad12"
+    },
+    "README-V45.txt": {
+      "bytes": 1859,
+      "sha256": "5de816b33cac017b270434e47c8a1ec9ac18d4b78064ed6721537160540bceff"
+    },
+    "byz-portal-scroll-lock-v45.js": {
+      "bytes": 2096,
+      "sha256": "7e15c4d313c11f05c98a2626e79def75468a20e27aab7be82465f8664c3e9813"
+    },
+    "about-map/byzantine-map.js": {
+      "bytes": 6425,
+      "sha256": "e3b520c40f023a539beda6f997ed6750cf0994bc9300a4bc63c13f6d4da173e9"
+    },
+    "about-map/Byzantine-Empire.webp": {
+      "bytes": 103114,
+      "sha256": "aae54f369f21c9b458f3d41bd8c625c73b56a5f81c781cf5dec34293d24adaa7"
+    },
+    "about-map/byzantine-map.css": {
+      "bytes": 6576,
+      "sha256": "06cd8df3853c9611481214e8362316b8c02c7480df4aed1e0d9624deddde1c1d"
+    },
+    "about-map/empire-pulse.png": {
+      "bytes": 79625,
+      "sha256": "7b70233a3acd2d54bf88cad2cbef8e7f52fef5eadf7045e51f75584aa64effc9"
+    },
+    "_next/static/chunks/1502ibkr~cu.4.js": {
+      "bytes": 275635,
+      "sha256": "89354fb6fe033467b104dfba9c0149ccf80c029af5288a32ac1e0a96db8521ad"
+    }
+  }
+}

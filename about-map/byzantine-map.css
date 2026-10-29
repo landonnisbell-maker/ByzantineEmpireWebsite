@@ -31,3 +31,49 @@
 #byz-history-map[data-expanded="true"] .hm-expand{background:rgba(166,101,233,.22)}
 @media(max-width:1160px){#byz-history-map:not([data-expanded="true"]){top:auto;bottom:23px;right:20px;width:auto}#byz-history-map:not([data-expanded="true"]) .hm-card{border-radius:8px}#byz-history-map:not([data-expanded="true"]) .hm-header{padding:8px 10px;gap:12px}#byz-history-map:not([data-expanded="true"]) .hm-viewport,#byz-history-map:not([data-expanded="true"]) .hm-foot,#byz-history-map:not([data-expanded="true"]) .hm-tools .hm-icon{display:none}#byz-history-map:not([data-expanded="true"]) .hm-heading{font-size:13px}#byz-history-map:not([data-expanded="true"]) .hm-eyebrow{font-size:8px}}
 @media (prefers-reduced-motion:reduce){#byz-history-map[data-active="true"]{animation:none}#byz-history-map .hm-highlight{animation:none;opacity:.4}#byz-history-map button{transition:none}}
+
+/* V45: original V43 controls, sized and tracked to the former full-width hero image. */
+#byz-history-map{
+  box-sizing:border-box;
+  position:fixed;
+  right:auto;bottom:auto;
+  max-width:none;
+  min-width:0;
+  z-index:144;
+  transform:none !important;
+}
+#byz-history-map[data-active="true"]{animation:none}
+#byz-history-map .hm-card{width:100%;height:100%;display:flex;flex-direction:column}
+#byz-history-map .hm-header{flex:0 0 auto;}
+#byz-history-map .hm-viewport{flex:1 1 auto;min-height:0;aspect-ratio:auto;}
+#byz-history-map .hm-foot{flex:0 0 auto;}
+#byz-history-map[data-expanded="true"]{
+  left:0 !important;top:0 !important;right:0 !important;bottom:0 !important;
+  width:100vw !important;height:100vh !important;
+  transform:none !important;
+}
+#byz-history-map[data-expanded="true"] .hm-card{
+  height:auto;max-height:min(94vh,790px);
+}
+#byz-history-map[data-expanded="true"] .hm-viewport{
+  flex:none;height:min(70vh,550px);max-height:none;
+}
+@media(max-width:1160px){
+  #byz-history-map:not([data-expanded="true"]){
+    top:var(--hm-native-top,auto);bottom:auto;right:auto;
+    width:auto;
+  }
+  #byz-history-map:not([data-expanded="true"]) .hm-card{border-radius:10px}
+  #byz-history-map:not([data-expanded="true"]) .hm-header{padding:8px 10px;gap:7px}
+  #byz-history-map:not([data-expanded="true"]) .hm-viewport{display:block;flex:1 1 auto}
+  #byz-history-map:not([data-expanded="true"]) .hm-foot{display:flex;padding:5px 9px}
+  #byz-history-map:not([data-expanded="true"]) .hm-tools .hm-icon{display:inline-block}
+  #byz-history-map:not([data-expanded="true"]) .hm-heading{font-size:clamp(12px,2vw,18px)}
+  #byz-history-map:not([data-expanded="true"]) .hm-eyebrow{font-size:8px}
+}
+@media(max-width:600px){
+  #byz-history-map:not([data-expanded="true"]) .hm-foot{font-size:7px;gap:3px}
+  #byz-history-map:not([data-expanded="true"]) .hm-expand{font-size:8px;padding:5px}
+  #byz-history-map:not([data-expanded="true"]) .hm-tools{gap:2px}
+  #byz-history-map:not([data-expanded="true"]) .hm-tools .hm-icon{min-width:23px;height:24px;font-size:12px}
+}
