@@ -43,6 +43,7 @@ const palia=document.getElementById('byz-palia');
 let paliaStartedLoading=false;
 let productLoadGeneration=0;
 let pendingProductSlug=null;
+let productHeroReady=false;
 function ensurePaliaLoaded(){
  // V69: intentionally DO NOT preload a default sword into the reused Palia runtime.
  // Every product choice navigates a fresh product-specific document instead.
@@ -102,6 +103,7 @@ function showStatus(show){status.classList.toggle('visible',show);}
 function makeVisible(){
   if(!productRequested||!visualReady||leaving)return;
   if(!confirmedV66Product || confirmedV66Product!==PRODUCTS[activeProductIndex].title)return;
+  if(!productHeroReady)return; // no image flash during async GPU texture loading
   // The new document has its own scroll origin; never switch its product mid-reveal.
   // The matching title was mounted before we expose its independently loaded WebGL canvas.
   clearTimeout(loadDeadline);loadDeadline=null;
@@ -126,13 +128,18 @@ function openProduct(selection,options={}){
   clearTimeout(v66ProductCheck);clearTimeout(loadDeadline);
   document.body.classList.remove('byz-product-open','byz-product-leaving');
   retry.classList.remove('visible');showStatus(true);
-  pendingProductSlug=product.slug;
+  pendingProductSlug=product.slug;productHeroReady=false;
   const generation=++productLoadGeneration;
   // Distinct document URL for every selection; the browser creates new DOM, Nuxt,
   // canvas, shaders, texture state, and scroll position for each product.
-  const url=new URL(palia.getAttribute('data-src'),location.origin);
+  // Five actual HTML documents (not one document whose product changes).
+  const url=new URL('/ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/'+product.slug+'/index.html',location.origin);
+  url.searchParams.set('no-loader','');
+  url.searchParams.set('byzantine-palia-preload','1');
+  url.searchParams.set('byzantine-lite-fullscreen','1');
   url.searchParams.set('byz-product',product.slug);
   url.searchParams.set('byz-entry',String(generation));
+  url.searchParams.set('v','70.0');
   paliaStartedLoading=true;
   palia.src=url.pathname+url.search;
   report('new-document',product.slug+' '+url.pathname+url.search);
@@ -155,7 +162,7 @@ function exitProduct(options={}){
     ++productLoadGeneration;
     palia.src='about:blank';paliaStartedLoading=false;
     enteredPalia=false;sceneStarted=false;visualReady=false;
-    confirmedV66Product=null;pendingProductSlug=null;
+    confirmedV66Product=null;pendingProductSlug=null;productHeroReady=false;
     return;
   }
   leaving=true;
@@ -168,7 +175,7 @@ function exitProduct(options={}){
   setTimeout(()=>{
     palia.src='about:blank';paliaStartedLoading=false;
     enteredPalia=false;sceneStarted=false;visualReady=false;
-    confirmedV66Product=null;pendingProductSlug=null;
+    confirmedV66Product=null;pendingProductSlug=null;productHeroReady=false;
     document.body.classList.remove('byz-product-leaving');leaving=false;
   },720);
 
@@ -202,6 +209,13 @@ window.addEventListener('message',ev=>{
     return;
   }
   if(ev.source!==palia.contentWindow)return;
+  if(type==='byz:palia:hero-ready-v70'){
+    if(productRequested && ev.data.slug===pendingProductSlug && ev.data.title===PRODUCTS[activeProductIndex].title){
+      productHeroReady=true;
+      makeVisible();
+    }
+    return;
+  }
   if(type==='byz:palia:v66-applied'){
     if(productRequested && ev.data.title===PRODUCTS[activeProductIndex].title){
       confirmedV66Product=ev.data.title;
@@ -287,8 +301,8 @@ returnBtn.addEventListener('click',()=>{
   }else returnToCrystals();
 });
 window.addEventListener('keydown',e=>{if(e.key==='Escape' && !document.body.classList.contains('byz-product-open'))returnToCrystals()});
-window.__BYZ_MARKET_STATUS__=()=>({version:'69.0',galleryReady,visualReady,productRequested,activeProductIndex});
+window.__BYZ_MARKET_STATUS__=()=>({version:'70.0',galleryReady,visualReady,productRequested,activeProductIndex});
 window.__BYZ_MARKET_SHOULD_ENTER__=true;
-report('host-loaded','V24: new dedicated Market page, five product routes');
+report('host-loaded','V70: five isolated Palia HTML entrypoints and GPU-ready gate');
 })();
 </script><script>window.parent!==window && window.parent.postMessage({type:'byz:market:shell-ready'},location.origin);</script></body></html>

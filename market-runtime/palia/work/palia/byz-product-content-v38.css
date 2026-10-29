@@ -142,3 +142,33 @@ html.byz-market-copy-ready .work-detail .hero__title {margin:0!important;}
  }
  html.byz-market-copy-ready .work-detail .hero__intro.grid {padding:10px 6% 30px!important;}
 }
+
+/* V70 — Hero/title meeting point. Keeps the WebGL feathered banner intact.
+   Pull the ORIGINAL hero caption into the bottom of the GL composition, and
+   let the remaining copy follow naturally in normal document flow. */
+html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl{
+ height:clamp(330px,36vw,620px)!important;max-height:68vh!important;
+}
+html.byz-market-copy-ready .work-detail .hero__intro.grid{
+ margin-top:calc(-1 * clamp(5.5rem,8.3vw,9rem))!important;
+ padding:0 5% .8rem!important;z-index:12!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading{
+ position:relative!important;z-index:13!important;
+}
+html.byz-market-copy-ready .byz-market-tagline{
+ margin-top:.42rem!important;
+}
+html.byz-market-copy-ready .byz-market-product-copy{
+ padding-top:clamp(1.5rem,2.8vw,2.8rem)!important;
+}
+@media(max-width:720px){
+ html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl{
+  height:clamp(320px,53vh,510px)!important;max-height:64vh!important;
+ }
+ html.byz-market-copy-ready .work-detail .hero__intro.grid{
+  margin-top:calc(-1 * clamp(3rem,10vw,5rem))!important;
+  padding:0 6% .65rem!important;
+ }
+ html.byz-market-copy-ready .byz-market-product-copy{padding-top:1.2rem!important}
+}
