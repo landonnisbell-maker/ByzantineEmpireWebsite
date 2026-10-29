@@ -1,0 +1,310 @@
+/* V38 — product editorial layout only. Original WebGL and navigation are unchanged. */
+html.byz-market-copy-ready .work-detail .hero__intro > .hero__text,
+html.byz-market-copy-ready .work-detail .blocks.content,
+html.byz-market-copy-ready .work-detail .page > .next,
+html.byz-market-copy-ready .work-detail .page > .footer {display:none!important}
+/* One center-aligned title beneath the hero artwork, subtly overlapping its lower edge. */
+html.byz-market-copy-ready .work-detail .hero__media {margin-bottom:-3.4rem!important}
+html.byz-market-copy-ready .work-detail .hero__intro.grid {
+ display:flex!important; flex-direction:column!important; align-items:center!important;
+ justify-content:center!important; text-align:center!important; position:relative!important;
+ z-index:4!important; padding:0 5% 2rem!important; gap:0!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading {
+ display:flex!important; flex-direction:column!important; align-items:center!important;
+ justify-content:center!important; text-align:center!important; width:min(96%,1000px)!important;
+ max-width:1000px!important; margin:0 auto!important; grid-column:auto!important;
+}
+html.byz-market-copy-ready .work-detail h1.hero__title {
+ margin:0!important; text-align:center!important; font-family:var(--font-serif,Georgia,serif);
+ font-size:clamp(2.4rem,4.5vw,5.5rem)!important; font-weight:500!important;
+ letter-spacing:-.028em!important; line-height:1.12!important;
+ color:#fff!important; text-shadow:0 3px 35px rgba(0,0,0,.62);
+}
+.byz-market-tagline {
+ display:block; width:100%; text-align:center!important; margin:.75rem auto 0!important;
+ color:#f0edf0; font:italic 500 clamp(1.03rem,1.55vw,1.55rem)/1.55 var(--font-serif,Georgia,serif);
+ letter-spacing:-.01em; text-shadow:0 3px 22px rgba(0,0,0,.75);
+}
+/* Readable independent product content. */
+.byz-market-product-copy {
+ box-sizing:border-box; padding:clamp(3.5rem,6vw,7rem) max(5%,calc((100% - 1360px)/2)) clamp(8rem,13vw,14rem);
+ max-width:100%; color:#e9eaf0; font-family:var(--font-sans,Arial,sans-serif);
+ letter-spacing:.008em; position:relative; z-index:1;
+}
+.byz-market-reading{width:min(790px,100%);margin:0 auto}
+.byz-market-reading .byz-offering-title {
+ font-family:var(--font-serif,Georgia,serif);font-size:clamp(2rem,3.35vw,3.65rem);
+ font-weight:500;line-height:1.2;letter-spacing:-.02em; margin:5rem 0 1.5rem;
+}
+.byz-market-reading .byz-offering-title:first-child{margin-top:0}
+.byz-market-reading .byz-offering-title:not(:first-child){border-top:1px solid rgba(231,236,247,.23);padding-top:4.5rem;margin-top:6.5rem}
+.byz-market-reading .byz-section-title {
+ font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.6rem,2.2vw,2.3rem);
+ font-weight:500;line-height:1.35;letter-spacing:-.015em;margin:4rem 0 1.5rem;color:#faf8f6;
+}
+.byz-market-reading p{font-size:clamp(.95rem,1.16vw,1.05rem);line-height:1.85;margin:0 0 1.35em;color:#d6d9e2;max-width:72ch}
+.byz-market-reading p:has(>em:only-child){font-family:var(--font-serif,Georgia,serif);color:#f0ece7;font-size:clamp(1.15rem,1.55vw,1.43rem);line-height:1.65;margin-bottom:2rem}
+.byz-market-reading strong{color:#fff;font-weight:600}.byz-market-reading em{font-style:italic}
+.byz-market-purchase {
+ width:min(790px,100%);margin:5rem auto 0;border-top:1px solid rgba(231,236,247,.35);
+ padding:2.1rem 0 0;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.1rem,1.5vw,1.45rem);
+ line-height:1.6;color:#fff;
+}
+/* Empty editorial image spaces, with an actual irregular feathered mask (not a rectangular border). */
+.byz-market-scratch-figure {
+ position:relative; width:min(1080px,calc(100% + 13vw)); max-width:calc(100vw - 7vw);
+ margin:clamp(3.5rem,7vw,7rem) 0; left:50%; transform:translateX(-50%);
+ aspect-ratio:16/9; padding:0; overflow:visible; isolation:isolate;
+}
+.byz-market-scratch-surface {
+ display:flex; align-items:center; justify-content:center; position:absolute;
+ inset:0; background:radial-gradient(ellipse at 45% 36%,rgba(50,77,103,.55),rgba(13,19,30,.79) 60%,rgba(3,5,10,.04) 90%);
+ -webkit-mask-image:url('./byz-scratch-edge-v38.png');mask-image:url('./byz-scratch-edge-v38.png');
+ -webkit-mask-size:100% 100%;mask-size:100% 100%;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
+.byz-market-scratch-surface::after {
+ content:''; position:absolute;inset:0;opacity:.24;
+ background:repeating-linear-gradient(131deg,transparent 0 9px,rgba(255,255,255,.025) 10px 11px,transparent 13px 24px);
+ pointer-events:none;
+}
+.byz-market-image-placeholder {
+ position:relative;z-index:1;font:500 clamp(.7rem,.85vw,.88rem)/1.5 var(--font-sans,Arial,sans-serif);
+ color:rgba(229,235,243,.67);letter-spacing:.2em;text-transform:uppercase;text-align:center;
+}
+.byz-market-scratch-surface img.byz-market-supplied-photo {
+ position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+}
+.byz-market-scratch-figure:has(img.byz-market-supplied-photo[src]) .byz-market-image-placeholder{display:none}
+/* Subtle text reveals for scrolling, each element animates once. */
+html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready,
+html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready {
+ opacity:0; translate:0 28px; filter:blur(3px);
+ transition:opacity .85s cubic-bezier(.22,1,.36,1),translate .9s cubic-bezier(.22,1,.36,1),filter .8s ease;
+}
+html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready.byz-revealed,
+html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready.byz-revealed {
+ opacity:1; translate:0 0; filter:blur(0);
+}
+@media(max-width:850px){
+ html.byz-market-copy-ready .work-detail .hero__media{margin-bottom:-2.3rem!important}
+ html.byz-market-copy-ready .work-detail .hero__intro.grid{padding:0 5% 1.3rem!important}
+ .byz-market-tagline{margin-top:.45rem!important}
+ .byz-market-product-copy{padding:3rem 7% 8rem}
+ .byz-market-reading .byz-section-title{margin-top:3rem}
+ .byz-market-scratch-figure{width:calc(100% + 12vw);max-width:96vw;margin-block:3.2rem}
+}
+@media(prefers-reduced-motion:reduce){
+ html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready,
+ html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready {
+ opacity:1!important;translate:none!important;filter:none!important;transition:none!important;
+ }
+}
+
+
+/* V68: restore Palia's real GL hero banner, not a replacement DOM <img>.
+   The original BannerScene shader feathers/distorts/dissolves the texture. */
+html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl {
+ position:relative!important;
+ display:block!important;
+ width:100%!important;
+ height:clamp(350px,39vw,690px)!important;
+ min-height:0!important;
+ max-height:min(74vh,690px)!important;
+ margin:0!important;
+ overflow:visible!important;
+ background:transparent!important;
+ isolation:auto!important;
+ transform:none!important;
+}
+html.byz-market-copy-ready .work-detail .hero__media .byz-product-hero-photo-v61,
+html.byz-market-copy-ready .work-detail .hero__media .byz-product-hero-backdrop-v65,
+html.byz-market-copy-ready .work-detail .byz-hero-stage-v66 { display:none!important; }
+html.byz-market-copy-ready .work-detail .hero__intro.grid {
+ display:flex!important;
+ flex-direction:column!important;
+ justify-content:center!important;
+ align-items:center!important;
+ position:relative!important;
+ z-index:2!important;
+ margin:0!important;
+ padding:clamp(12px,2vw,36px) 5% clamp(24px,3vw,44px)!important;
+ transform:none!important;
+ clear:both!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading {margin:0 auto!important;transform:none!important;}
+html.byz-market-copy-ready .work-detail .hero__title {margin:0!important;}
+@media(max-width:720px){
+ html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl {
+   height:clamp(310px,55vh,530px)!important;
+   max-height:66vh!important;
+ }
+ html.byz-market-copy-ready .work-detail .hero__intro.grid {padding:10px 6% 30px!important;}
+}
+
+/* V70 — Hero/title meeting point. Keeps the WebGL feathered banner intact.
+   Pull the ORIGINAL hero caption into the bottom of the GL composition, and
+   let the remaining copy follow naturally in normal document flow. */
+html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl{
+ height:clamp(330px,36vw,620px)!important;max-height:68vh!important;
+}
+html.byz-market-copy-ready .work-detail .hero__intro.grid{
+ margin-top:calc(-1 * clamp(5.5rem,8.3vw,9rem))!important;
+ padding:0 5% .8rem!important;z-index:12!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading{
+ position:relative!important;z-index:13!important;
+}
+html.byz-market-copy-ready .byz-market-tagline{
+ margin-top:.42rem!important;
+}
+html.byz-market-copy-ready .byz-market-product-copy{
+ padding-top:clamp(1.5rem,2.8vw,2.8rem)!important;
+}
+@media(max-width:720px){
+ html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl{
+  height:clamp(320px,53vh,510px)!important;max-height:64vh!important;
+ }
+ html.byz-market-copy-ready .work-detail .hero__intro.grid{
+  margin-top:calc(-1 * clamp(3rem,10vw,5rem))!important;
+  padding:0 6% .65rem!important;
+ }
+ html.byz-market-copy-ready .byz-market-product-copy{padding-top:1.2rem!important}
+}
+
+
+/* V73 — Silk Textiles becomes a premium editorial shopping experience.
+   The original Palia WebGL hero remains untouched; this styles only the product copy area. */
+.byz-market-product-copy--silk{
+ padding-left:max(4.5%,calc((100% - 1450px)/2))!important;
+ padding-right:max(4.5%,calc((100% - 1450px)/2))!important;
+}
+.byz-silk-experience{display:flex;flex-direction:column;gap:clamp(2.75rem,5vw,5rem)}
+.byz-silk-section,
+.byz-silk-feature-grid,
+.byz-silk-gallery,
+.byz-silk-pricing,
+.byz-silk-story{position:relative}
+.byz-silk-section{
+ display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);
+ gap:clamp(1.5rem,3vw,3.4rem);align-items:center;
+}
+.byz-silk-section--reverse{grid-template-columns:minmax(320px,.95fr) minmax(0,1.05fr)}
+.byz-silk-section--reverse .byz-silk-copy{order:2}
+.byz-silk-section--reverse .byz-silk-visual{order:1}
+.byz-silk-copy{
+ background:linear-gradient(180deg,rgba(15,20,33,.62),rgba(9,13,22,.2));
+ border:1px solid rgba(236,220,191,.11);
+ border-radius:28px;padding:clamp(1.35rem,2.4vw,2.3rem);
+ box-shadow:0 22px 60px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.03);
+ backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.byz-silk-eyebrow{display:block;margin:0 0 .8rem;color:#d2b889;font:600 .77rem/1.4 var(--font-sans,Arial,sans-serif);letter-spacing:.22em;text-transform:uppercase}
+.byz-silk-copy h2{font-family:var(--font-serif,Georgia,serif);font-size:clamp(2rem,3.4vw,4rem);font-weight:500;line-height:1.04;letter-spacing:-.03em;color:#fff;margin:0 0 1rem}
+.byz-silk-copy p{font-size:clamp(.98rem,1.12vw,1.08rem);line-height:1.9;color:#d9dce6;margin:0 0 1.05rem;max-width:68ch}
+.byz-silk-copy p:last-child{margin-bottom:0}
+.byz-silk-quote{
+ margin-top:1.4rem;padding:1rem 1.15rem 1rem 1.25rem;border-left:2px solid rgba(212,180,118,.78);
+ background:linear-gradient(90deg,rgba(212,180,118,.08),rgba(212,180,118,0));
+ color:#faf5ea;font-family:var(--font-serif,Georgia,serif);font-style:italic;font-size:clamp(1.05rem,1.45vw,1.45rem);line-height:1.7;
+}
+.byz-silk-visual{position:relative}
+.byz-market-scratch-figure--portrait{width:min(560px,100%);max-width:min(560px,100%);aspect-ratio:4/5;margin:0 auto;left:auto;transform:none}
+.byz-market-scratch-figure--square{width:min(100%,410px);max-width:100%;aspect-ratio:1/1;margin:0;left:auto;transform:none}
+.byz-market-scratch-figure--wide{width:100%;max-width:100%;aspect-ratio:21/9;margin:0;left:auto;transform:none}
+.byz-market-scratch-figure--room{width:min(100%,620px);max-width:100%;aspect-ratio:5/4;margin:0 auto;left:auto;transform:none}
+.byz-market-scratch-figure--gallery{margin:0;width:100%;max-width:100%;left:auto;transform:none}
+.byz-market-scratch-figure--short{aspect-ratio:16/10}
+.byz-market-scratch-surface::before{
+ content:'';position:absolute;inset:0;z-index:0;
+ background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.14),transparent 28%),
+ linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.18));pointer-events:none;
+}
+.byz-market-scratch-surface img.byz-market-supplied-photo{z-index:0;transition:transform .7s var(--expo-out, cubic-bezier(.14,1,.34,1)), filter .55s ease}
+.byz-market-scratch-figure:hover .byz-market-supplied-photo{transform:scale(1.03);filter:saturate(1.04)}
+.byz-market-scratch-caption{
+ margin-top:.95rem;color:#bfc5d0;font:500 .84rem/1.7 var(--font-sans,Arial,sans-serif);letter-spacing:.03em
+}
+.byz-market-image-placeholder{
+ width:min(85%,720px);padding:1.2rem 1.3rem;border:1px solid rgba(255,255,255,.12);border-radius:18px;
+ background:rgba(13,19,30,.34);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)
+}
+.byz-market-image-placeholder strong{display:block;font-size:.86rem;letter-spacing:.26em;color:#f2ead9;margin-bottom:.75rem}
+.byz-market-image-placeholder span{display:block;font-size:.77rem;letter-spacing:.12em;line-height:1.8;text-transform:none;color:rgba(229,235,243,.78)}
+.byz-market-image-placeholder em{display:block;margin-top:.7rem;color:#d5b47b;font-style:normal;font-size:.74rem;letter-spacing:.18em;text-transform:uppercase}
+.byz-silk-banner{
+ position:relative;min-height:0;padding:0;border-radius:30px;overflow:hidden;
+ border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(5,8,14,.05));
+}
+.byz-silk-banner .byz-market-scratch-figure{margin:0}
+.byz-silk-banner-copy{
+ position:absolute;left:clamp(18px,3vw,42px);bottom:clamp(18px,3vw,42px);z-index:3;
+ width:min(640px,calc(100% - 32px));padding:clamp(1rem,2vw,1.55rem);
+ background:linear-gradient(180deg,rgba(8,12,20,.2),rgba(8,12,20,.76));
+ border:1px solid rgba(255,255,255,.08);border-radius:24px;backdrop-filter:blur(10px);
+}
+.byz-silk-banner-copy h3{margin:0 0 .55rem;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.55rem,2.2vw,2.4rem);font-weight:500;line-height:1.08;color:#fff}
+.byz-silk-banner-copy p{margin:0;color:#dde3eb;font-size:clamp(.92rem,1.02vw,1rem);line-height:1.8;max-width:54ch}
+.byz-silk-feature-grid{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.6vw,22px)
+}
+.byz-silk-card,
+.byz-silk-price-card{
+ position:relative;padding:1.35rem 1.3rem 1.25rem;border-radius:24px;
+ background:linear-gradient(180deg,rgba(17,22,35,.76),rgba(10,14,24,.56));
+ border:1px solid rgba(237,226,207,.1);overflow:hidden;
+ box-shadow:0 18px 40px rgba(0,0,0,.12);transition:transform .5s var(--expo-out,cubic-bezier(.14,1,.34,1)), border-color .3s ease, box-shadow .3s ease;
+}
+.byz-silk-card:hover,.byz-silk-price-card:hover{transform:translateY(-6px);border-color:rgba(216,185,120,.24);box-shadow:0 26px 50px rgba(0,0,0,.18)}
+.byz-silk-card::after,.byz-silk-price-card::after{content:'';position:absolute;inset:auto -10% -40% auto;width:220px;height:220px;background:radial-gradient(circle,rgba(214,177,107,.11),transparent 65%);pointer-events:none}
+.byz-silk-card-number{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:999px;border:1px solid rgba(214,177,107,.3);color:#dfbe82;font:600 .8rem/1 var(--font-sans,Arial,sans-serif);letter-spacing:.16em;margin-bottom:.9rem}
+.byz-silk-card h3,.byz-silk-price-card h3{margin:0 0 .55rem;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.35rem,1.7vw,1.8rem);font-weight:500;line-height:1.15;color:#fff}
+.byz-silk-card p,.byz-silk-price-card p,.byz-silk-price-card li{margin:0;color:#d8dbe5;font-size:.96rem;line-height:1.85}
+.byz-silk-card p+p{margin-top:.7rem}
+.byz-silk-gallery{display:grid;grid-template-columns:1.05fr .95fr .95fr;gap:clamp(14px,1.6vw,22px);align-items:start}
+.byz-silk-gallery .byz-market-scratch-caption{padding-right:.5rem}
+.byz-silk-pricing{
+ display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(1.2rem,2.4vw,2.75rem);align-items:start
+}
+.byz-silk-pricing-copy h2,.byz-silk-story-copy h2{margin:0 0 .9rem;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.9rem,3vw,3.2rem);font-weight:500;line-height:1.06;color:#fff;letter-spacing:-.025em}
+.byz-silk-pricing-copy p,.byz-silk-story-copy p{margin:0 0 1rem;color:#d9dce6;font-size:1rem;line-height:1.9;max-width:64ch}
+.byz-silk-price-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.5vw,22px)}
+.byz-silk-price-card .byz-silk-price-kicker{display:block;color:#d7b97c;font:600 .76rem/1.4 var(--font-sans,Arial,sans-serif);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.8rem}
+.byz-silk-price{display:block;margin:.25rem 0 .85rem;color:#fff;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.45rem,2.1vw,2.1rem);line-height:1.05}
+.byz-silk-price-card ul{margin:.85rem 0 0;padding-left:1rem}
+.byz-silk-price-card li+li{margin-top:.45rem}
+.byz-silk-story{
+ display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);gap:clamp(1.2rem,2.4vw,2.75rem);align-items:start
+}
+.byz-silk-story-panel{
+ padding:1.35rem 1.3rem;border-radius:24px;border:1px solid rgba(237,226,207,.1);
+ background:linear-gradient(180deg,rgba(17,22,35,.76),rgba(10,14,24,.56));
+}
+.byz-silk-story-panel h3{margin:0 0 .65rem;font-family:var(--font-serif,Georgia,serif);font-size:1.45rem;font-weight:500;color:#fff;line-height:1.15}
+.byz-silk-story-panel p{margin:0;color:#dae0e7;font-size:.97rem;line-height:1.85}
+.byz-silk-story-panel p+p{margin-top:.8rem}
+.byz-silk-story-panel ul{margin:.8rem 0 0;padding-left:1rem}
+.byz-silk-story-panel li{color:#d9dde6;line-height:1.8}
+.byz-silk-story-panel li+li{margin-top:.45rem}
+.byz-needed-assets{margin-top:1rem;padding-left:1rem}
+.byz-needed-assets li{line-height:1.8;color:#dde0e8}
+.byz-market-product-copy--silk .byz-market-purchase{margin-top:1rem;width:100%;max-width:none}
+.byz-market-product-copy--silk .byz-market-reading{width:100%;max-width:none}
+@media(max-width:1100px){
+ .byz-silk-feature-grid,.byz-silk-price-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .byz-silk-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .byz-silk-gallery > :first-child{grid-column:1/-1}
+}
+@media(max-width:900px){
+ .byz-silk-section,.byz-silk-section--reverse,.byz-silk-pricing,.byz-silk-story{grid-template-columns:1fr}
+ .byz-silk-section--reverse .byz-silk-copy,.byz-silk-section--reverse .byz-silk-visual{order:initial}
+ .byz-silk-banner-copy{position:relative;left:auto;bottom:auto;width:100%;border-radius:0;border-left:0;border-right:0;border-bottom:0}
+}
+@media(max-width:720px){
+ .byz-market-product-copy--silk{padding-left:6%;padding-right:6%}
+ .byz-silk-feature-grid,.byz-silk-gallery,.byz-silk-price-grid{grid-template-columns:1fr}
+ .byz-silk-copy{padding:1.15rem}
+ .byz-market-scratch-figure--portrait{width:min(100%,520px)}
+ .byz-silk-card,.byz-silk-price-card,.byz-silk-story-panel{padding:1.15rem 1.05rem}
+}

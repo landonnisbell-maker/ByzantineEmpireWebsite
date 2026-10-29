@@ -1,0 +1,60 @@
+{
+  "version": 73,
+  "files": [
+    {
+      "path": "README-V73.txt",
+      "bytes": 1419,
+      "sha256": "670e5f9db1856b6b7a1b87ec87a2013771ce438309e38949d81602768fa11444"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v73.css",
+      "bytes": 18799,
+      "sha256": "bca7d2f0d6762ff3bcadbb40d3e75eead6f9810bd05b4ae70b1188244293e567"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v73.js",
+      "bytes": 41026,
+      "sha256": "75e04b67c202a355dca9e5d951b3d55e714722ac73fd4437c28851bab8d2ece9"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/coins/index.html",
+      "bytes": 61831,
+      "sha256": "55df271b6adfc7e4aa2a28643d25e61cdd117995f40109a2d3ef9c7f0f49eaab"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/food-items/index.html",
+      "bytes": 61825,
+      "sha256": "2f3f0d56e86ce78d8fb3472e6c0eaf469358b789c8f6b19180eff5ed766cc2ea"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/gold-jewelry/index.html",
+      "bytes": 61829,
+      "sha256": "4a2c72d38d31187b0a451d971a4013b3d3a54b59f8bb65ca2234c74af17e3e5c"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/paramerion-sword/index.html",
+      "bytes": 61837,
+      "sha256": "2f2bab5530592c44ef374365e7a22253516bb924f962a18182a1e4c1a62b184c"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/silk-textiles/index.html",
+      "bytes": 61831,
+      "sha256": "e2b2b248134f06aab2255e576b357eeea1d90bb0c7b38974ead3fb815921453f"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/index.html",
+      "bytes": 61201,
+      "sha256": "5de3910f739a540433943dc8afbce717ae5f8c97b408ba093d608bcbd54034dc"
+    },
+    {
+      "path": "market-runtime/product-images/details/silk-cloak-feature-v73.webp",
+      "bytes": 119548,
+      "sha256": "081dc5fb8201a8663e43a0a52eaa6a81784078d71ca15da1ddef2214ff2bd86b"
+    },
+    {
+      "path": "pp-loader/market-preload-v71.js",
+      "bytes": 2970,
+      "sha256": "042e59c8d6c9707b6a7fced3fd55ebf34876d693e25bbe5679bc51d83f0e5415"
+    }
+  ]
+}
