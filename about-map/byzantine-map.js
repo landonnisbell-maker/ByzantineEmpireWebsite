@@ -129,11 +129,16 @@ viewport.addEventListener('keydown',ev=>{
  });
 window.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&frame.dataset.expanded==='true')toggleExpand(false)});
 window.addEventListener('resize',()=>{if(frame.dataset.active==='true')draw()});
-// V49: the interactive HTML atlas only exists visually while the native
-// interior is fully open. A persistent WebGPU mesh (same material as the
-// text) carries the map through crystal entry, bend and exit. This avoids
-// both the entry-frame flash and the rigid rectangular exit overlay.
+// V50: the SVG widget uses the SAME native reveal uniform as the text.
+// Both fade out completely BEFORE the underlying crystal starts to move.
+// No second GPU-baked map and no retained preview on re-entry.
 let wasActive=false,prevRect='';
+// The store entry bridge fires synchronously at click time, before camera travel.
+window.addEventListener('byz:about:begin-entry',()=>{
+  frame.style.setProperty('--byz-native-reveal','0');
+  wasActive=false;prevRect='';
+  setMapActive(false);
+});
 function setMapActive(active){
   if(active){
     mount();
@@ -149,20 +154,21 @@ function setMapActive(active){
 }
 function layout(){
   const r=window.__BYZ_ABOUT_MAP_SLOT_V45__;
-  const valid=!!r&&r.phase==='interior'&&Number(r.opacity)>=0.975&&
-    r.width>60&&r.height>40&&
+  const reveal=clamp(Number(r?.opacity)||0,0,1);
+  const valid=!!r&&r.phase==='interior'&&!window.__BYZ_ABOUT_ENTER_LOCK__&&
+    reveal>0.001&&r.width>60&&r.height>40&&
     r.left<window.innerWidth&&r.top<window.innerHeight&&
     r.left+r.width>0&&r.top+r.height>0;
+  // This is the actual native text shader reveal, not a separate CSS timer.
+  frame.style.setProperty('--byz-native-reveal',valid?String(reveal):'0');
   if(valid!==wasActive){
     wasActive=valid;
     if(valid){reset();setMapActive(true)}
     else {setMapActive(false);prevRect=''}
   }
   if(valid){
-    // The widget is only activated once the native reveal is near-complete.
-    // It stays fully opaque while interactive. The native GPU map below it
-    // remains bendable and handles both transitions without a split frame.
-    frame.style.opacity='1';
+    // Opacity comes directly from the native WebGPU uReveal uniform.
+    // In particular, the widget does NOT remain opaque during exit.
     const vals=[r.left,r.top,r.width,r.height].map(n=>Math.round(n*2)/2);
     const key=vals.join(',');
     // Make the original SVG's 296.93:181.17 aspect fit the media slot *without*

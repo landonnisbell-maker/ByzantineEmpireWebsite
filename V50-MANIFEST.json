@@ -1,0 +1,20 @@
+{
+  "version": "50.0",
+  "baseline": "V49",
+  "type": "UPDATE ONLY",
+  "files": [
+    "index.html",
+    "about-map/byzantine-map.js",
+    "about-map/byzantine-map.css",
+    "_next/static/chunks/1502ibkr~cu.4.js",
+    "404.html"
+  ],
+  "changes": [
+    "No baked GPU map; eliminates re-entry texture flash",
+    "Fade SVG map and GPU text together, then delay About Us exit 500ms",
+    "Start text/map fade-in only after interior status confirms entry",
+    "Purple gradient restored behind expanded atlas",
+    "GitHub Pages custom 404 redirects reloads of unsupported deep URLs to homepage"
+  ],
+  "note": "The custom 404 returns to the Portal rather than restoring a deep product route; true same-route refresh requires exporting all routes or SPA navigation fallback handling."
+}

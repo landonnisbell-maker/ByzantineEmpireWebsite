@@ -225,13 +225,24 @@ html.byz-map-modal-open,body.byz-map-modal-open{overflow:hidden!important;oversc
 #byz-map-screen-veil{z-index:2147479998!important}
 #byz-history-map[data-expanded="true"]{z-index:2147480001!important}
 
-/* V49 — UI map takes over ONLY after native bend/dissolve settles. */
+/* V50 — One shared GPU/DOM fade, no rigid map at the crystal transition. */
 #byz-history-map[data-active="true"]:not([data-expanded="true"]){
-  opacity:1!important;
+  opacity:var(--byz-native-reveal,0)!important;
+  visibility:visible!important;
   animation:none!important;
+  transition:none!important;
 }
 #byz-history-map[data-active="false"]:not([data-expanded="true"]){
   opacity:0!important;
   visibility:hidden!important;
   pointer-events:none!important;
 }
+/* Preserve the purple-pink About Us atmosphere behind the expanded atlas. */
+#byz-history-map[data-expanded="true"],
+#byz-map-screen-veil.is-on{
+  background:radial-gradient(ellipse at 21% 12%,rgba(113,41,166,.48),transparent 54%),
+    radial-gradient(ellipse at 83% 72%,rgba(86,33,108,.45),transparent 53%),
+    linear-gradient(135deg,#11091f 0%,#231035 54%,#110b1c 100%)!important;
+}
+#byz-map-screen-veil.is-on{opacity:1!important;visibility:visible!important;}
+#byz-history-map[data-expanded="true"] .hm-viewport{background:#c4e9f9!important;}
