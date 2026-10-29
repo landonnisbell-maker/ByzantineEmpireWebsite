@@ -73,15 +73,41 @@
  };
  function syncHeroMedia(page){
    const hero=page.querySelector('.hero__media');if(!hero)return;
-   let image=hero.querySelector('.byz-product-hero-photo-v61');
    const src=BYZ_PRODUCT_IMAGE[activeProduct];
-   if(!src){if(image)image.remove();return;}
+   let image=hero.querySelector('.byz-product-hero-photo-v61');
+   let backdrop=hero.querySelector('.byz-product-hero-backdrop-v65');
+   if(!src){if(image)image.remove();if(backdrop)backdrop.remove();return;}
+   if(!backdrop){
+     backdrop=document.createElement('img');
+     backdrop.className='byz-product-hero-backdrop-v65';
+     backdrop.alt='';backdrop.setAttribute('aria-hidden','true');
+     backdrop.decoding='async';backdrop.loading='eager';
+     hero.appendChild(backdrop);
+   }
    if(!image){
      image=document.createElement('img');image.className='byz-product-hero-photo-v61';
      image.alt='Illustration of '+activeProduct;image.decoding='async';
      image.loading='eager';hero.appendChild(image);
    }
+   if(backdrop.getAttribute('src')!==src)backdrop.src=src;
+   function sizePortraitToHero(){
+     if(!image.isConnected||!image.naturalWidth||!image.naturalHeight)return;
+     const bounds=hero.getBoundingClientRect();
+     if(bounds.width<=0||bounds.height<=0)return;
+     const scale=Math.min(bounds.width/image.naturalWidth,bounds.height/image.naturalHeight);
+     image.style.setProperty('width',Math.max(1,Math.round(scale*image.naturalWidth))+'px','important');
+     image.style.setProperty('height',Math.max(1,Math.round(scale*image.naturalHeight))+'px','important');
+   }
+   if(!hero._byzHeroResizeV65 && 'ResizeObserver' in window){
+     hero._byzHeroResizeV65=new ResizeObserver(function(){sizePortraitToHero();});
+     hero._byzHeroResizeV65.observe(hero);
+   }
+   if(!image._byzHeroFittingV65){
+     image._byzHeroFittingV65=true;
+     image.addEventListener('load',sizePortraitToHero);
+   }
    if(image.getAttribute('src')!==src){image.src=src;image.alt=activeProduct;}
+   if(image.complete)sizePortraitToHero();
  }
  function apply(){
    const item=PRODUCTS[activeProduct];if(!item)return;

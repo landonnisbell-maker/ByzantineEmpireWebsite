@@ -1,0 +1,50 @@
+{
+  "version": "V65",
+  "files": [
+    {
+      "path": "README-V65.txt",
+      "size": 923,
+      "sha256": "731c6b9ffedb158624a06247bc2b83868336d684e05fcfa575422a2d11aa077a"
+    },
+    {
+      "path": "index.html",
+      "size": 155231,
+      "sha256": "7d24d250facdbefaff2f98c99cf58affaed226e2fcd1dc25616bc4d51d41538f"
+    },
+    {
+      "path": "byzantine-about-us-content.js",
+      "size": 8960,
+      "sha256": "d600408ff23690e913613e517434cdbabf844214f69c2c94e65d6854363d4c9c"
+    },
+    {
+      "path": "market/index.html",
+      "size": 15523,
+      "sha256": "3c2364f49c36dd3ed3ae8fb341b8d1734276cc0b9e134ece4ac2b13e89cc4102"
+    },
+    {
+      "path": "_next/static/chunks/1502ibkr~cu.4.js",
+      "size": 287296,
+      "sha256": "8df2bd573feaad7d2cf2434073a96e665192846d7bbf1dec31e34e96ef1b58c8"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-hero-edge-mask-v65.png",
+      "size": 199271,
+      "sha256": "19a6270784015600a804ae8ac1ed7b8e125d69f2462bb217c5d24bfb9fdda92b"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/index.html",
+      "size": 59261,
+      "sha256": "1b82d2cdddd99f48fd999c15cf1509d0a4aef988824720726dd56cde182fd44a"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v38.css",
+      "size": 11333,
+      "sha256": "2620e6fff198c3732e226d10be183cbbdc3727b93ef86c339337680ef1194c29"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-content-v38.js",
+      "size": 29682,
+      "sha256": "153829b1971827322378ad754c5971fa2d81ed95da6a7c27bd7c0423dbb83070"
+    }
+  ]
+}
