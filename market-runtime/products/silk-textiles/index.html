@@ -29,12 +29,13 @@ if(window.top===window && location.pathname!=="/ByzantineEmpireWebsite/"){
 })();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="theme-color" content="#0a0b0d"><title>ta pánta pazári · Market</title>
 <style>
-html,body{margin:0;height:100%;overflow:hidden;background:#0c0d0f;color:#fff;font-family:Arial,sans-serif}
+html,body{margin:0;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Arial,sans-serif}
 #byz-gallery,#byz-palia{position:fixed;inset:0;display:block;width:100%;height:100%;height:100dvh;border:0;overflow:hidden;}
-#byz-gallery{z-index:1;background:#111;opacity:1;transition:opacity .65s cubic-bezier(.22,1,.36,1);}
+#byz-gallery{z-index:1;background:#000;opacity:0;transition:opacity .65s cubic-bezier(.22,1,.36,1);}
 /* Palia has its real viewport while warming up, unlike a display:none iframe. */
 #byz-palia{z-index:2;background:#10141f;opacity:0.001;pointer-events:none;transform:scale(1.035) translateZ(0);filter:blur(9px);will-change:opacity,transform,filter;transition:opacity .76s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1),filter .76s ease;}
 body.byz-product-open #byz-palia{opacity:1;transform:scale(1) translateZ(0);filter:blur(0);pointer-events:auto;}
+body.byz-gallery-ready #byz-gallery{opacity:1;}
 body.byz-product-open #byz-gallery{opacity:0;pointer-events:none;}
 body.byz-product-leaving #byz-palia{opacity:.001;transform:scale(1.025) translateZ(0);filter:blur(7px);pointer-events:none;transition:opacity .65s cubic-bezier(.42,0,.58,1),transform .65s ease,filter .65s ease;}
 body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
@@ -50,286 +51,39 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 #byz-new-page-return:focus-visible{outline:2px solid #fff;outline-offset:3px}
 @media(max-width:680px){#byz-new-page-return{left:54px!important;top:17px!important;min-width:0!important;min-height:30px!important;padding:5px 4px!important}}
 
-#byz-gallery-guide{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:10;width:min(1000px,calc(100% - 36px));box-sizing:border-box;padding:13px 21px;border:1px solid rgba(250,239,218,.24);border-radius:12px;background:rgba(12,12,18,.74);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#f8f6f1;font:500 clamp(11px,1vw,14px)/1.6 Manrope,Arial,sans-serif;letter-spacing:.005em;text-align:center;pointer-events:none;opacity:1;transition:opacity .28s ease}
+#byz-gallery-guide{position:fixed;left:0;right:0;bottom:0;z-index:10;
+ box-sizing:border-box;padding:28px max(20px,calc((100vw - 1120px)/2)) max(14px,env(safe-area-inset-bottom));
+ pointer-events:none;text-align:center;color:#f5f0e8;background:linear-gradient(0deg,rgba(1,2,5,.9) 0%,rgba(1,2,5,.72) 45%,transparent 100%);
+ opacity:1;transition:opacity .3s ease,visibility .3s ease;font-family:Manrope,Arial,sans-serif}
+#byz-gallery-guide::before{content:'';display:block;width:clamp(48px,7vw,115px);height:1px;margin:0 auto 10px;background:linear-gradient(90deg,transparent,#f2c47e,transparent)}
+.byz-guide-kicker{font-size:clamp(9px,.64vw,11px);font-weight:700;letter-spacing:.28em;color:#e2bc82;text-transform:uppercase;line-height:1.6}
+.byz-guide-main{font:500 clamp(13px,1.12vw,18px)/1.35 Georgia,serif;letter-spacing:.012em;margin:5px 0 4px}
+.byz-guide-main b{font-weight:500;color:#edc891}
+.byz-guide-detail{font:400 clamp(10px,.77vw,12px)/1.45 Manrope,Arial,sans-serif;color:#d1cbd0;max-width:840px;margin:0 auto;opacity:.85}
 body.byz-product-open #byz-gallery-guide,body.byz-product-leaving #byz-gallery-guide{opacity:0;visibility:hidden}
-@media(max-width:600px){#byz-gallery-guide{padding:10px 12px;bottom:10px;font-size:11px;line-height:1.5;border-radius:8px}}
+@media(max-width:600px){#byz-gallery-guide{padding:18px 12px max(9px,env(safe-area-inset-bottom))}.byz-guide-main{font-size:12px}.byz-guide-detail{font-size:10px}.byz-guide-kicker{font-size:9px}}
+/* V86 persistent isolated product pages */
+#byz-palia-pool{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+#byz-palia-pool .byz-palia-frame{position:absolute;inset:0;display:block;width:100%;height:100dvh;border:0;background:#11131e;opacity:0;visibility:visible;pointer-events:none;transition:opacity .16s ease;contain:layout style}
+#byz-palia-pool .byz-palia-frame[data-ready="1"]:not(.byz-palia-active){visibility:hidden}
+#byz-palia-pool .byz-palia-frame.byz-palia-active{opacity:1;pointer-events:auto;z-index:2;visibility:visible}
+body.byz-product-open #byz-palia-pool{pointer-events:auto}
+body.byz-product-open #byz-gallery{opacity:0;pointer-events:none;transition:opacity .16s ease}
+body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;transition:opacity .16s ease}
+body.byz-product-open #byz-gallery-guide,body.byz-product-leaving #byz-gallery-guide,body.byz-quick-show #byz-gallery-guide{opacity:0;visibility:hidden}
+#byz-quick-v86{position:fixed;inset:0;z-index:3;pointer-events:none;background:#101420;opacity:0;visibility:hidden;transition:opacity .12s ease,visibility .12s ease;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:white}
+#byz-quick-v86.active{opacity:1;visibility:visible}
+#byz-quick-v86 img{width:min(90vw,1000px);max-height:45vh;object-fit:contain}
+#byz-quick-v86 h1{font:normal clamp(34px,6vw,78px) Georgia,serif;margin:10px 0}
+#byz-quick-v86 p{font:italic clamp(15px,1.6vw,23px) Georgia,serif;margin:4px 0;max-width:750px}
+@media(prefers-reduced-motion:reduce){#byz-palia-pool .byz-palia-frame,#byz-quick-v86{transition:none!important}}
 </style>
 <link rel="stylesheet" href="/ByzantineEmpireWebsite/brand/market-flower-v39.css?v=83"/>
 </head><body><img class="byz-market-flower-mark" src="/ByzantineEmpireWebsite/brand/pazari-flower-v39.png" alt="ta pánta pazári" aria-hidden="true" decoding="async"/>
-<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=64.0" allow="autoplay;fullscreen" loading="eager"></iframe>
-<iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&v=69.0" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
-<p id="byz-gallery-guide">Because this is a simulation, we have created cards for you to click on and view our products. Scroll to look at different cards, and click to enter a product.</p>
+<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=84.0" allow="autoplay;fullscreen" loading="eager"></iframe>
+<div id="byz-palia-pool" aria-label="Ready product pages"></div><section id="byz-quick-v86" aria-live="off" aria-hidden="true"><img alt=""/><h1></h1><p></p></section>
+<aside id="byz-gallery-guide" aria-label="How to explore the marketplace"><div class="byz-guide-kicker">ta pánta pazári &nbsp;·&nbsp; The Everything Bazaar</div><p class="byz-guide-main"><b>Scroll</b> to explore the wares &nbsp;✦&nbsp; <b>Select</b> a cloth to enter its story</p><p class="byz-guide-detail">Because this is a simulation, we have created cards for you to click on and view our products. Scroll to look at different cards, and click to enter a product.</p></aside>
 <div id="byz-status" role="status" aria-live="polite">Preparing product experience…</div>
 <button id="byz-retry" type="button">RETRY PRODUCT PAGE</button>
 <button type="button" id="byz-new-page-return" aria-label="Close Market or product" title="Close">CLOSE</button>
-<script>
-(()=>{
-'use strict';
-const gallery=document.getElementById('byz-gallery');
-const palia=document.getElementById('byz-palia');
-let paliaStartedLoading=false;
-let productLoadGeneration=0;
-let pendingProductSlug=null;
-let productHeroReady=false;
-function ensurePaliaLoaded(){
- // V69: intentionally DO NOT preload a default sword into the reused Palia runtime.
- // Every product choice navigates a fresh product-specific document instead.
-}
-
-const status=document.getElementById('byz-status');
-const retry=document.getElementById('byz-retry');
-// Separate dedicated product routes, backed by individual products/*.json files.
-const PRODUCTS=Object.freeze([
-  {slug:'paramerion-sword',title:'Paramerion Sword'},
-  {slug:'gold-jewelry',title:'Gold Jewelry'},
-  {slug:'food-items',title:'Food Items'},
-  {slug:'coins',title:'Coin Exchange Service'},
-  {slug:'silk-textiles',title:'Silk Textiles'}
-]);
-const PRODUCT_NAMES=Object.freeze(PRODUCTS.map(p=>p.title));
-const PRODUCT_PATH_PREFIX='/ByzantineEmpireWebsite/market-runtime/products/';
-const initialRoute=location.pathname.startsWith(PRODUCT_PATH_PREFIX)
-  ? location.pathname.slice(PRODUCT_PATH_PREFIX.length).replace(/\/$/,'').replace(/\/index\.html$/,'') : null;
-const initialIndex=PRODUCTS.findIndex(p=>p.slug===initialRoute);
-
-const PRODUCT_SLUGS=Object.freeze({'cgtrader':0,'w3r-one':1,'presti':2,'grandir':3,'reaali':4,'coins':3,'coin-exchange-service':3});
-let activeProductIndex=initialIndex>=0?initialIndex:0;
-let confirmedV66Product=null;
-let v66ProductCheck=null;
-let enteredPalia=false, sceneStarted=false, visualReady=false, productRequested=false, leaving=false, failing=false;
-let loadDeadline=null, startTime=performance.now(), lastReadyEvent='initial';
-function report(action,detail=''){
-  if(new URLSearchParams(location.search).has('byzdebug'))console.debug('[Market]',action,detail);
-}
-function enforceV66Product(activate){
-  const chosen=PRODUCTS[activeProductIndex];
-  const data={type:activate?'byz:palia:activate-product':'byz:palia:set-product',
-    title:chosen.title,slug:chosen.slug,index:activeProductIndex,resetScroll:!!activate};
-  try{
-    const child=palia.contentWindow;
-    // Same-origin direct selection avoids timing races during iframe activation.
-    child?.__BYZ_PALIA_SELECT_PRODUCT_V66__?.(data);
-    child?.postMessage(data,location.origin);
-  }catch(e){palia.contentWindow?.postMessage(data,location.origin);}
-}
-function selectProduct(selection){
-  let index=null;
-  if(selection && Number.isInteger(Number(selection.index)) && Number(selection.index)>=0 && Number(selection.index)<PRODUCT_NAMES.length)
-    index=Number(selection.index);
-  else if(selection && typeof selection.slug==='string' && Object.prototype.hasOwnProperty.call(PRODUCT_SLUGS,selection.slug))
-    index=PRODUCT_SLUGS[selection.slug];
-  else if(selection && typeof selection.title==='string')
-    index=PRODUCTS.findIndex(p=>p.title===selection.title);
-  if(index!==null&&index>=0)activeProductIndex=index;
-  confirmedV66Product=null;
-  // Selection is applied by the new Palia document BEFORE its Nuxt modules run.
-  // Do not send product-switch messages to any previous document.
-  report('product-title',PRODUCTS[activeProductIndex].slug+' '+PRODUCTS[activeProductIndex].title);
-}
-function showStatus(show){status.classList.toggle('visible',show);}
-function makeVisible(){
-  if(!productRequested||!visualReady||leaving)return;
-  if(!confirmedV66Product || confirmedV66Product!==PRODUCTS[activeProductIndex].title)return;
-  if(!productHeroReady)return; // no image flash during async GPU texture loading
-  // The new document has its own scroll origin; never switch its product mid-reveal.
-  // The matching title was mounted before we expose its independently loaded WebGL canvas.
-  clearTimeout(loadDeadline);loadDeadline=null;
-  failing=false;retry.classList.remove('visible');showStatus(false);
-  document.body.classList.remove('byz-product-leaving');
-  document.body.classList.add('byz-product-open');
-  report('reveal','Palia ready, unified compositor fade');
-}
-function activateProductScroll(){
-  // Fresh per-product documents start at the top: no recycled scroll to reset.
-}
-function openProduct(selection,options={}){
-  if(leaving)return;
-  selectProduct(selection);
-  const product=PRODUCTS[activeProductIndex];
-  if(!options.fromHistory){
-    const productRoute=PRODUCT_PATH_PREFIX+product.slug+'/';
-    if(location.pathname!==productRoute)history.pushState({byzProduct:product.slug},'',productRoute);
-  }
-  productRequested=true;
-  enteredPalia=false;sceneStarted=false;visualReady=false;confirmedV66Product=null;
-  clearTimeout(v66ProductCheck);clearTimeout(loadDeadline);
-  document.body.classList.remove('byz-product-open','byz-product-leaving');
-  retry.classList.remove('visible');showStatus(true);
-  pendingProductSlug=product.slug;productHeroReady=false;
-  const generation=++productLoadGeneration;
-  // Distinct document URL for every selection; the browser creates new DOM, Nuxt,
-  // canvas, shaders, texture state, and scroll position for each product.
-  // Five actual HTML documents (not one document whose product changes).
-  const url=new URL('/ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/'+product.slug+'/index.html',location.origin);
-  url.searchParams.set('no-loader','');
-  url.searchParams.set('byzantine-palia-preload','1');
-  url.searchParams.set('byzantine-lite-fullscreen','1');
-  url.searchParams.set('byz-product',product.slug);
-  url.searchParams.set('byz-entry',String(generation));
-  url.searchParams.set('v','70.0');
-  paliaStartedLoading=true;
-  palia.src=url.pathname+url.search;
-  report('new-document',product.slug+' '+url.pathname+url.search);
-  loadDeadline=setTimeout(()=>{
-    if(!productRequested || visualReady || generation!==productLoadGeneration)return;
-    showStatus(false);retry.classList.add('visible');failing=true;
-    report('startup-timeout','new document not yet ready');
-  },25000);
-}
-function exitProduct(options={}){
-  if(!productRequested && !document.body.classList.contains('byz-product-open'))return;
-  productRequested=false;clearTimeout(loadDeadline);loadDeadline=null;
-  if(!options.fromHistory && location.pathname.startsWith(PRODUCT_PATH_PREFIX)){
-    history.replaceState({byzMarket:true},'','/ByzantineEmpireWebsite/market/');
-  }
-  // No frame-level history rewrite: keep the gallery instance alive.
-  report('product-returned');
-  retry.classList.remove('visible');showStatus(false);
-  if(!document.body.classList.contains('byz-product-open')){
-    ++productLoadGeneration;
-    palia.src='about:blank';paliaStartedLoading=false;
-    enteredPalia=false;sceneStarted=false;visualReady=false;
-    confirmedV66Product=null;pendingProductSlug=null;productHeroReady=false;
-    return;
-  }
-  leaving=true;
-  report('return','preserving live gallery iframe');
-  document.body.classList.add('byz-product-leaving');
-  document.body.classList.remove('byz-product-open');
-  // Release the previous product document entirely before another selection.
-  // This is deliberate: no old WebGL image/texture can survive and flash.
-  ++productLoadGeneration;
-  setTimeout(()=>{
-    palia.src='about:blank';paliaStartedLoading=false;
-    enteredPalia=false;sceneStarted=false;visualReady=false;
-    confirmedV66Product=null;pendingProductSlug=null;productHeroReady=false;
-    document.body.classList.remove('byz-product-leaving');leaving=false;
-  },720);
-
-}
-function preparePalia(){
-  if(enteredPalia)return;
-  enteredPalia=true;
-  report('prepared','request original Nuxt project start while offscreen');
-  palia.contentWindow.postMessage({type:'byz:palia:enter'},location.origin);
-}
-window.addEventListener('message',ev=>{
-  if(ev.origin===location.origin && ev.source===window.parent){
-    if(['byz:market:prewarm','byz:market:enter','byz:market:ping'].includes(ev.data?.type)){
-      window.__BYZ_MARKET_SHOULD_ENTER__=true;
-      gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);
-      ensurePaliaLoaded();reportReady(true);
-    }
-    if(ev.data?.type==='byz:market:close'){gallery.contentWindow?.postMessage({type:'byz:market:close'},location.origin);exitProduct({fromHistory:true});}
-    return;
-  }
-
-  if(ev.origin!==location.origin || !ev.data || typeof ev.data!=='object')return;
-  const type=ev.data.type;
-  if(ev.source===gallery.contentWindow){
-    if(type==='byz:market:gallery-ready'){
-      galleryReady=true;
-      window.parent!==window && window.parent.postMessage({type:'byz:market:gallery-ready'},location.origin);
-      reportReady();
-    }
-    if(type==='byz:open-product')openProduct(ev.data);
-    return;
-  }
-  if(ev.source!==palia.contentWindow)return;
-  if(type==='byz:palia:hero-ready-v70'){
-    if(productRequested && ev.data.slug===pendingProductSlug && ev.data.title===PRODUCTS[activeProductIndex].title){
-      productHeroReady=true;
-      makeVisible();
-    }
-    return;
-  }
-  if(type==='byz:palia:v66-applied'){
-    if(productRequested && ev.data.title===PRODUCTS[activeProductIndex].title){
-      confirmedV66Product=ev.data.title;
-      if(visualReady&&!leaving){clearTimeout(v66ProductCheck);makeVisible();}
-    }
-    return;
-  }
-  if(type==='byz:palia:prepared')preparePalia();
-  if(type==='byz:palia:started' && !sceneStarted){
-    sceneStarted=true;lastReadyEvent='started';
-    report('scene-started','wait for the independent product page to become ready');
-    // The original Nuxt page, fonts, and hero effects finish behind the gallery.
-    Promise.resolve(palia.contentDocument?.fonts?.ready).catch(()=>{}).then(()=>{
-      setTimeout(()=>{
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          visualReady=true;lastReadyEvent='visual-ready';reportReady();
-          report('visual-ready',Math.round(performance.now()-startTime)+'ms after host boot');
-          makeVisible();
-        }));
-      },1100);
-    });
-  }
-  if(type==='byz:palia:return')exitProduct();
-  if(type==='byz:palia:window-loaded')report('window-loaded');
-});
-palia.addEventListener('load',()=>{
-  if(palia.src==='about:blank' || !productRequested)return;
-  report('palia-iframe-loaded');
-  // Palia V17 starts automatically, but replay missed ready signals if the
-  // child became ready before the host listener was registered.
-  palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin);
-  setTimeout(()=>{if(!sceneStarted)palia.contentWindow.postMessage({type:'byz:palia:ping'},location.origin)},1400);
-});
-let galleryReady=false;
-let shellReadySignalled=false;
-let fallbackJob=null;
-function reportReady(replay=false){
-  if(replay && galleryReady && window.parent!==window){
-    window.parent.postMessage({type:'byz:market:gallery-ready'},location.origin);
-  }
-  if(replay && shellReadySignalled && window.parent!==window){
-    window.parent.postMessage({type:'byz:market:ready'},location.origin);
-  }
-  if(galleryReady && !shellReadySignalled){
-    shellReadySignalled=true;clearTimeout(fallbackJob);
-    window.parent!==window && window.parent.postMessage({type:'byz:market:ready'},location.origin);
-    report('all-ready','gallery + Palia already running; safe to reveal');
-  }
-}
-gallery.addEventListener('load',()=>{
-  report('gallery-iframe-loaded');
-  gallery.contentWindow?.postMessage({type:'byz:market:enter'},location.origin);
-  setTimeout(ensurePaliaLoaded,350);
-});
-retry.addEventListener('click',()=>{
-  retry.classList.remove('visible');showStatus(true);
-  // A retry is only needed if WebGL initialization truly stalled.
-  // Never disturb the gallery or its Enter the Experience button.
-  report('retry');openProduct({index:activeProductIndex});
-});
-window.addEventListener('popstate',()=>{
-  const slug=location.pathname.startsWith(PRODUCT_PATH_PREFIX) ? location.pathname.slice(PRODUCT_PATH_PREFIX.length).replace(/\/$/,'') : '';
-  const index=PRODUCTS.findIndex(p=>p.slug===slug);
-  if(index>=0)openProduct({index},{fromHistory:true});
-  else exitProduct({fromHistory:true});
-});
-if(initialIndex>=0){
-  // A real per-product URL can be refreshed and still open its own product document.
-  report('deep-link',PRODUCTS[initialIndex].slug);
-  openProduct({index:initialIndex},{fromHistory:true});
-}
-const returnBtn=document.getElementById('byz-new-page-return');
-function returnToCrystals(){
- if(window.parent!==window){
-   window.parent.postMessage({type:'byz:v24:exit-market'},location.origin);
- }else{
-   location.href='/ByzantineEmpireWebsite/';
- }
-}
-returnBtn.addEventListener('click',()=>{
-  if(productRequested || document.body.classList.contains('byz-product-open') || document.body.classList.contains('byz-product-leaving')){
-    if(!leaving)exitProduct();
-  }else returnToCrystals();
-});
-window.addEventListener('keydown',e=>{if(e.key==='Escape' && !document.body.classList.contains('byz-product-open'))returnToCrystals()});
-window.__BYZ_MARKET_STATUS__=()=>({version:'70.0',galleryReady,visualReady,productRequested,activeProductIndex});
-window.__BYZ_MARKET_SHOULD_ENTER__=true;
-report('host-loaded','V70: five isolated Palia HTML entrypoints and GPU-ready gate');
-})();
-</script><script>window.parent!==window && window.parent.postMessage({type:'byz:market:shell-ready'},location.origin);</script></body></html>
+<script src="/ByzantineEmpireWebsite/market-runtime/product-pool-v86.js?v=86.0"></script><script>window.parent!==window && window.parent.postMessage({type:'byz:market:shell-ready'},location.origin);</script></body></html>

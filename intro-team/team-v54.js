@@ -215,6 +215,53 @@
   var marqueeLayout = null;
   var marqueeNode = null;
   var marqueeLastShown = false;
+  // Keep the external HTML overlay in sync with native Crystal I exit/entry fades.
+  // This is only toggled on visibility changes, never on every scroll frame.
+  var marqueeFadeTimeout = null;
+  var marqueeFadingOut = false;
+  var marqueeReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  function marqueeFadeMs() { return marqueeReducedMotion && marqueeReducedMotion.matches ? 160 : 760; }
+  function finishMarqueeFade() {
+    if (!marqueeFadingOut) return;
+    marqueeFadingOut = false;
+    if (marqueeNode) marqueeNode.style.display = 'none';
+    if (marqueeCaption) marqueeCaption.style.display = 'none';
+    marqueeFadeTimeout = null;
+  }
+  function hideMarquee(animate) {
+    var el = marqueeNode;
+    if (!el || !marqueeLastShown) return;
+    marqueeLastShown = false;
+    el.style.opacity = '0';
+    if (marqueeCaption) marqueeCaption.style.opacity = '0';
+    if (marqueeFadeTimeout) { clearTimeout(marqueeFadeTimeout); marqueeFadeTimeout=null; }
+    if (animate) {
+      marqueeFadingOut = true;
+      marqueeFadeTimeout = setTimeout(finishMarqueeFade, marqueeFadeMs() + 70);
+    } else {
+      marqueeFadingOut = false;
+      el.style.display = 'none';
+      if (marqueeCaption) marqueeCaption.style.display = 'none';
+    }
+  }
+  function showMarquee() {
+    var el = marqueeNode;
+    if (!el || marqueeLastShown) return;
+    var wasHidden = !marqueeFadingOut && !marqueeLastShown;
+    if (marqueeFadeTimeout) { clearTimeout(marqueeFadeTimeout); marqueeFadeTimeout=null; }
+    marqueeFadingOut = false;
+    el.style.display = 'block';
+    if (marqueeCaption) marqueeCaption.style.display = 'block';
+    // If page content was hidden, begin at zero and fade in; if closing was
+    // interrupted, reverse the running transition without snapping.
+    if (wasHidden) { el.style.opacity='0'; if (marqueeCaption) marqueeCaption.style.opacity='0'; }
+    marqueeLastShown = true;
+    requestAnimationFrame(function(){
+      if (!marqueeLastShown) return;
+      el.style.opacity='1';
+      if (marqueeCaption) marqueeCaption.style.opacity='1';
+    });
+  }
   var marqueeCaption = null;
 
   window.__BYZ_INTRO_GALLERY_ATLAS_V60__ = function () { return null; };
@@ -240,6 +287,8 @@
           box-shadow: none;
           box-sizing: border-box;
           contain: layout paint style;
+          opacity: 0;
+          transition: opacity .76s cubic-bezier(.22,1,.36,1);
         }
         #byz-intro-marquee-v97-caption {
           position: fixed; top: 0; left: 0; width: 100%;
@@ -250,6 +299,11 @@
           text-shadow: 0 2px 8px rgba(0,0,0,.33);
           z-index: 2147479000; pointer-events: none;
           display: none;
+          opacity: 0;
+          transition: opacity .76s cubic-bezier(.22,1,.36,1);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          #byz-intro-marquee-v97, #byz-intro-marquee-v97-caption {transition-duration:.16s;}
         }
         #byz-intro-marquee-v97 .byz97-track {
           display: flex; height: 100%; width: max-content;
@@ -345,11 +399,13 @@
       rect.bottom > 0 && rect.top < window.innerHeight &&
       rect.right > 0 && rect.left < window.innerWidth);
     if (!shown) {
-      if (marqueeLastShown) { el.style.display='none'; marqueeLastShown=false; }
-      if (marqueeCaption) marqueeCaption.style.display='none';
+      // On Crystal I close, the underlying canvas and text fade away naturally.
+      // Keep this independently rendered banner/caption alive through that fade.
+      // Outside the banner's scroll region, hide immediately as usual.
+      hideMarquee(!active);
       return;
     }
-    if (!marqueeLastShown) { el.style.display='block'; marqueeLastShown=true; }
+    showMarquee();
     // Bleed all the way to both screen edges; retain only projected Y/height
     // so it still scrolls natively with the existing Introduction plane.
     el.style.transform = 'translate3d(0,' + rect.top.toFixed(2) + 'px,0)';
@@ -359,7 +415,7 @@
     if (marqueeCaption) {
       var captionY = rect.bottom + 17;
       var captionVisible = captionY >= -24 && captionY < window.innerHeight;
-      marqueeCaption.style.display = captionVisible ? 'block' : 'none';
+      marqueeCaption.style.visibility = captionVisible ? 'visible' : 'hidden';
       if (captionVisible) marqueeCaption.style.transform='translate3d(0,' + captionY.toFixed(2) + 'px,0)';
     }
   };

@@ -105,6 +105,12 @@
     const intro = node('p', 'byz-h-long-copy byz-h-reveal', data.body || '');
     wrap.append(intro);
     if (data.image) wrap.append(buildFigure(data.image, data.alt || 'Market logo', 'byz-h-figure-market'));
+    // V100: The market's Greek name, in the existing centered editorial style.
+    const nameCopy = node('p', 'byz-h-centered-copy byz-h-centered-copy-wide byz-h-reveal');
+    nameCopy.append(document.createTextNode('The name we chose for our market is '));
+    nameCopy.append(node('em', '', 'ta pánta pazári'));
+    nameCopy.append(document.createTextNode(', a Greek phrase that translates to “The Everything Bazaar.” Greek was the primary language spoken throughout the Byzantine Empire, making it a fitting choice for our market\'s name. We wanted a name that would reflect the wide variety of goods we offer, ranging from swords and cloaks to food and more.'));
+    wrap.append(nameCopy);
     return wrap;
   }
 
