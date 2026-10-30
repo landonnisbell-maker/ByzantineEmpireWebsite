@@ -1,0 +1,4 @@
+/* V85: small, single-element hover highlight. No blend modes or glowing full-frame overlay. */
+#byz-cloth-halo-v85{position:fixed;left:0;top:0;width:168px;height:168px;pointer-events:none;z-index:2147482000;opacity:0;transform:translate3d(-300px,-300px,0) translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,222,154,.19) 0%,rgba(224,160,87,.095) 38%,transparent 72%);transition:opacity .15s linear;contain:layout paint style;will-change:transform}
+#byz-cloth-halo-v85[data-on="1"]{opacity:1}
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){#byz-cloth-halo-v85{display:none}}

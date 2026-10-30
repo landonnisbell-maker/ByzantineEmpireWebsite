@@ -1,0 +1,24 @@
+{
+  "version": "V85",
+  "base": "V84",
+  "mode": "update-only",
+  "changedFiles": [
+    "market-runtime/palia/work/palia/entries/paramerion-sword/index.html",
+    "market-runtime/palia/work/palia/entries/gold-jewelry/index.html",
+    "market-runtime/palia/work/palia/entries/food-items/index.html",
+    "market-runtime/palia/work/palia/entries/silk-textiles/index.html",
+    "market-runtime/palia/work/palia/entries/coins/index.html",
+    "market-runtime/gallery/index.html",
+    "market-runtime/palia/work/palia/byz-product-atmosphere-v85.css",
+    "market-runtime/palia/work/palia/byz-product-atmosphere-v85.js",
+    "market-runtime/gallery/cloth-glow-v85.css",
+    "market-runtime/gallery/cloth-glow-v85.js"
+  ],
+  "unchanged": [
+    "product content",
+    "prices",
+    "product imagery",
+    "3D gallery renderer",
+    "market entrance"
+  ]
+}

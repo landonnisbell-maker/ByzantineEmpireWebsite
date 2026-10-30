@@ -1,0 +1,33 @@
+/* V85: lightweight animated atmosphere. The V84 full-document gradient and scroll-long
+   compositing layers are deliberately NOT loaded. Only short viewport-size particles move. */
+html.byz-fx-sword{--byz-fx-rgb:255,135,55;--byz-fx-ink:#d79d75}
+html.byz-fx-jewelry{--byz-fx-rgb:245,192,91;--byz-fx-ink:#e4c18a}
+html.byz-fx-food{--byz-fx-rgb:218,153,93;--byz-fx-ink:#d8a66e}
+html.byz-fx-silk{--byz-fx-rgb:189,139,231;--byz-fx-ink:#d2b0ee}
+html.byz-fx-coins{--byz-fx-rgb:215,188,111;--byz-fx-ink:#e7c987}
+#byz-fx-v85{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:8;contain:layout style paint;isolation:isolate}
+/* One static, VIEWPORT-sized tint, instead of a gradient the height of the entire page. */
+#byz-fx-v85:before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 90% 68%,rgba(var(--byz-fx-rgb),.11) 0%,rgba(var(--byz-fx-rgb),.035) 32%,transparent 62%);pointer-events:none}
+.byz-fx-v85-particle{position:absolute;left:var(--fx-x);bottom:-36px;width:var(--fx-w);height:var(--fx-h);background:rgba(var(--byz-fx-rgb),var(--fx-a));opacity:0;border-radius:2px;transform:translate3d(0,0,0);animation:byz-fx-v85-rise var(--fx-d) linear var(--fx-delay) infinite;will-change:transform,opacity}
+@keyframes byz-fx-v85-rise{0%{opacity:0;transform:translate3d(0,18px,0) rotate(-15deg)}15%{opacity:var(--fx-opacity)}70%{opacity:var(--fx-opacity)}100%{opacity:0;transform:translate3d(var(--fx-drift),-108vh,0) rotate(75deg)}}
+/* Embers: orange sparks rising from a forge, with warm and brighter flecks. */
+html.byz-fx-sword .byz-fx-v85-particle{border-radius:46% 50% 35% 50%;background:rgba(255,159,72,var(--fx-a))}
+html.byz-fx-sword .byz-fx-v85-particle:nth-child(3n){background:#ffdc9b}
+/* Gold jewelry: short-lived four-point glints, not dust. */
+html.byz-fx-jewelry .byz-fx-v85-particle{background:rgba(241,197,105,.9);border-radius:50%;width:var(--fx-w);height:var(--fx-w);animation-name:byz-fx-v85-glint}
+html.byz-fx-jewelry .byz-fx-v85-particle:before,html.byz-fx-jewelry .byz-fx-v85-particle:after{content:'';position:absolute;left:50%;top:50%;background:rgba(255,219,141,.7);transform:translate(-50%,-50%)}
+html.byz-fx-jewelry .byz-fx-v85-particle:before{width:1px;height:12px}
+html.byz-fx-jewelry .byz-fx-v85-particle:after{width:12px;height:1px}
+@keyframes byz-fx-v85-glint{0%,78%,100%{opacity:0;transform:translate3d(0,0,0) scale(.5)}84%{opacity:.85;transform:translate3d(0,-12px,0) scale(1)}92%{opacity:.25;transform:translate3d(0,-20px,0) scale(1.25)}}
+/* Silk: fine colored threads float slowly, always as tiny geometric elements. */
+html.byz-fx-silk .byz-fx-v85-particle{border-radius:50%;height:22px;width:1px;background:rgba(219,157,247,.57);animation-duration:calc(var(--fx-d)*1.3)}
+/* Food: soft rising curls hint at smoke and steam. */
+html.byz-fx-food .byz-fx-v85-particle{background:rgba(224,174,119,.18);width:7px;height:22px;border:1px solid rgba(221,173,116,.19);border-radius:80% 30% 80% 35%}
+/* Coin exchange: a few metallic flecks. */
+html.byz-fx-coins .byz-fx-v85-particle{border-radius:50%;width:3px;height:3px;background:rgba(237,214,133,.76)}
+/* Subtle interaction, limited to heading ink. No photo image, masks, or hero layers altered. */
+html[class*="byz-fx-"] .byz-market-product-copy--editorial :is(.byz-section-title,.byz-offering-title,.byz-ed-detail-title){transition:color .22s ease}
+@media(hover:hover){html[class*="byz-fx-"] .byz-market-product-copy--editorial :is(.byz-section-title,.byz-offering-title,.byz-ed-detail-title):hover{color:var(--byz-fx-ink)}}
+html.byz-fx-suspended #byz-fx-v85 .byz-fx-v85-particle{animation-play-state:paused}
+@media(max-width:700px){#byz-fx-v85 .byz-fx-v85-particle:nth-child(n+6){display:none}#byz-fx-v85:before{opacity:.5}}
+@media(prefers-reduced-motion:reduce){#byz-fx-v85 .byz-fx-v85-particle{display:none!important}#byz-fx-v85:before{opacity:.35}html[class*="byz-fx-"] .byz-market-product-copy--editorial :is(.byz-section-title,.byz-offering-title,.byz-ed-detail-title){transition:none}}
