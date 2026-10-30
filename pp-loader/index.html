@@ -1,6 +1,33 @@
 <!DOCTYPE html>
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<html lang="en"><head><script data-byz-global-middle-autoscroll-v99>(function(){
+"use strict";
+function install(w){
+  try{
+    if(w.__BYZ_DISABLE_MIDDLE_SCROLL_V99__)return;
+    w.__BYZ_DISABLE_MIDDLE_SCROLL_V99__=true;
+    function cancelMiddle(e){
+      if(e.button!==1)return;
+      if(e.cancelable)e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+    ["pointerdown","mousedown","pointerup","mouseup","auxclick"].forEach(function(eventName){
+      w.addEventListener(eventName,cancelMiddle,{capture:true,passive:false});
+    });
+    // Same-origin frames can be created after startup; cover their initial about:blank/srcdoc
+    // phases as well as dedicated frame documents that install this guard themselves.
+    w.document.addEventListener("load",function(e){
+      if(e.target && e.target.tagName==="IFRAME")try{install(e.target.contentWindow)}catch(_){}
+    },true);
+  }catch(_){}
+}
+install(window);
+})();</script><script data-byz-top-level-refresh-v99>(function(){
+"use strict";
+if(window.top===window && location.pathname!=="/ByzantineEmpireWebsite/"){
+  location.replace("/ByzantineEmpireWebsite/");
+}
+})();</script><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>ta pánta pazári | The Everything Baazar</title><meta content="#151018" name="theme-color"/>
 <link href="loader-original.css" rel="stylesheet"/><link href="living-gold.css" rel="stylesheet"/><link href="integration.css" rel="stylesheet"/><link rel="stylesheet" href="/ByzantineEmpireWebsite/pp-loader/branding-v71.css?v=71.1" /><script defer src="/ByzantineEmpireWebsite/pp-loader/branding-v71.js?v=71.1"></script></head>
 <body class="pp-live-integrated"><div aria-busy="true" class="loader-module__y9w63G__loaderContainer pp-site-loading" style="--loader-exit-delay:100ms;--loader-exit-duration:900ms;--load-p:0"><span aria-hidden="true" class="loader-module__y9w63G__frameGrid"></span><canvas aria-hidden="true" id="gilded-grid"></canvas><figure class="loader-module__y9w63G__cornerImage pp-blueprint-card" aria-label="Hagia Sophia architectural illustration by Sir Banister Fletcher, 1896">

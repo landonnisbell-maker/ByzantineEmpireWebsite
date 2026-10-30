@@ -1,4 +1,31 @@
-<!DOCTYPE html><html lang="en" translate="no"><head><script src="/ByzantineEmpireWebsite/byzantine-introduction-content.js" data-byzantine-crystal-content="1"></script><script src="/ByzantineEmpireWebsite/intro-team/team-v54.js?v=54.0" data-byzantine-intro-team="1"></script><script src="/ByzantineEmpireWebsite/byzantine-about-us-content.js" data-byzantine-crystal-content="2"></script><link rel="stylesheet" href="/ByzantineEmpireWebsite/about-map/byzantine-map.css?v=51.0"><script defer src="/ByzantineEmpireWebsite/about-map/byzantine-map.js?v=51.0"></script><script defer src="/ByzantineEmpireWebsite/byz-portal-scroll-lock-v45.js?v=45.0"></script><script src="/ByzantineEmpireWebsite/byzantine-market-content.js" data-byzantine-crystal-content="3"></script><script src="/ByzantineEmpireWebsite/byzantine-historical-connection-content.js" data-byzantine-crystal-content="4"></script><script data-porphyra-home-start>(function(){
+<!DOCTYPE html><html lang="en" translate="no"><head><script data-byz-global-middle-autoscroll-v99>(function(){
+"use strict";
+function install(w){
+  try{
+    if(w.__BYZ_DISABLE_MIDDLE_SCROLL_V99__)return;
+    w.__BYZ_DISABLE_MIDDLE_SCROLL_V99__=true;
+    function cancelMiddle(e){
+      if(e.button!==1)return;
+      if(e.cancelable)e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+    ["pointerdown","mousedown","pointerup","mouseup","auxclick"].forEach(function(eventName){
+      w.addEventListener(eventName,cancelMiddle,{capture:true,passive:false});
+    });
+    // Same-origin frames can be created after startup; cover their initial about:blank/srcdoc
+    // phases as well as dedicated frame documents that install this guard themselves.
+    w.document.addEventListener("load",function(e){
+      if(e.target && e.target.tagName==="IFRAME")try{install(e.target.contentWindow)}catch(_){}
+    },true);
+  }catch(_){}
+}
+install(window);
+})();</script><script data-byz-top-level-refresh-v99>(function(){
+"use strict";
+if(window.top===window && location.pathname!=="/ByzantineEmpireWebsite/"){
+  location.replace("/ByzantineEmpireWebsite/");
+}
+})();</script><script src="/ByzantineEmpireWebsite/byzantine-introduction-content.js" data-byzantine-crystal-content="1"></script><script src="/ByzantineEmpireWebsite/intro-team/team-v54.js?v=54.0" data-byzantine-intro-team="1"></script><script src="/ByzantineEmpireWebsite/byzantine-about-us-content.js" data-byzantine-crystal-content="2"></script><link rel="stylesheet" href="/ByzantineEmpireWebsite/about-map/byzantine-map.css?v=51.0"><script defer src="/ByzantineEmpireWebsite/about-map/byzantine-map.js?v=51.0"></script><script defer src="/ByzantineEmpireWebsite/byz-portal-scroll-lock-v45.js?v=45.0"></script><script src="/ByzantineEmpireWebsite/byzantine-market-content.js" data-byzantine-crystal-content="3"></script><script src="/ByzantineEmpireWebsite/byzantine-historical-connection-content.js" data-byzantine-crystal-content="4"></script><script data-porphyra-home-start>(function(){
       var base="/ByzantineEmpireWebsite/";
       if(location.pathname==="/ByzantineEmpireWebsite"||location.pathname.indexOf(base)===0){
         if(location.pathname!==base){history.replaceState(null,"",base);}
