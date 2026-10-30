@@ -1,0 +1,47 @@
+/* V88: shared flower logo with Close vertically centered beside it. */
+#byz-crystal-flower-v88{
+  position:fixed;
+  z-index:2147482001;
+  top:clamp(12px,1.6vh,21px);
+  left:clamp(16px,1.45vw,28px);
+  width:clamp(37px,3.25vw,53px);
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 12px rgba(0,0,0,.38));
+  visibility:hidden;
+  opacity:0;
+  pointer-events:none;
+  user-select:none;
+  transition:opacity .23s ease, visibility .23s ease;
+}
+body.byz-crystal-header-v88-active #byz-crystal-flower-v88{visibility:visible;opacity:1;}
+body.byz-crystal-header-v88-active #byzantine-fixed-crystal-close{
+  position:fixed!important;
+  left:calc(clamp(16px,1.45vw,28px) + clamp(37px,3.25vw,53px) + 10px)!important;
+  top:calc(clamp(12px,1.6vh,21px) + 6px)!important;
+  min-width:0!important;
+  width:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  height:calc(clamp(37px,3.25vw,53px) - 10px)!important;
+  padding:0 5px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:1!important;
+  letter-spacing:.1em!important;
+  transform:none!important;
+  z-index:2147482002!important;
+}
+body.byz-map-modal-open #byz-crystal-flower-v88{opacity:0!important;pointer-events:none!important;}
+@media (max-width:680px){
+  #byz-crystal-flower-v88{width:35px;top:12px;left:13px;}
+  body.byz-crystal-header-v88-active #byzantine-fixed-crystal-close{
+    left:58px!important;
+    top:18px!important;
+    height:38px!important;
+    padding:0 4px!important;
+  }
+}
+@media (prefers-reduced-motion:reduce){#byz-crystal-flower-v88{transition:none;}}
