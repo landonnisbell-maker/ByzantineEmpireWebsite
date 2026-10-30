@@ -1,5 +1,5 @@
 /*
- * ta pánta pazári — Crystal 1 / Introduction team + galleries, V94.
+ * ta pánta pazári — Crystal 1 / Introduction team + galleries, V95.
  * Native canvas/WebGPU content only: team portraits, full names, roles/quotes,
  * and three continuous sliding galleries for Architecture, Jewelry, Artifacts.
  */
@@ -209,13 +209,13 @@
     if (shader && shader.enabled) shader.enabled.value = 0;
   };
 
-  // V94: restore the native auto-sliding gallery carousels for the
+  // V95: restore the native auto-sliding gallery carousels for the
   // Introduction page. Each category uses one wide carousel frame.
   // Landscape / near-16:9 images use a normal cover fit. Square and
   // portrait images keep a sharp centered foreground with a blurred
   // version of the same image filling the sides.
-  var GALLERY_CELL_W = 900;
-  var GALLERY_CELL_H = 500;
+  var GALLERY_CELL_W = 720;
+  var GALLERY_CELL_H = 400;
   var GALLERY_ATLAS_COLUMNS = 5;
   var GALLERY_ATLAS_ROWS = 3;
   var galleryAtlas = null;
