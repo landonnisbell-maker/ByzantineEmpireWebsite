@@ -1,0 +1,10 @@
+/* V86 — sprites pre-baked into tiny translucent PNGs; no real-time blur or filters. */
+html.byz-fx-sword #byz-fx-v85{display:none!important}
+#byz-forge-v86{position:fixed;inset:0;z-index:6;pointer-events:none;overflow:hidden;contain:layout style paint;isolation:isolate}
+#byz-forge-v86 .byz-ember{position:absolute;left:var(--x);top:110%;height:var(--h);width:var(--w);background:var(--sprite) center/100% 100% no-repeat;opacity:0;transform:translate3d(0,0,0);animation:byz-ember-rise var(--dur) linear var(--delay) infinite;will-change:transform,opacity}
+@keyframes byz-ember-rise{0%{opacity:0;transform:translate3d(0,3vh,0) rotate(var(--tilt)) scale(.66)}8%{opacity:var(--bright)}30%{opacity:calc(var(--bright)*.83)}65%{opacity:calc(var(--bright)*.72)}87%{opacity:calc(var(--bright)*.39)}100%{opacity:0;transform:translate3d(var(--drift),-126vh,0) rotate(calc(var(--tilt) + 38deg)) scale(.42)}}
+/* Floating cinders: soft broad halo plus a sharp hot interior, burnt-orange drift. */
+html.byz-fx-sword{--byz-forge-contrast:1}
+html.byz-fx-suspended #byz-forge-v86 .byz-ember{animation-play-state:paused}
+@media (max-width:700px){#byz-forge-v86 .byz-ember:nth-child(n+13){display:none}}
+@media(prefers-reduced-motion:reduce){#byz-forge-v86{display:none!important}}

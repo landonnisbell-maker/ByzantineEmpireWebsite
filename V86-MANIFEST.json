@@ -1,0 +1,22 @@
+{
+  "version": "86",
+  "base": "85",
+  "updateOnly": true,
+  "changedFiles": [
+    "README-V86.txt",
+    "market-runtime/index.html",
+    "market-runtime/palia/work/palia/byz-forge-v86.css",
+    "market-runtime/palia/work/palia/byz-forge-v86.js",
+    "market-runtime/palia/work/palia/entries/paramerion-sword/index.html",
+    "market-runtime/palia/work/palia/fx-v86-amber.png",
+    "market-runtime/palia/work/palia/fx-v86-ash.png",
+    "market-runtime/palia/work/palia/fx-v86-hot.png",
+    "market-runtime/product-pool-v86.js",
+    "market-runtime/products/coins/index.html",
+    "market-runtime/products/food-items/index.html",
+    "market-runtime/products/gold-jewelry/index.html",
+    "market-runtime/products/paramerion-sword/index.html",
+    "market-runtime/products/silk-textiles/index.html",
+    "market/index.html"
+  ]
+}
