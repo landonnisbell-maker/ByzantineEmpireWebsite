@@ -1,0 +1,24 @@
+/* V84 — tonal atmospheric art direction for isolated Palia product documents.
+   The original textured WebGL surface remains untouched. Lightweight gradient tint only. */
+html.byz-v84-sword {--byz-v84-warm:183,87,43;--byz-v84-cool:115,46,35;--off-black:#19131a}
+html.byz-v84-jewelry {--byz-v84-warm:197,137,57;--byz-v84-cool:98,45,91;--off-black:#1b131d}
+html.byz-v84-food {--byz-v84-warm:202,110,43;--byz-v84-cool:95,63,33;--off-black:#1b1717}
+html.byz-v84-silk {--byz-v84-warm:151,79,182;--byz-v84-cool:106,49,116;--off-black:#161321}
+html.byz-v84-coins {--byz-v84-warm:176,137,67;--byz-v84-cool:69,118,124;--off-black:#171820}
+html[class*="byz-v84-"] .byz-market-product-copy{position:relative;isolation:isolate;}
+html[class*="byz-v84-"] .byz-market-product-copy:before{
+ content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:radial-gradient(ellipse 70vw 47vw at 83% 10%,rgba(var(--byz-v84-warm),.19),transparent 75%),radial-gradient(ellipse 69vw 59vw at 8% 57%,rgba(var(--byz-v84-cool),.21),transparent 78%),linear-gradient(165deg,rgba(var(--byz-v84-warm),.025),rgba(2,5,12,0) 60%);
+}
+html[class*="byz-v84-"] .byz-market-product-copy > :not(.byz-v84-atmosphere){position:relative;z-index:1}
+.byz-v84-atmosphere{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.byz-v84-cursor{position:absolute;top:0;left:0;width:min(46vw,350px);height:min(46vw,350px);border-radius:50%;pointer-events:none;opacity:0;transform:translate3d(-999px,-999px,0) translate(-50%,-50%);background:radial-gradient(circle,rgba(var(--byz-v84-warm),.2),rgba(var(--byz-v84-warm),.065) 39%,transparent 67%);mix-blend-mode:screen;transition:opacity .3s ease;will-change:transform,opacity}
+.byz-v84-atmosphere.byz-v84-hover .byz-v84-cursor{opacity:1}
+.byz-v84-mote{position:absolute;bottom:5%;left:var(--mote-x);width:var(--mote-size);height:var(--mote-size);border-radius:50%;opacity:0;background:rgba(var(--byz-v84-warm),.65);box-shadow:0 0 12px rgba(var(--byz-v84-warm),.38);animation:byz-v84-float var(--mote-dur) linear infinite;animation-delay:var(--mote-delay)}
+html.byz-v84-sword .byz-v84-mote{bottom:auto;top:clamp(110px,11%,350px);border-radius:40% 60% 50% 45%;background:rgba(247,155,71,.8)}
+html.byz-v84-jewelry .byz-v84-mote{clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);background:rgba(255,216,133,.72);box-shadow:none}
+html.byz-v84-silk .byz-v84-mote{border-radius:50%;background:rgba(215,159,237,.44);height:2px;width:12px}
+html.byz-v84-food .byz-v84-mote{background:rgba(225,190,134,.26);filter:none}
+html.byz-v84-coins .byz-v84-mote{background:rgba(231,201,140,.5);border:1px solid rgba(230,222,183,.3)}
+@keyframes byz-v84-float{0%{transform:translate3d(0,28px,0);opacity:0}18%{opacity:.55}83%{opacity:.3}100%{transform:translate3d(var(--mote-drift),-310px,0);opacity:0}}
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.byz-v84-cursor,.byz-v84-mote{display:none!important}}

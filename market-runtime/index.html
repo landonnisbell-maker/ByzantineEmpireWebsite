@@ -2,12 +2,13 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="theme-color" content="#0a0b0d"><title>ta pánta pazári · Market</title>
 <style>
-html,body{margin:0;height:100%;overflow:hidden;background:#0c0d0f;color:#fff;font-family:Arial,sans-serif}
+html,body{margin:0;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Arial,sans-serif}
 #byz-gallery,#byz-palia{position:fixed;inset:0;display:block;width:100%;height:100%;height:100dvh;border:0;overflow:hidden;}
-#byz-gallery{z-index:1;background:#111;opacity:1;transition:opacity .65s cubic-bezier(.22,1,.36,1);}
+#byz-gallery{z-index:1;background:#000;opacity:0;transition:opacity .65s cubic-bezier(.22,1,.36,1);}
 /* Palia has its real viewport while warming up, unlike a display:none iframe. */
 #byz-palia{z-index:2;background:#10141f;opacity:0.001;pointer-events:none;transform:scale(1.035) translateZ(0);filter:blur(9px);will-change:opacity,transform,filter;transition:opacity .76s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1),filter .76s ease;}
 body.byz-product-open #byz-palia{opacity:1;transform:scale(1) translateZ(0);filter:blur(0);pointer-events:auto;}
+body.byz-gallery-ready #byz-gallery{opacity:1;}
 body.byz-product-open #byz-gallery{opacity:0;pointer-events:none;}
 body.byz-product-leaving #byz-palia{opacity:.001;transform:scale(1.025) translateZ(0);filter:blur(7px);pointer-events:none;transition:opacity .65s cubic-bezier(.42,0,.58,1),transform .65s ease,filter .65s ease;}
 body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
@@ -23,15 +24,23 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 #byz-new-page-return:focus-visible{outline:2px solid #fff;outline-offset:3px}
 @media(max-width:680px){#byz-new-page-return{left:54px!important;top:17px!important;min-width:0!important;min-height:30px!important;padding:5px 4px!important}}
 
-#byz-gallery-guide{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:10;width:min(1000px,calc(100% - 36px));box-sizing:border-box;padding:13px 21px;border:1px solid rgba(250,239,218,.24);border-radius:12px;background:rgba(12,12,18,.74);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#f8f6f1;font:500 clamp(11px,1vw,14px)/1.6 Manrope,Arial,sans-serif;letter-spacing:.005em;text-align:center;pointer-events:none;opacity:1;transition:opacity .28s ease}
+#byz-gallery-guide{position:fixed;left:0;right:0;bottom:0;z-index:10;
+ box-sizing:border-box;padding:28px max(20px,calc((100vw - 1120px)/2)) max(14px,env(safe-area-inset-bottom));
+ pointer-events:none;text-align:center;color:#f5f0e8;background:linear-gradient(0deg,rgba(1,2,5,.9) 0%,rgba(1,2,5,.72) 45%,transparent 100%);
+ opacity:1;transition:opacity .3s ease,visibility .3s ease;font-family:Manrope,Arial,sans-serif}
+#byz-gallery-guide::before{content:'';display:block;width:clamp(48px,7vw,115px);height:1px;margin:0 auto 10px;background:linear-gradient(90deg,transparent,#f2c47e,transparent)}
+.byz-guide-kicker{font-size:clamp(9px,.64vw,11px);font-weight:700;letter-spacing:.28em;color:#e2bc82;text-transform:uppercase;line-height:1.6}
+.byz-guide-main{font:500 clamp(13px,1.12vw,18px)/1.35 Georgia,serif;letter-spacing:.012em;margin:5px 0 4px}
+.byz-guide-main b{font-weight:500;color:#edc891}
+.byz-guide-detail{font:400 clamp(10px,.77vw,12px)/1.45 Manrope,Arial,sans-serif;color:#d1cbd0;max-width:840px;margin:0 auto;opacity:.85}
 body.byz-product-open #byz-gallery-guide,body.byz-product-leaving #byz-gallery-guide{opacity:0;visibility:hidden}
-@media(max-width:600px){#byz-gallery-guide{padding:10px 12px;bottom:10px;font-size:11px;line-height:1.5;border-radius:8px}}
+@media(max-width:600px){#byz-gallery-guide{padding:18px 12px max(9px,env(safe-area-inset-bottom))}.byz-guide-main{font-size:12px}.byz-guide-detail{font-size:10px}.byz-guide-kicker{font-size:9px}}
 </style>
 <link rel="stylesheet" href="/ByzantineEmpireWebsite/brand/market-flower-v39.css?v=83"/>
 </head><body><img class="byz-market-flower-mark" src="/ByzantineEmpireWebsite/brand/pazari-flower-v39.png" alt="ta pánta pazári" aria-hidden="true" decoding="async"/>
-<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=64.0" allow="autoplay;fullscreen" loading="eager"></iframe>
+<iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=84.0" allow="autoplay;fullscreen" loading="eager"></iframe>
 <iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&v=69.0" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
-<p id="byz-gallery-guide">Because this is a simulation, we have created cards for you to click on and view our products. Scroll to look at different cards, and click to enter a product.</p>
+<aside id="byz-gallery-guide" aria-label="How to explore the marketplace"><div class="byz-guide-kicker">ta pánta pazári &nbsp;·&nbsp; The Everything Bazaar</div><p class="byz-guide-main"><b>Scroll</b> to explore the wares &nbsp;✦&nbsp; <b>Select</b> a cloth to enter its story</p><p class="byz-guide-detail">Because this is a simulation, we have created cards for you to click on and view our products. Scroll to look at different cards, and click to enter a product.</p></aside>
 <div id="byz-status" role="status" aria-live="polite">Preparing product experience…</div>
 <button id="byz-retry" type="button">RETRY PRODUCT PAGE</button>
 <button type="button" id="byz-new-page-return" aria-label="Close Market or product" title="Close">CLOSE</button>
@@ -201,7 +210,7 @@ window.addEventListener('message',ev=>{
   const type=ev.data.type;
   if(ev.source===gallery.contentWindow){
     if(type==='byz:market:gallery-ready'){
-      galleryReady=true;
+      galleryReady=true;document.body.classList.add('byz-gallery-ready');
       window.parent!==window && window.parent.postMessage({type:'byz:market:gallery-ready'},location.origin);
       reportReady();
     }

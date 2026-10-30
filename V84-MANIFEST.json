@@ -1,0 +1,86 @@
+{
+  "version": "V84",
+  "update_only": true,
+  "files": [
+    {
+      "path": "README-V84.txt",
+      "size": 2281,
+      "sha256": "7c945ab02f5fd5b3b222dbab25f8dcbed292c23186b7f8f27f0da36c15613cd2"
+    },
+    {
+      "path": "index.html",
+      "size": 155478,
+      "sha256": "589542581c08705cc097b0373728c1ac91c18001fa8ee4559ca1e29f4ba43a25"
+    },
+    {
+      "path": "market/index.html",
+      "size": 19382,
+      "sha256": "0d2e0ef688b97dac640cd89c23f554392bcc8f8adee21402977fce48377ac8b4"
+    },
+    {
+      "path": "market/market-entry-v24.js",
+      "size": 8709,
+      "sha256": "8cd2b0ed5bcab9475db6f8dbe0ae1a3017e6e5c3109ec3e53d48f95e64a9dcd3"
+    },
+    {
+      "path": "market-runtime/gallery/cloth-glow-v84.css",
+      "size": 1033,
+      "sha256": "4b45129943f789f4ac313fda9161db71a234124d67fd3b69c8feb2870517a43b"
+    },
+    {
+      "path": "market-runtime/gallery/cloth-glow-v84.js",
+      "size": 1333,
+      "sha256": "d9386c1c1181f663197acb4d768b369adf8124d83c023cd90e83c1ae2d2f6e3e"
+    },
+    {
+      "path": "market-runtime/gallery/index.html",
+      "size": 94782,
+      "sha256": "f49a8587558083fef1117dc6719e08ed9b412d3ebc9e7e432fdc054b1da3c7ea"
+    },
+    {
+      "path": "market-runtime/index.html",
+      "size": 19382,
+      "sha256": "0d2e0ef688b97dac640cd89c23f554392bcc8f8adee21402977fce48377ac8b4"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-atmosphere-v84.css",
+      "size": 2971,
+      "sha256": "a380fa1053598d57c6f022013d9ffed7b8272127cdfaa82d035fadb77cc7c2f1"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/byz-product-atmosphere-v84.js",
+      "size": 2267,
+      "sha256": "bb1a66f67784140e4c2aee376f4182b1a90d0e58ba09f8cb8c7840a1bbcf1960"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/coins/index.html",
+      "size": 62078,
+      "sha256": "28a9e10f62648b358b59658900cb5d66f78936d19ec347de934a4a083779fbe8"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/food-items/index.html",
+      "size": 62072,
+      "sha256": "1f72b77154e2a5f390cf88a03d690aaa51a9fea4b2915ac67e9b4661d76961fa"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/gold-jewelry/index.html",
+      "size": 62076,
+      "sha256": "12e6c399a8fb43cdcde9c5098b2d06b7f633c1b86b72a06be9ef1b2a37f7fd6b"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/paramerion-sword/index.html",
+      "size": 62084,
+      "sha256": "016309ae4bb84b9123210156457023da90723932d0d5654d5cf3743376743933"
+    },
+    {
+      "path": "market-runtime/palia/work/palia/entries/silk-textiles/index.html",
+      "size": 62078,
+      "sha256": "3d6e72a5e75785007961985e3f0002abd49fa387bec1d2a7974f2438d3ce698d"
+    },
+    {
+      "path": "pp-loader/market-preload-v71.js",
+      "size": 4357,
+      "sha256": "32de7ad79d877c001e33e5559881a2bfac905b70be5adbc14998ae6f507ff340"
+    }
+  ]
+}

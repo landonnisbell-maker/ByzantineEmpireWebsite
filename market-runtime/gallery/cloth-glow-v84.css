@@ -1,0 +1,6 @@
+/* V84: GPU-friendly cursor halo for the WebGL cloth showcase. Does not block raycasting or clicks. */
+#byz-cloth-halo{position:fixed;left:0;top:0;width:370px;height:330px;transform:translate3d(-1000px,-1000px,0) translate(-50%,-50%);opacity:0;z-index:2147482000;pointer-events:none;user-select:none;mix-blend-mode:screen;will-change:transform,opacity;transition:opacity .27s ease;background:radial-gradient(ellipse at center,rgba(246,190,103,.16) 0%,rgba(226,139,70,.24) 24%,rgba(144,79,145,.11) 43%,transparent 72%)}
+#byz-cloth-halo[data-active="true"]{opacity:1}
+#byz-cloth-halo:before{content:'';position:absolute;inset:14%;border-radius:50%;border:1px solid rgba(255,218,133,.12);box-shadow:0 0 45px 13px rgba(235,145,81,.05),inset 0 0 30px rgba(252,202,148,.05);animation:byz-halo-breathe 3.2s ease-in-out infinite alternate}
+@keyframes byz-halo-breathe{from{transform:scale(.94);opacity:.55}to{transform:scale(1.1);opacity:1}}
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){#byz-cloth-halo{display:none}}

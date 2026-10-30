@@ -1,13 +1,13 @@
 (()=>{
 'use strict';
-// V33: Use the SAME 3D project interior camera animation as all other crystals.
-// The old Market canvas remains only as an interior-transition surface; the
-// ready cloth gallery replaces it at the original "interior" completion event.
+// V84: Preserve the native scene state machine, but cover its intermediate grey shader
+// with opaque black from the start of the Market crystal transition. Reveal the
+// already-warmed gallery as soon as the interior state AND gallery-ready are true.
 if(window.__BYZ_MARKET_V34__)return;
 window.__BYZ_MARKET_V34__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
-const SHELL=new URL('index.html?embedded=1&v=72.0',document.currentScript.src).href;
+const SHELL=new URL('index.html?embedded=1&v=84.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
 const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V33]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
@@ -15,9 +15,10 @@ let wanted=false,nativeReached=false,opened=false,recoveries=0,reconnectSchedule
 let feedback=null,deadline=0;
 const STYLES=`
 #byz-v33-market{position:fixed;inset:0;z-index:2147483000;opacity:0;visibility:visible;
- pointer-events:none;overflow:hidden;background:#090a0d;transition:opacity .16s ease-out}
-#byz-v33-market.byz-v33-open{opacity:1;pointer-events:auto}
-#byz-v33-market>iframe{display:block;width:100%;height:100%;border:0;background:#090a0d}
+ pointer-events:none;overflow:hidden;background:#000;transition:opacity .12s ease-out}
+#byz-v33-market.byz-v33-covering,#byz-v33-market.byz-v33-open{opacity:1;pointer-events:auto}
+#byz-v33-market>iframe{display:block;width:100%;height:100%;border:0;background:#000;opacity:0;transition:opacity .55s cubic-bezier(.22,1,.36,1);pointer-events:none}
+#byz-v33-market.byz-v33-open>iframe{opacity:1;pointer-events:auto}
 /* Keep the ORIGINAL website sound/menu controls over the Market frame.
    Do not copy or re-create any buttons: these are the live React controls. */
 html.byz-v34-market-active nav[data-navbar][class*="Navbar-module_"]{
@@ -38,7 +39,7 @@ function mount(){
  if(overlay){
   if(!overlay.isConnected){
    frameLoaded=false;marketReady=false;preloadRequested=false;opened=false;recoveries++;
-   overlay.classList.remove('byz-v33-open');overlay.setAttribute('aria-hidden','true');
+   overlay.classList.remove('byz-v33-open','byz-v33-covering');overlay.setAttribute('aria-hidden','true');
    // React may replace body during hydration. A reattached iframe reloads.
    document.body.appendChild(overlay);
    // Re-prime without changing native crystal state or restarting the main site.
@@ -62,6 +63,12 @@ function status(message,canRetry=false){
  if(!feedback.isConnected)document.body.appendChild(feedback);
 }
 function clearStatus(){if(deadline){clearTimeout(deadline);deadline=0;}feedback?.remove()}
+function coverWithBlack(){
+ mount();if(!overlay?.isConnected)return;
+ overlay.setAttribute('aria-hidden','false');
+ overlay.classList.add('byz-v33-covering');
+ // No iframe is shown until both the gallery and native handoff are ready.
+}
 function reveal(){
  if(!wanted||!nativeReached||!marketReady||opened)return;
  mount();if(!overlay?.isConnected)return;
@@ -70,7 +77,7 @@ function reveal(){
  log('native interior COMPLETE — gallery revealed');
 }
 function prepareMarket(){
- wanted=true;mount();if(frameLoaded){emit('byz:market:prewarm');emit('byz:market:ping');}
+ wanted=true;coverWithBlack();if(frameLoaded){emit('byz:market:prewarm');emit('byz:market:ping');}
  if(nativeReached){
   if(marketReady)reveal();else{
    status('Preparing Market…');
@@ -79,7 +86,7 @@ function prepareMarket(){
  }
 }
 function conceal(){
- opened=false;document.documentElement.classList.remove('byz-v34-market-active');overlay?.classList.remove('byz-v33-open');overlay?.setAttribute('aria-hidden','true');emit('byz:market:close');clearStatus();
+ opened=false;document.documentElement.classList.remove('byz-v34-market-active');overlay?.classList.remove('byz-v33-open','byz-v33-covering');overlay?.setAttribute('aria-hidden','true');emit('byz:market:close');clearStatus();
 }
 function closeMarket(options={}){
  wanted=false;nativeReached=false;conceal();

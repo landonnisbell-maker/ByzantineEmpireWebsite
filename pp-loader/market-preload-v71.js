@@ -32,6 +32,7 @@
   'market-runtime/palia/work/palia/byz-product-content-v82.css?v=82.0',
   'market-runtime/palia/work/palia/byz-product-content-v82.js?v=82.0',
   'market-runtime/palia/work/palia/byz-product-content-v83.css?v=83.0',
+  'market-runtime/palia/work/palia/byz-product-atmosphere-v84.css?v=84.0',
   'market-runtime/palia/work/palia/byz-product-content-v83.js?v=83.0',
   'market-runtime/palia/fonts/IvarHeadline-Regular.woff2',
   'market-runtime/palia/fonts/PPFrama-Regular.woff2'
