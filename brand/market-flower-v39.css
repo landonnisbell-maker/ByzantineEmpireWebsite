@@ -7,5 +7,9 @@
 }
 @media(max-width:680px){
  .byz-market-flower-mark{width:35px;left:13px;top:12px}
- #byz-new-page-return{left:68px!important;top:9px!important}
+ #byz-new-page-return{left:54px!important;top:17px!important;min-width:0!important;min-height:30px!important;padding:5px 4px!important}
 }
+
+/* V83 Close placement: directly to the right of the flower rather than beneath it. */
+#byz-new-page-return{left:calc(clamp(16px,1.45vw,28px) + clamp(37px,3.25vw,53px) + 6px)!important;top:clamp(18px,2.15vh,28px)!important;transform:none!important;min-width:0!important;min-height:32px!important;padding:6px 5px!important;white-space:nowrap!important;z-index:55!important;}
+@media(max-width:680px){#byz-new-page-return{left:54px!important;top:17px!important;min-height:30px!important;padding:5px 4px!important}}

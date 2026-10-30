@@ -1,0 +1,1128 @@
+/* V38 — product editorial layout only. Original WebGL and navigation are unchanged. */
+html.byz-market-copy-ready .work-detail .hero__intro > .hero__text,
+html.byz-market-copy-ready .work-detail .blocks.content,
+html.byz-market-copy-ready .work-detail .page > .next,
+html.byz-market-copy-ready .work-detail .page > .footer {display:none!important}
+/* One center-aligned title beneath the hero artwork, subtly overlapping its lower edge. */
+html.byz-market-copy-ready .work-detail .hero__media {margin-bottom:-3.4rem!important}
+html.byz-market-copy-ready .work-detail .hero__intro.grid {
+ display:flex!important; flex-direction:column!important; align-items:center!important;
+ justify-content:center!important; text-align:center!important; position:relative!important;
+ z-index:4!important; padding:0 5% 2rem!important; gap:0!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading {
+ display:flex!important; flex-direction:column!important; align-items:center!important;
+ justify-content:center!important; text-align:center!important; width:min(96%,1000px)!important;
+ max-width:1000px!important; margin:0 auto!important; grid-column:auto!important;
+}
+html.byz-market-copy-ready .work-detail h1.hero__title {
+ margin:0!important; text-align:center!important; font-family:var(--font-serif,Georgia,serif);
+ font-size:clamp(2.4rem,4.5vw,5.5rem)!important; font-weight:500!important;
+ letter-spacing:-.028em!important; line-height:1.12!important;
+ color:#fff!important; text-shadow:0 3px 35px rgba(0,0,0,.62);
+}
+.byz-market-tagline {
+ display:block; width:100%; text-align:center!important; margin:.75rem auto 0!important;
+ color:#f0edf0; font:italic 500 clamp(1.03rem,1.55vw,1.55rem)/1.55 var(--font-serif,Georgia,serif);
+ letter-spacing:-.01em; text-shadow:0 3px 22px rgba(0,0,0,.75);
+}
+/* Readable independent product content. */
+.byz-market-product-copy {
+ box-sizing:border-box; padding:clamp(3.5rem,6vw,7rem) max(5%,calc((100% - 1360px)/2)) clamp(8rem,13vw,14rem);
+ max-width:100%; color:#e9eaf0; font-family:var(--font-sans,Arial,sans-serif);
+ letter-spacing:.008em; position:relative; z-index:1;
+}
+.byz-market-reading{width:min(790px,100%);margin:0 auto}
+.byz-market-reading .byz-offering-title {
+ font-family:var(--font-serif,Georgia,serif);font-size:clamp(2rem,3.35vw,3.65rem);
+ font-weight:500;line-height:1.2;letter-spacing:-.02em; margin:5rem 0 1.5rem;
+}
+.byz-market-reading .byz-offering-title:first-child{margin-top:0}
+.byz-market-reading .byz-offering-title:not(:first-child){border-top:1px solid rgba(231,236,247,.23);padding-top:4.5rem;margin-top:6.5rem}
+.byz-market-reading .byz-section-title {
+ font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.6rem,2.2vw,2.3rem);
+ font-weight:500;line-height:1.35;letter-spacing:-.015em;margin:4rem 0 1.5rem;color:#faf8f6;
+}
+.byz-market-reading p{font-size:clamp(.95rem,1.16vw,1.05rem);line-height:1.85;margin:0 0 1.35em;color:#d6d9e2;max-width:72ch}
+.byz-market-reading p:has(>em:only-child){font-family:var(--font-serif,Georgia,serif);color:#f0ece7;font-size:clamp(1.15rem,1.55vw,1.43rem);line-height:1.65;margin-bottom:2rem}
+.byz-market-reading strong{color:#fff;font-weight:600}.byz-market-reading em{font-style:italic}
+.byz-market-purchase {
+ width:min(790px,100%);margin:5rem auto 0;border-top:1px solid rgba(231,236,247,.35);
+ padding:2.1rem 0 0;font-family:var(--font-serif,Georgia,serif);font-size:clamp(1.1rem,1.5vw,1.45rem);
+ line-height:1.6;color:#fff;
+}
+/* Empty editorial image spaces, with an actual irregular feathered mask (not a rectangular border). */
+.byz-market-scratch-figure {
+ position:relative; width:min(1080px,calc(100% + 13vw)); max-width:calc(100vw - 7vw);
+ margin:clamp(3.5rem,7vw,7rem) 0; left:50%; transform:translateX(-50%);
+ aspect-ratio:16/9; padding:0; overflow:visible; isolation:isolate;
+}
+.byz-market-scratch-surface {
+ display:flex; align-items:center; justify-content:center; position:absolute;
+ inset:0; background:radial-gradient(ellipse at 45% 36%,rgba(50,77,103,.55),rgba(13,19,30,.79) 60%,rgba(3,5,10,.04) 90%);
+ -webkit-mask-image:url('./byz-scratch-edge-v38.png');mask-image:url('./byz-scratch-edge-v38.png');
+ -webkit-mask-size:100% 100%;mask-size:100% 100%;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
+.byz-market-scratch-surface::after {
+ content:''; position:absolute;inset:0;opacity:.24;
+ background:repeating-linear-gradient(131deg,transparent 0 9px,rgba(255,255,255,.025) 10px 11px,transparent 13px 24px);
+ pointer-events:none;
+}
+.byz-market-image-placeholder {
+ position:relative;z-index:1;font:500 clamp(.7rem,.85vw,.88rem)/1.5 var(--font-sans,Arial,sans-serif);
+ color:rgba(229,235,243,.67);letter-spacing:.2em;text-transform:uppercase;text-align:center;
+}
+.byz-market-scratch-surface img.byz-market-supplied-photo {
+ position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+}
+.byz-market-scratch-surface--contain img.byz-market-supplied-photo,
+img.byz-market-supplied-photo--contain {
+ object-fit:contain;
+ object-position:center center;
+ padding:clamp(8px,1.2vw,14px);
+}
+.byz-market-scratch-surface--feather-strong::after {
+ content:'';position:absolute;inset:0;pointer-events:none;opacity:1;
+ background:
+   radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.22) 80%, rgba(0,0,0,.72) 100%),
+   linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 32%, rgba(0,0,0,.16) 100%);
+}
+.byz-market-scratch-figure:has(img.byz-market-supplied-photo[src]) .byz-market-image-placeholder{display:none}
+/* Subtle text reveals for scrolling, each element animates once. */
+html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready,
+html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready {
+ opacity:0; transform:translate3d(0,22px,0);
+ transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1);
+ will-change:opacity,transform;
+}
+html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready.byz-revealed,
+html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready.byz-revealed {
+ opacity:1; transform:translate3d(0,0,0);
+}
+@media(max-width:850px){
+ html.byz-market-copy-ready .work-detail .hero__media{margin-bottom:-2.3rem!important}
+ html.byz-market-copy-ready .work-detail .hero__intro.grid{padding:0 5% 1.3rem!important}
+ .byz-market-tagline{margin-top:.45rem!important}
+ .byz-market-product-copy{padding:3rem 7% 8rem}
+ .byz-market-reading .byz-section-title{margin-top:3rem}
+ .byz-market-scratch-figure{width:calc(100% + 12vw);max-width:96vw;margin-block:3.2rem}
+}
+@media(prefers-reduced-motion:reduce){
+ html.byz-market-copy-ready .byz-market-reading .byz-reveal-ready,
+ html.byz-market-copy-ready .byz-market-purchase.byz-reveal-ready {
+ opacity:1!important;translate:none!important;filter:none!important;transition:none!important;
+ }
+}
+
+
+/* V68: restore Palia's real GL hero banner, not a replacement DOM <img>.
+   The original BannerScene shader feathers/distorts/dissolves the texture. */
+html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl {
+ position:relative!important;
+ display:block!important;
+ width:100%!important;
+ height:clamp(350px,39vw,690px)!important;
+ min-height:0!important;
+ max-height:min(74vh,690px)!important;
+ margin:0!important;
+ overflow:visible!important;
+ background:transparent!important;
+ isolation:auto!important;
+ transform:none!important;
+}
+html.byz-market-copy-ready .work-detail .hero__media .byz-product-hero-photo-v61,
+html.byz-market-copy-ready .work-detail .hero__media .byz-product-hero-backdrop-v65,
+html.byz-market-copy-ready .work-detail .byz-hero-stage-v66 { display:none!important; }
+html.byz-market-copy-ready .work-detail .hero__intro.grid {
+ display:flex!important;
+ flex-direction:column!important;
+ justify-content:center!important;
+ align-items:center!important;
+ position:relative!important;
+ z-index:2!important;
+ margin:0!important;
+ padding:clamp(12px,2vw,36px) 5% clamp(24px,3vw,44px)!important;
+ transform:none!important;
+ clear:both!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading {margin:0 auto!important;transform:none!important;}
+html.byz-market-copy-ready .work-detail .hero__title {margin:0!important;}
+@media(max-width:720px){
+ html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl {
+   height:clamp(310px,55vh,530px)!important;
+   max-height:66vh!important;
+ }
+ html.byz-market-copy-ready .work-detail .hero__intro.grid {padding:10px 6% 30px!important;}
+}
+
+/* V70 — Hero/title meeting point. Keeps the WebGL feathered banner intact.
+   Pull the ORIGINAL hero caption into the bottom of the GL composition, and
+   let the remaining copy follow naturally in normal document flow. */
+html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl{
+ height:clamp(330px,36vw,620px)!important;max-height:68vh!important;
+}
+html.byz-market-copy-ready .work-detail .hero__intro.grid{
+ margin-top:calc(-1 * clamp(5.5rem,8.3vw,9rem))!important;
+ padding:0 5% .8rem!important;z-index:12!important;
+}
+html.byz-market-copy-ready .work-detail .hero__heading{
+ position:relative!important;z-index:13!important;
+}
+html.byz-market-copy-ready .byz-market-tagline{
+ margin-top:.42rem!important;
+}
+html.byz-market-copy-ready .byz-market-product-copy{
+ padding-top:clamp(1.5rem,2.8vw,2.8rem)!important;
+}
+@media(max-width:720px){
+ html.byz-market-copy-ready .work-detail .hero__media.hero__media--gl{
+  height:clamp(320px,53vh,510px)!important;max-height:64vh!important;
+ }
+ html.byz-market-copy-ready .work-detail .hero__intro.grid{
+  margin-top:calc(-1 * clamp(3rem,10vw,5rem))!important;
+  padding:0 6% .65rem!important;
+ }
+ html.byz-market-copy-ready .byz-market-product-copy{padding-top:1.2rem!important}
+}
+
+
+/* V77: coherent, compact editorial product detail system.
+   The existing Palia WebGL hero, its title and its texture shader are unchanged. */
+html.byz-market-copy-ready .byz-market-product-copy--editorial{
+  width:100%;max-width:none;margin:0;
+  padding:clamp(20px,2.4vw,32px) max(26px,calc((100% - 1216px)/2)) clamp(56px,7vw,92px)!important;
+  color:#e4e3e6;
+}
+.byz-market-product-copy--editorial .byz-market-reading,
+.byz-market-product-copy--editorial .byz-market-purchase{
+  width:100%;max-width:1216px;margin-left:auto;margin-right:auto;
+}
+.byz-market-product-copy--editorial .byz-ed-product{
+  display:block;
+  font-family:var(--font-sans,Arial,sans-serif);
+  letter-spacing:normal;
+}
+.byz-market-product-copy--editorial .byz-ed-product p{
+  max-width:72ch;
+  margin:0 0 .78em;
+  font-family:var(--font-sans,Arial,sans-serif);
+  font-size:clamp(15px,1.1vw,16px);
+  font-weight:400;
+  line-height:1.65;
+  color:#d8dae2;
+  letter-spacing:0;
+}
+.byz-market-product-copy--editorial .byz-ed-product p:last-child{margin-bottom:0}
+.byz-market-product-copy--editorial .byz-ed-product strong{font-weight:600;color:#f7f3ed}
+.byz-market-product-copy--editorial .byz-ed-product em{font-style:italic}
+.byz-market-product-copy--editorial .byz-offering-title{
+  font-family:var(--font-serif,Georgia,serif);
+  font-size:clamp(28px,2.85vw,38px);
+  line-height:1.14;
+  letter-spacing:-.025em;
+  font-weight:500;
+  color:#fff;
+  padding:0;
+  margin:0 0 12px!important;
+  border:0!important;
+}
+.byz-market-product-copy--editorial .byz-section-title{
+  font-family:var(--font-serif,Georgia,serif);
+  font-size:clamp(23px,2vw,29px);
+  line-height:1.18;
+  letter-spacing:-.017em;
+  font-weight:500;
+  color:#f6f2ec;
+  margin:0!important;
+  padding:0!important;
+}
+.byz-market-product-copy--editorial .byz-ed-intro{
+  display:block;
+  padding:0 0 clamp(27px,3.1vw,38px);
+}
+.byz-market-product-copy--editorial .byz-ed-intro-content{min-width:0}
+.byz-market-product-copy--editorial .byz-ed-intro-primary{min-width:0}
+.byz-market-product-copy--editorial .byz-ed-intro-primary p:has(>em:only-child){
+  font-size:clamp(16px,1.22vw,18px);
+  line-height:1.45;
+  font-family:var(--font-serif,Georgia,serif);
+  color:#dac8ab;
+  font-style:italic;
+  margin:0 0 15px;
+}
+.byz-market-product-copy--editorial .byz-ed-intro-primary p:has(>em:only-child) em{font-style:italic}
+.byz-market-product-copy--editorial .byz-ed-intro--image-right,
+.byz-market-product-copy--editorial .byz-ed-intro--image-left{
+  display:grid;
+  grid-template-columns:minmax(0,1.36fr) minmax(0,.84fr);
+  gap:clamp(30px,4.6vw,72px);
+  align-items:center;
+}
+.byz-market-product-copy--editorial .byz-ed-intro--image-left{
+  grid-template-columns:minmax(0,.84fr) minmax(0,1.36fr);
+}
+.byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-intro-content{grid-column:2;grid-row:1}
+.byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-media{grid-column:1;grid-row:1}
+.byz-market-product-copy--editorial .byz-ed-intro--image-right .byz-ed-media{grid-column:2}
+.byz-market-product-copy--editorial .byz-ed-intro--text-only .byz-ed-intro-content{
+  display:grid;
+  grid-template-columns:minmax(250px,.37fr) minmax(0,.63fr);
+  gap:clamp(28px,5vw,82px);
+  align-items:start;
+}
+.byz-market-product-copy--editorial .byz-ed-intro-text--columns{
+  column-count:2;
+  column-gap:clamp(22px,2.8vw,42px);
+  column-fill:balance;
+}
+.byz-market-product-copy--editorial .byz-ed-intro-text--columns p{
+  break-inside:avoid;
+  -webkit-column-break-inside:avoid;
+}
+.byz-market-product-copy--editorial .byz-ed-detail,
+.byz-market-product-copy--editorial .byz-ed-second-offering{
+  border-top:1px solid rgba(235,222,200,.17);
+  padding:clamp(25px,2.9vw,37px) 0;
+  margin:0;
+}
+.byz-market-product-copy--editorial .byz-ed-second-offering{
+  border-top:1px solid rgba(228,188,117,.35);
+  margin-top:6px;
+  padding-bottom:0;
+}
+.byz-market-product-copy--editorial .byz-ed-second-offering > .byz-ed-intro{padding-bottom:24px}
+.byz-market-product-copy--editorial .byz-ed-second-offering > .byz-ed-detail:last-child{padding-bottom:0}
+.byz-market-product-copy--editorial .byz-ed-detail--rail,
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse,
+.byz-market-product-copy--editorial .byz-ed-detail--price{
+  display:grid;
+  grid-template-columns:minmax(225px,.29fr) minmax(0,.71fr);
+  column-gap:clamp(28px,4vw,68px);
+  align-items:start;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse{
+  grid-template-columns:minmax(0,.71fr) minmax(225px,.29fr);
+}
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-detail-title{grid-column:2;grid-row:1}
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-section-body{grid-column:1;grid-row:1}
+.byz-market-product-copy--editorial .byz-ed-detail--full{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--full .byz-ed-section-body{
+  max-width:1100px;
+}
+.byz-market-product-copy--editorial .byz-ed-section-body--dense{
+  column-count:2;
+  column-gap:clamp(24px,3vw,46px);
+  column-fill:balance;
+}
+.byz-market-product-copy--editorial .byz-ed-section-body--dense p{
+  break-inside:avoid;
+  -webkit-column-break-inside:avoid;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left{
+  display:grid;
+  grid-template-columns:minmax(0,1.48fr) minmax(0,.8fr);
+  grid-template-areas:"heading photo" "copy photo";
+  column-gap:clamp(26px,3.5vw,56px);
+  align-items:start;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left{
+  grid-template-columns:minmax(0,.80fr) minmax(0,1.48fr);
+  grid-template-areas:"photo heading" "photo copy";
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-title{
+  grid-area:heading;
+  margin-bottom:11px;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-section-body{
+  grid-area:copy;
+  align-self:start;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-media,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-media{
+  grid-area:photo;
+  align-self:center;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-section-body--dense,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-section-body--dense{
+  column-count:1;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--price .byz-ed-section-body{max-width:none}
+.byz-market-product-copy--editorial .byz-ed-price-lines{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 clamp(22px,3vw,42px);
+  margin:0 0 15px;
+  border-top:1px solid rgba(235,222,200,.15);
+}
+.byz-market-product-copy--editorial .byz-ed-price-lines p{
+  padding:10px 0;
+  margin:0;
+  border-bottom:1px solid rgba(235,222,200,.15);
+  max-width:none;
+}
+.byz-market-product-copy--editorial .byz-ed-price-lines p:only-child{grid-column:1/-1}
+.byz-market-product-copy--editorial .byz-ed-detail--price .byz-ed-section-body>p{max-width:70ch}
+/* Images are intentionally untouched: no mask, clip, crop, recolor, border, backdrop or pseudo-elements. */
+.byz-market-product-copy--editorial .byz-ed-media{
+  display:block;
+  padding:0;
+  margin:0;
+  width:100%;
+  max-width:100%;
+  border:0;
+  outline:0;
+  border-radius:0;
+  background:none;
+  box-shadow:none;
+  overflow:visible;
+  isolation:auto;
+}
+.byz-market-product-copy--editorial .byz-ed-image{
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:auto;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  outline:0;
+  object-fit:contain;
+  object-position:center;
+  filter:none;
+  clip-path:none;
+  mask:none;
+  -webkit-mask:none;
+}
+.byz-market-product-copy--editorial .byz-ed-media--cloak{max-width:380px;justify-self:center}
+.byz-market-product-copy--editorial .byz-ed-media--rug{max-width:100%;justify-self:center}
+.byz-market-product-copy--editorial .byz-ed-media--intro{max-width:455px;justify-self:center}
+.byz-market-product-copy--editorial .byz-ed-purchase{
+  border-top:1px solid rgba(235,222,200,.23);
+  padding:17px 0 0;
+  margin:5px auto 0;
+  background:none;
+  box-shadow:none;
+  border-radius:0;
+  font-family:var(--font-serif,Georgia,serif);
+  font-size:clamp(16px,1.25vw,18px);
+  line-height:1.55;
+  color:#eee9e2;
+}
+/* Per-product treatment is subtle, editorial and keeps all copy in place. */
+.byz-market-product-copy--editorial.byz-market-product-copy--jewelry .byz-ed-intro--image-left .byz-ed-media{max-width:360px}
+.byz-market-product-copy--editorial.byz-market-product-copy--coin .byz-ed-detail--price .byz-section-title,
+.byz-market-product-copy--editorial.byz-market-product-copy--silk .byz-ed-detail--price .byz-section-title{color:#e7d0a5}
+.byz-market-product-copy--editorial.byz-market-product-copy--food .byz-ed-second-offering .byz-ed-intro{padding-top:0}
+/* Two lightweight composited properties, and only the actual photos animate. */
+html.byz-ed-motion-ready .byz-market-product-copy--editorial .byz-ed-media:not(.byz-ed-in-view){
+  opacity:0;
+  transform:translate3d(0,12px,0);
+}
+html.byz-ed-motion-ready .byz-market-product-copy--editorial .byz-ed-media.byz-ed-in-view{
+  opacity:1;
+  transform:none;
+  transition:opacity .47s ease-out,transform .52s cubic-bezier(.22,1,.36,1);
+}
+@media(max-width:1120px){
+  .byz-market-product-copy--editorial .byz-ed-section-body--dense,
+  .byz-market-product-copy--editorial .byz-ed-intro-text--columns{column-count:1}
+  .byz-market-product-copy--editorial .byz-ed-media--cloak{max-width:310px}
+}
+@media(max-width:850px){
+  html.byz-market-copy-ready .byz-market-product-copy--editorial{
+    padding:23px clamp(19px,5.6vw,42px) 62px!important;
+  }
+  .byz-market-product-copy--editorial .byz-ed-intro--image-right,
+  .byz-market-product-copy--editorial .byz-ed-intro--image-left,
+  .byz-market-product-copy--editorial .byz-ed-intro--text-only .byz-ed-intro-content,
+  .byz-market-product-copy--editorial .byz-ed-detail--rail,
+  .byz-market-product-copy--editorial .byz-ed-detail--rail-reverse,
+  .byz-market-product-copy--editorial .byz-ed-detail--price,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-right,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-left{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:none;
+    gap:16px;
+  }
+  .byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-intro-content,
+  .byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-media,
+  .byz-market-product-copy--editorial .byz-ed-intro--image-right .byz-ed-media,
+  .byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-detail-title,
+  .byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-section-body,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-title,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-section-body,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-media,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-title,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-section-body,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-media{
+    grid-column:auto;grid-row:auto;grid-area:auto;
+  }
+  .byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-media{order:2}
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-media{order:2}
+  .byz-market-product-copy--editorial .byz-ed-media--intro{max-width:480px;width:min(75%,480px)}
+  .byz-market-product-copy--editorial .byz-ed-media--cloak{max-width:375px}
+  .byz-market-product-copy--editorial .byz-ed-section-body--dense,
+  .byz-market-product-copy--editorial .byz-ed-intro-text--columns{column-count:1}
+}
+@media(max-width:540px){
+  .byz-market-product-copy--editorial .byz-ed-detail,
+  .byz-market-product-copy--editorial .byz-ed-second-offering{padding:22px 0}
+  .byz-market-product-copy--editorial .byz-ed-price-lines{grid-template-columns:1fr}
+  .byz-market-product-copy--editorial .byz-ed-media--intro{width:100%}
+  .byz-market-product-copy--editorial .byz-ed-product p{font-size:15px;line-height:1.62}
+  .byz-market-product-copy--editorial .byz-offering-title{font-size:30px}
+  .byz-market-product-copy--editorial .byz-section-title{font-size:23px}
+}
+@media(prefers-reduced-motion:reduce){
+  html.byz-ed-motion-ready .byz-market-product-copy--editorial .byz-ed-media{
+    opacity:1!important;transform:none!important;transition:none!important;
+  }
+}
+
+
+/* V78 — Silk product photography and prices. No cropping/masking/borders on any image. */
+.byz-market-product-copy--silk .byz-ed-detail--photo-left{
+  grid-template-columns:minmax(0,.94fr) minmax(0,1.34fr);
+  column-gap:clamp(24px,3.5vw,50px);
+}
+.byz-market-product-copy--silk .byz-ed-media--cloak{
+  max-width:min(100%,420px);justify-self:center;
+}
+.byz-market-product-copy--silk .byz-ed-media--rug{
+  max-width:100%;justify-self:center;
+}
+.byz-market-product-copy--silk .byz-ed-silk-closeups{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(14px,2.1vw,30px);
+  width:100%;margin-top:clamp(20px,2.4vw,32px);
+  align-items:center;
+}
+.byz-market-product-copy--silk .byz-ed-media--silk-closeup{
+  max-width:100%;width:100%;
+}
+.byz-market-product-copy--silk .byz-ed-detail--silk-pricing{
+  display:block;
+  border-top:1px solid rgba(235,222,200,.17);
+  padding:clamp(26px,2.9vw,38px) 0;
+}
+.byz-market-product-copy--silk .byz-ed-detail--silk-pricing>.byz-ed-detail-title{
+  margin-bottom:clamp(20px,2.2vw,30px);
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(20px,3vw,48px);align-items:start;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-item{
+  min-width:0;margin:0;
+}
+.byz-market-product-copy--silk .byz-ed-media--silk-price{
+  width:100%;max-width:none;margin:0;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-wording{
+  text-align:center;padding:clamp(4px,.8vw,10px) 0 0;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-primary{
+  margin:0!important;max-width:none!important;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-primary>strong{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-weight:400;line-height:1.3;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-label{
+  font-family:var(--font-sans,Arial,sans-serif);font-size:clamp(13px,1vw,15px);
+  letter-spacing:.035em;color:#dccaa9;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-amount{
+  margin:6px 0 0;font-family:var(--font-serif,Georgia,serif);
+  font-weight:500;font-size:clamp(27px,2.7vw,35px);
+  letter-spacing:-.022em;line-height:1.16;color:#f6f1e9;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-usd{
+  margin-top:6px;font-family:var(--font-sans,Arial,sans-serif);
+  font-size:clamp(12px,1vw,14px);font-weight:400;color:#c8cad3;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-comparison{
+  max-width:none!important;margin:clamp(12px,1.4vw,18px) 0 0!important;
+  padding-top:10px;border-top:1px solid rgba(235,222,200,.15);
+  font-size:clamp(12px,1vw,14px)!important;line-height:1.5!important;
+  color:#c5c3c2;text-align:center;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-comparison strong{
+  font-weight:400;color:#c5c3c2;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-conclusion{
+  max-width:74ch;margin:clamp(22px,2.8vw,36px) auto 0;
+  text-align:center;
+}
+.byz-market-product-copy--silk .byz-ed-silk-price-conclusion>p{
+  max-width:none;margin:0 0 .65em;
+}
+/* Preserve every pixel of user-created transparency and feathered borders. */
+.byz-market-product-copy--silk .byz-ed-media,
+.byz-market-product-copy--silk .byz-ed-image{
+  background:none!important;border:0!important;border-radius:0!important;
+  clip-path:none!important;mask:none!important;-webkit-mask:none!important;
+  box-shadow:none!important;filter:none!important;
+}
+.byz-market-product-copy--silk .byz-ed-image{
+  width:100%;height:auto;object-fit:contain;max-height:none;
+}
+@media(max-width:850px){
+  .byz-market-product-copy--silk .byz-ed-detail--photo-left{grid-template-columns:minmax(0,1fr);}
+  .byz-market-product-copy--silk .byz-ed-detail--photo-left .byz-ed-detail-title,
+  .byz-market-product-copy--silk .byz-ed-detail--photo-left .byz-ed-section-body,
+  .byz-market-product-copy--silk .byz-ed-detail--photo-left .byz-ed-media{grid-column:auto;grid-area:auto;grid-row:auto;}
+  .byz-market-product-copy--silk .byz-ed-media--rug{width:100%;max-width:640px;margin:0 auto;}
+}
+@media(max-width:650px){
+  .byz-market-product-copy--silk .byz-ed-silk-price-grid{grid-template-columns:minmax(0,1fr);gap:34px;}
+  .byz-market-product-copy--silk .byz-ed-silk-closeups{grid-template-columns:minmax(0,1fr);gap:17px;}
+}
+
+
+/* V79 — Paramerion product features and price presentation.
+   Actual uploaded images are rendered directly: natural dimensions/alpha,
+   with no crop, mask, border, feather, rounded corners or color alterations. */
+.byz-market-product-copy--sword .byz-ed-detail--photo-right{
+  grid-template-columns:minmax(0,1.13fr) minmax(0,.87fr);
+  gap:0 clamp(24px,3vw,45px);
+}
+.byz-market-product-copy--sword .byz-ed-detail--photo-left{
+  grid-template-columns:minmax(0,.87fr) minmax(0,1.13fr);
+  gap:0 clamp(24px,3vw,45px);
+}
+.byz-market-product-copy--sword .byz-ed-detail--photo-right .byz-ed-media--sword-harness{
+  width:min(100%,440px);max-width:440px;justify-self:center;
+}
+.byz-market-product-copy--sword .byz-ed-detail--photo-left .byz-ed-media--sword-scabbard{
+  width:100%;max-width:580px;justify-self:center;
+}
+.byz-market-product-copy--sword .byz-ed-detail--sword-pricing{
+  display:block;
+  border-top:1px solid rgba(235,222,200,.17);
+  padding:clamp(26px,2.9vw,38px) 0;
+}
+.byz-market-product-copy--sword .byz-ed-detail--sword-pricing>.byz-ed-detail-title{
+  margin-bottom:clamp(18px,2vw,28px);
+}
+.byz-market-product-copy--sword .byz-ed-media--sword-price-banner{
+  width:min(100%,990px);max-width:990px;margin:0 auto;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-wording{
+  max-width:860px;margin:clamp(8px,1.25vw,16px) auto 0;
+  text-align:center;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-sentence{
+  display:flex;flex-direction:column;align-items:center;
+  gap:8px;max-width:none!important;margin:0!important;
+  font-size:clamp(15px,1.05vw,17px)!important;
+  line-height:1.6!important;
+  color:#d8dae2;text-align:center;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-lead{
+  display:block;font-size:clamp(14px,1vw,16px);color:#d8dae2;
+}
+.byz-market-product-copy--sword .byz-ed-sword-main-price{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;margin:0;
+  font-weight:400!important;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-comparison{
+  display:block;max-width:700px;margin-top:7px;
+  font-size:clamp(13px,.95vw,15px);line-height:1.55;
+  color:#c6c8d0;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-comparison strong{
+  color:#e0d2bc;font-weight:600;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-amount{
+  font-family:var(--font-serif,Georgia,serif);
+  font-weight:500;font-size:clamp(27px,2.8vw,38px);
+  line-height:1.1;letter-spacing:-.022em;color:#fff;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-usd{
+  display:block;font-family:var(--font-sans,Arial,sans-serif);
+  font-size:clamp(12px,1vw,14px);font-weight:400;line-height:1.45;
+  color:#c6c8d0;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-conclusion{
+  margin:clamp(16px,2.1vw,27px) auto 0;
+  max-width:70ch;text-align:center;
+}
+.byz-market-product-copy--sword .byz-ed-sword-price-conclusion>p{
+  max-width:none;margin:0 auto .6em;
+}
+.byz-market-product-copy--sword .byz-ed-media,
+.byz-market-product-copy--sword .byz-ed-image{
+  border:0!important;outline:0!important;border-radius:0!important;
+  background:none!important;box-shadow:none!important;
+  clip-path:none!important;mask:none!important;-webkit-mask:none!important;
+  filter:none!important;overflow:visible!important;
+}
+.byz-market-product-copy--sword .byz-ed-image{
+  display:block;width:100%;height:auto;max-height:none;
+  object-fit:contain;object-position:center center;
+}
+@media(max-width:850px){
+  .byz-market-product-copy--sword .byz-ed-detail--photo-right,
+  .byz-market-product-copy--sword .byz-ed-detail--photo-left{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"heading" "copy" "photo";
+    gap:12px 0;
+  }
+  .byz-market-product-copy--sword .byz-ed-detail--photo-left .byz-ed-detail-title,
+  .byz-market-product-copy--sword .byz-ed-detail--photo-left .byz-ed-section-body,
+  .byz-market-product-copy--sword .byz-ed-detail--photo-left .byz-ed-media{
+    grid-column:1;grid-row:auto;
+  }
+  .byz-market-product-copy--sword .byz-ed-detail--photo-left .byz-ed-detail-title{grid-area:heading}
+  .byz-market-product-copy--sword .byz-ed-detail--photo-left .byz-ed-section-body{grid-area:copy}
+  .byz-market-product-copy--sword .byz-ed-detail--photo-left .byz-ed-media{grid-area:photo}
+  .byz-market-product-copy--sword .byz-ed-detail--photo-right .byz-ed-media--sword-harness{
+    width:min(100%,380px);margin:0 auto;
+  }
+}
+
+.byz-market-product-copy--sword .byz-ed-media--sword-harness .byz-ed-image{aspect-ratio:2/3}
+.byz-market-product-copy--sword .byz-ed-media--sword-scabbard .byz-ed-image{aspect-ratio:3/2}
+.byz-market-product-copy--sword .byz-ed-media--sword-price-banner .byz-ed-image{aspect-ratio:3/2}
+
+
+/* V81 additions follow V80 content. */
+
+/* V81 — center-align general product copy across all product pages.
+   Text that sits next to images stays left-aligned for readability. */
+.byz-market-product-copy--editorial .byz-ed-product p{
+  text-align:center;
+  margin-left:auto;
+  margin-right:auto;
+}
+.byz-market-product-copy--editorial .byz-offering-title,
+.byz-market-product-copy--editorial .byz-section-title,
+.byz-market-product-copy--editorial .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-intro-primary,
+.byz-market-product-copy--editorial .byz-ed-intro-text,
+.byz-market-product-copy--editorial .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-price-lines p{
+  text-align:center;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--full .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--full .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--rail .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--rail .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--price .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--price .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-intro--text-only .byz-ed-intro-primary,
+.byz-market-product-copy--editorial .byz-ed-intro--text-only .byz-ed-intro-text{
+  text-align:center;
+}
+.byz-market-product-copy--editorial .byz-ed-intro--image-right .byz-ed-intro-primary,
+.byz-market-product-copy--editorial .byz-ed-intro--image-right .byz-ed-intro-text,
+.byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-intro-primary,
+.byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-intro-text,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-section-body{
+  text-align:left;
+}
+
+/* V80 — Gold Jewelry imagery and dedicated non-image pricing area. */
+.byz-market-product-copy--jewelry .byz-ed-detail--photo-right{
+  grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);
+  gap:0 clamp(24px,3.1vw,44px);
+}
+.byz-market-product-copy--jewelry .byz-ed-detail--photo-left{
+  grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);
+  gap:0 clamp(24px,3.1vw,44px);
+}
+.byz-market-product-copy--jewelry .byz-ed-media--jewelry-pendants,
+.byz-market-product-copy--jewelry .byz-ed-media--jewelry-necklace,
+.byz-market-product-copy--jewelry .byz-ed-media--jewelry-earrings,
+.byz-market-product-copy--jewelry .byz-ed-media--jewelry-ring{
+  width:100%;max-width:680px;justify-self:center;
+}
+.byz-market-product-copy--jewelry .byz-ed-detail--jewelry-pricing{
+  border-top:1px solid rgba(235,222,200,.17);
+  padding-top:clamp(26px,2.9vw,38px);
+}
+.byz-market-product-copy--jewelry .byz-ed-detail--jewelry-pricing .byz-ed-section-body{
+  max-width:none;
+}
+.byz-market-product-copy--jewelry .byz-ed-detail--jewelry-pricing>.byz-ed-detail-title{
+  margin-bottom:clamp(18px,1.9vw,26px);
+}
+.byz-market-product-copy--jewelry .byz-ed-detail--jewelry-pricing .byz-ed-price-lines{
+  margin-top:0;
+}
+.byz-market-product-copy--jewelry .byz-ed-detail--jewelry-pricing .byz-ed-price-lines p:last-child{
+  grid-column:1/-1;
+}
+.byz-market-product-copy--jewelry .byz-ed-media,
+.byz-market-product-copy--jewelry .byz-ed-image{
+  border:0!important;outline:0!important;border-radius:0!important;
+  background:none!important;box-shadow:none!important;filter:none!important;
+  clip-path:none!important;mask:none!important;-webkit-mask:none!important;
+}
+.byz-market-product-copy--jewelry .byz-ed-image{
+  width:100%;height:auto;max-height:none;object-fit:contain;
+}
+@media(max-width:850px){
+  .byz-market-product-copy--jewelry .byz-ed-detail--photo-right,
+  .byz-market-product-copy--jewelry .byz-ed-detail--photo-left{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"heading" "copy" "photo";
+    gap:12px 0;
+  }
+  .byz-market-product-copy--jewelry .byz-ed-detail--photo-left .byz-ed-detail-title,
+  .byz-market-product-copy--jewelry .byz-ed-detail--photo-left .byz-ed-section-body,
+  .byz-market-product-copy--jewelry .byz-ed-detail--photo-left .byz-ed-media{
+    grid-column:1;grid-row:auto;
+  }
+  .byz-market-product-copy--jewelry .byz-ed-detail--photo-left .byz-ed-detail-title{grid-area:heading}
+  .byz-market-product-copy--jewelry .byz-ed-detail--photo-left .byz-ed-section-body{grid-area:copy}
+  .byz-market-product-copy--jewelry .byz-ed-detail--photo-left .byz-ed-media{grid-area:photo}
+}
+
+/* V80 — Food Items imagery and combined price section. */
+.byz-market-product-copy--food .byz-ed-intro--image-right .byz-ed-media--intro,
+.byz-market-product-copy--food .byz-ed-intro--image-left .byz-ed-media--intro{
+  max-width:520px;justify-self:center;
+}
+.byz-market-product-copy--food .byz-ed-second-offering--food .byz-ed-intro{padding-top:0}
+.byz-market-product-copy--food .byz-ed-detail--photo-right{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:0 clamp(24px,3.1vw,44px);
+}
+.byz-market-product-copy--food .byz-ed-detail--photo-right .byz-ed-media--food-hanging{
+  width:min(100%,640px);max-width:640px;justify-self:center;
+}
+.byz-market-product-copy--food .byz-ed-detail--food-pricing{
+  display:block;
+  border-top:1px solid rgba(235,222,200,.17);
+  padding:clamp(26px,2.9vw,38px) 0;
+}
+.byz-market-product-copy--food .byz-ed-detail--food-pricing>.byz-ed-detail-title{
+  margin-bottom:clamp(18px,2vw,28px);
+}
+.byz-market-product-copy--food .byz-ed-media--food-price-banner{
+  width:min(100%,980px);max-width:980px;margin:0 auto;
+}
+.byz-market-product-copy--food .byz-ed-food-price-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(20px,3vw,40px);max-width:980px;margin:clamp(18px,2.2vw,30px) auto 0;
+}
+.byz-market-product-copy--food .byz-ed-food-price-card{
+  border-top:1px solid rgba(235,222,200,.15);
+  padding-top:14px;text-align:center;
+}
+.byz-market-product-copy--food .byz-ed-food-price-name{
+  margin:0 0 10px;font-family:var(--font-serif,Georgia,serif);
+  font-size:clamp(24px,2.2vw,30px);font-weight:500;line-height:1.08;
+  color:#f3eee7;
+}
+.byz-market-product-copy--food .byz-ed-food-price-line,
+.byz-market-product-copy--food .byz-ed-food-price-note{
+  max-width:none!important;margin:0 auto;
+}
+.byz-market-product-copy--food .byz-ed-food-price-line{
+  font-size:clamp(15px,1.05vw,17px)!important;line-height:1.7!important;
+}
+.byz-market-product-copy--food .byz-ed-food-price-line strong{
+  font-weight:600;color:#f0dcc0;
+}
+.byz-market-product-copy--food .byz-ed-food-price-note{
+  margin-top:10px;color:#d4d0cb;
+}
+.byz-market-product-copy--food .byz-ed-media,
+.byz-market-product-copy--food .byz-ed-image{
+  border:0!important;outline:0!important;border-radius:0!important;
+  background:none!important;box-shadow:none!important;filter:none!important;
+  clip-path:none!important;mask:none!important;-webkit-mask:none!important;
+}
+.byz-market-product-copy--food .byz-ed-image{
+  width:100%;height:auto;max-height:none;object-fit:contain;
+}
+@media(max-width:850px){
+  .byz-market-product-copy--food .byz-ed-detail--photo-right{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"heading" "copy" "photo";
+    gap:12px 0;
+  }
+  .byz-market-product-copy--food .byz-ed-detail--photo-right .byz-ed-detail-title{grid-area:heading}
+  .byz-market-product-copy--food .byz-ed-detail--photo-right .byz-ed-section-body{grid-area:copy}
+  .byz-market-product-copy--food .byz-ed-detail--photo-right .byz-ed-media{grid-area:photo}
+}
+@media(max-width:650px){
+  .byz-market-product-copy--food .byz-ed-food-price-grid{grid-template-columns:minmax(0,1fr);gap:30px;}
+}
+
+/* V81 — Food image assignments corrected: Garos intro, Apaki intro, smoking detail, and combo-only price banner. */
+
+
+/* V82 — improved centered editorial layout and intro cleanup.
+   General no-image sections are centered as a coherent block instead of being split into awkward mini-columns.
+   Image-adjacent sections remain aligned in the direction that reads best. */
+.byz-market-product-copy--editorial .byz-ed-intro--copy-only .byz-ed-intro-content,
+.byz-market-product-copy--editorial .byz-ed-intro-content--copy-only,
+.byz-market-product-copy--editorial .byz-ed-intro--text-only .byz-ed-intro-content{
+  display:block;
+  max-width:78ch;
+  margin:0 auto;
+}
+.byz-market-product-copy--editorial .byz-ed-intro--text-only .byz-ed-intro-primary,
+.byz-market-product-copy--editorial .byz-ed-intro--text-only .byz-ed-intro-text,
+.byz-market-product-copy--editorial .byz-ed-intro--copy-only .byz-ed-intro-text{
+  text-align:center;
+}
+.byz-market-product-copy--editorial .byz-ed-intro--copy-only .byz-ed-intro-text p,
+.byz-market-product-copy--editorial .byz-ed-intro--text-only .byz-ed-intro-text p,
+.byz-market-product-copy--editorial .byz-ed-detail--full .byz-ed-section-body p,
+.byz-market-product-copy--editorial .byz-ed-detail--rail .byz-ed-section-body p,
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-section-body p,
+.byz-market-product-copy--editorial .byz-ed-detail--price .byz-ed-section-body > p{
+  max-width:68ch;
+  margin-left:auto;
+  margin-right:auto;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--full,
+.byz-market-product-copy--editorial .byz-ed-detail--rail,
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse,
+.byz-market-product-copy--editorial .byz-ed-detail--price{
+  display:block;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--full .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--rail .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--price .byz-ed-detail-title{
+  width:100%;
+  margin:0 0 15px;
+  text-align:center;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--full .byz-ed-detail-title > *,
+.byz-market-product-copy--editorial .byz-ed-detail--rail .byz-ed-detail-title > *,
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-detail-title > *,
+.byz-market-product-copy--editorial .byz-ed-detail--price .byz-ed-detail-title > *{
+  margin-left:auto;
+  margin-right:auto;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--full .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--rail .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--rail-reverse .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--price .byz-ed-section-body{
+  max-width:78ch;
+  margin:0 auto;
+  text-align:center;
+}
+.byz-market-product-copy--editorial .byz-ed-section-body--dense,
+.byz-market-product-copy--editorial .byz-ed-intro-text--columns{
+  column-count:1 !important;
+  column-gap:0 !important;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-intro--image-right .byz-ed-intro-primary,
+.byz-market-product-copy--editorial .byz-ed-intro--image-right .byz-ed-intro-text,
+.byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-intro-primary,
+.byz-market-product-copy--editorial .byz-ed-intro--image-left .byz-ed-intro-text{
+  text-align:left;
+}
+.byz-market-product-copy--editorial .byz-ed-price-lines{
+  max-width:76ch;
+  margin-left:auto;
+  margin-right:auto;
+}
+.byz-market-product-copy--editorial .byz-ed-purchase{
+  max-width:76ch;
+  text-align:center;
+}
+/* Keep food subproduct headings neatly aligned over their own copy blocks. */
+.byz-market-product-copy--food .byz-ed-intro--image-right .byz-ed-intro-primary,
+.byz-market-product-copy--food .byz-ed-intro--image-left .byz-ed-intro-primary{
+  margin-bottom:6px;
+}
+
+
+/* V83 — targeted visual fixes, no source copy or supplied image changes. */
+/* 1. The heading and its paragraph group share a single layout cell.
+   This eliminates the large vertical gap seen on the cloak and sword pages. */
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left{
+  grid-template-rows:auto!important;
+  align-items:center!important;
+  gap:clamp(20px,3.5vw,48px)!important;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right{
+  grid-template-areas:'copy photo'!important;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left{
+  grid-template-areas:'photo copy'!important;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-copy,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-copy{
+  grid-area:copy;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:clamp(11px,1.25vw,17px);
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-copy .byz-ed-detail-title,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-copy .byz-ed-detail-title{
+  margin:0!important;
+  width:100%;
+  grid-area:auto!important;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-copy .byz-ed-section-body,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-copy .byz-ed-section-body{
+  margin:0!important;
+  width:100%;
+  grid-area:auto!important;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-copy .byz-ed-section-body p,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-copy .byz-ed-section-body p{
+  margin-left:0!important;
+  margin-right:0!important;
+  text-align:left!important;
+}
+.byz-market-product-copy--editorial .byz-ed-detail--photo-right > .byz-ed-media,
+.byz-market-product-copy--editorial .byz-ed-detail--photo-left > .byz-ed-media{
+  grid-area:photo!important;
+  align-self:center!important;
+}
+/* 2. The Coin Exchange and Jewelry opening copy reads as one short lead.
+   Keep each source paragraph intact while removing awkward whitespace. */
+.byz-market-product-copy--editorial.byz-market-product-copy--coin .byz-ed-intro,
+.byz-market-product-copy--editorial.byz-market-product-copy--jewelry .byz-ed-intro{
+  padding-top:0!important;
+  padding-bottom:clamp(16px,2.2vw,28px)!important;
+}
+.byz-market-product-copy--editorial.byz-market-product-copy--coin .byz-ed-intro-text,
+.byz-market-product-copy--editorial.byz-market-product-copy--jewelry .byz-ed-intro-text{
+  max-width:66ch;
+  margin:0 auto;
+  text-align:center;
+}
+.byz-market-product-copy--editorial.byz-market-product-copy--coin .byz-ed-intro-text p,
+.byz-market-product-copy--editorial.byz-market-product-copy--jewelry .byz-ed-intro-text p{
+  max-width:66ch!important;
+  margin:0 auto .48em!important;
+  line-height:1.55;
+}
+/* 3. Exchange fee: one clean block, with a single section divider only. */
+.byz-market-product-copy--coin .byz-ed-detail--coin-fee{
+  display:block!important;
+  border-top:1px solid rgba(235,222,200,.20);
+  padding:clamp(25px,2.9vw,36px) 0 clamp(22px,2.9vw,36px)!important;
+}
+.byz-market-product-copy--coin .byz-ed-detail--coin-fee .byz-ed-detail-title{
+  margin:0 0 15px!important;
+  text-align:center;
+}
+.byz-market-product-copy--coin .byz-ed-detail--coin-fee .byz-ed-section-body{
+  max-width:78ch!important;
+  margin:0 auto!important;
+  text-align:center;
+  border:0!important;
+}
+.byz-market-product-copy--coin .byz-ed-detail--coin-fee .byz-ed-section-body p{
+  max-width:76ch!important;
+  margin:0 auto .7em!important;
+  padding:0!important;
+  border:0!important;
+}
+.byz-market-product-copy--coin .byz-ed-detail--coin-fee .byz-ed-section-body p:first-child{
+  color:#f1dfbe;
+  font-size:clamp(16px,1.12vw,18px)!important;
+}
+.byz-market-product-copy--coin .byz-ed-detail--coin-fee .byz-ed-section-body p:last-child{
+  margin-bottom:0!important;
+}
+/* 4. Jewelry pricing: no nested divider maze, balanced readable price entries. */
+.byz-market-product-copy--jewelry .byz-ed-detail--jewelry-pricing{
+  display:block!important;
+  padding-top:clamp(26px,3vw,38px)!important;
+}
+.byz-market-product-copy--jewelry .byz-ed-detail--jewelry-pricing > .byz-ed-detail-title{
+  width:100%;
+  margin:0 auto clamp(19px,2.25vw,29px)!important;
+  text-align:center;
+}
+.byz-market-product-copy--jewelry .byz-ed-jewelry-price-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:clamp(28px,5vw,76px);
+  row-gap:clamp(10px,1.5vw,20px);
+  max-width:960px;
+  margin:0 auto;
+  padding:0;
+  border:0;
+  align-items:center;
+}
+.byz-market-product-copy--jewelry .byz-ed-jewelry-price-grid p{
+  display:block;
+  margin:0!important;
+  padding:0 12px!important;
+  max-width:none!important;
+  border:0!important;
+  font-size:clamp(14px,1.07vw,16px);
+  line-height:1.55;
+  text-align:center;
+  color:#f0e9e0;
+}
+.byz-market-product-copy--jewelry .byz-ed-jewelry-price-grid p:nth-child(5){
+  grid-column:1/-1;
+  justify-self:center;
+  max-width:660px!important;
+}
+.byz-market-product-copy--jewelry .byz-ed-jewelry-price-closing{
+  max-width:700px;
+  margin:clamp(18px,2.1vw,25px) auto 0;
+  text-align:center;
+}
+.byz-market-product-copy--jewelry .byz-ed-jewelry-price-closing p{
+  margin:0 auto!important;
+  padding:0!important;
+  border:0!important;
+  font-size:clamp(14px,1.07vw,16px);
+}
+@media(max-width:850px){
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-right,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-left{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:'copy' 'photo'!important;
+    gap:clamp(12px,3vw,22px)!important;
+  }
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-right .byz-ed-detail-copy,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-left .byz-ed-detail-copy{
+    grid-column:1;
+    grid-row:1;
+    grid-area:copy!important;
+  }
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-right > .byz-ed-media,
+  .byz-market-product-copy--editorial .byz-ed-detail--photo-left > .byz-ed-media{
+    grid-column:1;
+    grid-row:2;
+    grid-area:photo!important;
+    margin-inline:auto;
+  }
+}
+@media(max-width:560px){
+  .byz-market-product-copy--jewelry .byz-ed-jewelry-price-grid{grid-template-columns:minmax(0,1fr);gap:12px;}
+  .byz-market-product-copy--jewelry .byz-ed-jewelry-price-grid p:nth-child(5){grid-column:1;}
+}

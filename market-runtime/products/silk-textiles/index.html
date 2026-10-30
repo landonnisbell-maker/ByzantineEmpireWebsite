@@ -18,16 +18,16 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 #byz-retry.visible{display:block}
 @media(prefers-reduced-motion:reduce){#byz-palia,#byz-gallery{transition-duration:.2s!important}}
 
-#byz-new-page-return{position:fixed;left:calc(clamp(16px,1.45vw,28px) + clamp(37px,3.25vw,53px) + clamp(14px,1.5vw,20px));top:clamp(11px,1.55vh,20px);z-index:40;display:inline-flex;justify-content:center;align-items:center;min-width:72px;min-height:40px;padding:10px 10px;background:transparent;border:0;border-radius:4px;color:rgba(255,255,255,.92);font:600 clamp(10px,.75vw,13px)/1.15 Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;pointer-events:auto;white-space:nowrap;transition:color .18s ease,background-color .18s ease}
+#byz-new-page-return{position:fixed!important;left:calc(clamp(16px,1.45vw,28px) + clamp(37px,3.25vw,53px) + 6px)!important;top:clamp(18px,2.15vh,28px)!important;z-index:55;display:inline-flex;justify-content:flex-start;align-items:center;width:auto!important;min-width:0!important;min-height:32px!important;padding:6px 5px!important;margin:0!important;background:transparent;border:0;border-radius:2px;color:rgba(255,255,255,.95);font:600 clamp(10px,.75vw,13px)/1.15 Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;pointer-events:auto;white-space:nowrap;transform:none!important;transition:color .18s ease,background-color .18s ease}
 #byz-new-page-return:hover{color:#fff;background:rgba(255,255,255,.075)}
 #byz-new-page-return:focus-visible{outline:2px solid #fff;outline-offset:3px}
-@media(max-width:680px){#byz-new-page-return{left:68px;top:9px;min-width:78px;min-height:44px;padding:10px 8px}}
+@media(max-width:680px){#byz-new-page-return{left:54px!important;top:17px!important;min-width:0!important;min-height:30px!important;padding:5px 4px!important}}
 
 #byz-gallery-guide{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:10;width:min(1000px,calc(100% - 36px));box-sizing:border-box;padding:13px 21px;border:1px solid rgba(250,239,218,.24);border-radius:12px;background:rgba(12,12,18,.74);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#f8f6f1;font:500 clamp(11px,1vw,14px)/1.6 Manrope,Arial,sans-serif;letter-spacing:.005em;text-align:center;pointer-events:none;opacity:1;transition:opacity .28s ease}
 body.byz-product-open #byz-gallery-guide,body.byz-product-leaving #byz-gallery-guide{opacity:0;visibility:hidden}
 @media(max-width:600px){#byz-gallery-guide{padding:10px 12px;bottom:10px;font-size:11px;line-height:1.5;border-radius:8px}}
 </style>
-<link rel="stylesheet" href="/ByzantineEmpireWebsite/brand/market-flower-v39.css"/>
+<link rel="stylesheet" href="/ByzantineEmpireWebsite/brand/market-flower-v39.css?v=83"/>
 </head><body><img class="byz-market-flower-mark" src="/ByzantineEmpireWebsite/brand/pazari-flower-v39.png" alt="ta pánta pazári" aria-hidden="true" decoding="async"/>
 <iframe id="byz-gallery" title="Interactive cloth product gallery" src="/ByzantineEmpireWebsite/market-runtime/gallery/index.html?byz-internal=1&v=64.0" allow="autoplay;fullscreen" loading="eager"></iframe>
 <iframe id="byz-palia" title="Palia interactive product page" data-src="/ByzantineEmpireWebsite/market-runtime/palia/work/palia/?no-loader&byzantine-palia-preload=1&byzantine-lite-fullscreen=1&v=69.0" src="about:blank" allow="autoplay;fullscreen" loading="eager"></iframe>
