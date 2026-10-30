@@ -1,7 +1,7 @@
 /*
- * ta pánta pazári — Crystal 1 / Introduction team + galleries, V96.
+ * ta pánta pazári — Crystal 1 / Introduction team + galleries, V97.
  * Native canvas/WebGPU content only: team portraits, full names, roles/quotes,
- * and three continuous sliding galleries for Architecture, Jewelry, Artifacts.
+ * and one lightweight HTML marquee of Architecture, Jewelry, Artifacts.
  */
 (function () {
   'use strict';
@@ -209,188 +209,143 @@
     if (shader && shader.enabled) shader.enabled.value = 0;
   };
 
-  // V96: independent, low-overhead native carousels for the
-  // Introduction page. Each category uses one wide carousel frame.
-  // Landscape / near-16:9 images use a normal cover fit. Square and
-  // portrait images keep a sharp centered foreground with a blurred
-  // version of the same image filling the sides.
-  var GALLERY_CELL_W = 720;
-  var GALLERY_CELL_H = 400;
-  
-  function roundedRect(ctx, x, y, w, h, r) {
-    roundedPath(ctx, x, y, w, h, r);
-    ctx.clip();
-  }
+  // V97: One plain HTML/CSS image marquee, independent from WebGPU textures.
+  // The previous WebGPU atlas showed stretched fragments on multiple devices.
+  // Images are now regular <img> elements and never passed through a shader.
+  var marqueeLayout = null;
+  var marqueeNode = null;
+  var marqueeLastShown = false;
 
-  function drawGalleryImage(ctx, img, x, y, w, h) {
-    if (!img || !img.naturalWidth || !img.naturalHeight) {
-      ctx.fillStyle = '#102238';
-      ctx.fillRect(x, y, w, h);
-      return;
-    }
-
-    var iw = img.naturalWidth;
-    var ih = img.naturalHeight;
-    var aspect = iw / ih;
-
-    if (aspect < 1.11) {
-      var cover = Math.max((w + 80) / iw, (h + 80) / ih);
-      var bw = iw * cover;
-      var bh = ih * cover;
-      ctx.save();
-      ctx.filter = 'blur(35px) brightness(.42) saturate(.75)';
-      ctx.drawImage(img, x + (w - bw) / 2, y + (h - bh) / 2, bw, bh);
-      ctx.restore();
-      ctx.fillStyle = 'rgba(2,9,22,.33)';
-      ctx.fillRect(x, y, w, h);
-
-      var contain = Math.min((w - 35) / iw, (h - 20) / ih);
-      var fw = iw * contain;
-      var fh = ih * contain;
-      var front = document.createElement('canvas');
-      front.width = Math.max(1, Math.round(fw));
-      front.height = Math.max(1, Math.round(fh));
-      var fctx = front.getContext('2d');
-      if (fctx) {
-        fctx.drawImage(img, 0, 0, front.width, front.height);
-        fctx.globalCompositeOperation = 'destination-in';
-        var edge = fctx.createLinearGradient(0, 0, front.width, 0);
-        edge.addColorStop(0, 'rgba(0,0,0,0)');
-        edge.addColorStop(.065, 'rgba(0,0,0,.75)');
-        edge.addColorStop(.15, 'rgba(0,0,0,1)');
-        edge.addColorStop(.85, 'rgba(0,0,0,1)');
-        edge.addColorStop(.935, 'rgba(0,0,0,.75)');
-        edge.addColorStop(1, 'rgba(0,0,0,0)');
-        fctx.fillStyle = edge;
-        fctx.fillRect(0, 0, front.width, front.height);
-        fctx.globalCompositeOperation = 'source-over';
-      }
-      ctx.drawImage(front, x + (w - fw) / 2, y + (h - fh) / 2, fw, fh);
-    } else {
-      var scale = Math.max(w / iw, h / ih);
-      var dw = iw * scale;
-      var dh = ih * scale;
-      ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
-    }
-  }
-
-  // V96: SMALL SINGLE-COLUMN ATLAS, ONE INDEPENDENT ROW PER CATEGORY.
-  // The V95 five-column sliding UV lookup was unstable in the WebGPU renderer.
-  // Pre-render each photograph once, then update only the three small rows
-  // during actual slide transitions. A stationary frame needs no GPU upload.
-  var galleryFrames = [];
-  var galleryLastKeys = ['', '', ''];
-  var gallerySequenceStart = null;
-  var galleryAtlas = null;
-
-  function makeGalleryFrame(img) {
-    var frame = document.createElement('canvas');
-    frame.width = GALLERY_CELL_W;
-    frame.height = GALLERY_CELL_H;
-    var ctx = frame.getContext('2d', { alpha: true });
-    if (!ctx) return frame;
-    ctx.fillStyle = '#091827';
-    ctx.fillRect(0, 0, GALLERY_CELL_W, GALLERY_CELL_H);
-    ctx.save();
-    roundedRect(ctx, 0, 0, GALLERY_CELL_W, GALLERY_CELL_H, 19);
-    drawGalleryImage(ctx, img, 0, 0, GALLERY_CELL_W, GALLERY_CELL_H);
-    ctx.restore();
-    return frame;
-  }
-
-  function buildGalleryAtlas() {
-    if (galleryAtlas) return galleryAtlas;
-    var canvas = document.createElement('canvas');
-    canvas.width = GALLERY_CELL_W;
-    canvas.height = GALLERY_CELL_H * galleries.length;
-    var ctx = canvas.getContext('2d', { alpha: true });
-    if (!ctx) return null;
-    galleryFrames = galleries.map(function (gallery) {
-      return gallery._images.map(makeGalleryFrame);
-    });
-    galleryFrames.forEach(function (frames, k) {
-      if (frames && frames[0]) {
-        ctx.drawImage(frames[0], 0, k * GALLERY_CELL_H);
-      }
-    });
-    galleryAtlas = canvas;
-    return galleryAtlas;
-  }
-
-  window.__BYZ_INTRO_GALLERY_ATLAS_V60__ = function () { return galleryAtlas; };
+  window.__BYZ_INTRO_GALLERY_ATLAS_V60__ = function () { return null; };
   window.__BYZ_INTRO_GALLERY_TICK_V60__ = function (active, shader) {
-    if (!shader || !shader.enabled || !shader.texture) return;
-    var atlas = galleryAtlas;
-    if (!atlas || !active) {
-      shader.enabled.value = 0;
-      return;
-    }
-    if (shader.texture.image !== atlas) {
-      shader.texture.image = atlas;
-      shader.texture.needsUpdate = true;
-    }
-    shader.enabled.value = 1;
-    // This shader reads a single image-row at UV x=0..1, so slides never
-    // change the sampled UV; the frame motion happens within the row itself.
-    if (shader.slides) shader.slides.forEach(function (v) { v.value = 0; });
-    if (gallerySequenceStart === null) gallerySequenceStart = performance.now();
-    var elapsed = (performance.now() - gallerySequenceStart) / 4400;
-    var ctx = atlas.getContext('2d');
-    if (!ctx) return;
-    var changed = false;
-    for (var k = 0; k < galleries.length; k++) {
-      var frames = galleryFrames[k];
-      if (!frames || !frames.length) continue;
-      var count = frames.length;
-      var pos = (elapsed + k * .32) % count;
-      var idx = Math.floor(pos);
-      var phase = pos - idx;
-      var t = phase <= .78 ? 0 : Math.min(1, (phase - .78) / .22);
-      t = t * t * t * (t * (t * 6 - 15) + 10);
-      // 45 subframes over each move, no uploads while an image is held still.
-      var step = Math.round(t * 45);
-      var key = idx + ':' + step;
-      if (galleryLastKeys[k] === key) continue;
-      galleryLastKeys[k] = key;
-      var offset = step / 45 * GALLERY_CELL_W;
-      var rowY = k * GALLERY_CELL_H;
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(0, rowY, GALLERY_CELL_W, GALLERY_CELL_H);
-      ctx.clip();
-      ctx.clearRect(0, rowY, GALLERY_CELL_W, GALLERY_CELL_H);
-      ctx.drawImage(frames[idx], -offset, rowY);
-      if (step > 0) {
-        ctx.drawImage(frames[(idx + 1) % count], GALLERY_CELL_W - offset, rowY);
-      }
-      ctx.restore();
-      changed = true;
-    }
-    if (changed) shader.texture.needsUpdate = true;
+    if (shader && shader.enabled) shader.enabled.value = 0;
   };
 
-  function drawCarouselFrame(ctx,gallery,x,y,w,h){
-    ctx.save();
-    roundedPath(ctx,x,y,w,h,26);
-    ctx.fillStyle='rgba(7,20,36,.85)';
-    ctx.fill();
-    ctx.strokeStyle='rgba(189,235,255,.26)';
-    ctx.lineWidth=1.4;
-    ctx.stroke();
-    ctx.restore();
+  function makeMarquee() {
+    if (marqueeNode) return marqueeNode;
+    if (!document.body) return null;
+    if (!document.getElementById('byz-intro-marquee-v97-style')) {
+      var style = document.createElement('style');
+      style.id = 'byz-intro-marquee-v97-style';
+      style.textContent = `
+        #byz-intro-marquee-v97 {
+          position: fixed; z-index: 2147479000;
+          display: none; left: 0; top: 0;
+          margin: 0; padding: 0; pointer-events: none;
+          overflow: hidden; isolation: isolate;
+          background: #071525;
+          border: 1px solid rgba(167,222,238,.36);
+          border-radius: 14px;
+          box-shadow: 0 15px 44px rgba(0,0,0,.24);
+          box-sizing: border-box;
+          contain: layout paint style;
+        }
+        #byz-intro-marquee-v97 .byz97-track {
+          display: flex; height: 100%; width: max-content;
+          animation: byz97-marquee 72s linear infinite;
+          will-change: transform;
+        }
+        #byz-intro-marquee-v97 .byz97-set {
+          display: flex; height: 100%; width: max-content; gap: 12px;
+          padding-right: 12px; box-sizing: border-box;
+          flex: 0 0 auto;
+        }
+        #byz-intro-marquee-v97 figure {
+          position: relative; height: 100%; aspect-ratio: 1.55;
+          flex: 0 0 auto; overflow: hidden; background: #102035;
+          margin: 0;
+        }
+        #byz-intro-marquee-v97 .byz97-back {
+          position: absolute; width: 116%; height: 116%; left: -8%; top: -8%;
+          object-fit: cover;
+          filter: blur(15px) brightness(.60);
+        }
+        #byz-intro-marquee-v97 .byz97-front {
+          position: relative; z-index: 1; display: block;
+          width: 100%; height: 100%; object-fit: contain;
+        }
+        #byz-intro-marquee-v97 .byz97-label {
+          position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+          padding: 24px 13px 12px;
+          font: 700 11px/1.4 Manrope, system-ui, sans-serif;
+          letter-spacing: .17em; text-transform: uppercase;
+          color: #fff; text-shadow: 0 1px 8px rgba(0,0,0,.9);
+          background: linear-gradient(transparent,rgba(2,8,17,.72));
+        }
+        @keyframes byz97-marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+        @media (prefers-reduced-motion: reduce) {
+          #byz-intro-marquee-v97 .byz97-track {animation-duration: 180s;}
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    var host = document.createElement('div');
+    host.id = 'byz-intro-marquee-v97';
+    host.setAttribute('aria-label', 'Automatically scrolling Byzantine architecture, jewelry, and artifacts photographs');
+    var track = document.createElement('div');
+    track.className = 'byz97-track';
+    var primarySet = document.createElement('div');
+    primarySet.className = 'byz97-set';
+    galleries.forEach(function(gallery) {
+      gallery.images.forEach(function(name) {
+        var frame = document.createElement('figure');
+        var src = GALLERY_BASE + name;
+        var back = document.createElement('img');
+        back.className = 'byz97-back';
+        back.src = src; back.alt = ''; back.decoding = 'async';
+        back.setAttribute('aria-hidden', 'true');
+        var front = document.createElement('img');
+        front.className = 'byz97-front';
+        front.src = src;
+        front.alt = gallery.title + ': ' + name.split('/').pop().replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+        front.decoding = 'async';
+        var label = document.createElement('figcaption');
+        label.className = 'byz97-label';
+        label.textContent = gallery.title;
+        frame.appendChild(back); frame.appendChild(front); frame.appendChild(label);
+        primarySet.appendChild(frame);
+      });
+    });
+    var clonedSet = primarySet.cloneNode(true);
+    clonedSet.setAttribute('aria-hidden', 'true');
+    clonedSet.querySelectorAll('img').forEach(function(img){img.alt='';});
+    track.appendChild(primarySet);
+    track.appendChild(clonedSet);
+    host.appendChild(track);
+    document.body.appendChild(host);
+    marqueeNode = host;
+    return host;
+  }
 
+  window.__BYZ_INTRO_MARQUEE_LAYOUT_V97__ = null;
+  // Coordinates are supplied by the site's existing 3D-to-screen projection
+  // while Introduction is active. No independent scroll container is created.
+  window.__BYZ_INTRO_MARQUEE_TICK_V97__ = function (active, rect) {
+    var el = makeMarquee();
+    if (!el) return;
+    var shown = !!(active && rect &&
+      Number.isFinite(rect.left) && Number.isFinite(rect.top) &&
+      rect.width > 20 && rect.height > 20 &&
+      rect.bottom > 0 && rect.top < window.innerHeight &&
+      rect.right > 0 && rect.left < window.innerWidth);
+    if (!shown) {
+      if (marqueeLastShown) { el.style.display='none'; marqueeLastShown=false; }
+      return;
+    }
+    if (!marqueeLastShown) { el.style.display='block'; marqueeLastShown=true; }
+    el.style.transform = 'translate3d(' + rect.left.toFixed(2) + 'px,' + rect.top.toFixed(2) + 'px,0)';
+    el.style.width = rect.width.toFixed(2) + 'px';
+    el.style.height = rect.height.toFixed(2) + 'px';
+  };
+
+  function drawMarqueeFrame(ctx, x, y, w, h) {
     ctx.save();
-    ctx.textAlign='left';
-    ctx.fillStyle='#f3fbff';
-    ctx.font='700 40px "League Spartan", system-ui, sans-serif';
-    ctx.fillText(gallery.title,x,y-25);
-    ctx.fillStyle='rgba(216,241,252,.88)';
-    ctx.font='500 18px Manrope, sans-serif';
-    ctx.fillText(gallery.subtitle,x,y+h+35);
-    ctx.textAlign='right';
-    ctx.fillStyle='#a7deee';
-    ctx.font='700 17px Manrope, sans-serif';
-    ctx.fillText('AUTO · '+String(gallery.images.length).padStart(2,'0')+' IMAGES',x+w,y-25);
+    roundedPath(ctx, x, y, w, h, 16);
+    ctx.fillStyle = '#061625';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(158,220,240,.34)';
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
     ctx.restore();
   }
 
@@ -470,15 +425,21 @@
       ctx.restore();
     });
 
-    var galleryStart = gallerySectionY + 170;
-    var gallerySpacing = 850;
-    galleries.forEach(function (gallery, idx) {
-      var gy = galleryStart + idx * gallerySpacing;
-      commands.push(function (ctx) {
-        drawCarouselFrame(ctx, gallery, 468, gy + 48, 1310, 710);
-      });
+    // A single banner at the bottom, not three oversized WebGPU panels.
+    var bandX = 348, bandY = gallerySectionY + 166;
+    var bandW = 1530, bandH = 485;
+    window.__BYZ_INTRO_MARQUEE_LAYOUT_V97__ = {
+      x: bandX, y: bandY, w: bandW, h: bandH
+    };
+    commands.push(function(ctx) {
+      drawMarqueeFrame(ctx, bandX, bandY, bandW, bandH);
+      ctx.save();
+      ctx.fillStyle = '#c6e8f3';
+      ctx.font = '600 19px Manrope, system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Architecture  ·  Jewelry  ·  Artifacts', 1122, bandY + bandH + 44);
+      ctx.restore();
     });
-
-    return galleryStart + gallerySpacing * galleries.length + 10;
+    return bandY + bandH + 116;
   };
 })();
