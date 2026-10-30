@@ -1,4 +1,4 @@
-/* V88: preserves original historical copy for the redesigned page and adds Works Cited. */
+/* V90: original historical paragraphs and MLA citations, native legacy hero explicitly disabled. */
 (() => {
   const page = {
     title: 'Historical Connection',
@@ -65,6 +65,8 @@ The flower-based logo for ta pánta pazári was also designed with meaning in mi
   window.BYZANTINE_CRYSTAL_CONTENT[3] = {
     ...page, title: '', tagline: '', year: '', overline: '',
     description: '', roleHeading: '', roleDescription: '',
-    challengesHeading: '', challenges: '', stack: [], roleTitles: [], gallery: []
+    challengesHeading: '', challenges: '', stack: [], roleTitles: [], gallery: [],
+    // V90: avoid the original 3D canvas image/placeholder drawing over the article.
+    heroMedia: null, liveUrl: null
   };
 })();
