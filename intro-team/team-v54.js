@@ -1,5 +1,5 @@
 /*
- * ta pánta pazári — Crystal 1 / Introduction team + galleries, V97.
+ * ta pánta pazári — Crystal 1 / Introduction team + galleries, V98.
  * Native canvas/WebGPU content only: team portraits, full names, roles/quotes,
  * and one lightweight HTML marquee of Architecture, Jewelry, Artifacts.
  */
@@ -209,12 +209,13 @@
     if (shader && shader.enabled) shader.enabled.value = 0;
   };
 
-  // V97: One plain HTML/CSS image marquee, independent from WebGPU textures.
+  // V98: Full-bleed plain HTML/CSS image marquee, independent from WebGPU textures.
   // The previous WebGPU atlas showed stretched fragments on multiple devices.
   // Images are now regular <img> elements and never passed through a shader.
   var marqueeLayout = null;
   var marqueeNode = null;
   var marqueeLastShown = false;
+  var marqueeCaption = null;
 
   window.__BYZ_INTRO_GALLERY_ATLAS_V60__ = function () { return null; };
   window.__BYZ_INTRO_GALLERY_TICK_V60__ = function (active, shader) {
@@ -234,11 +235,21 @@
           margin: 0; padding: 0; pointer-events: none;
           overflow: hidden; isolation: isolate;
           background: #071525;
-          border: 1px solid rgba(167,222,238,.36);
-          border-radius: 14px;
-          box-shadow: 0 15px 44px rgba(0,0,0,.24);
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
           box-sizing: border-box;
           contain: layout paint style;
+        }
+        #byz-intro-marquee-v97-caption {
+          position: fixed; top: 0; left: 0; width: 100%;
+          text-align: center; box-sizing: border-box;
+          margin: 0; padding: 0 16px;
+          color: #c6e8f3;
+          font: 600 15px/1.5 Manrope, system-ui, sans-serif;
+          text-shadow: 0 2px 8px rgba(0,0,0,.33);
+          z-index: 2147479000; pointer-events: none;
+          display: none;
         }
         #byz-intro-marquee-v97 .byz97-track {
           display: flex; height: 100%; width: max-content;
@@ -313,6 +324,11 @@
     track.appendChild(clonedSet);
     host.appendChild(track);
     document.body.appendChild(host);
+    var caption = document.createElement('p');
+    caption.id = 'byz-intro-marquee-v97-caption';
+    caption.textContent = 'Architecture  ·  Jewelry  ·  Artifacts';
+    document.body.appendChild(caption);
+    marqueeCaption = caption;
     marqueeNode = host;
     return host;
   }
@@ -330,12 +346,22 @@
       rect.right > 0 && rect.left < window.innerWidth);
     if (!shown) {
       if (marqueeLastShown) { el.style.display='none'; marqueeLastShown=false; }
+      if (marqueeCaption) marqueeCaption.style.display='none';
       return;
     }
     if (!marqueeLastShown) { el.style.display='block'; marqueeLastShown=true; }
-    el.style.transform = 'translate3d(' + rect.left.toFixed(2) + 'px,' + rect.top.toFixed(2) + 'px,0)';
-    el.style.width = rect.width.toFixed(2) + 'px';
+    // Bleed all the way to both screen edges; retain only projected Y/height
+    // so it still scrolls natively with the existing Introduction plane.
+    el.style.transform = 'translate3d(0,' + rect.top.toFixed(2) + 'px,0)';
+    el.style.width = window.innerWidth + 'px';
     el.style.height = rect.height.toFixed(2) + 'px';
+    // Viewport-centered caption independent of the 3D page's horizontal offset.
+    if (marqueeCaption) {
+      var captionY = rect.bottom + 17;
+      var captionVisible = captionY >= -24 && captionY < window.innerHeight;
+      marqueeCaption.style.display = captionVisible ? 'block' : 'none';
+      if (captionVisible) marqueeCaption.style.transform='translate3d(0,' + captionY.toFixed(2) + 'px,0)';
+    }
   };
 
   function drawMarqueeFrame(ctx, x, y, w, h) {
@@ -431,15 +457,8 @@
     window.__BYZ_INTRO_MARQUEE_LAYOUT_V97__ = {
       x: bandX, y: bandY, w: bandW, h: bandH
     };
-    commands.push(function(ctx) {
-      drawMarqueeFrame(ctx, bandX, bandY, bandW, bandH);
-      ctx.save();
-      ctx.fillStyle = '#c6e8f3';
-      ctx.font = '600 19px Manrope, system-ui, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Architecture  ·  Jewelry  ·  Artifacts', 1122, bandY + bandH + 44);
-      ctx.restore();
-    });
+    // V98: Frame and caption live in the full-bleed HTML overlay, not on
+    // the limited-width WebGPU content plane. This prevents doubled text.
     return bandY + bandH + 116;
   };
 })();

@@ -21,6 +21,18 @@
     e.preventDefault();e.stopImmediatePropagation();
   }
   window.addEventListener('wheel',blockWheel,{capture:true,passive:false});
+  // V98: Chromium/Firefox middle-click auto-scroll bypasses wheel/keyboard
+  // listeners. Cancel its initiating mouse/pointer event in the crystal scene.
+  // Do not cancel other mouse buttons or any events on content pages.
+  function stopMiddleAutoscroll(e){
+    if(!onSelector()||e.button!==1)return;
+    if(e.cancelable)e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+  window.addEventListener('mousedown',stopMiddleAutoscroll,{capture:true,passive:false});
+  window.addEventListener('pointerdown',stopMiddleAutoscroll,{capture:true,passive:false});
+  window.addEventListener('auxclick',stopMiddleAutoscroll,{capture:true,passive:false});
+
   window.addEventListener('keydown',e=>{
     if(!onSelector()||ignore(e)||/INPUT|TEXTAREA|SELECT/.test(e.target?.tagName||'')||e.target?.isContentEditable)return;
     if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(e.key)){
