@@ -1,0 +1,203 @@
+/* V89 – Historical Connection, native shader visible. Only Works Cited is boxed. */
+#byz-history-v89{
+  position:fixed;inset:0;z-index:180000;isolation:isolate;
+  overflow:hidden;visibility:hidden;opacity:0;pointer-events:none;
+  color:#f8f4ef;font-family:Manrope,Arial,sans-serif;
+  transition:opacity .32s ease,visibility 0s linear .32s;
+}
+#byz-history-v89.byz-h-open{
+  visibility:visible;opacity:1;pointer-events:auto;
+  transition:opacity .4s ease,visibility 0s;
+}
+#byz-history-v89 *,#byz-history-v89 *::before,#byz-history-v89 *::after{box-sizing:border-box;}
+#byz-history-v89 .byz-history-scroll{
+  position:absolute;inset:0;z-index:1;overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain;touch-action:pan-y;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  padding:0 clamp(16px,3vw,40px) 110px;
+}
+#byz-history-v89 .byz-history-scroll::-webkit-scrollbar{display:none;width:0;height:0;}
+#byz-history-v89 .byz-history-scroll:focus{outline:none;}
+#byz-history-v89 .byz-history-page{
+  width:min(1160px,100%);margin:0 auto;
+  padding:clamp(140px,17vh,190px) 0 75px;
+}
+#byz-history-v89 .byz-h-reveal{
+  opacity:0;transform:translate3d(0,14px,0);
+  transition:opacity .56s ease,transform .65s cubic-bezier(.2,.7,.22,1);
+}
+#byz-history-v89 .byz-h-reveal.byz-h-shown{opacity:1;transform:none;}
+#byz-history-v89 h1,#byz-history-v89 h2,#byz-history-v89 h3{
+  margin:0;font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;color:#fffaf2;text-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+#byz-history-v89 p,#byz-history-v89 li,#byz-history-v89 a,#byz-history-v89 summary,#byz-history-v89 .byz-h-card{
+  text-shadow:0 1px 4px rgba(0,0,0,.54);
+}
+#byz-history-v89 .byz-h-eyebrow{
+  font:700 10px/1.5 Manrope,Arial,sans-serif;text-transform:uppercase;
+  letter-spacing:.24em;color:#f4c489;
+}
+#byz-history-v89 .byz-h-hero{max-width:900px;margin:0 auto 94px;text-align:center;}
+#byz-history-v89 .byz-h-hero h1{
+  font-size:clamp(48px,6.5vw,92px);line-height:1.02;
+  letter-spacing:-.055em;margin:14px 0 16px;
+}
+#byz-history-v89 .byz-h-hero-sub{
+  margin:0;color:#f5d0a4;letter-spacing:.18em;text-transform:uppercase;
+  font:600 12px/1.65 Manrope,Arial,sans-serif;
+}
+#byz-history-v89 .byz-h-hero-copy{
+  max-width:680px;margin:18px auto 0;color:#fff7f0;
+  font-size:16px;line-height:1.75;
+}
+#byz-history-v89 .byz-h-nav{
+  display:flex;justify-content:center;flex-wrap:wrap;gap:12px 30px;
+  margin:28px auto 0;padding:21px 0 0;
+  border-top:1px solid rgba(255,224,189,.36);
+}
+#byz-history-v89 .byz-h-nav a{
+  color:#fff2df;text-decoration:none;text-transform:uppercase;
+  font:700 11px/1.7 Manrope,Arial,sans-serif;letter-spacing:.13em;
+  transition:color .18s ease;
+}
+#byz-history-v89 .byz-h-nav a:hover{color:#ffd28a;}
+#byz-history-v89 .byz-h-nav a:focus-visible{outline:2px solid #ffd28a;outline-offset:4px;}
+#byz-history-v89 .byz-h-section{margin:0 auto 108px;scroll-margin-top:30px;}
+#byz-history-v89 .byz-h-section-title{
+  max-width:880px;text-align:center;margin:0 auto 38px;
+  padding:24px 0 0;border-top:1px solid rgba(255,226,195,.38);
+}
+#byz-history-v89 .byz-h-section-title h2{
+  font-size:clamp(36px,4.3vw,60px);letter-spacing:-.045em;
+  line-height:1.1;margin:12px 0;
+}
+#byz-history-v89 .byz-h-section-sub{
+  color:#f0cea8;margin:0;font:650 11px/1.6 Manrope,Arial,sans-serif;
+  text-transform:uppercase;letter-spacing:.17em;
+}
+/* Editorial grid with natural text, no panels, cards, or overlays. */
+#byz-history-v89 .byz-h-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(34px,5vw,72px) clamp(36px,5vw,84px);align-items:start;
+}
+#byz-history-v89 .byz-h-card{
+  min-width:0;padding:17px 0 0;position:relative;
+  border:none;border-top:1px solid rgba(255,226,189,.32);
+  background:none;box-shadow:none;backdrop-filter:none;
+}
+#byz-history-v89 .byz-h-card-count{
+  color:#f5c88b;letter-spacing:.16em;
+  font:700 10px/1.3 Manrope,Arial,sans-serif;margin-bottom:12px;
+}
+#byz-history-v89 .byz-h-card h3{
+  font-size:clamp(27px,2.7vw,40px);line-height:1.12;
+  letter-spacing:-.032em;margin-bottom:14px;
+}
+#byz-history-v89 .byz-h-card p{
+  font-size:clamp(15px,1.07vw,17px);line-height:1.78;
+  color:rgba(255,250,245,.98);margin:0;
+}
+#byz-history-v89 .byz-h-secret-intro{
+  max-width:700px;margin:0 auto 24px;
+  text-align:center;font-size:16px;line-height:1.7;
+}
+#byz-history-v89 .byz-h-secret-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 clamp(36px,6vw,82px);
+}
+#byz-history-v89 .byz-h-secret{
+  border:0;border-top:1px solid rgba(255,231,197,.35);
+  background:transparent;box-shadow:none;
+}
+#byz-history-v89 .byz-h-secret summary{
+  list-style:none;cursor:pointer;display:grid;
+  grid-template-columns:27px 1fr 25px;align-items:center;gap:12px;
+  padding:20px 0;
+}
+#byz-history-v89 .byz-h-secret summary::-webkit-details-marker{display:none;}
+#byz-history-v89 .byz-h-secret-count{
+  color:#f5c88b;font:700 10px/1.3 Manrope,Arial,sans-serif;
+  letter-spacing:.16em;
+}
+#byz-history-v89 .byz-h-secret-title{
+  font:400 clamp(20px,2vw,29px)/1.25 Georgia,'Times New Roman',serif;
+  color:#fffaf2;
+}
+#byz-history-v89 .byz-h-secret-symbol{font-size:23px;color:#f5c88b;text-align:right;}
+#byz-history-v89 .byz-h-secret[open] .byz-h-secret-symbol{transform:rotate(45deg);}
+#byz-history-v89 .byz-h-secret-body{
+  padding:0 0 24px 39px;font-size:15px;line-height:1.76;color:#fff7ed;
+}
+#byz-history-v89 .byz-h-secret summary:hover .byz-h-secret-title{color:#ffdfa8;}
+#byz-history-v89 .byz-h-secret summary:focus-visible{outline:2px solid #ffd28a;outline-offset:4px;}
+/* Works Cited is intentionally the ONLY solid, boxed section. */
+#byz-history-v89 .byz-h-works{margin:0 auto 16px;scroll-margin-top:22px;}
+#byz-history-v89 .byz-h-works-box{
+  max-width:1050px;margin:0 auto;padding:clamp(24px,4vw,52px);
+  border:1px solid rgba(246,201,142,.45);
+  background:#080b11;box-shadow:0 20px 60px rgba(0,0,0,.22);
+  position:relative;isolation:isolate;
+}
+#byz-history-v89 .byz-h-works-box .byz-h-section-title{border-top:0;padding-top:0;margin-bottom:22px;}
+#byz-history-v89 .byz-h-works-box .byz-h-section-title h2{font-size:clamp(40px,4.4vw,64px);}
+#byz-history-v89 .byz-h-works-intro{
+  max-width:760px;margin:0 auto 24px;text-align:center;
+  color:#f4d4ac;font-size:15px;line-height:1.65;
+}
+#byz-history-v89 .byz-h-works-list{
+  list-style:none;counter-reset:source;
+  display:grid;gap:18px;margin:0;padding:0;
+}
+#byz-history-v89 .byz-h-work-item{
+  color:#fff9f2;font-size:clamp(14px,1vw,16px);
+  line-height:1.74;padding-left:1.65em;text-indent:-1.65em;
+  overflow-wrap:anywhere;
+}
+#byz-history-v89 .byz-h-work-item a{color:#ffce8f;text-decoration:underline;text-underline-offset:3px;}
+#byz-history-v89 .byz-h-work-item a:hover{color:#fff1cf;}
+#byz-history-v89 .byz-h-work-item a:focus-visible{outline:2px solid #ffd28a;outline-offset:2px;}
+#byz-history-v89 .byz-h-footer{
+  text-align:center;margin:42px auto 0;
+  text-transform:uppercase;color:#f3c78a;
+  font:700 10px/1.7 Manrope,Arial,sans-serif;letter-spacing:.2em;
+}
+/* Hide only the old crystal image placeholder while history is open.
+   The live orange-and-black shader/canvas is left untouched. */
+body.byz-history-is-active img[src*="no-image-supplied.webp"],
+body.byz-history-is-active [style*="no-image-supplied.webp"]{
+  visibility:hidden!important;
+}
+/* Keep native header + Close above this editorial layer. */
+body.byz-history-is-active #byzantine-fixed-crystal-close{z-index:2147482002!important;}
+@media(max-width:800px){
+  #byz-history-v89 .byz-history-page{padding-top:130px;}
+  #byz-history-v89 .byz-h-grid,#byz-history-v89 .byz-h-secret-grid{grid-template-columns:minmax(0,1fr);}
+  #byz-history-v89 .byz-h-section{margin-bottom:76px;}
+  #byz-history-v89 .byz-h-hero{margin-bottom:75px;}
+}
+@media(max-width:560px){
+  #byz-history-v89 .byz-history-scroll{padding:0 17px 90px;}
+  #byz-history-v89 .byz-history-page{padding-top:116px;}
+  #byz-history-v89 .byz-h-nav{gap:12px 16px;}
+  #byz-history-v89 .byz-h-nav a{font-size:10px;}
+  #byz-history-v89 .byz-h-hero h1{font-size:clamp(42px,12vw,62px);}
+  #byz-history-v89 .byz-h-section-title h2{font-size:clamp(34px,9vw,45px);}
+  #byz-history-v89 .byz-h-grid{gap:34px;}
+  #byz-history-v89 .byz-h-works-box{padding:24px 18px;}
+  #byz-history-v89 .byz-h-work-item{font-size:14px;}
+}
+@media(prefers-reduced-motion:reduce){
+  #byz-history-v89,#byz-history-v89 .byz-h-reveal{transition:none!important;}
+  #byz-history-v89 .byz-h-reveal{transform:none!important;opacity:1!important;}
+}
+
+/* Keep existing upper-right sound/menu controls clickable above the article.
+   The native navigation is one stacking context; raising children alone cannot
+   solve the full-page overlay collision. The separate flower/Close stay intact. */
+body.byz-history-is-active nav[data-navbar]{
+  z-index:2147482100!important;
+}
+body.byz-history-is-active nav[data-navbar] > button[aria-label="Portal"]{
+  visibility:hidden!important;pointer-events:none!important;
+}
