@@ -13,6 +13,7 @@
     pageBackground: 'orange-black',
     heroMedia: null,
     gallery: [],
+    stack: [], // clear legacy template keywords (including [ZENDORA MAVEN])
 
     description: `Society
 
@@ -71,5 +72,13 @@ The flower-based logo for ta pánta pazári was also designed with meaning in mi
   };
 
   window.BYZANTINE_CRYSTAL_CONTENT = window.BYZANTINE_CRYSTAL_CONTENT || {};
-  window.BYZANTINE_CRYSTAL_CONTENT[3] = page;
+  // Preserve the full original copy for the V87 behind-the-scenes editorial experience.
+  window.BYZANTINE_HISTORICAL_CONTENT_V87 = page;
+  // Keep the original 3D background/shader active, but do not rasterize the old
+  // forum-style text on top of the new HTML layout. Navigation stays unchanged.
+  window.BYZANTINE_CRYSTAL_CONTENT[3] = {
+    ...page, title: '', tagline: '', year: '', overline: '',
+    description: '', roleHeading: '', roleDescription: '',
+    challengesHeading: '', challenges: '', stack: [], roleTitles: [], gallery: []
+  };
 })();

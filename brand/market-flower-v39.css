@@ -13,3 +13,13 @@
 /* V83 Close placement: directly to the right of the flower rather than beneath it. */
 #byz-new-page-return{left:calc(clamp(16px,1.45vw,28px) + clamp(37px,3.25vw,53px) + 6px)!important;top:clamp(18px,2.15vh,28px)!important;transform:none!important;min-width:0!important;min-height:32px!important;padding:6px 5px!important;white-space:nowrap!important;z-index:55!important;}
 @media(max-width:680px){#byz-new-page-return{left:54px!important;top:17px!important;min-height:30px!important;padding:5px 4px!important}}
+
+/* V87: vertically center CLOSE against the full flower mark, not its top edge. */
+#byz-new-page-return{
+ top:clamp(12px,1.6vh,21px)!important;
+ height:calc(clamp(37px,3.25vw,53px) * 366 / 280)!important;
+ min-height:0!important;max-height:none!important;padding:0 5px!important;
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ line-height:1!important;
+}
+@media(max-width:680px){#byz-new-page-return{top:12px!important;height:46px!important;left:54px!important;}}
