@@ -29,6 +29,8 @@
   'market-runtime/palia/work/palia/byz-product-content-v80.js?v=80.0',
   'market-runtime/palia/work/palia/byz-product-content-v81.css?v=81.0',
   'market-runtime/palia/work/palia/byz-product-content-v81.js?v=81.0',
+  'market-runtime/palia/work/palia/byz-product-content-v82.css?v=82.0',
+  'market-runtime/palia/work/palia/byz-product-content-v82.js?v=82.0',
   'market-runtime/palia/fonts/IvarHeadline-Regular.woff2',
   'market-runtime/palia/fonts/PPFrama-Regular.woff2'
  ].map(s=>base+s);
