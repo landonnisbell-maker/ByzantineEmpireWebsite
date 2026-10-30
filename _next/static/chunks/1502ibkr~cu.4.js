@@ -452,7 +452,7 @@ for(let k=0;k<3;k++){
   let x=468,y=5295+k*850,w=1310,h=710;
   let inside=(0,M.smoothstep)(x,x+2,px).mul((0,M.smoothstep)(x+w-2,x+w,px).oneMinus())
     .mul((0,M.smoothstep)(y,y+2,py)).mul((0,M.smoothstep)(y+h-2,y+h,py).oneMinus());
-  let sampleUV=(0,M.vec2)(px.sub(x).div(w).add(slides[k]).div(5),(0,M.float)(1).sub((0,M.float)(k).add(py.sub(y).div(h)).div(3)));
+  let sampleUV=(0,M.vec2)(px.sub(x).div(w),(0,M.float)(1).sub((0,M.float)(k).add(py.sub(y).div(h)).div(3)));
   let image=(0,M.texture)(tex,sampleUV);
   result=(0,M.mix)(result,image.rgb,inside.mul(image.a).mul(enabled));
 }

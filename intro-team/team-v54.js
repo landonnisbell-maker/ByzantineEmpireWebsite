@@ -1,5 +1,5 @@
 /*
- * ta pánta pazári — Crystal 1 / Introduction team + galleries, V95.
+ * ta pánta pazári — Crystal 1 / Introduction team + galleries, V96.
  * Native canvas/WebGPU content only: team portraits, full names, roles/quotes,
  * and three continuous sliding galleries for Architecture, Jewelry, Artifacts.
  */
@@ -209,17 +209,14 @@
     if (shader && shader.enabled) shader.enabled.value = 0;
   };
 
-  // V95: restore the native auto-sliding gallery carousels for the
+  // V96: independent, low-overhead native carousels for the
   // Introduction page. Each category uses one wide carousel frame.
   // Landscape / near-16:9 images use a normal cover fit. Square and
   // portrait images keep a sharp centered foreground with a blurred
   // version of the same image filling the sides.
   var GALLERY_CELL_W = 720;
   var GALLERY_CELL_H = 400;
-  var GALLERY_ATLAS_COLUMNS = 5;
-  var GALLERY_ATLAS_ROWS = 3;
-  var galleryAtlas = null;
-
+  
   function roundedRect(ctx, x, y, w, h, r) {
     roundedPath(ctx, x, y, w, h, r);
     ctx.clip();
@@ -277,58 +274,99 @@
     }
   }
 
+  // V96: SMALL SINGLE-COLUMN ATLAS, ONE INDEPENDENT ROW PER CATEGORY.
+  // The V95 five-column sliding UV lookup was unstable in the WebGPU renderer.
+  // Pre-render each photograph once, then update only the three small rows
+  // during actual slide transitions. A stationary frame needs no GPU upload.
+  var galleryFrames = [];
+  var galleryLastKeys = ['', '', ''];
+  var gallerySequenceStart = null;
+  var galleryAtlas = null;
+
+  function makeGalleryFrame(img) {
+    var frame = document.createElement('canvas');
+    frame.width = GALLERY_CELL_W;
+    frame.height = GALLERY_CELL_H;
+    var ctx = frame.getContext('2d', { alpha: true });
+    if (!ctx) return frame;
+    ctx.fillStyle = '#091827';
+    ctx.fillRect(0, 0, GALLERY_CELL_W, GALLERY_CELL_H);
+    ctx.save();
+    roundedRect(ctx, 0, 0, GALLERY_CELL_W, GALLERY_CELL_H, 19);
+    drawGalleryImage(ctx, img, 0, 0, GALLERY_CELL_W, GALLERY_CELL_H);
+    ctx.restore();
+    return frame;
+  }
+
   function buildGalleryAtlas() {
     if (galleryAtlas) return galleryAtlas;
-    var c = document.createElement('canvas');
-    c.width = GALLERY_CELL_W * GALLERY_ATLAS_COLUMNS;
-    c.height = GALLERY_CELL_H * GALLERY_ATLAS_ROWS;
-    var ctx = c.getContext('2d');
+    var canvas = document.createElement('canvas');
+    canvas.width = GALLERY_CELL_W;
+    canvas.height = GALLERY_CELL_H * galleries.length;
+    var ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return null;
-
-    for (var row = 0; row < galleries.length; row++) {
-      var gal = galleries[row];
-      var imgs = gal._images;
-      if (!imgs || !imgs.length) continue;
-      for (var col = 0; col < Math.min(GALLERY_ATLAS_COLUMNS, imgs.length + 1); col++) {
-        var img = imgs[col % imgs.length];
-        var x = col * GALLERY_CELL_W;
-        var y = row * GALLERY_CELL_H;
-        ctx.save();
-        roundedRect(ctx, x, y, GALLERY_CELL_W, GALLERY_CELL_H, 19);
-        drawGalleryImage(ctx, img, x, y, GALLERY_CELL_W, GALLERY_CELL_H);
-        ctx.restore();
+    galleryFrames = galleries.map(function (gallery) {
+      return gallery._images.map(makeGalleryFrame);
+    });
+    galleryFrames.forEach(function (frames, k) {
+      if (frames && frames[0]) {
+        ctx.drawImage(frames[0], 0, k * GALLERY_CELL_H);
       }
-    }
-
-    galleryAtlas = c;
-    return c;
+    });
+    galleryAtlas = canvas;
+    return galleryAtlas;
   }
 
   window.__BYZ_INTRO_GALLERY_ATLAS_V60__ = function () { return galleryAtlas; };
-  var gallerySequenceStart = null;
   window.__BYZ_INTRO_GALLERY_TICK_V60__ = function (active, shader) {
-    if (!shader || !shader.enabled || !shader.slides || !shader.texture) return;
-    var c = galleryAtlas;
-    if (!c || !active) {
+    if (!shader || !shader.enabled || !shader.texture) return;
+    var atlas = galleryAtlas;
+    if (!atlas || !active) {
       shader.enabled.value = 0;
       return;
     }
-    if (shader.texture.image !== c) {
-      shader.texture.image = c;
+    if (shader.texture.image !== atlas) {
+      shader.texture.image = atlas;
       shader.texture.needsUpdate = true;
     }
     shader.enabled.value = 1;
+    // This shader reads a single image-row at UV x=0..1, so slides never
+    // change the sampled UV; the frame motion happens within the row itself.
+    if (shader.slides) shader.slides.forEach(function (v) { v.value = 0; });
     if (gallerySequenceStart === null) gallerySequenceStart = performance.now();
     var elapsed = (performance.now() - gallerySequenceStart) / 4400;
+    var ctx = atlas.getContext('2d');
+    if (!ctx) return;
+    var changed = false;
     for (var k = 0; k < galleries.length; k++) {
-      var count = galleries[k].images.length;
-      var unit = (elapsed + k * .32) % count;
-      var index = Math.floor(unit);
-      var frac = unit - index;
-      var slide = frac <= .78 ? 0 : (frac - .78) / .22;
-      slide = slide * slide * slide * (slide * (slide * 6 - 15) + 10);
-      shader.slides[k].value = index + slide;
+      var frames = galleryFrames[k];
+      if (!frames || !frames.length) continue;
+      var count = frames.length;
+      var pos = (elapsed + k * .32) % count;
+      var idx = Math.floor(pos);
+      var phase = pos - idx;
+      var t = phase <= .78 ? 0 : Math.min(1, (phase - .78) / .22);
+      t = t * t * t * (t * (t * 6 - 15) + 10);
+      // 45 subframes over each move, no uploads while an image is held still.
+      var step = Math.round(t * 45);
+      var key = idx + ':' + step;
+      if (galleryLastKeys[k] === key) continue;
+      galleryLastKeys[k] = key;
+      var offset = step / 45 * GALLERY_CELL_W;
+      var rowY = k * GALLERY_CELL_H;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, rowY, GALLERY_CELL_W, GALLERY_CELL_H);
+      ctx.clip();
+      ctx.clearRect(0, rowY, GALLERY_CELL_W, GALLERY_CELL_H);
+      ctx.drawImage(frames[idx], -offset, rowY);
+      if (step > 0) {
+        ctx.drawImage(frames[(idx + 1) % count], GALLERY_CELL_W - offset, rowY);
+      }
+      ctx.restore();
+      changed = true;
     }
+    if (changed) shader.texture.needsUpdate = true;
   };
 
   function drawCarouselFrame(ctx,gallery,x,y,w,h){
