@@ -1,0 +1,71 @@
+{
+  "version": "V81",
+  "base": "V80",
+  "files": [
+    {
+      "path": "ByzantineEmpireWebsite/README-V81.txt",
+      "bytes": 1635,
+      "sha256": "7c31268b51df2a465d8d7406f360db5fcd8e90c873dd06c5f85ab8787a3c6d2c"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/byz-product-content-v81.css",
+      "bytes": 39479,
+      "sha256": "af360a745e76b441347bb83a9f25462bb875394cfbb0370c05e550581ae9ae90"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/byz-product-content-v81.js",
+      "bytes": 46759,
+      "sha256": "219b3f07755da59df8c2135cb4d5ce40918c8313a324a368ab0fab08855d6bcb"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/coins/index.html",
+      "bytes": 61831,
+      "sha256": "e703221fbf2736a07e98e712f44d53f55e5d095063d9379ac9f1baf2120e72a3"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/food-items/index.html",
+      "bytes": 61825,
+      "sha256": "ae19a07cd09b7160b7407cb249665c38ebfbb8f1131acb7b47c9831815589d5b"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/gold-jewelry/index.html",
+      "bytes": 61829,
+      "sha256": "1e6b224d5eb3339b2e9fe170bd902896a471f566d7e6228132370bb64075d782"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/paramerion-sword/index.html",
+      "bytes": 61837,
+      "sha256": "58e9b55d6b3d1b6cab8bc1e2c963eee2c958af5ba2b27caa75e0e3af8ace49a3"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/palia/work/palia/entries/silk-textiles/index.html",
+      "bytes": 61831,
+      "sha256": "d80a4480ea7f498d1f470884ca4423092566fbe7fb0f4405959e10da9c5872a4"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/food-v81-apaki-hanging.png",
+      "bytes": 3394874,
+      "sha256": "7b29fc0c292b0f02234c3909b6369be933b37dbf923438198b1ad165de12d02c"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/food-v81-apaki-sliced.png",
+      "bytes": 3849597,
+      "sha256": "c328ab35d49f8bf62fb472395d32502fcf9a825192d27ad6ac9a710ec17ea7ab"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/food-v81-garos-apaki-combo.png",
+      "bytes": 3407558,
+      "sha256": "5276de1ba8915b825ab879f35bb0de6a8d692c571dd3594deb296d7ec1180ff9"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/market-runtime/product-images/details/food-v81-garos-bottle.png",
+      "bytes": 3856846,
+      "sha256": "10aadd2edf855dc038d837ccb5d392c4bf72205452317dceb13247928675919f"
+    },
+    {
+      "path": "ByzantineEmpireWebsite/pp-loader/market-preload-v71.js",
+      "bytes": 3996,
+      "sha256": "24aeb5926fe46d41b0af713841e34ebd7b8072ba28c6a738d1eb81ba1532ee1b"
+    }
+  ]
+}

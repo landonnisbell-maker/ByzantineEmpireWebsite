@@ -27,6 +27,8 @@
   'market-runtime/palia/work/palia/byz-product-content-v79.js?v=79.0',
   'market-runtime/palia/work/palia/byz-product-content-v80.css?v=80.0',
   'market-runtime/palia/work/palia/byz-product-content-v80.js?v=80.0',
+  'market-runtime/palia/work/palia/byz-product-content-v81.css?v=81.0',
+  'market-runtime/palia/work/palia/byz-product-content-v81.js?v=81.0',
   'market-runtime/palia/fonts/IvarHeadline-Regular.woff2',
   'market-runtime/palia/fonts/PPFrama-Regular.woff2'
  ].map(s=>base+s);
@@ -36,6 +38,8 @@
  imageUrls.push(base+'market-runtime/product-images/details/sword-v79-leather-harness.png');
  imageUrls.push(base+'market-runtime/product-images/details/jewelry-v80-pendants.png');
  imageUrls.push(base+'market-runtime/product-images/details/food-v80-garos-apaki-combo.png');
+ imageUrls.push(base+'market-runtime/product-images/details/food-v81-garos-apaki-combo.png');
+ imageUrls.push(base+'market-runtime/product-images/details/food-v81-garos-bottle.png');
  let complete=0;const total=docs.length+shared.length+imageUrls.length;
  const state={started:true,done:false,complete:0,total,errors:0};
  window.__BYZ_MARKET_PRELOAD_STATE__=state;
