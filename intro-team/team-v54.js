@@ -106,7 +106,8 @@
   var ready = false;
   var readyCallbacks = [];
   Promise.all(loading).then(function () {
-    buildGalleryAtlas();
+    // V104: V98 uses the HTML marquee. The old WebGPU atlas was removed;
+    // calling buildGalleryAtlas() here prevented the Introduction ready signal.
     ready = true;
     readyCallbacks.splice(0).forEach(function (callback) { callback(); });
   });
