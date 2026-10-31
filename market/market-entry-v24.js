@@ -1,25 +1,27 @@
 (()=>{
 'use strict';
-// V108: gate gallery entry on the native WebGL interior-complete signal,
-// rather than a wall-clock timer that can overtake the crystal animation.
-// On exit, crossfade directly back into the native camera's reverse movement.
+// V109: hand gallery entry over at the NATIVE GSAP camera zoom milestone,
+// before the raw prismatic interior screen becomes visible. Preloaded gallery
+// crossfades into the finishing camera move; black safety protects slow loads.
+// Exit retains V108's native camera reverse crossfade.
 if(window.__BYZ_MARKET_V34__)return;
 window.__BYZ_MARKET_V34__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
-const SHELL=new URL('index.html?embedded=1&v=108.0',document.currentScript.src).href;
+const SHELL=new URL('index.html?embedded=1&v=109.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
-const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V108]',...args)};
+const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V109]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
 let wanted=false,nativeReached=false,opened=false,recoveries=0,reconnectScheduled=false;
+let safetyCover=false;
 let closing=false,closingStarted=0,exitFallback=0,revealExitTimer=0,returnFadeTimer=0;
 let feedback=null,deadline=0;
 // V103: replay the gallery's original Aengel intro only once it is actually visible.
 let marketRevealEpoch=0;
 let galleryPreloadCheck=null;
-// The core WebGL animation sets its authoritative 'interior' state only AFTER
-// its complete ~2.75s entrance timeline. Do not estimate completion using
-// setTimeout: a timer can outrun actual rendered frames on loaded devices.
+// The native timeline signals zoom-ready at 1.48s during the 1.6s camera move.
+// A 115ms spin pre-lead makes the gallery already move when its .24s fade
+// begins. The gallery is opaque before the raw prismatic scene is visible.
 const DIRECT_SPIN_LEAD_MS=115;
 // Native reverse camera movement starts ~0.71s into its exit timeline.
 // Hold the already-moving gallery until then, and dissolve into the reverse
@@ -33,7 +35,7 @@ const STYLES=`
 #byz-v33-market.byz-v33-covering,#byz-v33-market.byz-v33-open,
 #byz-v33-market.byz-v33-closing{opacity:1;pointer-events:auto}
 /* Direct handoff only after native completion; the gallery was pre-rendered. */
-#byz-v33-market.byz-v106-direct{opacity:1;pointer-events:auto;transition:opacity .38s cubic-bezier(.22,1,.36,1)}
+#byz-v33-market.byz-v106-direct{opacity:1;pointer-events:auto;transition:opacity .24s cubic-bezier(.22,1,.36,1)}
 #byz-v33-market.byz-v33-covering{transition:opacity .26s ease-in}
 #byz-v33-market.byz-v33-closing{transition:none}
 /* V108 reverse handoff: reveal the actual native camera retreat, not a black
@@ -53,6 +55,15 @@ const STYLES=`
 /* No opaque veil on reverse: expose the exiting 3D camera directly. */
 #byz-v33-market.byz-v33-closing::after,
 #byz-v33-market.byz-v108-returning::after{opacity:0;transition:none}
+/* Slow-load safety: a black cover fades over the zoom before native traversal
+   exposes the empty interior. On readiness, dissolve black into a moving gallery.
+   Normally preloading makes this branch unnecessary. */
+#byz-v33-market.byz-v109-safety,
+#byz-v33-market.byz-v109-recovering{opacity:1;pointer-events:auto;
+ transition:opacity .24s ease-in}
+#byz-v33-market.byz-v109-recovering>iframe{opacity:1;pointer-events:auto}
+#byz-v33-market.byz-v109-recovering::after{opacity:0;
+ transition:opacity .38s ease-out}
 /* Keep the ORIGINAL website sound/menu controls over the Market frame.
    Do not copy or re-create any buttons: these are the live React controls. */
 html.byz-v34-market-active nav[data-navbar][class*="Navbar-module_"]{
@@ -80,7 +91,7 @@ function mount(){
  if(overlay){
   if(!overlay.isConnected){
    frameLoaded=false;marketReady=false;preloadRequested=false;opened=false;recoveries++;
-   overlay.classList.remove('byz-v33-open','byz-v33-covering','byz-v33-closing','byz-v106-direct','byz-v108-returning');overlay.setAttribute('aria-hidden','true');
+   overlay.classList.remove('byz-v33-open','byz-v33-covering','byz-v33-closing','byz-v106-direct','byz-v108-returning','byz-v109-safety','byz-v109-recovering');overlay.setAttribute('aria-hidden','true');
    // React may replace body during hydration. A reattached iframe reloads.
    document.body.appendChild(overlay);
    // Re-prime without changing native crystal state or restarting the main site.
@@ -105,16 +116,25 @@ function status(message,canRetry=false){
  if(!feedback.isConnected)document.body.appendChild(feedback);
 }
 function clearStatus(){if(deadline){clearTimeout(deadline);deadline=0;}feedback?.remove()}
+function engageSafetyCover(){
+ if(!wanted||opened||closing||!nativeReached||marketReady||!overlay?.isConnected)return;
+ safetyCover=true;
+ overlay.setAttribute('aria-hidden','false');
+ overlay.classList.add('byz-v109-safety');
+ // Gallery remains hidden until genuinely pre-rendered; black is preferable
+ // to exposing the unstyled internal prism on slow or disconnected devices.
+ log('preload pending: mask native interior with safety cover');
+}
 function revealDirect(){
- // The real GSAP project transition announces 'interior' on completion.
- // Loader-ready, a route event, or elapsed time alone must NEVER show the gallery.
+ // The camera-zoom marker is emitted by the ACTUAL GSAP entrance animation;
+ // interior completion is retained as a backwards-compatible fallback.
  if(!wanted||!marketReady||!nativeReached||opened||closing)return;
  mount();if(!overlay?.isConnected)return;
  clearStatus();opened=true;
  const epoch=++marketRevealEpoch;
  overlay.setAttribute('aria-hidden','false');
- // Start native Aengel movement while the crystal is still visible, so the
- // crossfade doesn't expose a motionless gallery frame before the spin.
+ const fromSafety=safetyCover;
+ // The gallery starts animating before its first visible frame.
  emit('byz:market:enter');
  emit('byz:market:replay-intro');
  emit('byz:market:visible');
@@ -123,10 +143,16 @@ function revealDirect(){
   requestAnimationFrame(()=>{
    if(!opened||closing||!wanted||epoch!==marketRevealEpoch)return;
    document.documentElement.classList.add('byz-v34-market-active');
-   overlay.classList.add('byz-v106-direct');
+   if(fromSafety){
+    // Keep the solid cover until gallery paints, then animate the veil off.
+    overlay.classList.add('byz-v109-recovering','byz-v106-direct');
+    overlay.classList.remove('byz-v109-safety');
+   }else{
+    overlay.classList.add('byz-v106-direct');
+   }
   });
  },DIRECT_SPIN_LEAD_MS);
- log('native crystal interior COMPLETE: crossfading into moving gallery');
+ log('native zoom milestone: crossfade into moving gallery');
 }
 function prepareMarket(entering=false){
  if(closing)return;
@@ -137,6 +163,7 @@ function prepareMarket(entering=false){
  if(frameLoaded){emit('byz:market:prewarm');emit('byz:market:ping');}
  if(marketReady)revealDirect();
  else if(nativeReached){
+  engageSafetyCover();
   status('Preparing Market…');
   if(!deadline)deadline=setTimeout(()=>{deadline=0;if(wanted&&!marketReady)status('Market could not finish loading.',true)},30000);
  }
@@ -147,9 +174,9 @@ function clearExitTimers(){
 }
 function conceal(){
  marketRevealEpoch++;clearExitTimers();closing=false;
- opened=false;wanted=false;nativeReached=false;
+ opened=false;wanted=false;nativeReached=false;safetyCover=false;
  document.documentElement.classList.remove('byz-v34-market-active');
- overlay?.classList.remove('byz-v33-open','byz-v33-covering','byz-v33-closing','byz-v106-direct','byz-v108-returning');
+ overlay?.classList.remove('byz-v33-open','byz-v33-covering','byz-v33-closing','byz-v106-direct','byz-v108-returning','byz-v109-safety','byz-v109-recovering');
  overlay?.setAttribute('aria-hidden','true');
  emit('byz:market:close');clearStatus();
 }
@@ -191,7 +218,7 @@ function closeMarket(options={}){
  // Keep the rendered gallery in place. Do not create a black curtain or
  // hide its iframe while the native state begins its reverse transition.
  overlay.classList.add('byz-v33-closing');
- overlay.classList.remove('byz-v33-open','byz-v106-direct','byz-v108-returning');
+ overlay.classList.remove('byz-v33-open','byz-v106-direct','byz-v108-returning','byz-v109-safety','byz-v109-recovering');
  if(!options.fromNative){
   // Start native exit immediately. Waiting to call it until after a blackout
   // meant the return camera could not appear during the gallery transition.
@@ -212,7 +239,7 @@ window.__BYZ_V24_OPEN_MARKET__=()=>{
  prepareMarket();return false;
 };
 window.__BYZ_V24_CLOSE_MARKET__=()=>closeMarket();
-window.__BYZ_V24_STATUS__=()=>({version:'108.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
+window.__BYZ_V24_STATUS__=()=>({version:'109.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
 function applyNative(detail){
  if(!detail)return;
  const index=Number(detail.index??detail.projectIndex??-1);
@@ -224,7 +251,7 @@ function applyNative(detail){
   return;
  }
  if(index===2&&(state==='entering'||state==='interior')){
-  nativeReached=state==='interior';
+  nativeReached=nativeReached||state==='interior';
   prepareMarket(state==='entering');
   if(nativeReached)revealDirect();
  }else if(state==='exiting'&&(wanted||opened)){
@@ -233,6 +260,13 @@ function applyNative(detail){
   conceal();
  }
 }
+// Exact native camera-move checkpoint, before the gallery's undesired
+// WebGL interior background would take over the screen.
+window.addEventListener('byz:market:zoom-ready',ev=>{
+ if(Number(ev.detail?.index)!==2||closing||!wanted)return;
+ nativeReached=true;
+ if(marketReady)revealDirect();else engageSafetyCover();
+});
 window.addEventListener('byz:market:route',ev=>applyNative(ev.detail));
 window.addEventListener('byz:market:real-page',ev=>applyNative(ev.detail));
 window.addEventListener('message',ev=>{
