@@ -1,379 +1,266 @@
-/* V122 – Draw Historical Connection's already-laid-out HTML content into a
- * screen-aligned, live canvas texture. The ORIGINAL Aengel WebGPU project-
- * interior fluid compositor samples that texture and distorts its pixels.
- * No substitute cursor animation, no second WebGPU canvas, no mix-blend hack.
- * The original HTML supplies only initial measurements and Works Cited;
- * Aengel owns scrolling and velocity, identical to Introduction;
- * non-Works-Cited pixels are drawn into the real 3D scene surface.
- */
+/* V130 — Historical Connection native Aengel canvas content.
+   HTML supplies its existing editorial layout and accessible Works Cited.
+   We compile a list of TEXT and IMAGE draw commands only when opening or
+   resizing, just as the original Aengel pages prepare content canvases.
+   No DOM screenshot, no scrolling texture upload, no extra WebGPU renderer.
+*/
 (() => {
   'use strict';
   if (window.__BYZ_HISTORY_FRAME_BRIDGE_V121__) return;
-  const bridge = window.__BYZ_HISTORY_FRAME_BRIDGE_V121__ = {
-    canvas:document.createElement('canvas'), tiles:[], tileCount:0, ready:false, version:0, gpuUploaded:false,
-    nativeScrollPx:0, worksStart:0, worksHeight:0, nativeActive:false,
+  let root, scroller, dirty=true, frame=0, active=false, building=false;
+  let lastWidth=0,lastHeight=0,lastDoc=0;
+  const watchedImages=new WeakSet();
+  const isActive=()=>!!document.querySelector('#byz-history-v93.byz-h-open');
+  const bridge=window.__BYZ_HISTORY_FRAME_BRIDGE_V121__={
+    canvas:document.createElement('canvas'),tiles:[],tileCount:0,tilesReady:false,
+    ready:false,version:0,gpuUploaded:false,nativeActive:false,
+    documentPx:0,viewportPx:0,scrollPx:0,nativeScrollPx:0,
+    worksStart:0,worksHeight:0,commandCount:0,
     activate(){
-      if (!this.ready || !this.gpuUploaded || !isActive()) return;
-      if(this.nativeActive)return;
-      // The native content already contains a reserved gap for the citations.
-      // Put the *real* interactive Works Cited element into a separate overlay
-      // outside the hidden HTML scroll container (like the About Us map).
-      // This prevents scroll clipping and a second transform interpolation.
+      if(!this.ready||!this.gpuUploaded||!isActive()||this.nativeActive)return;
       const page=scroller?.querySelector('.byz-history-page');
       const works=page?.querySelector('#byz-h-works');
       if(works&&root){
-        if(page)page.style.minHeight=(this.pageHeight||page.getBoundingClientRect().height)+'px';
-        const rect=works.getBoundingClientRect();
-        const style=getComputedStyle(works);
-        this.worksPlaceholder=document.createElement('div');
-        this.worksPlaceholder.className='byz-h-works-spacer-v122';
-        this.worksPlaceholder.style.height=rect.height+'px';
-        this.worksPlaceholder.style.marginBottom=style.marginBottom;
-        works.replaceWith(this.worksPlaceholder);
-        root.appendChild(works);
-        this.worksNode=works;
+        page.style.minHeight=(this.pageHeight||page.getBoundingClientRect().height)+'px';
+        const rect=works.getBoundingClientRect(), style=getComputedStyle(works);
+        const spacer=document.createElement('div');spacer.className='byz-h-works-spacer-v122';
+        spacer.style.height=rect.height+'px';spacer.style.marginBottom=style.marginBottom;
+        works.replaceWith(spacer);root.appendChild(works);
+        this.worksPlaceholder=spacer;this.worksNode=works;
       }
       this.nativeActive=true;
       document.body.classList.add('byz-h-native-content-v121');
-      if(scroller){
-        scroller.removeAttribute('data-lenis-prevent');
-        scroller.removeAttribute('data-lenis-prevent-wheel');
-        scroller.removeAttribute('data-lenis-prevent-touch');
-      }
+      scroller?.removeAttribute('data-lenis-prevent');
+      scroller?.removeAttribute('data-lenis-prevent-wheel');
+      scroller?.removeAttribute('data-lenis-prevent-touch');
       this.onNativeScroll(this.nativeScrollPx);
     },
     deactivate(){
-      if(this.worksNode&&this.worksPlaceholder?.isConnected){
-        this.worksPlaceholder.replaceWith(this.worksNode);
-      }
+      if(this.worksNode&&this.worksPlaceholder?.isConnected){this.worksPlaceholder.replaceWith(this.worksNode);}
       this.worksNode=null;this.worksPlaceholder=null;
       const page=scroller?.querySelector('.byz-history-page');
       if(page)page.style.minHeight='';
-      this.nativeActive=false;
+      this.nativeActive=false;this.nativeScrollPx=0;this.lastWorksTop=undefined;
       document.body.classList.remove('byz-h-native-content-v121');
-      this.nativeScrollPx=0;this.lastWorksTop=undefined;
-      if(scroller){
-        scroller.setAttribute('data-lenis-prevent','true');
-        scroller.setAttribute('data-lenis-prevent-wheel','true');
-        scroller.setAttribute('data-lenis-prevent-touch','true');
-      }
+      scroller?.setAttribute('data-lenis-prevent','true');
+      scroller?.setAttribute('data-lenis-prevent-wheel','true');
+      scroller?.setAttribute('data-lenis-prevent-touch','true');
     },
     onNativeScroll(px){
       if(!this.nativeActive||!this.worksNode)return;
       this.nativeScrollPx=px;
-      // Same smoothed scroll position as the 3D plane: no additional easing.
       const top=Math.round((this.worksStart-px)*100)/100;
-      const h=innerHeight;
-      // V128: the citation panel is an entire HTML document layer, not part
-      // of the native shader. Do NOT animate its compositor layer on every
-      // frame while it is thousands of pixels outside the viewport. The native
-      // Aengel scroll interpolation still drives the visible panel directly.
-      const inRange=top<h+160&&top+(this.worksHeight||0)>-160;
+      const inRange=top<innerHeight+160&&top+(this.worksHeight||0)>-160;
       if(inRange&&this.lastWorksTop!==top){
         this.lastWorksTop=top;
         this.worksNode.style.transform=`translate3d(-50%, ${top}px, 0)`;
       }
-      if(this.worksNode.dataset.nativeShown!==(inRange?'1':'0')){
-        this.worksNode.dataset.nativeShown=inRange?'1':'0';
-      }
+      if(this.worksNode.dataset.nativeShown!==(inRange?'1':'0'))this.worksNode.dataset.nativeShown=inRange?'1':'0';
     }
   };
-  let ctx = bridge.canvas.getContext('2d', { alpha:true, desynchronized:true });
-  let sliceTop=0, sliceBottom=Infinity;
-  if (!ctx) return;
-  ctx.imageSmoothingEnabled=true;
-  ctx.imageSmoothingQuality='high';
-  if('fontKerning' in ctx)ctx.fontKerning='normal';
-  if('textRendering' in ctx)ctx.textRendering='optimizeLegibility';
-  let root, scroller, dirty=true, raf=0, active=false, capturing=false;
-  let lastWidth=0,lastHeight=0,lastDocHeight=0, lastCapture=0;
-  let imageListenerSet = new WeakSet();
-  // V124: no extra WebGPU adapter request during the site's initial load.
-  // The primary crystal renderer owns adapter/device creation. Historical
-  // page capture stays capped, and happens only when Crystal 4 is opened.
-  const gpuMaxTexture=8192, gpuMaxPixels=10000000;
-  const isActive=()=>!!document.querySelector('#byz-history-v93.byz-h-open');
-  const fmtColor=(val, fallback)=>val && val!=='transparent'?val:fallback;
-  // The full texture is built only when the content or dimensions change.
-  // Native Three.js translates/bends the plane during scrolling at full FPS.
-  const bridgeState=bridge;
-  bridgeState.scrollPx=0; bridgeState.documentPx=0; bridgeState.viewportPx=innerHeight;
-  bridgeState.getActiveScroll=()=>isActive()&&bridge.ready?bridge.scrollPx:null;
-  function getRoot() {
-    root = document.getElementById('byz-history-v93');
-    scroller = root?.querySelector('.byz-history-scroll');
-    return !!scroller;
-  }
-  function isVisible(r) {
-    // Work in the scroller's document space, never the visible viewport.
-    // Rectangles outside the screen MUST be included in a full-page snapshot.
-    const box=scroller.getBoundingClientRect();
-    const top=r.top-box.top+scroller.scrollTop;
-    return top+r.height>=sliceTop&&top<=sliceBottom&&r.right>=box.left-40&&r.left<=box.right+40;
-  }
-  function resize() {
-    const width=Math.max(1,Math.round(scroller.clientWidth));
-    const viewport=Math.max(1,Math.round(scroller.clientHeight));
-    const doc=Math.max(viewport,Math.round(scroller.scrollHeight));
-    // Retain the working single-canvas texture as a fail-safe. V126 replaced
-    // this with a transparent 1x1 texture, which left nothing visible when
-    // its tiled shader did not correctly output alpha.
-    const preferred=Math.min(1.1,Math.max(.8,Math.min(devicePixelRatio||1,1.1)));
-    const fallbackScale=Math.min(preferred,gpuMaxTexture/doc,gpuMaxTexture/width,
-      Math.sqrt(gpuMaxPixels/(width*doc)));
-    const fallbackW=Math.max(1,Math.round(width*fallbackScale));
-    const fallbackH=Math.max(1,Math.round(doc*fallbackScale));
-    if(bridge.canvas.width!==fallbackW)bridge.canvas.width=fallbackW;
-    if(bridge.canvas.height!==fallbackH)bridge.canvas.height=fallbackH;
-    bridge.documentPx=doc;bridge.viewportPx=viewport;
-    ctx.setTransform(fallbackW/width,0,0,fallbackH/doc,0,0);
-
-    // Match the pixel density of the native Aengel Introduction texture by
-    // allocating short sections. They all sample on the ORIGINAL Aengel
-    // bent 3D plane, and never change or re-upload on ordinary scroll.
-    const highEnd=(Number(navigator.deviceMemory)||4)>=6 &&
-      (Number(navigator.hardwareConcurrency)||4)>=6;
-    // Four smaller sections on stronger devices give each word and image
-    // more samples without growing any single texture beyond 8.4M pixels.
-    const count=Math.min(4,Math.max(1,Math.ceil(doc/(highEnd?2100:2900))));
-    const desiredScale=highEnd?1.65:1.05;
-    const maxPixels=highEnd?8400000:5100000;
-    const tileDocumentH=doc/count;
-    const scale=Math.max(.55,Math.min(desiredScale,gpuMaxTexture/width,
-      gpuMaxTexture/tileDocumentH,Math.sqrt(maxPixels/(width*tileDocumentH))));
-    const w=Math.max(1,Math.round(width*scale));
-    const h=Math.max(1,Math.round(tileDocumentH*scale));
-    bridge.tileCount=count;bridge.tileHeightPx=tileDocumentH;
-    bridge.tileScaleX=w/width;bridge.tileScaleY=h/tileDocumentH;
-    for(let k=0;k<count;k++){
-      const tile=bridge.tiles[k]||(bridge.tiles[k]=document.createElement('canvas'));
-      if(tile.width!==w)tile.width=w;
-      if(tile.height!==h)tile.height=h;
-    }
-    bridge.tiles.length=count;
-    return {width,viewport,doc};
-  }
-
-  function border(el) {
-    const style=getComputedStyle(el),r=el.getBoundingClientRect();
-    if (!isVisible(r)) return;
-    const thickness=parseFloat(style.borderTopWidth);
-    if (thickness>0&&style.borderTopStyle!=='none'&&style.borderTopColor!=='transparent') {
-      ctx.fillStyle=style.borderTopColor;
-      ctx.fillRect(r.left,r.top,r.width,Math.min(2,thickness));
-    }
-  }
-
-  function drawImage(el) {
-    if(!el.complete||!el.naturalWidth){
-      if(!imageListenerSet.has(el)){
-        imageListenerSet.add(el);
-        el.addEventListener('load',()=>{dirty=true;schedule();},{once:true});
+  bridge.canvas.width=bridge.canvas.height=1;
+  bridge.getActiveScroll=()=>isActive()&&bridge.ready?bridge.scrollPx:null;
+  function findRoot(){root=document.getElementById('byz-history-v93');scroller=root?.querySelector('.byz-history-scroll');return !!scroller;}
+  const visibleStyle=style=>style.display!=='none'&&style.visibility!=='hidden';
+  const num=x=>Number.parseFloat(x)||0;
+  function createNativeCommands(width,doc){
+    // Use the real page's typography and CSS grid solely for one-time layout.
+    // Unlike a rasterized HTML screenshot, text stays as native fillText
+    // commands and every image is drawn from its original high-res source.
+    const commands=[];
+    const origin=scroller.getBoundingClientRect();
+    const scroll=scroller.scrollTop;
+    const xRect=r=>r.left-origin.left;
+    const yRect=r=>r.top-origin.top+scroll;
+    const add=(command)=>{if(command.y+command.h>=0&&command.y<=doc)commands.push(command);};
+    function textNode(node){
+      const text=node.nodeValue;
+      if(!text||!text.trim())return;
+      const parent=node.parentElement;if(!parent)return;
+      const s=getComputedStyle(parent);if(!visibleStyle(s))return;
+      const fontSize=num(s.fontSize)||16;
+      const font=`${s.fontStyle||'normal'} ${s.fontWeight||'400'} ${fontSize}px ${s.fontFamily||'Arial, sans-serif'}`;
+      const range=document.createRange();
+      const regex=/\S+/g;
+      let match,line=null;
+      function flush(){
+        if(!line)return;
+        let value=text.slice(line.start,line.end).replace(/\s+/g,' ');
+        if(value.trim())add({kind:'text',value,x:line.x,y:line.y,h:line.h,
+          font,color:s.color||'#fff',letterSpacing:s.letterSpacing==='normal'?'0px':s.letterSpacing});
+        line=null;
       }
-      return;
-    }
-    const r=el.getBoundingClientRect();
-    if(!isVisible(r)||r.width<1||r.height<1)return;
-    const style=getComputedStyle(el);
-    ctx.save();
-    const alpha=parseFloat(style.opacity);
-    if(Number.isFinite(alpha))ctx.globalAlpha=alpha;
-    const dropShadow=style.filter.match(/drop-shadow\([^)]*?([\d.]+)px\s+rgba?\(([^)]*)\)\)/);
-    if(dropShadow){ctx.shadowColor='rgba(0,0,0,.33)';ctx.shadowBlur=12;ctx.shadowOffsetY=8;}
-    const fit=style.objectFit;
-    if(fit==='contain'||fit==='cover'){
-      const iw=el.naturalWidth,ih=el.naturalHeight;
-      const s=fit==='contain'?Math.min(r.width/iw,r.height/ih):Math.max(r.width/iw,r.height/ih);
-      const dw=iw*s,dh=ih*s;
-      if(fit==='cover'){ctx.beginPath();ctx.rect(r.left,r.top,r.width,r.height);ctx.clip();}
-      ctx.drawImage(el,r.left+(r.width-dw)/2,r.top+(r.height-dh)/2,dw,dh);
-    } else ctx.drawImage(el,r.left,r.top,r.width,r.height);
-    ctx.restore();
-  }
-
-  function drawText(node) {
-    const text=node.nodeValue;
-    if(!text||!text.trim())return;
-    const parent=node.parentElement;
-    if(!parent)return;
-    const style=getComputedStyle(parent);
-    if(style.display==='none'||style.visibility==='hidden')return;
-    const fontSize=parseFloat(style.fontSize)||16;
-    const family=style.fontFamily||'Arial,sans-serif';
-    const weight=style.fontWeight||'400';
-    const fontStyle=style.fontStyle||'normal';
-    const rect=document.createRange();
-    ctx.save();
-    ctx.font=`${fontStyle} ${weight} ${fontSize}px ${family}`;
-    if('letterSpacing' in ctx) ctx.letterSpacing=style.letterSpacing==='normal'?'0px':style.letterSpacing;
-    ctx.fillStyle=fmtColor(style.color,'white');
-    ctx.textAlign='left';ctx.textBaseline='alphabetic';
-    // Use the BROWSER's actual typeset line positions. This retains the
-    // original CSS grid, spacing and wrapping without maintaining a clone.
-    const regex=/\S+/g;let m;
-    while((m=regex.exec(text))){
-      rect.setStart(node,m.index);rect.setEnd(node,m.index+m[0].length);
-      const parts=rect.getClientRects();
-      for(const r of parts){
-        if(!isVisible(r)||r.width<=0||r.height<=0)continue;
-        // Text's glyph baseline is near the bottom of its browser line box.
-        const y=r.bottom-Math.max(1,fontSize*.18);
-        ctx.fillText(m[0],r.left,y);
-      }
-    }
-    rect.detach?.(); ctx.restore();
-  }
-
-  function drawBranch(el){
-    if(!el||el.nodeType!==1)return;
-    const st=getComputedStyle(el);
-    if(st.display==='none'||st.visibility==='hidden')return;
-    const r=el.getBoundingClientRect();
-    if(!isVisible(r))return;
-    ctx.save();
-    const ownOpacity=parseFloat(st.opacity);
-    if(Number.isFinite(ownOpacity))ctx.globalAlpha*=ownOpacity;
-    if(el.matches('.byz-h-card,.byz-h-section-title'))border(el);
-    if(el.tagName==='IMG')drawImage(el);
-    else if(el.tagName!=='CANVAS')for(const child of el.childNodes){
-      if(child.nodeType===3)drawText(child);
-      else if(child.nodeType===1)drawBranch(child);
-    }
-    ctx.restore();
-  }
-
-  function capture() {
-    raf=0;
-    if(!isActive()){
-      active=false;bridge.ready=false;bridge.gpuUploaded=false;bridge.deactivate();return;
-    }
-    if(!getRoot())return;
-    const viewportWidth=scroller.clientWidth,viewportHeight=scroller.clientHeight,docHeight=scroller.scrollHeight;
-    if (!dirty && bridge.ready && viewportWidth===lastWidth && viewportHeight===lastHeight && docHeight===lastDocHeight)return;
-    if(capturing)return;
-    capturing=true;
-    try {
-      // The page retains native HTML layout and scrolling, but we capture its
-      // static, fully revealed content just ONCE, not on every scroll event.
-      root.classList.add('byz-h-capture-v121');
-      const pageEl=scroller.querySelector('.byz-history-page');
-      if(pageEl&&!bridge.nativeActive)bridge.pageHeight=pageEl.getBoundingClientRect().height;
-      const works=root.querySelector('#byz-h-works');
-      const wr=works?.getBoundingClientRect();
-      const sr=scroller.getBoundingClientRect();
-      if(wr&&!bridge.nativeActive){bridge.worksStart=wr.top-sr.top+scroller.scrollTop;bridge.worksHeight=wr.height;}
-      const {width,viewport,doc}=resize();
-      ctx.save();
-      ctx.setTransform(1,0,0,1,0,0);
-      ctx.clearRect(0,0,bridge.canvas.width,bridge.canvas.height);
-      ctx.restore();
-      const box=scroller.getBoundingClientRect();
-      ctx.save();
-      // Coordinates of DOM text are viewport-relative; convert to the full
-      // scroll-document origin, without changing the actual HTML scrollTop.
-      ctx.translate(-box.left,scroller.scrollTop-box.top);
-      root.querySelectorAll('.byz-history-page > .byz-h-hero, .byz-history-page > .byz-h-section:not(.byz-h-works), .byz-history-page > .byz-h-footer').forEach(drawBranch);
-      ctx.restore();
-      // Tiled capture of the SAME DOM content. The original atlas above is
-      // still available as a fallback if GPU tile uploading never finishes.
-      const fallbackContext=ctx;
-      try {
-        const parts=root.querySelectorAll('.byz-history-page > .byz-h-hero, .byz-history-page > .byz-h-section:not(.byz-h-works), .byz-history-page > .byz-h-footer');
-        for(let tileIndex=0;tileIndex<bridge.tileCount;tileIndex++){
-          sliceTop=tileIndex*bridge.tileHeightPx;
-          sliceBottom=(tileIndex+1)*bridge.tileHeightPx;
-          ctx=bridge.tiles[tileIndex].getContext('2d',{alpha:true,desynchronized:true});
-          if(!ctx)throw Error('Historical high-resolution canvas context unavailable');
-          ctx.setTransform(1,0,0,1,0,0);
-          ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
-          ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
-          if('fontKerning' in ctx)ctx.fontKerning='normal';
-          if('textRendering' in ctx)ctx.textRendering='optimizeLegibility';
-          const sx=bridge.tileScaleX,sy=bridge.tileScaleY;
-          ctx.save();
-          ctx.setTransform(sx,0,0,sy,-box.left*sx,(scroller.scrollTop-box.top-sliceTop)*sy);
-          parts.forEach(drawBranch);
-          ctx.restore();
+      while((match=regex.exec(text))){
+        range.setStart(node,match.index);range.setEnd(node,match.index+match[0].length);
+        for(const r of range.getClientRects()){
+          if(r.width<=0||r.height<=0)continue;
+          const x=xRect(r),top=yRect(r),base=top+r.height-Math.max(1,fontSize*.18);
+          const end=match.index+match[0].length;
+          if(line&&Math.abs(line.top-top)>Math.max(2,fontSize*.28))flush();
+          if(!line)line={start:match.index,end,x,y:base,top,h:r.height};
+          else line.end=end;
         }
-        bridge.tilesReady=true;
-      }catch(tileError){
-        // Never blank the page due to the optional sharper path.
-        bridge.tilesReady=false;
-        console.warn('[V129] Sharp historical atlas unavailable; using original texture',tileError);
-      }finally{
-        ctx=fallbackContext;sliceTop=0;sliceBottom=Infinity;
       }
-      bridge.version++;
+      flush();range.detach?.();
+    }
+    function walk(el){
+      if(!el||el.nodeType!==1||el.id==='byz-h-works'||el.classList.contains('byz-h-works-spacer-v122'))return;
+      const s=getComputedStyle(el);if(!visibleStyle(s))return;
+      const r=el.getBoundingClientRect();
+      const x=xRect(r),y=yRect(r);
+      if(y>doc+50||y+r.height< -50)return;
+      if(el.matches('.byz-h-card,.byz-h-section-title')){
+        const bw=num(s.borderTopWidth);
+        if(bw>0&&s.borderTopStyle!=='none')add({kind:'rule',x,y,h:2,w:r.width,color:s.borderTopColor});
+      }
+      if(el.tagName==='IMG'){
+        if(el.complete&&el.naturalWidth>0){
+          const iw=el.naturalWidth,ih=el.naturalHeight;
+          let dx=x,dy=y,dw=r.width,dh=r.height;
+          const fit=s.objectFit;
+          if(fit==='contain'||fit==='cover'){
+            const scale=fit==='contain'?Math.min(dw/iw,dh/ih):Math.max(dw/iw,dh/ih);
+            const ww=iw*scale,hh=ih*scale;dx+=(dw-ww)/2;dy+=(dh-hh)/2;dw=ww;dh=hh;
+          }
+          add({kind:'image',image:el,x:dx,y:dy,w:dw,h:dh,clip:fit==='cover'?{x,y,w:r.width,h:r.height}:null});
+        }else if(!watchedImages.has(el)){
+          watchedImages.add(el);
+          el.loading='eager';
+          el.addEventListener('load',()=>{dirty=true;schedule();},{once:true});
+          el.addEventListener('error',()=>{dirty=true;schedule();},{once:true});
+        }
+        return;
+      }
+      if(el.tagName==='CANVAS')return;
+      for(const child of el.childNodes){
+        if(child.nodeType===3)textNode(child);
+        else if(child.nodeType===1)walk(child);
+      }
+    }
+    scroller.querySelectorAll('.byz-history-page > .byz-h-hero, .byz-history-page > .byz-h-section:not(.byz-h-works), .byz-history-page > .byz-h-footer').forEach(walk);
+    return commands;
+  }
+  function paintTile(canvas,commands,top,sectionH,width,scale){
+    const w=Math.max(1,Math.round(width*scale)),h=Math.max(1,Math.round(sectionH*scale));
+    if(canvas.width!==w)canvas.width=w;
+    if(canvas.height!==h)canvas.height=h;
+    const ctx=canvas.getContext('2d',{alpha:true,desynchronized:true});
+    if(!ctx)throw Error('Native historical canvas is unavailable');
+    const sx=w/width,sy=h/sectionH;
+    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,w,h);
+    ctx.setTransform(sx,0,0,sy,0,-top*sy);
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+    if('fontKerning' in ctx)ctx.fontKerning='normal';
+    if('textRendering' in ctx)ctx.textRendering='optimizeLegibility';
+    ctx.textBaseline='alphabetic';ctx.textAlign='left';
+    for(const cmd of commands){
+      if(cmd.y+cmd.h<top-4||cmd.y>top+sectionH+4)continue;
+      if(cmd.kind==='text'){
+        ctx.font=cmd.font;
+        ctx.fillStyle=cmd.color;
+        if('letterSpacing' in ctx)ctx.letterSpacing=cmd.letterSpacing;
+        ctx.fillText(cmd.value,cmd.x,cmd.y);
+      }else if(cmd.kind==='image'){
+        ctx.save();
+        if(cmd.clip){ctx.beginPath();ctx.rect(cmd.clip.x,cmd.clip.y,cmd.clip.w,cmd.clip.h);ctx.clip();}
+        ctx.drawImage(cmd.image,cmd.x,cmd.y,cmd.w,cmd.h);ctx.restore();
+      }else if(cmd.kind==='rule'){
+        ctx.fillStyle=cmd.color;ctx.fillRect(cmd.x,cmd.y,cmd.w,1);
+      }
+    }
+    ctx.setTransform(1,0,0,1,0,0);
+  }
+  function build(){
+    frame=0;
+    if(building||!isActive()||!findRoot())return;
+    if(bridge.nativeActive&&!dirty)return;
+    building=true;
+    try{
+      // Never hide the HTML before native GPU upload and shader completion.
+      if(bridge.nativeActive){bridge.deactivate();bridge.gpuUploaded=false;}
+      root.classList.add('byz-h-capture-v121');
+      const width=Math.max(1,Math.round(scroller.clientWidth));
+      const viewport=Math.max(1,Math.round(scroller.clientHeight));
+      const doc=Math.max(viewport,Math.round(scroller.scrollHeight));
+      const page=scroller.querySelector('.byz-history-page');
+      bridge.pageHeight=page?.getBoundingClientRect().height||doc;
+      const works=page?.querySelector('#byz-h-works'),wr=works?.getBoundingClientRect(),sr=scroller.getBoundingClientRect();
+      if(wr){bridge.worksStart=wr.top-sr.top+scroller.scrollTop;bridge.worksHeight=wr.height;}
+      // Aengel's Introduction builder similarly produces commands first,
+      // then paints them directly to its canvas at the selected resolution.
+      const commands=createNativeCommands(width,doc);
+      const cores=Number(navigator.hardwareConcurrency)||4;
+      const memory=Number(navigator.deviceMemory)||4;
+      const strong=cores>=8&&memory>=6;
+      const medium=cores>=6&&memory>=4;
+      const count=strong?6:medium?5:4;
+      const sectionH=doc/count;
+      const pixelBudget=strong?9500000:medium?5500000:3000000;
+      const targetScale=strong?2:medium?1.45:1.05;
+      const maxDimension=8192;
+      const scale=Math.max(.5,Math.min(targetScale,maxDimension/width,maxDimension/sectionH,
+        Math.sqrt(pixelBudget/(width*sectionH))));
+      const next=[];
+      for(let i=0;i<count;i++){
+        const canvas=bridge.tiles[i]||document.createElement('canvas');
+        paintTile(canvas,commands,i*sectionH,sectionH,width,scale);
+        next.push(canvas);
+      }
+      bridge.tiles=next;
+      bridge.tilesReady=true;
+      bridge.tileCount=count;
+      bridge.documentPx=doc;
+      bridge.viewportPx=viewport;
+      bridge.commandCount=commands.length;
+      bridge.nativeScale=scale;
       bridge.ready=true;
-      lastCapture=performance.now();
-      lastWidth=viewportWidth;lastHeight=viewportHeight;lastDocHeight=docHeight;
+      bridge.gpuUploaded=false;
+      bridge.version++;
+      lastWidth=width;lastHeight=viewport;lastDoc=doc;
       dirty=false;
-    } catch(e) {
-      // On failure, HTML remains visible rather than going black.
-      bridge.deactivate();bridge.ready=false;
-      console.warn('[V121] Historical canvas atlas failed; retaining HTML',e);
-    } finally {
-      root.classList.remove('byz-h-capture-v121');
-      ctx=bridge.canvas.getContext('2d');sliceTop=0;sliceBottom=Infinity;
-      capturing=false;
+    }catch(err){
+      bridge.ready=false;bridge.tilesReady=false;bridge.gpuUploaded=false;
+      bridge.deactivate();
+      console.warn('[V130] Native historical content unavailable; retaining HTML',err);
+    }finally{
+      root?.classList.remove('byz-h-capture-v121');
+      building=false;
     }
   }
-  function schedule(){if(!raf)raf=requestAnimationFrame(capture);}
+  function schedule(){if(!frame)frame=requestAnimationFrame(build);}
   function tick(){
     if(isActive()){
-      active=true;
-      if(!bridge.ready)dirty=true;
-      // V128: Aengel's native controller owns the scrolling. While the GPU
-      // texture is active the source HTML is intentionally content-visibility:
-      // hidden; reading its scrollHeight would report the skipped-layout size
-      // and provoke a full 10-million-pixel repaint/upload every 150ms.
-      bridge.scrollPx=0;
-      if(bridge.nativeActive){
-        if(dirty)schedule();
-      }else if(dirty || !bridge.ready || scroller.clientWidth!==lastWidth || scroller.clientHeight!==lastHeight || scroller.scrollHeight!==lastDocHeight){
-        schedule();
-      }
-    } else if(active){
-      active=false;bridge.ready=false;bridge.gpuUploaded=false;bridge.deactivate();
+      active=true;bridge.scrollPx=0;
+      if(bridge.nativeActive){if(dirty)schedule();return;}
+      if(dirty||!bridge.ready||scroller?.clientWidth!==lastWidth||scroller?.clientHeight!==lastHeight||scroller?.scrollHeight!==lastDoc)schedule();
+    }else if(active){
+      active=false;bridge.ready=false;bridge.tilesReady=false;
+      bridge.gpuUploaded=false;bridge.deactivate();dirty=true;
     }
   }
   function boot(){
-    if(!getRoot()){setTimeout(boot,100);return;}
-    // Read scrollTop only; DO NOT rasterize, redraw or upload a texture per tick.
-    // No HTML scroll handler. Input goes straight to Aengel's native scroll store.
-    window.addEventListener('resize',()=>{dirty=true; schedule();},{passive:true});
-    window.addEventListener('byz:market:real-page',()=>{
-      if(isActive()&&!active){dirty=true;bridge.ready=false;}
-      tick();
-    });
+    if(!findRoot()){setTimeout(boot,100);return;}
+    window.addEventListener('resize',()=>{dirty=true;schedule();},{passive:true});
+    window.addEventListener('byz:market:real-page',()=>{if(isActive()&&!active){dirty=true;bridge.ready=false;}tick();});
     document.fonts?.ready.then(()=>{dirty=true;schedule();}).catch(()=>{});
-    const obs=new MutationObserver(list=>{
-      // Reveal class mutations are cosmetic. They DO NOT change our capture.
-      if(list.some(m=>{
+    const observer=new MutationObserver(changes=>{
+      if(changes.some(m=>{
         if(m.target?.closest?.('#byz-h-works'))return false;
         if(m.type==='childList'){
-          const changed=[...m.addedNodes,...m.removedNodes];
-          if(changed.length&&changed.every(n=>n.nodeType===1&&
+          const nodes=[...m.addedNodes,...m.removedNodes];
+          if(nodes.length&&nodes.every(n=>n.nodeType===1&&
             (n.matches?.('#byz-h-works,.byz-h-works-spacer-v122')||n.closest?.('#byz-h-works'))))return false;
         }
         return m.type==='childList'||m.attributeName==='src';
-      })){
-        dirty=true;schedule();
-      }
+      })){dirty=true;schedule();}
     });
-    obs.observe(scroller,{subtree:true,childList:true,attributes:true,attributeFilter:['src']});
-    // Images beyond the viewport must load before they're used in the atlas.
-    scroller.querySelectorAll('img').forEach(img=>{
-      img.loading='eager';
-      if(!img.complete){
-        img.addEventListener('load',()=>{dirty=true;schedule();},{once:true});
-        img.addEventListener('error',()=>{dirty=true;schedule();},{once:true});
-      }
+    observer.observe(scroller,{subtree:true,childList:true,attributes:true,attributeFilter:['src']});
+    scroller.querySelectorAll('img').forEach(el=>{el.loading='eager';
+      if(!el.complete){el.addEventListener('load',()=>{dirty=true;schedule();},{once:true});
+        el.addEventListener('error',()=>{dirty=true;schedule();},{once:true});}
     });
     window.addEventListener('load',()=>{dirty=true;schedule();},{once:true});
-    setInterval(tick,150);
-    tick();
+    setInterval(tick,150);tick();
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});
-  else boot();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

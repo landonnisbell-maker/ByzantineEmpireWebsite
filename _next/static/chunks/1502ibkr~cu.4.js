@@ -442,10 +442,10 @@ for(let k=0;k<5;k++){
 }
 return{height:height,enabled:enabled,images:images,texts:texts,mask:(0,M.mix)((0,M.float)(1),alpha,enabled),slide:slide.mul(enabled)};
 })()),(0,M.texture)(aK,(0,M.uv)().add((0,M.vec2)(0,F.team.slide.div(F.team.height))))),BYZGallery=(F.history=(function(){
- const tiles=Array.from({length:4},()=>{let c=document.createElement('canvas');c.width=c.height=1;let t=new P.CanvasTexture(c);t.colorSpace=P.SRGBColorSpace;t.minFilter=P.LinearFilter;t.magFilter=P.LinearFilter;t.generateMipmaps=!1;return t});
+ const tiles=Array.from({length:6},()=>{let c=document.createElement('canvas');c.width=c.height=1;let t=new P.CanvasTexture(c);t.colorSpace=P.SRGBColorSpace;t.minFilter=P.LinearFilter;t.magFilter=P.LinearFilter;t.generateMipmaps=!1;return t});
  const enabled=(0,M.uniform)(0),count=(0,M.uniform)(1),uv=(0,M.uv)(),fromTop=(0,M.float)(1).sub(uv.y).mul(count);
  let sample=(0,M.vec4)(0,0,0,0);
- for(let k=0;k<4;k++){
+ for(let k=0;k<6;k++){
    const localUV=(0,M.vec2)(uv.x,(0,M.float)(k+1).sub(fromTop));
    const pixel=(0,M.texture)(tiles[k],localUV);
    const mask=(0,M.step)(k,fromTop).mul((0,M.step)(fromTop,k+1));
@@ -534,36 +534,21 @@ return{texture:tex,enabled:enabled,slides:slides,color:result};
 // crystal-navigation logic intact for the other three crystals.
 if(t===2||t===3){let canvas=document.createElement("canvas");canvas.width=1573;canvas.height=e6.DESIGN_REFERENCE_HEIGHT;return{canvas,height:e6.DESIGN_REFERENCE_HEIGHT,hero:null,carousel:null,progress:null,liveLink:null,next:null}}
 let o=t===1&&typeof e.interior?.description==="string"?{...e.interior,gallery:[],description:e.interior.description.replace(/^\s*Time Frame\s*\n+\s*330 CE\s*[-–]\s*1453 CE\s*\n*/i,"")}:e.interior,a=document.createElement("canvas").getContext("2d"),n=[],l=(e,t,r=aS)=>{a.font=t;let o=e.split(/\s+/).filter(Boolean),n=[],l="";for(let e of o){let t=l?`${l} ${e}`:e;l&&a.measureText(t).width>r?(n.push(l),l=e):l=t}return l&&n.push(l),n},s=(e,t,r,o,a,l="left")=>{n.push(n=>{n.textAlign=l,n.font=o,n.fillStyle=a,n.fillText(e,t,r)})},i=(e,t,r)=>{let o=t;for(let t of e.split(/\n{2,}/).filter(e=>e.trim())){let h=t.trim(),b=["Time Frame","Location","Government","Economy","Religion","Important Cities","Major Achievements","Important Resources","Trade connections","Cultural Characteristics","Society","Trade","Paramerion Sword","Gold Jewelry","Gàros","Apáki","Silk Textiles","Coins","Purple Energy","Gold and Purple Portal","Crystal Landmarks","Mountains and Water","Market Logo"].includes(h);if(b){o+=10,s(h.toUpperCase(),336,o,aF,ak),o+=44}else{for(let e of l(t.replace(/\n/g," "),aV))s(e,336,o,aV,r),o+=32;o+=18}}return o-18};s(aY((o.overline??`PROJET — ${String(t+1).padStart(2,"0")}`).toUpperCase()),1909,202,aE,aD,"right"),s(o.title.toUpperCase(),336,231,aC,ak),s((o.tagline?`${o.tagline} - ${o.year}`:`${o.year}`).toUpperCase(),336,277,aj,aD);let u=315;if(t===0&&typeof window!=="undefined"&&window.__BYZ_DRAW_INTRO_TEAM_V54__){u=window.__BYZ_DRAW_INTRO_TEAM_V54__(n,u);o={...o,description:"",liveUrl:null,heroMedia:null,roleTitles:[],roleDescription:"",stack:[],gallery:[],challenges:""};}o.description&&(u=i(o.description,u,aD));let m=null;if(o.liveUrl){let e=u+44,t=aY("LIVE LINK");a.font=a_;let r=a.measureText(t).width,o=" ↘",n=a.measureText(o).width;s(t+o,336,e,a_,ak),m={x:324,y:e-30,w:r+n+24,h:46},u=e}let c=null;if(o.heroMedia){let e=u+22;c={x:336,y:e,w:1573,h:aA},u=e+aA}if((o.roleTitles?.length||o.roleDescription)&&(s(o.roleHeading??(o.title==="About Us"?"GOVERNMENT, ECONOMY & RELIGION":"ROLE SUMMARY"),336,u+=72,aT,ak),o.roleTitles?.length&&(u+=36,s(o.roleTitles.join(" · ").toUpperCase(),336,u,aF,"#c0c0c0")),o.roleDescription&&(u=i(o.roleDescription,u+44,aD))),o.stack?.length){u+=46,a.font=aL;let e=336;for(let t of o.stack){let r=`[ ${t.toUpperCase()} ]`,o=a.measureText(r).width;e>336&&e+o>336+aS&&(e=336,u+=32),s(r,e,u,aL,aD),e+=o+24}}let d=null,f=null;if(o.gallery?.length){let e=u+26;d={x:336,y:e,w:1134,h:aR},u=(f={x:1340,y:e+aR+14,w:130,h:2}).y+f.h}o.challenges&&(s(o.challengesHeading??(o.title==="About Us"?"ACHIEVEMENTS, RESOURCES & CULTURE":"TECHNICAL CONSTRAINTS"),336,u+=66,aT,ak),u=i(o.challenges,u+44,aD));let p=null;if(false){let e=u+96;n.push(t=>{t.fillStyle="rgba(255, 255, 255, 0.35)",t.fillRect(996.66,e,912.3399999999999,1)});let t=e+46,r=aY("NEXT PAGE");a.font=a_;let o=a.measureText(r).width;s(r,1909,t,a_,ak,"right"),p={x:1909-o-20,y:t-32,w:o+32,h:50},u=t+60}else u+=80;let h=Math.max(Math.ceil(u),e6.DESIGN_REFERENCE_HEIGHT),g=Math.min(2,8192/h,5.207883026064844),v=document.createElement("canvas");v.width=Math.ceil(1573*g),v.height=Math.ceil(h*g);let x=v.getContext("2d");return x.scale(g,g),x.translate(-336,0),x.textBaseline="alphabetic",n.forEach(e=>e(x)),{canvas:v,height:h,hero:c,carousel:d,progress:f,liveLink:m,next:p}}(e,n,t.length);p.current=l;R.team.height.value=l.height;R.team.enabled.value=0;let s=new P.CanvasTexture(l.canvas);s.colorSpace=P.SRGBColorSpace,s.minFilter=P.LinearMipmapLinearFilter,s.magFilter=P.LinearFilter,s.anisotropy=4;let i=l.height*aw,u=Math.min(256,Math.max(8,Math.round(7*i))),c=new P.PlaneGeometry(1573*aw,i,1,u),h=A.value,g=w.geometry;A.value=s,w.geometry=c,h&&h!==aK&&h.dispose(),g.dispose(),d.current=aM/2-i/2,f.current=Math.max(0,i-aM),w.position.y=d.current+m.current,a&&o(l),V()};if(h.current===n&&p.current)return void o(p.current);h.current=n;let l="u">typeof document?document.fonts:void 0,s=!!l&&!aI.every(e=>l.check(e));return n===0&&typeof window!=="undefined"&&window.__BYZ_INTRO_TEAM_ON_READY_V54__?.(()=>{r||(a(!0),E.repaint())}),a(!s),l&&s&&Promise.all(aI.map(e=>l.load(e))).then(()=>{r||(a(!0),E.repaint())}).catch(()=>{}),g.current&&(g.current=!1,ab.useInteriorScrollStore.getState().reset(),m.current=0,w.position.y=d.current,ea.gsap.to(N,{value:1,duration:1.1,ease:"power2.out"})),()=>{r=!0;window.__BYZ_ABOUT_MAP_SLOT_V45__=null}},[n,t,u,w,A,N,V,C,T,E]);
-// V129: Aengel's ORIGINAL native history scrolling and bend shader continue
-// to drive a single 3D plane. Sharper canvas sections replace the page's
-// low-density pixels only AFTER their actual GPU uploads succeed. The
-// known-working single texture remains visible if the tiled path fails.
+// V130: native high-resolution Aengel canvas builder for Historical Connection.
+// The same native scroll store, camera-plane bend, and fluid shader remain.
+// HTML is NEVER hidden until every native texture is confirmed uploaded.
 (0,x.useEffect)(()=>{
  if(n!==3||typeof window==="undefined")return;
- let tex=null,installed=false,lastVersion=-1,lastDimensions='',cancelled=false;
- let uploaded=false,installedAtRange=false,stageVersion=-1;
+ let lastVersion=-1,lastDimensions='',cancelled=false;
+ let installedAtRange=false,stagedVersion=-1;
  const history=R.history;
  const bridge=()=>window.__BYZ_HISTORY_FRAME_BRIDGE_V121__;
+ const clear=()=>{history.enabled.value=0;bridge()?.deactivate();};
  const refresh=()=>{
   if(cancelled)return;
   const b=bridge(),state=ei.useProjectStore.getState();
-  if(!b||!b.ready||state.currentProjectIndex!==3||state.interiorStatus!=="interior"){
-   history.enabled.value=0;
-   b?.deactivate();return;
-  }
-  if(!installed){
-   tex=new P.CanvasTexture(b.canvas);
-   tex.colorSpace=P.SRGBColorSpace;
-   tex.minFilter=P.LinearFilter;tex.magFilter=P.LinearFilter;
-   tex.generateMipmaps=!1;
-   tex.onUpdate=()=>{
-    if(cancelled)return;
-    uploaded=true;b.gpuUploaded=true;
-    if(ei.useProjectStore.getState().interiorStatus==="interior")b.activate();
-   };
-   const oldTex=A.value;A.value=tex;
-   if(oldTex&&oldTex!==aK)oldTex.dispose();
-   installed=true;
+  if(!b||!b.ready||!b.tilesReady||state.currentProjectIndex!==3||state.interiorStatus!=="interior"){
+   clear();return;
   }
   const pageH=Math.max(innerHeight,b.documentPx||innerHeight);
   const pageW=Math.max(1,document.documentElement.clientWidth||innerWidth);
@@ -582,43 +567,38 @@ let o=t===1&&typeof e.interior?.description==="string"?{...e.interior,gallery:[]
    if(!installedAtRange){store.reset();m.current=0;installedAtRange=true;}
    lastDimensions=dimensions;
   }
-  if(lastVersion!==b.version){
-   lastVersion=b.version;stageVersion=b.version;
-   history.enabled.value=0;
+  if(lastVersion===b.version)return;
+  lastVersion=b.version;stagedVersion=b.version;
+  clear();b.gpuUploaded=false;
+  const count=Math.min(6,Math.max(1,b.tileCount||0));
+  if(count!==b.tiles.length||!count)return;
+  history.count.value=count;
+  let completed=0;
+  const thisVersion=b.version;
+  for(let k=0;k<6;k++){
+   const tex=history.tiles[k];
+   tex.onUpdate=null;
+   if(k>=count)continue;
+   const img=b.tiles[k];
+   if(!img||!img.width||!img.height)return;
+   tex.image=img;
+   tex.onUpdate=()=>{
+    if(cancelled||stagedVersion!==thisVersion||!b.ready)return;
+    tex.onUpdate=null;completed++;
+    if(completed!==count)return;
+    // Actual GPU upload confirmation; reveal all at once, not per section.
+    b.gpuUploaded=true;
+    history.enabled.value=1;
+    if(ei.useProjectStore.getState().interiorStatus==="interior")b.activate();
+   };
    tex.needsUpdate=true;
-   // The original path activates the page; sharper tiles are an enhancement,
-   // not a condition for the page to appear. Never change b.gpuUploaded here.
-   if(b.tilesReady&&b.tiles?.length){
-    const count=Math.max(1,Math.min(4,b.tileCount||1));
-    history.count.value=count;
-    const thisVersion=b.version;
-    let completed=0;
-    for(let k=0;k<4;k++){
-     const tile=history.tiles[k];
-     tile.onUpdate=null;
-     if(k>=count)continue;
-     tile.image=b.tiles[k];
-     tile.onUpdate=()=>{
-      if(cancelled||stageVersion!==thisVersion)return;
-      tile.onUpdate=null;
-      completed++;
-      if(completed===count){
-       // The shader outputs the tiled RGBA, not just tiled RGB. V126's
-       // missing alpha output made its entire plane transparent.
-       history.enabled.value=1;
-      }
-     };
-     tile.needsUpdate=true;
-    }
-   }
   }
-  if(!uploaded)b.deactivate();
  };
- const id=setInterval(refresh,120);refresh();
+ const timer=setInterval(refresh,120);refresh();
  return()=>{
-  cancelled=true;clearInterval(id);history.enabled.value=0;
-  history.tiles.forEach(tile=>tile.onUpdate=null);
-  const b=bridge();b?.deactivate();if(b)b.gpuUploaded=false;
+  cancelled=true;clearInterval(timer);clear();
+  history.tiles.forEach(tex=>tex.onUpdate=null);
+  const b=bridge();if(b)b.gpuUploaded=false;
  };
 },[n,s,w,A,o,R]);
 let I=(0,x.useCallback)(e=>{let t=ei.useProjectStore.getState();g.current||"interior"===t.interiorStatus&&"idle"===t.morphStatus&&(g.current=!0,ea.gsap.to(N,{value:0,duration:.65,ease:"power2.in",onComplete:()=>{let t=ei.useProjectStore.getState(),r=t.currentProjectIndex;1===e?t.setProjectNext():t.setProjectPrev(),ei.useProjectStore.getState().currentProjectIndex===r&&(g.current=!1,ea.gsap.to(N,{value:1,duration:.65,ease:"power2.out"}))}}))},[N]);return(0,x.useEffect)(()=>{if(!a)return;let e=new P.Raycaster;e.layers.set(30);let r=new P.Vector2,n=!1,l=e=>{e!==n&&(n=e,document.body.style.cursor=e?"pointer":"")},s=(t,a)=>{r.set(t/window.innerWidth*2-1,-(2*(a/window.innerHeight))+1),e.setFromCamera(r,o)},i=(t,r)=>{let o=p.current;if(!o)return null;s(t,r);let a=e.intersectObject(w,!1)[0];return a?.uv?{x:336+1573*a.uv.x,y:(1-a.uv.y)*o.height}:null},u=()=>!1,m=(e,t)=>!!t&&e.x>=t.x&&e.x<=t.x+t.w&&e.y>=t.y&&e.y<=t.y+t.h,c=()=>"interior"===ei.useProjectStore.getState().interiorStatus,d=e=>{if(!c()||g.current)return;let t=i(e.clientX,e.clientY);t&&T.contains(t)&&T.beginDrag(t.x)},f=0,h=0,x=!1,y=e=>{f=e.clientX,h=e.clientY,x=!0},b=()=>{x&&(x=!1,((e,t)=>{if(!c())return l(!1);if(T.dragging){let r=i(e,t);r&&T.moveDrag(r.x);return}if(g.current)return l(!1);if(u(e,t))return l(!0);let r=i(e,t),o=p.current;l(!!r&&(m(r,o?.next??null)||m(r,o?.liveLink??null)||T.contains(r)))})(f,h))};v.current=b;let M=()=>{T.dragging&&(b(),T.endDrag())},S=e=>{if(!c()||g.current)return;if(u(e.clientX,e.clientY))return void ei.useProjectStore.getState().exitInterior();let r=i(e.clientX,e.clientY);if(!r)return;let o=p.current;if(m(r,o?.next??null))I(1);else if(m(r,o?.liveLink??null)){let e=ei.useProjectStore.getState().currentProjectIndex,r=t[e]?.interior.liveUrl;r&&(0,ay.isSafeExternalUrl)(r)&&window.open(r,"_blank","noopener,noreferrer")}};return window.addEventListener("pointerdown",d),window.addEventListener("pointermove",y),window.addEventListener("pointerup",M),window.addEventListener("click",S),()=>{
