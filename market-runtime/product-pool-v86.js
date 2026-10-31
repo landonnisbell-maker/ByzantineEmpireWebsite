@@ -105,6 +105,9 @@ window.addEventListener('message',ev=>{
    // Native Aengel gallery animation, deferred until the real Market reveal.
    // Intentionally not sent during prewarming or product transitions.
    if(!open)send(gallery,{type:'byz:market:replay-intro'});
+  }else if(ev.data.type==='byz:market:reverse-intro'){
+   // V110: send the real 2.2s reverse intro command through to WebGL gallery.
+   if(!open)send(gallery,{type:'byz:market:reverse-intro'});
   }else if(ev.data.type==='byz:market:close'){exitProduct({fromHistory:true});send(gallery,{type:'byz:market:close'})}
   return;
  }
