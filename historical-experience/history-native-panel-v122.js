@@ -84,23 +84,10 @@
   let root, scroller, dirty=true, raf=0, active=false, capturing=false;
   let lastWidth=0,lastHeight=0,lastDocHeight=0, lastCapture=0;
   let imageListenerSet = new WeakSet();
-  // V123: Introduction's text uses a higher-density GPU atlas. Historical
-  // used to shrink 12k+ pixels of page content into an 8192px texture, which
-  // made every line of text look artificially thick and blurry. Only raise
-  // this limit after checking the actual adapter's maximum texture dimension.
-  let gpuMaxTexture=8192, gpuMaxPixels=10000000;
-  if (navigator.gpu && typeof navigator.gpu.requestAdapter==='function') {
-    navigator.gpu.requestAdapter().then(adapter=>{
-      const max=Number(adapter?.limits?.maxTextureDimension2D)||8192;
-      if(max>=16384){
-        gpuMaxTexture=16384;
-        // An atlas of this size is used only on a GPU capable of 16k textures.
-        // 28 million RGBA pixels = up to 112 MB before GPU processing.
-        gpuMaxPixels=28000000;
-        dirty=true;schedule();
-      }
-    }).catch(()=>{});
-  }
+  // V124: no extra WebGPU adapter request during the site's initial load.
+  // The primary crystal renderer owns adapter/device creation. Historical
+  // page capture stays capped, and happens only when Crystal 4 is opened.
+  const gpuMaxTexture=8192, gpuMaxPixels=10000000;
   const isActive=()=>!!document.querySelector('#byz-history-v93.byz-h-open');
   const fmtColor=(val, fallback)=>val && val!=='transparent'?val:fallback;
   // The full texture is built only when the content or dimensions change.
@@ -127,9 +114,7 @@
     // Aengel's native content texture is similarly capped at 8192px high.
     // Cap total allocation too to protect low-end and integrated GPUs.
     const maxTexture=gpuMaxTexture, maxPixels=gpuMaxPixels;
-    const preferredScale=gpuMaxTexture>8192?
-      Math.max(1.15,Math.min(devicePixelRatio||1,1.5)):
-      Math.min(1.1,Math.max(.8,Math.min(devicePixelRatio||1,1.1)));
+    const preferredScale=Math.min(1.1,Math.max(.8,Math.min(devicePixelRatio||1,1.1)));
     const scale=Math.min(preferredScale,maxTexture/doc,maxTexture/width,Math.sqrt(maxPixels/(width*doc)));
     const w=Math.max(1,Math.round(width*scale)), h=Math.max(1,Math.round(doc*scale));
     if (bridge.canvas.width!==w||bridge.canvas.height!==h) {

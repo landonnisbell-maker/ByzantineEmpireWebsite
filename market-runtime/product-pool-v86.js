@@ -25,6 +25,7 @@ const constrained=matchMedia('(pointer:coarse)').matches||((navigator.deviceMemo
 // permanently cached and show an instant lightweight product preview for others.
 const residentCap=constrained?2:5;
 let recent=[],cursor=0,statusTimer=null,failTimer=null;
+let delayedWarmupStarted=false;
 const send=(frame,msg)=>{try{frame?.contentWindow?.postMessage(msg,ORIGIN)}catch(e){log('postMessage',e)}};
 function clearTimers(){clearTimeout(statusTimer);clearTimeout(failTimer);statusTimer=failTimer=null;status.classList.remove('visible')}
 function indexFor(d){
@@ -50,13 +51,30 @@ function ensure(i){
  f.addEventListener('load',()=>{s.loaded=true;send(f,{type:'byz:palia:ping'});update(s);log('loaded',s.product.slug)});
  s.frame=f;s.started=true;pool.append(f);touch(i);trim(i);f.src=urlFor(s.product);log('warming',s.product.slug);return f;
 }
+// V125: Warming begins on the GATE phase of the original loading page,
+// not while the original 3D scene is still initializing (the 30% stall).
+// Wait for each product's document load or a bounded fallback before starting
+// another WebGL page, keeping the first view responsive on slower hardware.
 function warmNext(){
  if(cursor>=PRODUCTS.length)return;
- // V105: Restore V103 background product warmup during the ORIGINAL loading screen.
- // Lower-end devices retain the existing residentCap to limit GPU memory use.
  if(constrained&&cursor>=residentCap)return;
- ensure(cursor++);
- if(cursor<PRODUCTS.length)setTimeout(warmNext,constrained?1200:700);
+ const index=cursor++;
+ ensure(index);
+ const startedAt=performance.now();
+ const follow=()=>{
+  if(!delayedWarmupStarted||cursor>=PRODUCTS.length||(constrained&&cursor>=residentCap))return;
+  if(states[index].loaded||states[index].ready||performance.now()-startedAt>=4500){
+   setTimeout(warmNext,constrained?1600:900);
+  }else setTimeout(follow,300);
+ };
+ setTimeout(follow,900);
+}
+function beginWarmup(duringLoader=false){
+ if(delayedWarmupStarted)return;
+ delayedWarmupStarted=true;
+ // During the loader gate, start now; if a visitor enters Market before
+ // the gate handoff, retain V124's entrance-safe delayed fallback.
+ setTimeout(warmNext,duringLoader?120:2700);
 }
 function showQuick(i){const p=states[i].product;const mobile=innerWidth<=720;
  const img=quick.querySelector('img');img.src=BASE+'market-runtime/product-images/banners/'+p.slug+'-'+(mobile?'mobile':'desktop')+'.webp';
@@ -99,8 +117,16 @@ function reportReady(){if(!galleryReady)return;
 window.addEventListener('message',ev=>{
  if(ev.origin!==ORIGIN||!ev.data||typeof ev.data!=='object')return;
  if(ev.source===window.parent){
-  if(['byz:market:prewarm','byz:market:enter','byz:market:ping'].includes(ev.data.type)){
+  if(ev.data.type==='byz:market:prewarm-products'){
+   // Explicit loading-gate message from the main document. Prewarming actual
+   // product iframes here leaves them mounted for instant later navigation.
+   beginWarmup(true);
+   window.parent.postMessage({type:'byz:market:products-warmup-started',residentCap,total:PRODUCTS.length},ORIGIN);
+  }else if(['byz:market:prewarm','byz:market:enter','byz:market:ping'].includes(ev.data.type)){
    send(gallery,{type:'byz:market:enter'});reportReady();
+   // Only actual entry may start product WebGL contexts. Prewarm/ping
+   // signals sent during site startup must not spawn five hidden pages.
+   if(ev.data.type==='byz:market:enter')beginWarmup();
   }else if(ev.data.type==='byz:market:replay-intro'){
    // Native Aengel gallery animation, deferred until the real Market reveal.
    // Intentionally not sent during prewarming or product transitions.
@@ -137,6 +163,8 @@ window.__BYZ_MARKET_STATUS__=()=>({version:'86',galleryReady,productRequested:op
  preloaded:states.map(s=>({slug:s.product.slug,ready:s.ready,hero:s.hero,applied:s.applied,scene:s.scene,loaded:s.loaded}))});
 window.__BYZ_MARKET_SHOULD_ENTER__=true;
 if(activeIndex>=0)openProduct({index:activeIndex},{fromHistory:true});
-// V105: start warming the product pages at initial load, as in V103.
-setTimeout(warmNext,500);
+// V125: product WebGL iframes are allowed *during the visible loading GATE*,
+// after the original site reaches READY. Never start them at 0-30% startup.
+// Direct product routes still call openProduct/ensure above on demand.
+if(window.parent===window&&activeIndex<0)beginWarmup();
 })();

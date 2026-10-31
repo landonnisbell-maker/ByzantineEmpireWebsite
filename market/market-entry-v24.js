@@ -8,7 +8,7 @@ if(window.__BYZ_MARKET_V37__)return;
 window.__BYZ_MARKET_V37__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
-const SHELL=new URL('index.html?embedded=1&v=111.0',document.currentScript.src).href;
+const SHELL=new URL('index.html?embedded=1&v=125.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
 const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V111]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;

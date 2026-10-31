@@ -50,7 +50,7 @@
  imageUrls.push(base+'market-runtime/product-images/details/food-v81-garos-apaki-combo.png');
  imageUrls.push(base+'market-runtime/product-images/details/food-v81-garos-bottle.png');
  let complete=0;const total=docs.length+shared.length+imageUrls.length+galleryImages.length;
- const state={started:true,done:false,complete:0,total,errors:0};
+ const state={started:false,deferred:true,done:false,complete:0,total,errors:0};
  window.__BYZ_MARKET_PRELOAD_STATE__=state;
  const done=()=>{complete++;state.complete=complete;if(complete>=total){state.done=true;window.dispatchEvent(new Event('byz:market:preload-complete'))}};
  const fetchOne=async(url)=>{
@@ -64,7 +64,58 @@
  };
  const tasks=[...galleryImages.map(url=>()=>imageOne(url)),...docs.map(url=>()=>fetchOne(url)),...shared.map(url=>()=>fetchOne(url))];
  for(let url of imageUrls)tasks.push(()=>imageOne(url));
- // Gentle four-request queue; avoid delaying the actual 3D gateway startup.
- let idx=0;const next=async()=>{while(idx<tasks.length){const n=idx++;await tasks[n]()}};
- Promise.all([next(),next(),next(),next()]).catch(e=>{console.warn('[Byzantine market preload] stopped',e);state.done=true});
+ // V125: original scene initializes alone. Once it reaches READY, the
+ // loader remains visible (the visitor has not pressed Enter yet) and we
+ // begin caching page assets AND ask the hidden Market shell to initialize
+ // its real product pages in a staggered queue. Neither can hold the original
+ // enter button hostage on devices that fail WebGL or remote assets.
+ let idx=0,watcher=null,launchTimer=null,productWarmAcknowledged=false;
+ state.productWarmRequested=false;
+ state.productWarmAcknowledged=false;
+ const next=async()=>{while(idx<tasks.length){const n=idx++;await tasks[n]()}};
+ const gatewayReady=()=>{
+   const root=document.querySelector('body > .loader-module__y9w63G__loaderContainer');
+   const btn=root?.querySelector('[data-testid="loader-enter"]');
+   return !!(root&&btn&&!btn.disabled&&
+     (root.classList.contains('loader-module__y9w63G__gate')||
+      root.classList.contains('loader-module__y9w63G__exiting')));
+ };
+ const marketFrame=()=>document.getElementById('byz-v33-market-frame');
+ const requestProductWarm=()=>{
+   if(productWarmAcknowledged)return;
+   const f=marketFrame();
+   if(!f?.isConnected||!f.contentWindow)return;
+   try{
+     f.contentWindow.postMessage({type:'byz:market:prewarm-products'},location.origin);
+     state.productWarmRequested=true;
+   }catch(e){console.warn('[Byzantine market preload] product warm-up request',e)}
+ };
+ window.addEventListener('message',event=>{
+   if(event.origin!==location.origin||event.source!==marketFrame()?.contentWindow)return;
+   if(event.data?.type==='byz:market:products-warmup-started'){
+     productWarmAcknowledged=true;
+     state.productWarmAcknowledged=true;
+     state.productResidentCap=event.data.residentCap;
+   }
+ });
+ const launch=()=>{
+   if(state.started)return;
+   state.started=true;state.deferred=false;
+   // Keep low-priority asset caching gentle (at most 2 requests at once).
+   Promise.all([next(),next()]).catch(e=>{
+     console.warn('[Byzantine market preload] stopped',e);state.done=true;
+   });
+   requestProductWarm();
+ };
+ const check=()=>{
+   if(!gatewayReady())return;
+   if(!state.started&&launchTimer===null){
+     // Briefly settle the native renderer first; no extra GPU contexts
+     // launch while the original progress is still at 30%.
+     launchTimer=setTimeout(launch,300);
+   }
+   if(state.started&&!productWarmAcknowledged)requestProductWarm();
+   if(productWarmAcknowledged&&watcher!==null){clearInterval(watcher);watcher=null}
+ };
+ watcher=setInterval(check,450);check();
 })();
