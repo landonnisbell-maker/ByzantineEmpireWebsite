@@ -228,7 +228,7 @@
       frameClock = 0;
       return;
     }
-    const ease = 1 - Math.exp(-elapsed / 74);
+    const ease = 1 - Math.pow(0.91, elapsed / (1000 / 60));
     scroller.scrollTop = current + distance * ease;
     wheelFrame = requestAnimationFrame(animateWheel);
   }

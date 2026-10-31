@@ -121,17 +121,23 @@ body.byz-history-is-active nav[data-navbar] > button[aria-label="Portal"]{visibi
   #byz-history-v93 .byz-h-reveal{transform:none!important;opacity:1!important;}
 }
 
-/* V119: The existing Aengel 3D interior plane renders these pixels.
+/* V120: The existing Aengel 3D interior plane renders these pixels.
    Keep the actual HTML scroll container and Works Cited fully usable.
    A grouped opacity filter makes only the selected HTML sections invisible
    without changing their computed text/image styles used for native rasterization.
    Never activate until the native texture has been uploaded by the GPU. */
-body.byz-h-native-content-v119 #byz-history-v93 .byz-history-page > .byz-h-hero,
-body.byz-h-native-content-v119 #byz-history-v93 .byz-history-page > .byz-h-section:not(.byz-h-works),
-body.byz-h-native-content-v119 #byz-history-v93 .byz-history-page > .byz-h-footer{
+body.byz-h-native-content-v120 #byz-history-v93 .byz-history-page > .byz-h-hero,
+body.byz-h-native-content-v120 #byz-history-v93 .byz-history-page > .byz-h-section:not(.byz-h-works),
+body.byz-h-native-content-v120 #byz-history-v93 .byz-history-page > .byz-h-footer{
   filter:opacity(0)!important;
 }
-body.byz-h-native-content-v119 #byz-history-v93 .byz-h-works,
-body.byz-h-native-content-v119 #byz-history-v93 .byz-h-works *{
+body.byz-h-native-content-v120 #byz-history-v93 .byz-h-works,
+body.byz-h-native-content-v120 #byz-history-v93 .byz-h-works *{
   filter:none;
+}
+
+/* V120: Snapshot layout with the original final text positions regardless of
+   below-the-fold reveal classes; revert this flag in the same JS task. */
+#byz-history-v93.byz-h-capture-v120 .byz-h-reveal{
+ opacity:1!important;transform:none!important;transition:none!important;
 }
