@@ -53,7 +53,8 @@
   function currentMode() {
     const market = document.querySelector('#byz-v33-market');
     if (market && /byz-v33-open|byz-v106-direct|byz-v33-closing|byz-v110-recovering/.test(market.className)) return '';
-    if (document.querySelector('#byz-history-v93.byz-h-open')) return 'history';
+    // V115: The Historical Connection uses the original Aengel shader instead.
+    if (document.querySelector('#byz-history-v93.byz-h-open')) return '';
     if (!needsFallback) return '';
     if (document.querySelector('#byz-intro-v52.byz-intro-open')) return 'intro';
     if (document.querySelector('#byz-about-v40.byz-about-open')) return 'about';

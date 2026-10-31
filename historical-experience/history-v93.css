@@ -120,3 +120,18 @@ body.byz-history-is-active nav[data-navbar] > button[aria-label="Portal"]{visibi
   #byz-history-v93,#byz-history-v93 .byz-h-reveal{transition:none!important;}
   #byz-history-v93 .byz-h-reveal{transform:none!important;opacity:1!important;}
 }
+
+/* V115: Present the existing Aengel WebGPU fluid compositor above the
+   Historical Connection content, without changing its original shader.
+   The native canvas remains untouched on every other page. */
+body.byz-history-is-active .layout-module__r4ewHq__main canvas.byz-aengel-history-fluid-v115{
+  position:fixed!important;z-index:180028!important;
+  pointer-events:none!important;
+  opacity:.67;mix-blend-mode:screen;
+  mask-image:var(--byz-aengel-history-mask,radial-gradient(circle 0px at -100px -100px,transparent 100%,transparent 100%));
+  -webkit-mask-image:var(--byz-aengel-history-mask,radial-gradient(circle 0px at -100px -100px,transparent 100%,transparent 100%));
+  mask-composite:intersect;
+  -webkit-mask-composite:source-in;
+}
+/* Preserve the archival reading room's isolation and its pointer interactions. */
+#byz-history-v93 .byz-h-works-box{isolation:isolate;}
