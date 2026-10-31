@@ -1,22 +1,28 @@
 (()=>{
 'use strict';
-// V84: Preserve the native scene state machine, but cover its intermediate grey shader
-// with opaque black from the start of the Market crystal transition. Reveal the
-// already-warmed gallery as soon as the interior state AND gallery-ready are true.
+// V102: Preserve the native Market crystal camera zoom before covering the later
+// grey/refraction traversal with black. Reveal the already-warmed gallery when
+// the native interior state and gallery-ready signal are both true.
 if(window.__BYZ_MARKET_V34__)return;
 window.__BYZ_MARKET_V34__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
-const SHELL=new URL('index.html?embedded=1&v=84.0',document.currentScript.src).href;
+const SHELL=new URL('index.html?embedded=1&v=102.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
 const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V33]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
 let wanted=false,nativeReached=false,opened=false,recoveries=0,reconnectScheduled=false;
 let feedback=null,deadline=0;
+// The original WebGL entrance starts a 1.6s camera move; its shader traversal
+// begins at about 1.15s. Do NOT cover the initial crystal zoom.
+const CRYSTAL_ZOOM_VISIBLE_MS=1100;
+let zoomCoverTimer=0;
+function cancelZoomCover(){if(zoomCoverTimer){clearTimeout(zoomCoverTimer);zoomCoverTimer=0;}}
 const STYLES=`
 #byz-v33-market{position:fixed;inset:0;z-index:2147483000;opacity:0;visibility:visible;
  pointer-events:none;overflow:hidden;background:#000;transition:opacity .12s ease-out}
 #byz-v33-market.byz-v33-covering,#byz-v33-market.byz-v33-open{opacity:1;pointer-events:auto}
+#byz-v33-market.byz-v33-covering{transition:opacity .26s ease-in}
 #byz-v33-market>iframe{display:block;width:100%;height:100%;border:0;background:#000;opacity:0;transition:opacity .55s cubic-bezier(.22,1,.36,1);pointer-events:none}
 #byz-v33-market.byz-v33-open>iframe{opacity:1;pointer-events:auto}
 /* Keep the ORIGINAL website sound/menu controls over the Market frame.
@@ -76,8 +82,19 @@ function reveal(){
  requestAnimationFrame(()=>{if(opened)overlay.classList.add('byz-v33-open')});
  log('native interior COMPLETE — gallery revealed');
 }
-function prepareMarket(){
- wanted=true;coverWithBlack();if(frameLoaded){emit('byz:market:prewarm');emit('byz:market:ping');}
+function prepareMarket(preserveCrystalZoom=false){
+ // The gallery keeps prewarming in its existing iframe while the actual 3D
+ // crystal moves toward the camera. Only the late shader handoff is black.
+ if(!wanted && preserveCrystalZoom && !nativeReached){
+  cancelZoomCover();
+  zoomCoverTimer=setTimeout(()=>{
+   zoomCoverTimer=0;
+   if(wanted&&!nativeReached)coverWithBlack();
+  },CRYSTAL_ZOOM_VISIBLE_MS);
+ }
+ wanted=true;
+ if(!preserveCrystalZoom||nativeReached){cancelZoomCover();coverWithBlack();}
+ if(frameLoaded){emit('byz:market:prewarm');emit('byz:market:ping');}
  if(nativeReached){
   if(marketReady)reveal();else{
    status('Preparing Market…');
@@ -86,6 +103,7 @@ function prepareMarket(){
  }
 }
 function conceal(){
+ cancelZoomCover();
  opened=false;document.documentElement.classList.remove('byz-v34-market-active');overlay?.classList.remove('byz-v33-open','byz-v33-covering');overlay?.setAttribute('aria-hidden','true');emit('byz:market:close');clearStatus();
 }
 function closeMarket(options={}){
@@ -113,7 +131,9 @@ function applyNative(detail){
  const index=Number(detail.index??detail.projectIndex??-1);
  const state=detail.status;
  if(index===2&&(state==='entering'||state==='interior')){
-  nativeReached=state==='interior';prepareMarket();if(nativeReached)reveal();
+  nativeReached=state==='interior';
+  prepareMarket(state==='entering');
+  if(nativeReached)reveal();
  }else if(state==='exiting'||state==='exterior'||(index!==2&&wanted)){
   wanted=false;nativeReached=false;conceal();
  }

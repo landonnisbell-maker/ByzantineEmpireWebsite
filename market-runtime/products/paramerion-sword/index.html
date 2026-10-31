@@ -46,8 +46,9 @@ body.byz-product-leaving #byz-gallery{opacity:1;pointer-events:auto;}
 #byz-retry.visible{display:block}
 @media(prefers-reduced-motion:reduce){#byz-palia,#byz-gallery{transition-duration:.2s!important}}
 
-#byz-new-page-return{position:fixed!important;left:calc(clamp(16px,1.45vw,28px) + clamp(37px,3.25vw,53px) + 6px)!important;top:clamp(18px,2.15vh,28px)!important;z-index:55;display:inline-flex;justify-content:flex-start;align-items:center;width:auto!important;min-width:0!important;min-height:32px!important;padding:6px 5px!important;margin:0!important;background:transparent;border:0;border-radius:2px;color:rgba(255,255,255,.95);font:600 clamp(10px,.75vw,13px)/1.15 Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;pointer-events:auto;white-space:nowrap;transform:none!important;transition:color .18s ease,background-color .18s ease}
-#byz-new-page-return:hover{color:#fff;background:rgba(255,255,255,.075)}
+#byz-new-page-return{position:fixed!important;left:calc(clamp(16px,1.45vw,28px) + clamp(37px,3.25vw,53px) + 6px)!important;top:clamp(18px,2.15vh,28px)!important;z-index:55;display:inline-flex;justify-content:flex-start;align-items:center;width:auto!important;min-width:0!important;min-height:32px!important;padding:6px 5px!important;margin:0!important;background:transparent;border:0;border-radius:2px;color:rgba(255,255,255,.95);font:600 clamp(10px,.75vw,13px)/1.15 Manrope,Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;pointer-events:auto;white-space:nowrap;transform:none!important;transition:color .18s ease;-webkit-tap-highlight-color:transparent}
+/* V102: Keep the full clickable Close hit-target, but never paint a hover/click box. */
+#byz-new-page-return:hover,#byz-new-page-return:active,#byz-new-page-return:focus:not(:focus-visible){color:#fff;background:transparent!important;border-color:transparent!important;box-shadow:none!important;outline:none!important}
 #byz-new-page-return:focus-visible{outline:2px solid #fff;outline-offset:3px}
 @media(max-width:680px){#byz-new-page-return{left:54px!important;top:17px!important;min-width:0!important;min-height:30px!important;padding:5px 4px!important}}
 
