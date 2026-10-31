@@ -1,16 +1,16 @@
 (()=>{
 'use strict';
-// V111: extend visible crystal zoom by 185ms, and accelerate the real WebGL reverse on exit.
+// V112: retain V111 entrance zoom and 1.1s reverse cloth speed, but show the crystal earlier on exit.
 // Early-preloaded gallery crossfades before the raw prismatic interior.
-// On exit the gallery plays its real reverse intro at 2x speed,
-// then dissolves to the returning native crystal camera.
-if(window.__BYZ_MARKET_V35__)return;
-window.__BYZ_MARKET_V35__=true;
+// On exit the gallery plays its real reverse intro at the SAME 2x speed,
+// while the returning native crystal camera becomes visible much sooner.
+if(window.__BYZ_MARKET_V36__)return;
+window.__BYZ_MARKET_V36__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
 const SHELL=new URL('index.html?embedded=1&v=111.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
-const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V111]',...args)};
+const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V112]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
 let wanted=false,nativeReached=false,opened=false,recoveries=0,reconnectScheduled=false;
 let safetyCover=false;
@@ -25,13 +25,13 @@ let galleryPreloadCheck=null;
 // Use a 90ms spin pre-lead so the gallery is moving at reveal.
 // Shorten the opacity fade to 65ms so the native interior never flashes.
 const DIRECT_SPIN_LEAD_MS=90;
-// Exit mirrors entry with a faster, 1.1-second reversal of the true
-// cloth/ribbon renderer. Trigger native return early enough for its traversal
-// to be underway before the gallery fades out.
+// V112: preserve the same 1.1-second cloth/ribbon reverse and 320ms native
+// camera trigger from V111. Overlap the camera with the cloths by starting
+// the gallery-to-crystal dissolve at 560ms instead of waiting 1030ms.
 const REVERSE_GALLERY_MS=1100;
 const RETURN_NATIVE_START_MS=320;
-const RETURN_FADE_DELAY_MS=REVERSE_GALLERY_MS-70;
-const RETURN_FADE_MS=300;
+const RETURN_FADE_DELAY_MS=560;
+const RETURN_FADE_MS=390;
 const RETURN_SAFETY_MS=3200;
 const STYLES=`
 #byz-v33-market{position:fixed;inset:0;z-index:2147483000;opacity:0;visibility:visible;
@@ -42,10 +42,10 @@ const STYLES=`
 #byz-v33-market.byz-v106-direct{opacity:1;pointer-events:auto;transition:opacity .065s cubic-bezier(.22,1,.36,1)}
 #byz-v33-market.byz-v33-covering{transition:opacity .26s ease-in}
 #byz-v33-market.byz-v33-closing{transition:none}
-/* V111: after the gallery's accelerated reverse WebGL animation, unveil the
-   retreating crystal camera in a short reverse-entry crossfade. */
+/* V112: unveil the retreating crystal while the reverse WebGL cloths are
+   still moving at the unchanged V111 speed. */
 #byz-v33-market.byz-v108-returning{opacity:0;pointer-events:none;
- transition:opacity .30s cubic-bezier(.42,0,.58,1)}
+ transition:opacity .39s cubic-bezier(.42,0,.58,1)}
 #byz-v33-market>iframe{display:block;width:100%;height:100%;border:0;background:#000;opacity:0;pointer-events:none}
 /* A cheap, fixed black veil fades over a PRE-RENDERED gallery frame. The iframe
    itself must never jump from transparent to opaque on its first WebGL paint. */
@@ -199,8 +199,8 @@ function finishClosing(){
 }
 function beginReturnFade(){
  if(!closing||!overlay?.isConnected)return;
- // The gallery's accelerated WebGL ribbon/cloth motion is almost fully rewound.
- // The native crystal camera is already retreating beneath this dissolve.
+ // The WebGL cloths are still moving backwards at their unchanged speed.
+ // Fade them into the already-retreating native crystal camera sooner.
  document.documentElement.classList.remove('byz-v35-market-active');
  overlay.classList.add('byz-v108-returning');
  log('crossfade gallery back into native reversing crystal camera');
@@ -248,7 +248,7 @@ window.__BYZ_V24_OPEN_MARKET__=()=>{
  prepareMarket();return false;
 };
 window.__BYZ_V24_CLOSE_MARKET__=()=>closeMarket();
-window.__BYZ_V24_STATUS__=()=>({version:'111.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
+window.__BYZ_V24_STATUS__=()=>({version:'112.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
 function applyNative(detail){
  if(!detail)return;
  const index=Number(detail.index??detail.projectIndex??-1);
