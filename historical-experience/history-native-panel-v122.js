@@ -63,15 +63,18 @@
       this.nativeScrollPx=px;
       // Same smoothed scroll position as the 3D plane: no additional easing.
       const top=Math.round((this.worksStart-px)*100)/100;
-      if(this.lastWorksTop!==top){
+      const h=innerHeight;
+      // V128: the citation panel is an entire HTML document layer, not part
+      // of the native shader. Do NOT animate its compositor layer on every
+      // frame while it is thousands of pixels outside the viewport. The native
+      // Aengel scroll interpolation still drives the visible panel directly.
+      const inRange=top<h+160&&top+(this.worksHeight||0)>-160;
+      if(inRange&&this.lastWorksTop!==top){
         this.lastWorksTop=top;
         this.worksNode.style.transform=`translate3d(-50%, ${top}px, 0)`;
       }
-      const h=innerHeight;
-      // Don't paint/capture a massive offscreen citation block.
-      const onScreen=top<h+80&&top+(this.worksHeight||0)>-80;
-      if(this.worksNode.dataset.nativeShown!==(onScreen?'1':'0')){
-        this.worksNode.dataset.nativeShown=onScreen?'1':'0';
+      if(this.worksNode.dataset.nativeShown!==(inRange?'1':'0')){
+        this.worksNode.dataset.nativeShown=inRange?'1':'0';
       }
     }
   };
@@ -264,9 +267,16 @@
     if(isActive()){
       active=true;
       if(!bridge.ready)dirty=true;
-      // Native store drives the plane. Reading HTML scrollTop here caused V120 jitter.
+      // V128: Aengel's native controller owns the scrolling. While the GPU
+      // texture is active the source HTML is intentionally content-visibility:
+      // hidden; reading its scrollHeight would report the skipped-layout size
+      // and provoke a full 10-million-pixel repaint/upload every 150ms.
       bridge.scrollPx=0;
-      if(dirty || !bridge.ready || scroller.clientWidth!==lastWidth || scroller.clientHeight!==lastHeight || scroller.scrollHeight!==lastDocHeight)schedule();
+      if(bridge.nativeActive){
+        if(dirty)schedule();
+      }else if(dirty || !bridge.ready || scroller.clientWidth!==lastWidth || scroller.clientHeight!==lastHeight || scroller.scrollHeight!==lastDocHeight){
+        schedule();
+      }
     } else if(active){
       active=false;bridge.ready=false;bridge.gpuUploaded=false;bridge.deactivate();
     }

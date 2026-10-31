@@ -183,3 +183,16 @@ body.byz-h-native-content-v121 #byz-history-v93.byz-h-capture-v121 .byz-history-
 body.byz-h-native-content-v121 #byz-history-v93 .byz-history-scroll{
   visibility:hidden!important;
 }
+
+/* V128 native source suspension. Introduction and About Us draw their GPU page
+   without painting a separate, enormous HTML scroller in parallel. Once the
+   Historical texture is uploaded, skip its DOM layout/paint entirely. The
+   historical content remains in the DOM and returns on native teardown. */
+body.byz-h-native-content-v121 #byz-history-v93 .byz-history-scroll{
+  content-visibility:hidden!important;
+}
+/* Allow the original one-time capture routine to measure its source again
+   only when a genuine image/font/viewport change invalidates the texture. */
+body.byz-h-native-content-v121 #byz-history-v93.byz-h-capture-v121 .byz-history-scroll{
+  content-visibility:visible!important;
+}
