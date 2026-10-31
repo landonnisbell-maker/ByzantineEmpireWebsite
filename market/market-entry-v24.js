@@ -7,12 +7,14 @@ if(window.__BYZ_MARKET_V34__)return;
 window.__BYZ_MARKET_V34__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
-const SHELL=new URL('index.html?embedded=1&v=102.0',document.currentScript.src).href;
+const SHELL=new URL('index.html?embedded=1&v=103.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
-const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V33]',...args)};
+const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V103]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
 let wanted=false,nativeReached=false,opened=false,recoveries=0,reconnectScheduled=false;
 let feedback=null,deadline=0;
+// V103: replay the gallery's original Aengel intro only once it is actually visible.
+let marketRevealEpoch=0;
 // The original WebGL entrance starts a 1.6s camera move; its shader traversal
 // begins at about 1.15s. Do NOT cover the initial crystal zoom.
 const CRYSTAL_ZOOM_VISIBLE_MS=1100;
@@ -79,7 +81,17 @@ function reveal(){
  if(!wanted||!nativeReached||!marketReady||opened)return;
  mount();if(!overlay?.isConnected)return;
  clearStatus();opened=true;document.documentElement.classList.add('byz-v34-market-active');overlay.setAttribute('aria-hidden','false');emit('byz:market:enter');
- requestAnimationFrame(()=>{if(opened)overlay.classList.add('byz-v33-open')});
+ const revealEpoch=++marketRevealEpoch;
+ requestAnimationFrame(()=>{
+  if(!opened||revealEpoch!==marketRevealEpoch)return;
+  overlay.classList.add('byz-v33-open');
+  // The cards were prewarmed offscreen. Restart their native (2.2s) spin
+  // just after the iframe fade begins; never restart the 3D/gallery assets.
+  setTimeout(()=>{
+   if(opened&&wanted&&nativeReached&&revealEpoch===marketRevealEpoch)
+    emit('byz:market:replay-intro');
+  },120);
+ });
  log('native interior COMPLETE — gallery revealed');
 }
 function prepareMarket(preserveCrystalZoom=false){
@@ -103,6 +115,7 @@ function prepareMarket(preserveCrystalZoom=false){
  }
 }
 function conceal(){
+ marketRevealEpoch++;
  cancelZoomCover();
  opened=false;document.documentElement.classList.remove('byz-v34-market-active');overlay?.classList.remove('byz-v33-open','byz-v33-covering');overlay?.setAttribute('aria-hidden','true');emit('byz:market:close');clearStatus();
 }
@@ -123,7 +136,7 @@ window.__BYZ_V24_OPEN_MARKET__=()=>{
  prepareMarket();return false;
 };
 window.__BYZ_V24_CLOSE_MARKET__=()=>closeMarket();
-window.__BYZ_V24_STATUS__=()=>({version:'34.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
+window.__BYZ_V24_STATUS__=()=>({version:'103.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
 function applyNative(detail){
  if(!detail)return;
  // Native store drives every one of the original camera transitions:

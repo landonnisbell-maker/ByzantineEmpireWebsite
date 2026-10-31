@@ -118,6 +118,10 @@ window.addEventListener('message',event=>{
   if(['byz:market:enter','byz:market:prewarm','byz:market:ping'].includes(event.data?.type)){
     if(ready)send('byz:market:gallery-ready');else check();
   }
+  if(event.data?.type==='byz:market:replay-intro' && ready &&
+     !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    window.dispatchEvent(new Event('byz:market:replay-intro'));
+  }
 });
 window.__BYZ_GALLERY_STATUS__=()=>({version:'32.0',clicked,ready});
 const timer=setInterval(check,180);

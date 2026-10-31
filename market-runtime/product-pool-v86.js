@@ -98,6 +98,10 @@ window.addEventListener('message',ev=>{
  if(ev.source===window.parent){
   if(['byz:market:prewarm','byz:market:enter','byz:market:ping'].includes(ev.data.type)){
    send(gallery,{type:'byz:market:enter'});reportReady();
+  }else if(ev.data.type==='byz:market:replay-intro'){
+   // Native Aengel gallery animation, deferred until the real Market reveal.
+   // Intentionally not sent during prewarming or product transitions.
+   if(!open)send(gallery,{type:'byz:market:replay-intro'});
   }else if(ev.data.type==='byz:market:close'){exitProduct({fromHistory:true});send(gallery,{type:'byz:market:close'})}
   return;
  }
