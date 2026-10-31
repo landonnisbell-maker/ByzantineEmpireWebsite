@@ -30,6 +30,11 @@
  function scan(){queued=false;document.querySelectorAll(sel).forEach(root=>{
   const header=root.querySelector('.loader-module__y9w63G__header');if(header)brand(header);
   const card=root.querySelector('.loader-module__y9w63G__ticketCard');if(card)ticket(card);
+  const zone=root.querySelector('.loader-module__y9w63G__progressZone');
+  if(zone && !zone.querySelector('.byz-v105-device-note')){
+   const note=el('p','byz-v105-device-note','This website may load slower or perform worse on lower end devices');
+   zone.appendChild(note);
+  }
  });}
  function queue(){if(queued)return;queued=true;requestAnimationFrame(scan);}
  function init(){scan();new MutationObserver(queue).observe(document.body,{childList:true,subtree:true});}

@@ -24,7 +24,7 @@ const constrained=matchMedia('(pointer:coarse)').matches||((navigator.deviceMemo
 // Full-screen WebGL canvases cost GPU RAM. On constrained hardware, keep two
 // permanently cached and show an instant lightweight product preview for others.
 const residentCap=constrained?2:5;
-let recent=[],cursor=0,statusTimer=null,failTimer=null,warmScheduled=false;
+let recent=[],cursor=0,statusTimer=null,failTimer=null;
 const send=(frame,msg)=>{try{frame?.contentWindow?.postMessage(msg,ORIGIN)}catch(e){log('postMessage',e)}};
 function clearTimers(){clearTimeout(statusTimer);clearTimeout(failTimer);statusTimer=failTimer=null;status.classList.remove('visible')}
 function indexFor(d){
@@ -51,16 +51,12 @@ function ensure(i){
  s.frame=f;s.started=true;pool.append(f);touch(i);trim(i);f.src=urlFor(s.product);log('warming',s.product.slug);return f;
 }
 function warmNext(){
- if(cursor>=PRODUCTS.length||(constrained&&cursor>=residentCap))return;
- // Never compete with opening a real product for CPU, bandwidth or GPU RAM.
- if(open){setTimeout(warmNext,1600);return;}
+ if(cursor>=PRODUCTS.length)return;
+ // V105: Restore V103 background product warmup during the ORIGINAL loading screen.
+ // Lower-end devices retain the existing residentCap to limit GPU memory use.
+ if(constrained&&cursor>=residentCap)return;
  ensure(cursor++);
- if(cursor<PRODUCTS.length)setTimeout(warmNext,constrained?3200:1900);
-}
-function beginWarmAfterVisible(){
- if(warmScheduled)return;warmScheduled=true;
- // Gallery-first: don't start 3D product canvases under the main site's loader.
- setTimeout(warmNext,850);
+ if(cursor<PRODUCTS.length)setTimeout(warmNext,constrained?1200:700);
 }
 function showQuick(i){const p=states[i].product;const mobile=innerWidth<=720;
  const img=quick.querySelector('img');img.src=BASE+'market-runtime/product-images/banners/'+p.slug+'-'+(mobile?'mobile':'desktop')+'.webp';
@@ -103,9 +99,7 @@ function reportReady(){if(!galleryReady)return;
 window.addEventListener('message',ev=>{
  if(ev.origin!==ORIGIN||!ev.data||typeof ev.data!=='object')return;
  if(ev.source===window.parent){
-  if(ev.data.type==='byz:market:visible'){
-   beginWarmAfterVisible();
-  }else if(['byz:market:prewarm','byz:market:enter','byz:market:ping'].includes(ev.data.type)){
+  if(['byz:market:prewarm','byz:market:enter','byz:market:ping'].includes(ev.data.type)){
    send(gallery,{type:'byz:market:enter'});reportReady();
   }else if(ev.data.type==='byz:market:replay-intro'){
    // Native Aengel gallery animation, deferred until the real Market reveal.
@@ -140,5 +134,6 @@ window.__BYZ_MARKET_STATUS__=()=>({version:'86',galleryReady,productRequested:op
  preloaded:states.map(s=>({slug:s.product.slug,ready:s.ready,hero:s.hero,applied:s.applied,scene:s.scene,loaded:s.loaded}))});
 window.__BYZ_MARKET_SHOULD_ENTER__=true;
 if(activeIndex>=0)openProduct({index:activeIndex},{fromHistory:true});
-// V104: do not warm all five heavy GPU product pages during the main loader.
+// V105: start warming the product pages at initial load, as in V103.
+setTimeout(warmNext,500);
 })();
