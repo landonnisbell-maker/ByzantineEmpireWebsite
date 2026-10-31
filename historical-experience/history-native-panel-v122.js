@@ -10,7 +10,7 @@
   'use strict';
   if (window.__BYZ_HISTORY_FRAME_BRIDGE_V121__) return;
   const bridge = window.__BYZ_HISTORY_FRAME_BRIDGE_V121__ = {
-    canvas:document.createElement('canvas'), ready:false, version:0, gpuUploaded:false,
+    canvas:document.createElement('canvas'), tiles:[], tileCount:0, ready:false, version:0, gpuUploaded:false,
     nativeScrollPx:0, worksStart:0, worksHeight:0, nativeActive:false,
     activate(){
       if (!this.ready || !this.gpuUploaded || !isActive()) return;
@@ -75,7 +75,8 @@
       }
     }
   };
-  const ctx = bridge.canvas.getContext('2d', { alpha:true, desynchronized:true });
+  let ctx = bridge.canvas.getContext('2d', { alpha:true, desynchronized:true });
+  let sliceTop=0, sliceBottom=Infinity;
   if (!ctx) return;
   ctx.imageSmoothingEnabled=true;
   ctx.imageSmoothingQuality='high';
@@ -105,23 +106,41 @@
     // Rectangles outside the screen MUST be included in a full-page snapshot.
     const box=scroller.getBoundingClientRect();
     const top=r.top-box.top+scroller.scrollTop;
-    return top+r.height>=0&&top<=bridge.documentPx&&r.right>=box.left-40&&r.left<=box.right+40;
+    return top+r.height>=sliceTop&&top<=sliceBottom&&r.right>=box.left-40&&r.left<=box.right+40;
   }
   function resize() {
     const width=Math.max(1,Math.round(scroller.clientWidth));
     const viewport=Math.max(1,Math.round(scroller.clientHeight));
     const doc=Math.max(viewport,Math.round(scroller.scrollHeight));
-    // Aengel's native content texture is similarly capped at 8192px high.
-    // Cap total allocation too to protect low-end and integrated GPUs.
-    const maxTexture=gpuMaxTexture, maxPixels=gpuMaxPixels;
-    const preferredScale=Math.min(1.1,Math.max(.8,Math.min(devicePixelRatio||1,1.1)));
-    const scale=Math.min(preferredScale,maxTexture/doc,maxTexture/width,Math.sqrt(maxPixels/(width*doc)));
-    const w=Math.max(1,Math.round(width*scale)), h=Math.max(1,Math.round(doc*scale));
-    if (bridge.canvas.width!==w||bridge.canvas.height!==h) {
-      bridge.canvas.width=w;bridge.canvas.height=h;
+    // One massive image was compressing every letter and photograph.  Divide
+    // the DOCUMENT (not the viewport) into constant-resolution sections.
+    // Aengel still moves/bends ONE native plane, with zero per-scroll uploads.
+    // Four WebGPU-compatible texture bindings, no extra GPU adapter request.
+    const count=Math.min(4,Math.max(1,Math.ceil(doc/3400)));
+    const memory=Number(navigator.deviceMemory)||4;
+    const desiredScale=memory>=6&&navigator.hardwareConcurrency>=6?1.45:1.0;
+    const tilePixelBudget=memory>=6?9500000:6000000;
+    const tileDocumentH=doc/count;
+    const scale=Math.max(.55,Math.min(desiredScale,8192/Math.max(width,tileDocumentH),Math.sqrt(tilePixelBudget/(width*tileDocumentH))));
+    const w=Math.max(1,Math.round(width*scale));
+    const h=Math.max(1,Math.round(tileDocumentH*scale));
+    bridge.documentPx=doc;
+    bridge.viewportPx=viewport;
+    bridge.tileCount=count;
+    bridge.tileHeightPx=tileDocumentH;
+    bridge.tileScaleX=w/width;
+    bridge.tileScaleY=h/tileDocumentH;
+    for(let k=0;k<count;k++){
+      let tile=bridge.tiles[k];
+      if(!tile){tile=bridge.tiles[k]=document.createElement('canvas');}
+      if(tile.width!==w)tile.width=w;
+      if(tile.height!==h)tile.height=h;
     }
-    bridge.documentPx=doc;bridge.viewportPx=viewport;
-    ctx.setTransform(w/width,0,0,h/doc,0,0);
+    bridge.tiles.length=count;
+    // The legacy texture is a transparent 1x1 fallback. It is NEVER sampled
+    // while the six-section historical atlas is active.
+    if(bridge.canvas.width!==1)bridge.canvas.width=1;
+    if(bridge.canvas.height!==1)bridge.canvas.height=1;
     return {width,viewport,doc};
   }
 
@@ -239,12 +258,28 @@
       ctx.clearRect(0,0,bridge.canvas.width,bridge.canvas.height);
       ctx.restore();
       const box=scroller.getBoundingClientRect();
-      ctx.save();
-      // Coordinates of DOM text are viewport-relative; convert to the full
-      // scroll-document origin, without changing the actual HTML scrollTop.
-      ctx.translate(-box.left,scroller.scrollTop-box.top);
-      root.querySelectorAll('.byz-history-page > .byz-h-hero, .byz-history-page > .byz-h-section:not(.byz-h-works), .byz-history-page > .byz-h-footer').forEach(drawBranch);
-      ctx.restore();
+      const oldCtx=ctx;
+      for(let tileIndex=0;tileIndex<bridge.tileCount;tileIndex++){
+        sliceTop=tileIndex*bridge.tileHeightPx;
+        sliceBottom=(tileIndex+1)*bridge.tileHeightPx;
+        ctx=bridge.tiles[tileIndex].getContext('2d',{alpha:true,desynchronized:true});
+        if(!ctx)throw Error('Canvas context unavailable for historical section '+tileIndex);
+        ctx.setTransform(1,0,0,1,0,0);
+        ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+        ctx.imageSmoothingEnabled=true;
+        ctx.imageSmoothingQuality='high';
+        if('fontKerning' in ctx)ctx.fontKerning='normal';
+        if('textRendering' in ctx)ctx.textRendering='optimizeLegibility';
+        ctx.save();
+        // Capture DOM coordinates at the same resolution as Introduction,
+        // clipped to this section. No HTML canvas changes while scrolling.
+        const sx=bridge.tileScaleX,sy=bridge.tileScaleY;
+        ctx.setTransform(sx,0,0,sy,-box.left*sx,(scroller.scrollTop-box.top-sliceTop)*sy);
+        root.querySelectorAll('.byz-history-page > .byz-h-hero, .byz-history-page > .byz-h-section:not(.byz-h-works), .byz-history-page > .byz-h-footer').forEach(drawBranch);
+        ctx.restore();
+      }
+      ctx=oldCtx;
+      sliceTop=0;sliceBottom=Infinity;
       bridge.version++;
       bridge.ready=true;
       lastCapture=performance.now();
@@ -256,6 +291,7 @@
       console.warn('[V121] Historical canvas atlas failed; retaining HTML',e);
     } finally {
       root.classList.remove('byz-h-capture-v121');
+      ctx=bridge.canvas.getContext('2d');sliceTop=0;sliceBottom=Infinity;
       capturing=false;
     }
   }

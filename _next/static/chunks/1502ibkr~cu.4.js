@@ -441,13 +441,24 @@ for(let k=0;k<5;k++){
  slide=slide.add(row.mul(missing).mul(38));
 }
 return{height:height,enabled:enabled,images:images,texts:texts,mask:(0,M.mix)((0,M.float)(1),alpha,enabled),slide:slide.mul(enabled)};
-})()),(0,M.texture)(aK,(0,M.uv)().add((0,M.vec2)(0,F.team.slide.div(F.team.height))))),BYZGallery=(F.gallery=(function(){
+})()),(0,M.texture)(aK,(0,M.uv)().add((0,M.vec2)(0,F.team.slide.div(F.team.height))))),BYZGallery=(F.history=(function(){
+ const tiles=Array.from({length:4},()=>{let c=document.createElement('canvas');c.width=c.height=1;let t=new P.CanvasTexture(c);t.colorSpace=P.SRGBColorSpace;t.minFilter=P.LinearFilter;t.magFilter=P.LinearFilter;t.generateMipmaps=!1;return t});
+ const enabled=(0,M.uniform)(0),count=(0,M.uniform)(1),uv=(0,M.uv)(),fromTop=(0,M.float)(1).sub(uv.y).mul(count);
+ let sample=(0,M.vec4)(0,0,0,0);
+ for(let k=0;k<4;k++){
+   const localUV=(0,M.vec2)(uv.x,(0,M.float)(k+1).sub(fromTop));
+   const pixel=(0,M.texture)(tiles[k],localUV);
+   const mask=(0,M.step)(k,fromTop).mul((0,M.step)(fromTop,k+1));
+   sample=(0,M.mix)(sample,pixel,mask);
+ }
+ return{tiles,enabled,count,sample};
+})(),F.gallery=(function(){
 // Atlas cells are 900x500, five columns, three rows. Each gallery
 // stores an extra copy of frame zero for a seamless final slide.
 const tex=new P.CanvasTexture(document.createElement("canvas"));tex.colorSpace=P.SRGBColorSpace;tex.minFilter=P.LinearFilter;tex.magFilter=P.LinearFilter;tex.generateMipmaps=!1;
 let enabled=(0,M.uniform)(0),slides=[(0,M.uniform)(0),(0,M.uniform)(0),(0,M.uniform)(0)];
 let uv=(0,M.uv)(),px=uv.x.mul(1573).add(336),py=(0,M.float)(1).sub(uv.y).mul(F.team.height);
-let result=_.rgb;
+let result=(0,M.mix)(_.rgb,F.history.sample.rgb,F.history.enabled);
 for(let k=0;k<3;k++){
   let x=530,y=5295+k*690,w=1134,h=600;
   let inside=(0,M.smoothstep)(x,x+2,px).mul((0,M.smoothstep)(x+w-2,x+w,px).oneMinus())
@@ -457,7 +468,7 @@ for(let k=0;k<3;k++){
   result=(0,M.mix)(result,image.rgb,inside.mul(image.a).mul(enabled));
 }
 return{texture:tex,enabled:enabled,slides:slides,color:result};
-})()),V=az({rgb:F.gallery.color,alpha:_.a.mul(F.team.mask),shared:F,grainScale:(0,M.uniform)(new P.Vector2(7,18)),edgeGlow:!0}),L=new P.Mesh(new P.PlaneGeometry(1,1),V);L.position.set(aP,0,-12),L.layers.set(30),L.renderOrder=-1e3,L.frustumCulled=!1;let I=new a$(F),k=(i=new a$(F),u=new a$(F),m=(0,M.uniform)(0),c=(0,M.uniform)(new P.Vector2(1,1)),d=(0,M.uniform)(0),f=az({rgb:(0,M.vec3)(1,1,1),alpha:(0,M.step)((0,M.uv)().x,m).mul(.7).add(.18),shared:F,offsetY:d,grainScale:c}),(p=new P.Mesh(new P.PlaneGeometry(1,1),f)).layers.set(30),p.renderOrder=-999,p.frustumCulled=!1,p.visible=!1,h=[],g=[],v=0,x=-1,y=0,b=null,w=!1,S=0,A=0,R=null,C=0,T=()=>{h.forEach(e=>e.dispose()),h=[],g=[]},E=(e,t)=>{let r=h[t];r&&e.setTexture(r.texture,g[t]??1)},N=e=>{if(A=e,i.slide.value=e,0===e||h.length<2){u.slide.value=1,u.mesh.visible=!1;return}let t=(v+(e>0?-1:1)+h.length)%h.length;x!==t&&(x=t,E(u,t)),u.slide.value=e>0?e-1:e+1,u.mesh.visible=!0},j=(e,t)=>{R?.kill();let r={s:A};R=ea.gsap.to(r,{s:e,duration:t,ease:"power3.out",onUpdate:()=>N(r.s),onComplete:()=>{R=null,0!==e&&x>=0&&E(i,v=x),N(0),y=0,m.value=0}})},{meshes:[i.mesh,u.mesh,p],setContent(e,t,r,o){let a=C+=1;if(R?.kill(),R=null,T(),v=0,x=-1,y=0,w=!1,A=0,i.slide.value=0,u.slide.value=0,u.mesh.visible=!1,!e.length||!t){b=null,i.hide(),u.hide(),p.visible=!1;return}(b=t,h=e.map(aq),g=e.map(()=>1),h.forEach((e,t)=>{e.ready.then(e=>{a===C&&(g[t]=e,t===v&&E(i,v),t===x&&E(u,x))}).catch(()=>{})}),i.place(t,o),u.place(t,o),E(i,0),i.mesh.visible=!0,r&&e.length>1)?(p.geometry.dispose(),p.geometry=new P.PlaneGeometry(r.w*aw,r.h*aw),p.position.x=aO(r),p.position.y=aB(r,o),d.value=p.position.y,c.value.set(r.w*aU,r.h*aG),p.visible=!0,m.value=0):p.visible=!1},tick(e){h.length<2||w||R||(m.value=Math.min(1,(y+=e)/5),y>=5&&j(-1,.9))},contains:e=>!!b&&e.x>=b.x&&e.x<=b.x+b.w&&e.y>=b.y&&e.y<=b.y+b.h,beginDrag(e){!(h.length<2)&&b&&(w=!0,R?.kill(),R=null,S=e-A*b.w)},moveDrag(e){if(!w||!b)return;let t=(e-S)/b.w;for(;t>=1;)E(i,v=(v+h.length-1)%h.length),S+=b.w,t-=1;for(;t<=-1;)E(i,v=(v+1)%h.length),S-=b.w,t+=1;N(t)},endDrag(){w&&(w=!1,y=0,j(Math.abs(A)>=.5?Math.sign(A):0,.5))},get dragging(){return w},dispose(){C+=1,R?.kill(),T(),i.dispose(),u.dispose(),p.geometry.dispose(),f.dispose()}});L.add(I.mesh,...k.meshes);let D=(e=F,(t=document.createElement("canvas")).width=168,t.height=88,r=t.getContext("2d"),(o=()=>{r.setTransform(1,0,0,1,0,0),r.clearRect(0,0,t.width,t.height),r.scale(2,2),r.font=aN,r.fillStyle=ak,r.textBaseline="middle",r.fillText("CLOSE".split("").join(" "),0,22)})(),(a=new P.CanvasTexture(t)).colorSpace=P.SRGBColorSpace,a.magFilter=P.LinearFilter,l=az({rgb:(n=(0,M.texture)(a)).rgb,alpha:n.a,shared:e,bend:!1,grainScale:(0,M.uniform)(new P.Vector2(3,1))}),(s=new P.Mesh(new P.PlaneGeometry(84*aw,44*aw),l)).position.set((201-e6.DESIGN_REFERENCE_WIDTH/2)*aw,(e6.DESIGN_REFERENCE_HEIGHT/2-207.64)*aw,-12),s.layers.set(30),s.renderOrder=-999,s.frustumCulled=!1,{mesh:s,repaint(){o(),a.needsUpdate=!0},dispose(){s.geometry.dispose(),n.value?.dispose(),l.dispose()}});return{mesh:L,material:V,texNode:_,shared:F,hero:I,carousel:k,pinned:D}},[]),{uReveal:N,uBendAmp:j,uFacingY:F,uBendWidth:_}=R,V=(0,x.useCallback)(()=>{c.current=aM/window.innerHeight,ab.useInteriorScrollStore.getState().setMaxPx(f.current/c.current)},[]),L=(0,au.useResizeGateStore)(e=>e.settleEpoch);(0,x.useEffect)(()=>{V()},[V,L]),
+})()),V=az({rgb:F.gallery.color,alpha:(0,M.mix)(_.a,F.history.sample.a,F.history.enabled).mul(F.team.mask),shared:F,grainScale:(0,M.uniform)(new P.Vector2(7,18)),edgeGlow:!0}),L=new P.Mesh(new P.PlaneGeometry(1,1),V);L.position.set(aP,0,-12),L.layers.set(30),L.renderOrder=-1e3,L.frustumCulled=!1;let I=new a$(F),k=(i=new a$(F),u=new a$(F),m=(0,M.uniform)(0),c=(0,M.uniform)(new P.Vector2(1,1)),d=(0,M.uniform)(0),f=az({rgb:(0,M.vec3)(1,1,1),alpha:(0,M.step)((0,M.uv)().x,m).mul(.7).add(.18),shared:F,offsetY:d,grainScale:c}),(p=new P.Mesh(new P.PlaneGeometry(1,1),f)).layers.set(30),p.renderOrder=-999,p.frustumCulled=!1,p.visible=!1,h=[],g=[],v=0,x=-1,y=0,b=null,w=!1,S=0,A=0,R=null,C=0,T=()=>{h.forEach(e=>e.dispose()),h=[],g=[]},E=(e,t)=>{let r=h[t];r&&e.setTexture(r.texture,g[t]??1)},N=e=>{if(A=e,i.slide.value=e,0===e||h.length<2){u.slide.value=1,u.mesh.visible=!1;return}let t=(v+(e>0?-1:1)+h.length)%h.length;x!==t&&(x=t,E(u,t)),u.slide.value=e>0?e-1:e+1,u.mesh.visible=!0},j=(e,t)=>{R?.kill();let r={s:A};R=ea.gsap.to(r,{s:e,duration:t,ease:"power3.out",onUpdate:()=>N(r.s),onComplete:()=>{R=null,0!==e&&x>=0&&E(i,v=x),N(0),y=0,m.value=0}})},{meshes:[i.mesh,u.mesh,p],setContent(e,t,r,o){let a=C+=1;if(R?.kill(),R=null,T(),v=0,x=-1,y=0,w=!1,A=0,i.slide.value=0,u.slide.value=0,u.mesh.visible=!1,!e.length||!t){b=null,i.hide(),u.hide(),p.visible=!1;return}(b=t,h=e.map(aq),g=e.map(()=>1),h.forEach((e,t)=>{e.ready.then(e=>{a===C&&(g[t]=e,t===v&&E(i,v),t===x&&E(u,x))}).catch(()=>{})}),i.place(t,o),u.place(t,o),E(i,0),i.mesh.visible=!0,r&&e.length>1)?(p.geometry.dispose(),p.geometry=new P.PlaneGeometry(r.w*aw,r.h*aw),p.position.x=aO(r),p.position.y=aB(r,o),d.value=p.position.y,c.value.set(r.w*aU,r.h*aG),p.visible=!0,m.value=0):p.visible=!1},tick(e){h.length<2||w||R||(m.value=Math.min(1,(y+=e)/5),y>=5&&j(-1,.9))},contains:e=>!!b&&e.x>=b.x&&e.x<=b.x+b.w&&e.y>=b.y&&e.y<=b.y+b.h,beginDrag(e){!(h.length<2)&&b&&(w=!0,R?.kill(),R=null,S=e-A*b.w)},moveDrag(e){if(!w||!b)return;let t=(e-S)/b.w;for(;t>=1;)E(i,v=(v+h.length-1)%h.length),S+=b.w,t-=1;for(;t<=-1;)E(i,v=(v+1)%h.length),S-=b.w,t+=1;N(t)},endDrag(){w&&(w=!1,y=0,j(Math.abs(A)>=.5?Math.sign(A):0,.5))},get dragging(){return w},dispose(){C+=1,R?.kill(),T(),i.dispose(),u.dispose(),p.geometry.dispose(),f.dispose()}});L.add(I.mesh,...k.meshes);let D=(e=F,(t=document.createElement("canvas")).width=168,t.height=88,r=t.getContext("2d"),(o=()=>{r.setTransform(1,0,0,1,0,0),r.clearRect(0,0,t.width,t.height),r.scale(2,2),r.font=aN,r.fillStyle=ak,r.textBaseline="middle",r.fillText("CLOSE".split("").join(" "),0,22)})(),(a=new P.CanvasTexture(t)).colorSpace=P.SRGBColorSpace,a.magFilter=P.LinearFilter,l=az({rgb:(n=(0,M.texture)(a)).rgb,alpha:n.a,shared:e,bend:!1,grainScale:(0,M.uniform)(new P.Vector2(3,1))}),(s=new P.Mesh(new P.PlaneGeometry(84*aw,44*aw),l)).position.set((201-e6.DESIGN_REFERENCE_WIDTH/2)*aw,(e6.DESIGN_REFERENCE_HEIGHT/2-207.64)*aw,-12),s.layers.set(30),s.renderOrder=-999,s.frustumCulled=!1,{mesh:s,repaint(){o(),a.needsUpdate=!0},dispose(){s.geometry.dispose(),n.value?.dispose(),l.dispose()}});return{mesh:L,material:V,texNode:_,shared:F,hero:I,carousel:k,pinned:D}},[]),{uReveal:N,uBendAmp:j,uFacingY:F,uBendWidth:_}=R,V=(0,x.useCallback)(()=>{c.current=aM/window.innerHeight,ab.useInteriorScrollStore.getState().setMaxPx(f.current/c.current)},[]),L=(0,au.useResizeGateStore)(e=>e.settleEpoch);(0,x.useEffect)(()=>{V()},[V,L]),
 // V23: The active project-interior renderer is the source of truth for Market.
 // No title checks, polling, or external animation-status guesses.
 (0,x.useEffect)(()=>{
@@ -523,68 +534,77 @@ return{texture:tex,enabled:enabled,slides:slides,color:result};
 // crystal-navigation logic intact for the other three crystals.
 if(t===2||t===3){let canvas=document.createElement("canvas");canvas.width=1573;canvas.height=e6.DESIGN_REFERENCE_HEIGHT;return{canvas,height:e6.DESIGN_REFERENCE_HEIGHT,hero:null,carousel:null,progress:null,liveLink:null,next:null}}
 let o=t===1&&typeof e.interior?.description==="string"?{...e.interior,gallery:[],description:e.interior.description.replace(/^\s*Time Frame\s*\n+\s*330 CE\s*[-–]\s*1453 CE\s*\n*/i,"")}:e.interior,a=document.createElement("canvas").getContext("2d"),n=[],l=(e,t,r=aS)=>{a.font=t;let o=e.split(/\s+/).filter(Boolean),n=[],l="";for(let e of o){let t=l?`${l} ${e}`:e;l&&a.measureText(t).width>r?(n.push(l),l=e):l=t}return l&&n.push(l),n},s=(e,t,r,o,a,l="left")=>{n.push(n=>{n.textAlign=l,n.font=o,n.fillStyle=a,n.fillText(e,t,r)})},i=(e,t,r)=>{let o=t;for(let t of e.split(/\n{2,}/).filter(e=>e.trim())){let h=t.trim(),b=["Time Frame","Location","Government","Economy","Religion","Important Cities","Major Achievements","Important Resources","Trade connections","Cultural Characteristics","Society","Trade","Paramerion Sword","Gold Jewelry","Gàros","Apáki","Silk Textiles","Coins","Purple Energy","Gold and Purple Portal","Crystal Landmarks","Mountains and Water","Market Logo"].includes(h);if(b){o+=10,s(h.toUpperCase(),336,o,aF,ak),o+=44}else{for(let e of l(t.replace(/\n/g," "),aV))s(e,336,o,aV,r),o+=32;o+=18}}return o-18};s(aY((o.overline??`PROJET — ${String(t+1).padStart(2,"0")}`).toUpperCase()),1909,202,aE,aD,"right"),s(o.title.toUpperCase(),336,231,aC,ak),s((o.tagline?`${o.tagline} - ${o.year}`:`${o.year}`).toUpperCase(),336,277,aj,aD);let u=315;if(t===0&&typeof window!=="undefined"&&window.__BYZ_DRAW_INTRO_TEAM_V54__){u=window.__BYZ_DRAW_INTRO_TEAM_V54__(n,u);o={...o,description:"",liveUrl:null,heroMedia:null,roleTitles:[],roleDescription:"",stack:[],gallery:[],challenges:""};}o.description&&(u=i(o.description,u,aD));let m=null;if(o.liveUrl){let e=u+44,t=aY("LIVE LINK");a.font=a_;let r=a.measureText(t).width,o=" ↘",n=a.measureText(o).width;s(t+o,336,e,a_,ak),m={x:324,y:e-30,w:r+n+24,h:46},u=e}let c=null;if(o.heroMedia){let e=u+22;c={x:336,y:e,w:1573,h:aA},u=e+aA}if((o.roleTitles?.length||o.roleDescription)&&(s(o.roleHeading??(o.title==="About Us"?"GOVERNMENT, ECONOMY & RELIGION":"ROLE SUMMARY"),336,u+=72,aT,ak),o.roleTitles?.length&&(u+=36,s(o.roleTitles.join(" · ").toUpperCase(),336,u,aF,"#c0c0c0")),o.roleDescription&&(u=i(o.roleDescription,u+44,aD))),o.stack?.length){u+=46,a.font=aL;let e=336;for(let t of o.stack){let r=`[ ${t.toUpperCase()} ]`,o=a.measureText(r).width;e>336&&e+o>336+aS&&(e=336,u+=32),s(r,e,u,aL,aD),e+=o+24}}let d=null,f=null;if(o.gallery?.length){let e=u+26;d={x:336,y:e,w:1134,h:aR},u=(f={x:1340,y:e+aR+14,w:130,h:2}).y+f.h}o.challenges&&(s(o.challengesHeading??(o.title==="About Us"?"ACHIEVEMENTS, RESOURCES & CULTURE":"TECHNICAL CONSTRAINTS"),336,u+=66,aT,ak),u=i(o.challenges,u+44,aD));let p=null;if(false){let e=u+96;n.push(t=>{t.fillStyle="rgba(255, 255, 255, 0.35)",t.fillRect(996.66,e,912.3399999999999,1)});let t=e+46,r=aY("NEXT PAGE");a.font=a_;let o=a.measureText(r).width;s(r,1909,t,a_,ak,"right"),p={x:1909-o-20,y:t-32,w:o+32,h:50},u=t+60}else u+=80;let h=Math.max(Math.ceil(u),e6.DESIGN_REFERENCE_HEIGHT),g=Math.min(2,8192/h,5.207883026064844),v=document.createElement("canvas");v.width=Math.ceil(1573*g),v.height=Math.ceil(h*g);let x=v.getContext("2d");return x.scale(g,g),x.translate(-336,0),x.textBaseline="alphabetic",n.forEach(e=>e(x)),{canvas:v,height:h,hero:c,carousel:d,progress:f,liveLink:m,next:p}}(e,n,t.length);p.current=l;R.team.height.value=l.height;R.team.enabled.value=0;let s=new P.CanvasTexture(l.canvas);s.colorSpace=P.SRGBColorSpace,s.minFilter=P.LinearMipmapLinearFilter,s.magFilter=P.LinearFilter,s.anisotropy=4;let i=l.height*aw,u=Math.min(256,Math.max(8,Math.round(7*i))),c=new P.PlaneGeometry(1573*aw,i,1,u),h=A.value,g=w.geometry;A.value=s,w.geometry=c,h&&h!==aK&&h.dispose(),g.dispose(),d.current=aM/2-i/2,f.current=Math.max(0,i-aM),w.position.y=d.current+m.current,a&&o(l),V()};if(h.current===n&&p.current)return void o(p.current);h.current=n;let l="u">typeof document?document.fonts:void 0,s=!!l&&!aI.every(e=>l.check(e));return n===0&&typeof window!=="undefined"&&window.__BYZ_INTRO_TEAM_ON_READY_V54__?.(()=>{r||(a(!0),E.repaint())}),a(!s),l&&s&&Promise.all(aI.map(e=>l.load(e))).then(()=>{r||(a(!0),E.repaint())}).catch(()=>{}),g.current&&(g.current=!1,ab.useInteriorScrollStore.getState().reset(),m.current=0,w.position.y=d.current,ea.gsap.to(N,{value:1,duration:1.1,ease:"power2.out"})),()=>{r=!0;window.__BYZ_ABOUT_MAP_SLOT_V45__=null}},[n,t,u,w,A,N,V,C,T,E]);
-// V121: Historical content is a STATIC scroll-length canvas texture on the
-// ORIGINAL Aengel bent interior mesh. Native geometry/scroll uniforms, no
-// per-scroll GPU texture upload and no duplicate HTML scroll compositor.
+// V126: Historical Connection is drawn into high-resolution DOCUMENT tiles.
+// The original Aengel node shader samples the tiled texture and distorts the
+// SAME native 3D plane as Introduction. No HTML/texture rebuild on scroll.
 (0,x.useEffect)(()=>{
  if(n!==3||typeof window==="undefined")return;
- let tex=null,installed=false,lastVersion=-1,lastDimensions='',cancelled=false,uploaded=false,installedAtRange=false;
+ let tex=null,installed=false,lastVersion=-1,lastDimensions='',cancelled=false,installedAtRange=false,stageVersion=-1;
+ const history=R.history;
  const bridge=()=>window.__BYZ_HISTORY_FRAME_BRIDGE_V121__;
  const refresh=()=>{
   if(cancelled)return;
   const b=bridge(),state=ei.useProjectStore.getState();
   if(!b||!b.ready||state.currentProjectIndex!==3||state.interiorStatus!=="interior"){
-   b?.deactivate();return;
+   if(b)b.deactivate();history.enabled.value=0;return;
   }
   if(!installed){
-   tex=new P.CanvasTexture(b.canvas);
-   tex.colorSpace=P.SRGBColorSpace;
-   tex.minFilter=P.LinearFilter;tex.magFilter=P.LinearFilter;
-   tex.generateMipmaps=!1;
-   tex.onUpdate=()=>{
-    if(cancelled||!installed)return;
-    uploaded=true;b.gpuUploaded=true;
-    // V123: hide source HTML in the same GPU-upload frame; the previous
-    // two-frame deferral showed two full copies of text/images on entry.
-    if(ei.useProjectStore.getState().interiorStatus==="interior")b.activate();
-   };
-   const oldTex=A.value;
-   A.value=tex;
+   tex=new P.CanvasTexture(b.canvas);tex.colorSpace=P.SRGBColorSpace;
+   tex.minFilter=P.LinearFilter;tex.magFilter=P.LinearFilter;tex.generateMipmaps=!1;
+   const oldTex=A.value;A.value=tex;
    if(oldTex&&oldTex!==aK)oldTex.dispose();
    installed=true;
   }
-  // Maintain the same long scroll plane used by Introduction, so the native
-  // scroll-velocity uBendAmp deforms text when scrolling in/out.
   const pageH=Math.max(innerHeight,b.documentPx||innerHeight);
   const pageW=Math.max(1,document.documentElement.clientWidth||innerWidth);
   const dimensions=`${pageH}:${pageW}:${innerHeight}`;
   if(dimensions!==lastDimensions){
-   const worldHeight=pageH*aM/innerHeight;
-   const old=w.geometry;
+   const worldHeight=pageH*aM/innerHeight,old=w.geometry;
    const seg=Math.min(256,Math.max(64,Math.round(worldHeight*7)));
-   w.geometry=new P.PlaneGeometry(aM*o.aspect,worldHeight,1,seg);
-   old?.dispose();
-   d.current=aM/2-worldHeight/2;
-   f.current=Math.max(0,worldHeight-aM);
+   w.geometry=new P.PlaneGeometry(aM*o.aspect,worldHeight,1,seg);old?.dispose();
+   d.current=aM/2-worldHeight/2;f.current=Math.max(0,worldHeight-aM);
    w.position.x=0;w.position.z=-12;
-   // The SAME store and max-range calculation used by Introduction.
    const store=ab.useInteriorScrollStore.getState();
    store.setMaxPx(Math.max(0,pageH-innerHeight));
    if(!installedAtRange){store.reset();m.current=0;installedAtRange=true;}
    lastDimensions=dimensions;
   }
-  if(lastVersion!==b.version){tex.needsUpdate=!0;lastVersion=b.version;}
-  if(!uploaded)b.deactivate();
+  if(lastVersion!==b.version){
+   lastVersion=b.version;stageVersion=b.version;
+   history.enabled.value=0;
+   b.gpuUploaded=false;
+   const count=Math.max(1,Math.min(4,b.tileCount||1));
+   history.count.value=count;
+   const thisVersion=b.version;
+   let completed=0;
+   for(let k=0;k<4;k++){
+    const tile=history.tiles[k];
+    // Unused tile samplers retain their tiny valid 1x1 texture.
+    if(k>=count){tile.onUpdate=null;continue;}
+    tile.image=b.tiles[k];
+    tile.onUpdate=()=>{
+     if(cancelled||stageVersion!==thisVersion)return;
+     tile.onUpdate=null;
+     completed++;
+     if(completed===count){
+      history.enabled.value=1;b.gpuUploaded=true;
+      if(ei.useProjectStore.getState().interiorStatus==="interior")b.activate();
+     }
+    };
+    tile.needsUpdate=true;
+   }
+   tex.needsUpdate=true;
+  }
  };
  const id=setInterval(refresh,120);refresh();
- return()=>{cancelled=true;clearInterval(id);const b=bridge();b?.deactivate();
-  if(b)b.gpuUploaded=false;
-  // Native Aengel selection restores the appropriate project panel next.
+ return()=>{cancelled=true;clearInterval(id);history.enabled.value=0;
+  for(const tile of history.tiles)tile.onUpdate=null;
+  const b=bridge();b?.deactivate();if(b)b.gpuUploaded=false;
  };
-},[n,s,w,A,o]);
+},[n,s,w,A,o,R]);
 let I=(0,x.useCallback)(e=>{let t=ei.useProjectStore.getState();g.current||"interior"===t.interiorStatus&&"idle"===t.morphStatus&&(g.current=!0,ea.gsap.to(N,{value:0,duration:.65,ease:"power2.in",onComplete:()=>{let t=ei.useProjectStore.getState(),r=t.currentProjectIndex;1===e?t.setProjectNext():t.setProjectPrev(),ei.useProjectStore.getState().currentProjectIndex===r&&(g.current=!1,ea.gsap.to(N,{value:1,duration:.65,ease:"power2.out"}))}}))},[N]);return(0,x.useEffect)(()=>{if(!a)return;let e=new P.Raycaster;e.layers.set(30);let r=new P.Vector2,n=!1,l=e=>{e!==n&&(n=e,document.body.style.cursor=e?"pointer":"")},s=(t,a)=>{r.set(t/window.innerWidth*2-1,-(2*(a/window.innerHeight))+1),e.setFromCamera(r,o)},i=(t,r)=>{let o=p.current;if(!o)return null;s(t,r);let a=e.intersectObject(w,!1)[0];return a?.uv?{x:336+1573*a.uv.x,y:(1-a.uv.y)*o.height}:null},u=()=>!1,m=(e,t)=>!!t&&e.x>=t.x&&e.x<=t.x+t.w&&e.y>=t.y&&e.y<=t.y+t.h,c=()=>"interior"===ei.useProjectStore.getState().interiorStatus,d=e=>{if(!c()||g.current)return;let t=i(e.clientX,e.clientY);t&&T.contains(t)&&T.beginDrag(t.x)},f=0,h=0,x=!1,y=e=>{f=e.clientX,h=e.clientY,x=!0},b=()=>{x&&(x=!1,((e,t)=>{if(!c())return l(!1);if(T.dragging){let r=i(e,t);r&&T.moveDrag(r.x);return}if(g.current)return l(!1);if(u(e,t))return l(!0);let r=i(e,t),o=p.current;l(!!r&&(m(r,o?.next??null)||m(r,o?.liveLink??null)||T.contains(r)))})(f,h))};v.current=b;let M=()=>{T.dragging&&(b(),T.endDrag())},S=e=>{if(!c()||g.current)return;if(u(e.clientX,e.clientY))return void ei.useProjectStore.getState().exitInterior();let r=i(e.clientX,e.clientY);if(!r)return;let o=p.current;if(m(r,o?.next??null))I(1);else if(m(r,o?.liveLink??null)){let e=ei.useProjectStore.getState().currentProjectIndex,r=t[e]?.interior.liveUrl;r&&(0,ay.isSafeExternalUrl)(r)&&window.open(r,"_blank","noopener,noreferrer")}};return window.addEventListener("pointerdown",d),window.addEventListener("pointermove",y),window.addEventListener("pointerup",M),window.addEventListener("click",S),()=>{
  window.removeEventListener("pointerdown",d),window.removeEventListener("pointermove",y),window.removeEventListener("pointerup",M),window.removeEventListener("click",S),v.current=null,l(!1)
-}},[a,o,w,E,T,I,t]),(0,x.useEffect)(()=>{if(!a)return;let e=e=>{if(!(e.isComposing||e.altKey||e.ctrlKey||e.metaKey||(0,ox.isEditableTarget)(e.target))&&"interior"===ei.useProjectStore.getState().interiorStatus){if("ArrowUp"===e.key||"ArrowDown"===e.key){let t="ArrowDown"===e.key?1:-1;ab.useInteriorScrollStore.getState().pushDelta(t*window.innerHeight*ai.KEY_SCROLL_STEP_VH)}else if("Home"===e.key||"End"===e.key){let{maxPx:t,pushDelta:r}=ab.useInteriorScrollStore.getState();r("End"===e.key?t:-t)}else if("ArrowLeft"===e.key||"ArrowRight"===e.key||"PageUp"===e.key||"PageDown"===e.key){if(e.repeat)return;I("ArrowRight"===e.key||"PageDown"===e.key?1:-1)}}};return window.addEventListener("keydown",e),()=>window.removeEventListener("keydown",e)},[a,I]),(0,x.useEffect)(()=>{"exterior"===s&&(ab.useInteriorScrollStore.getState().reset(),m.current=0,w.position.y=d.current,y.current=0,j.value=0)},[s,w,j]),(0,x.useEffect)(()=>{(n===1?(ea.gsap.killTweensOf(N),C.hide(),"interior"===s?(window.__BYZ_ABOUT_ENTER_LOCK__=!1,N.value=0,ea.gsap.to(N,{value:1,duration:.58,delay:.06,ease:"sine.inOut"})):"entering"===s?(window.__BYZ_ABOUT_ENTER_LOCK__=!0,N.value=0):(N.value=0)):("entering"===s?(ea.gsap.killTweensOf(N),N.value=0,ea.gsap.to(N,{value:1,duration:1.25,delay:ap,ease:"power2.out"})):"exiting"===s?(ea.gsap.killTweensOf(N),ea.gsap.to(N,{value:0,duration:1.12,delay:.08,ease:"sine.inOut"})):"interior"===s?!ea.gsap.isTweening(N)&&N.value<1&&ea.gsap.to(N,{value:1,duration:.8,ease:"power2.out"}):(ea.gsap.killTweensOf(N),N.value=1)))},[s,N,n]),(0,x.useEffect)(()=>{if(n!==1||typeof window==="undefined")return;const fade=()=>{ea.gsap.killTweensOf(N);ea.gsap.to(N,{value:0,duration:.43,ease:"sine.inOut"})};const modal=expanded=>{ea.gsap.killTweensOf(N);ea.gsap.to(N,{value:expanded?0:1,duration:expanded?.32:.38,ease:"sine.inOut"})};window.__BYZ_ABOUT_FADE_TEXT__=fade;window.__BYZ_ABOUT_MODAL_TEXT__=modal;return()=>{if(window.__BYZ_ABOUT_FADE_TEXT__===fade)delete window.__BYZ_ABOUT_FADE_TEXT__;if(window.__BYZ_ABOUT_MODAL_TEXT__===modal)delete window.__BYZ_ABOUT_MODAL_TEXT__}},[n,N]),(0,x.useEffect)(()=>()=>ea.gsap.killTweensOf(N),[N]),(0,e3.useTempus)((e,t)=>{if(!a)return;let r=Math.min(t/1e3,.1),n=m.current,l=ab.useInteriorScrollStore.getState().targetPx*c.current;m.current+=(l-m.current)*(0,e8.perFrameLerp)(.09,r),w.position.y=d.current+m.current,(()=>{const q=window.__BYZ_HISTORY_FRAME_BRIDGE_V121__;if(ei.useProjectStore.getState().currentProjectIndex===3&&q?.nativeActive){q.onNativeScroll(m.current/Math.max(c.current,.00001));}})(),window.__BYZ_INTRO_TEAM_TICK_V56__&&window.__BYZ_INTRO_TEAM_TICK_V56__(m.current/aw,e6.DESIGN_REFERENCE_HEIGHT,ei.useProjectStore.getState().currentProjectIndex===0&&ei.useProjectStore.getState().interiorStatus==="interior",R.team),window.__BYZ_INTRO_GALLERY_TICK_V60__&&window.__BYZ_INTRO_GALLERY_TICK_V60__(ei.useProjectStore.getState().currentProjectIndex===0&&ei.useProjectStore.getState().interiorStatus==="interior",R.gallery);let s=b.current,i=(m.current-n)/Math.max(r*e8.REFERENCE_HZ,.001),u=s.enabled?Math.max(-s.max,Math.min(s.max,i*s.gain)):0;y.current+=(u-y.current)*(0,e8.perFrameLerp)(s.lerp,r),j.value=y.current,F.value=o.position.y-w.position.y,o.updateWorldMatrix(!0,!1),(()=>{
+}},[a,o,w,E,T,I,t]),(0,x.useEffect)(()=>{if(!a)return;let e=e=>{if(!(e.isComposing||e.altKey||e.ctrlKey||e.metaKey||(0,ox.isEditableTarget)(e.target))&&"interior"===ei.useProjectStore.getState().interiorStatus){if("ArrowUp"===e.key||"ArrowDown"===e.key){let t="ArrowDown"===e.key?1:-1;ab.useInteriorScrollStore.getState().pushDelta(t*window.innerHeight*ai.KEY_SCROLL_STEP_VH)}else if("Home"===e.key||"End"===e.key){let{maxPx:t,pushDelta:r}=ab.useInteriorScrollStore.getState();r("End"===e.key?t:-t)}else if("ArrowLeft"===e.key||"ArrowRight"===e.key||"PageUp"===e.key||"PageDown"===e.key){if(e.repeat)return;I("ArrowRight"===e.key||"PageDown"===e.key?1:-1)}}};return window.addEventListener("keydown",e),()=>window.removeEventListener("keydown",e)},[a,I]),(0,x.useEffect)(()=>{"exterior"===s&&(ab.useInteriorScrollStore.getState().reset(),m.current=0,w.position.y=d.current,y.current=0,j.value=0)},[s,w,j]),(0,x.useEffect)(()=>{(n===1?(ea.gsap.killTweensOf(N),C.hide(),"interior"===s?(window.__BYZ_ABOUT_ENTER_LOCK__=!1,N.value=0,ea.gsap.to(N,{value:1,duration:.58,delay:.06,ease:"sine.inOut"})):"entering"===s?(window.__BYZ_ABOUT_ENTER_LOCK__=!0,N.value=0):(N.value=0)):("entering"===s?(ea.gsap.killTweensOf(N),N.value=0,ea.gsap.to(N,{value:1,duration:1.25,delay:ap,ease:"power2.out"})):"exiting"===s?(ea.gsap.killTweensOf(N),ea.gsap.to(N,{value:0,duration:n===0?.46:1.12,delay:n===0?0:.08,ease:"sine.inOut"})):"interior"===s?!ea.gsap.isTweening(N)&&N.value<1&&ea.gsap.to(N,{value:1,duration:.8,ease:"power2.out"}):(ea.gsap.killTweensOf(N),N.value=1)))},[s,N,n]),(0,x.useEffect)(()=>{if(n!==1||typeof window==="undefined")return;const fade=()=>{ea.gsap.killTweensOf(N);ea.gsap.to(N,{value:0,duration:.43,ease:"sine.inOut"})};const modal=expanded=>{ea.gsap.killTweensOf(N);ea.gsap.to(N,{value:expanded?0:1,duration:expanded?.32:.38,ease:"sine.inOut"})};window.__BYZ_ABOUT_FADE_TEXT__=fade;window.__BYZ_ABOUT_MODAL_TEXT__=modal;return()=>{if(window.__BYZ_ABOUT_FADE_TEXT__===fade)delete window.__BYZ_ABOUT_FADE_TEXT__;if(window.__BYZ_ABOUT_MODAL_TEXT__===modal)delete window.__BYZ_ABOUT_MODAL_TEXT__}},[n,N]),(0,x.useEffect)(()=>()=>ea.gsap.killTweensOf(N),[N]),(0,e3.useTempus)((e,t)=>{if(!a)return;let r=Math.min(t/1e3,.1),n=m.current,l=ab.useInteriorScrollStore.getState().targetPx*c.current;m.current+=(l-m.current)*(0,e8.perFrameLerp)(.09,r),w.position.y=d.current+m.current,(()=>{const q=window.__BYZ_HISTORY_FRAME_BRIDGE_V121__;if(ei.useProjectStore.getState().currentProjectIndex===3&&q?.nativeActive){q.onNativeScroll(m.current/Math.max(c.current,.00001));}})(),window.__BYZ_INTRO_TEAM_TICK_V56__&&window.__BYZ_INTRO_TEAM_TICK_V56__(m.current/aw,e6.DESIGN_REFERENCE_HEIGHT,ei.useProjectStore.getState().currentProjectIndex===0&&ei.useProjectStore.getState().interiorStatus==="interior",R.team),window.__BYZ_INTRO_GALLERY_TICK_V60__&&window.__BYZ_INTRO_GALLERY_TICK_V60__(ei.useProjectStore.getState().currentProjectIndex===0&&ei.useProjectStore.getState().interiorStatus==="interior",R.gallery);let s=b.current,i=(m.current-n)/Math.max(r*e8.REFERENCE_HZ,.001),u=s.enabled?Math.max(-s.max,Math.min(s.max,i*s.gain)):0;y.current+=(u-y.current)*(0,e8.perFrameLerp)(s.lerp,r),j.value=y.current,F.value=o.position.y-w.position.y,o.updateWorldMatrix(!0,!1),(()=>{
  // V123: restore the original Introduction gallery's missing screen-space
  // position callback. Its V98 DOM marquee and image assets were intact,
  // but the native canvas stopped sending its projected rectangle.
