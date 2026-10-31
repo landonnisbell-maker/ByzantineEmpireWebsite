@@ -1,16 +1,16 @@
 (()=>{
 'use strict';
-// V110: hand gallery entry over at the NATIVE GSAP camera zoom milestone,
-// before the raw prismatic interior screen becomes visible. Preloaded gallery
-// crossfades into the finishing camera move; black safety protects slow loads.
-// Exit retains V108's native camera reverse crossfade.
+// V111: extend visible crystal zoom by 185ms, and accelerate the real WebGL reverse on exit.
+// Early-preloaded gallery crossfades before the raw prismatic interior.
+// On exit the gallery plays its real reverse intro at 2x speed,
+// then dissolves to the returning native crystal camera.
 if(window.__BYZ_MARKET_V35__)return;
 window.__BYZ_MARKET_V35__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
-const SHELL=new URL('index.html?embedded=1&v=110.0',document.currentScript.src).href;
+const SHELL=new URL('index.html?embedded=1&v=111.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
-const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V110]',...args)};
+const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V111]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
 let wanted=false,nativeReached=false,opened=false,recoveries=0,reconnectScheduled=false;
 let safetyCover=false;
@@ -21,32 +21,31 @@ let feedback=null,deadline=0;
 // on Close. Give it its own visible exit phase before revealing the native zoom.
 let marketRevealEpoch=0;
 let galleryPreloadCheck=null;
-// The native timeline signals zoom-ready at 1.48s during the 1.6s camera move.
-// A 115ms spin pre-lead makes the gallery already move when its .24s fade
-// begins. The gallery is opaque before the raw prismatic scene is visible.
-const DIRECT_SPIN_LEAD_MS=115;
-// Exit mirrors entry: reverse the gallery's native 2.2-second intro in its
-// actual renderer. Start the native camera exit under its final portion; its
-// camera retreat starts ~0.71s into that timeline, so the crossfade unveils a
-// moving camera rather than the bare prismatic crystal interior.
-const REVERSE_GALLERY_MS=2200;
-const RETURN_NATIVE_START_MS=1320;
+// Native zoom-ready now fires 185ms later than V110 (~1.415s during the 1.6s zoom).
+// Use a 90ms spin pre-lead so the gallery is moving at reveal.
+// Shorten the opacity fade to 65ms so the native interior never flashes.
+const DIRECT_SPIN_LEAD_MS=90;
+// Exit mirrors entry with a faster, 1.1-second reversal of the true
+// cloth/ribbon renderer. Trigger native return early enough for its traversal
+// to be underway before the gallery fades out.
+const REVERSE_GALLERY_MS=1100;
+const RETURN_NATIVE_START_MS=320;
 const RETURN_FADE_DELAY_MS=REVERSE_GALLERY_MS-70;
-const RETURN_FADE_MS=340;
-const RETURN_SAFETY_MS=4600;
+const RETURN_FADE_MS=300;
+const RETURN_SAFETY_MS=3200;
 const STYLES=`
 #byz-v33-market{position:fixed;inset:0;z-index:2147483000;opacity:0;visibility:visible;
  pointer-events:none;overflow:hidden;background:#000;transition:opacity .12s ease-out}
 #byz-v33-market.byz-v33-covering,#byz-v33-market.byz-v33-open,
 #byz-v33-market.byz-v33-closing{opacity:1;pointer-events:auto}
 /* The gallery becomes visible during the last camera zoom segment. */
-#byz-v33-market.byz-v106-direct{opacity:1;pointer-events:auto;transition:opacity .24s cubic-bezier(.22,1,.36,1)}
+#byz-v33-market.byz-v106-direct{opacity:1;pointer-events:auto;transition:opacity .065s cubic-bezier(.22,1,.36,1)}
 #byz-v33-market.byz-v33-covering{transition:opacity .26s ease-in}
 #byz-v33-market.byz-v33-closing{transition:none}
-/* V110: after the gallery's REAL reverse WebGL animation, unveil the
+/* V111: after the gallery's accelerated reverse WebGL animation, unveil the
    retreating crystal camera in a short reverse-entry crossfade. */
 #byz-v33-market.byz-v108-returning{opacity:0;pointer-events:none;
- transition:opacity .34s cubic-bezier(.42,0,.58,1)}
+ transition:opacity .30s cubic-bezier(.42,0,.58,1)}
 #byz-v33-market>iframe{display:block;width:100%;height:100%;border:0;background:#000;opacity:0;pointer-events:none}
 /* A cheap, fixed black veil fades over a PRE-RENDERED gallery frame. The iframe
    itself must never jump from transparent to opaque on its first WebGL paint. */
@@ -200,7 +199,7 @@ function finishClosing(){
 }
 function beginReturnFade(){
  if(!closing||!overlay?.isConnected)return;
- // The gallery's native WebGL ribbon/cloth motion is almost fully rewound.
+ // The gallery's accelerated WebGL ribbon/cloth motion is almost fully rewound.
  // The native crystal camera is already retreating beneath this dissolve.
  document.documentElement.classList.remove('byz-v35-market-active');
  overlay.classList.add('byz-v108-returning');
@@ -249,7 +248,7 @@ window.__BYZ_V24_OPEN_MARKET__=()=>{
  prepareMarket();return false;
 };
 window.__BYZ_V24_CLOSE_MARKET__=()=>closeMarket();
-window.__BYZ_V24_STATUS__=()=>({version:'110.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
+window.__BYZ_V24_STATUS__=()=>({version:'111.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
 function applyNative(detail){
  if(!detail)return;
  const index=Number(detail.index??detail.projectIndex??-1);
