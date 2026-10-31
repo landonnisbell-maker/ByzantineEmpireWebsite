@@ -121,23 +121,38 @@ body.byz-history-is-active nav[data-navbar] > button[aria-label="Portal"]{visibi
   #byz-history-v93 .byz-h-reveal{transform:none!important;opacity:1!important;}
 }
 
-/* V120: The existing Aengel 3D interior plane renders these pixels.
-   Keep the actual HTML scroll container and Works Cited fully usable.
-   A grouped opacity filter makes only the selected HTML sections invisible
-   without changing their computed text/image styles used for native rasterization.
-   Never activate until the native texture has been uploaded by the GPU. */
-body.byz-h-native-content-v120 #byz-history-v93 .byz-history-page > .byz-h-hero,
-body.byz-h-native-content-v120 #byz-history-v93 .byz-history-page > .byz-h-section:not(.byz-h-works),
-body.byz-h-native-content-v120 #byz-history-v93 .byz-history-page > .byz-h-footer{
-  filter:opacity(0)!important;
+/* V121: Historical body lives on the ORIGINAL Aengel interior mesh.
+   DO NOT use filter:opacity(0) on thousands of HTML characters: that forces
+   giant composited layers and stalls GPUs at ~5 FPS. Preserve DOM layout for
+   its initial one-time texture build, but skip all offscreen HTML paint. */
+body.byz-h-native-content-v121 #byz-history-v93 .byz-history-page > .byz-h-hero,
+body.byz-h-native-content-v121 #byz-history-v93 .byz-history-page > .byz-h-section:not(.byz-h-works),
+body.byz-h-native-content-v121 #byz-history-v93 .byz-history-page > .byz-h-footer{
+  visibility:hidden!important;
 }
-body.byz-h-native-content-v120 #byz-history-v93 .byz-h-works,
-body.byz-h-native-content-v120 #byz-history-v93 .byz-h-works *{
-  filter:none;
+body.byz-h-native-content-v121 #byz-history-v93,
+body.byz-h-native-content-v121 #byz-history-v93 .byz-history-scroll{
+  pointer-events:none!important;
 }
-
-/* V120: Snapshot layout with the original final text positions regardless of
-   below-the-fold reveal classes; revert this flag in the same JS task. */
-#byz-history-v93.byz-h-capture-v120 .byz-h-reveal{
+body.byz-h-native-content-v121 #byz-history-v93 .byz-history-scroll{
+  overflow:hidden!important;touch-action:none!important;
+}
+/* Works Cited is ordinary HTML, not on the fluid surface. It follows the
+   same native smoothed scroll offset but remains sharp and clickable. */
+body.byz-h-native-content-v121 #byz-history-v93 #byz-h-works{
+  position:fixed!important; top:0!important;left:50%!important;
+  width:min(1050px,calc(100vw - 32px))!important;
+  margin:0!important;
+  transform:translate3d(-50%,var(--byz-h-works-top,20000px),0)!important;
+  visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:2!important;
+  will-change:transform;
+}
+/* Measure and capture native text regardless of scroll/reveal state. */
+#byz-history-v93.byz-h-capture-v121 .byz-h-reveal{
  opacity:1!important;transform:none!important;transition:none!important;
+}
+body.byz-h-native-content-v121 #byz-history-v93.byz-h-capture-v121 .byz-history-page > .byz-h-hero,
+body.byz-h-native-content-v121 #byz-history-v93.byz-h-capture-v121 .byz-history-page > .byz-h-section:not(.byz-h-works),
+body.byz-h-native-content-v121 #byz-history-v93.byz-h-capture-v121 .byz-history-page > .byz-h-footer{
+  visibility:visible!important;
 }

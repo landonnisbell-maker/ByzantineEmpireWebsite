@@ -249,6 +249,7 @@
     }
   }
   function handleWheel(event) {
+    if (window.__BYZ_HISTORY_FRAME_BRIDGE_V121__?.nativeActive) return;
     if (!active || !scroller || event.ctrlKey || event.metaKey) return;
     if (event.cancelable) event.preventDefault();
     event.stopImmediatePropagation();
@@ -256,6 +257,7 @@
     scrollBySmooth(event.deltaY * unit);
   }
   function handleKeys(event) {
+    if (window.__BYZ_HISTORY_FRAME_BRIDGE_V121__?.nativeActive) return;
     if (!active || !scroller || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.target?.closest?.('input,textarea,select,[contenteditable="true"]')) return;
     const jumps = { ArrowDown: 54, ArrowUp: -54, PageDown: scroller.clientHeight * 0.82, PageUp: -scroller.clientHeight * 0.82, ' ': scroller.clientHeight * 0.82 };
