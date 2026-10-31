@@ -120,12 +120,3 @@ body.byz-history-is-active nav[data-navbar] > button[aria-label="Portal"]{visibi
   #byz-history-v93,#byz-history-v93 .byz-h-reveal{transition:none!important;}
   #byz-history-v93 .byz-h-reveal{transform:none!important;opacity:1!important;}
 }
-
-/* V117: The genuine Aengel WebGPU fluid compositor renders these pixels.
-   Preserve the browser's DOM for layout, scroll, image loading and all input;
-   only suppress the *duplicate* DOM pixels after the GPU texture is ready.
-   Works Cited is intentionally never hidden or sampled by the texture. */
-body.byz-h-native-content-v117 #byz-history-v93 .byz-h-hero,
-body.byz-h-native-content-v117 #byz-history-v93 .byz-h-section:not(.byz-h-works){
-  opacity:0!important;
-}
