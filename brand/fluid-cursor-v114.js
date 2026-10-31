@@ -1,4 +1,4 @@
-/* V114 – resilient fluid mouse effects on crystal pages.
+/* V116 – original Aengel-only Historical page; V114 fallback on other pages.
  * The original WebGPU fluid compositor may be absent on reduced-power hardware.
  * This CPU-light, capped-resolution composited overlay is an intentional visual
  * fallback. On the Historical Connection page it also sits above normal content,

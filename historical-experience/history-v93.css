@@ -121,17 +121,27 @@ body.byz-history-is-active nav[data-navbar] > button[aria-label="Portal"]{visibi
   #byz-history-v93 .byz-h-reveal{transform:none!important;opacity:1!important;}
 }
 
-/* V115: Present the existing Aengel WebGPU fluid compositor above the
-   Historical Connection content, without changing its original shader.
-   The native canvas remains untouched on every other page. */
-body.byz-history-is-active .layout-module__r4ewHq__main canvas.byz-aengel-history-fluid-v115{
-  position:fixed!important;z-index:180028!important;
-  pointer-events:none!important;
-  opacity:.67;mix-blend-mode:screen;
-  mask-image:var(--byz-aengel-history-mask,radial-gradient(circle 0px at -100px -100px,transparent 100%,transparent 100%));
-  -webkit-mask-image:var(--byz-aengel-history-mask,radial-gradient(circle 0px at -100px -100px,transparent 100%,transparent 100%));
-  mask-composite:intersect;
-  -webkit-mask-composite:source-in;
+/* V116 — Original Aengel fluid compositing for the Historical page.
+   Intro, About and Historical are DOM overlays over the same native WebGPU
+   project-interior fluid compositor. Never reposition or duplicate the WebGPU
+   canvas: that previously exposed an unwanted render of the whole 3D scene.
+
+   Difference blending lets the CURRENT original WebGPU pixels influence the
+   historical reading surface, including its text, artwork and photographs,
+   without changing the original shader and without putting a second effect
+   above the document. On the near-black base, content keeps its normal color;
+   where native fluid pixels pass underneath, those pixels interact naturally.
+   Do not apply compositing to the Works Cited reading room. */
+body.byz-history-is-active #byz-history-v93{
+  isolation:auto;
 }
-/* Preserve the archival reading room's isolation and its pointer interactions. */
-#byz-history-v93 .byz-h-works-box{isolation:isolate;}
+body.byz-history-is-active #byz-history-v93 .byz-h-hero,
+body.byz-history-is-active #byz-history-v93 .byz-h-section:not(.byz-h-works){
+  mix-blend-mode:difference;
+}
+body.byz-history-is-active #byz-history-v93 .byz-h-works,
+body.byz-history-is-active #byz-history-v93 .byz-h-works-box{
+  mix-blend-mode:normal;
+  isolation:isolate;
+}
+/* Its dark, opaque reading room blocks the native fluid behind the citations. */
