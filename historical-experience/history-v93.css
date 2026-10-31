@@ -170,3 +170,16 @@ body.byz-h-native-content-v121 #byz-history-v93.byz-h-capture-v121 .byz-history-
 body.byz-h-native-content-v121 #byz-history-v93.byz-h-capture-v121 .byz-history-page > .byz-h-footer{
   visibility:visible!important;
 }
+
+/* V123: A transition out of the history page must not display the DOM
+   snapshot at the same time as the native GPU page that is fading out.
+   The unprocessed HTML is used only while its actual page is active. */
+#byz-history-v93:not(.byz-h-open){
+  opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+  transition:none!important;
+}
+/* V123: GPU upload handshake can start before the HTML overlay's
+   opacity transition finishes. Never fade the source page over native text. */
+body.byz-h-native-content-v121 #byz-history-v93 .byz-history-scroll{
+  visibility:hidden!important;
+}
