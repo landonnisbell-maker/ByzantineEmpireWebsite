@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-// V106: retain the crystal camera zoom and hand off DIRECTLY to the already-
+// V107: retain the native crystal zoom and delay the direct handoff by 0.75s to the already-
 // preloaded gallery. No opaque intermediate screen on entry; the gallery
 // crossfades over the last portion of the zoom before the grey shader stage.
 if(window.__BYZ_MARKET_V34__)return;
@@ -9,7 +9,7 @@ window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
 const SHELL=new URL('index.html?embedded=1&v=106.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
-const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V106]',...args)};
+const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V107]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
 let wanted=false,nativeReached=false,opened=false,recoveries=0,reconnectScheduled=false;
 let closing=false,closingStarted=0,exitCallTimer=0,exitFallback=0,revealExitTimer=0;
@@ -18,10 +18,10 @@ let feedback=null,deadline=0;
 let marketRevealEpoch=0;
 let galleryPreloadCheck=null;
 let crystalEnterAt=0,directEnterTimer=0;
-const DIRECT_GALLERY_MS=1040;
+const DIRECT_GALLERY_MS=1790;
 const DIRECT_SPIN_LEAD_MS=115;
 // The original native crystal zoom lasts ~1.6s. Reveal the gallery around
-// 1.04s into it, before the old refraction/grey handoff becomes visible.
+// 1.79s into it (0.75s later than V106) so the zoom completes before fading.
 function cancelDirectTimer(){if(directEnterTimer){clearTimeout(directEnterTimer);directEnterTimer=0;}}
 const STYLES=`
 #byz-v33-market{position:fixed;inset:0;z-index:2147483000;opacity:0;visibility:visible;
@@ -99,10 +99,10 @@ function status(message,canRetry=false){
 function clearStatus(){if(deadline){clearTimeout(deadline);deadline=0;}feedback?.remove()}
 function revealDirect(){
  if(!wanted||!marketReady||opened||closing)return;
- // Wait until the native zoom's handoff point, unless the crystal has already
- // reached its interior state. Timing is measured from the FIRST entering event.
+ // Wait for the full timed native zoom even if an early interior event arrives.
+ // Timing is measured from the FIRST entering event.
  const elapsed=crystalEnterAt?performance.now()-crystalEnterAt:DIRECT_GALLERY_MS;
- if(!nativeReached&&elapsed<DIRECT_GALLERY_MS){
+ if(elapsed<DIRECT_GALLERY_MS){
   cancelDirectTimer();
   directEnterTimer=setTimeout(()=>{directEnterTimer=0;revealDirect();},DIRECT_GALLERY_MS-elapsed);
   return;
@@ -203,7 +203,7 @@ window.__BYZ_V24_OPEN_MARKET__=()=>{
  prepareMarket();return false;
 };
 window.__BYZ_V24_CLOSE_MARKET__=()=>closeMarket();
-window.__BYZ_V24_STATUS__=()=>({version:'106.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
+window.__BYZ_V24_STATUS__=()=>({version:'107.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
 function applyNative(detail){
  if(!detail)return;
  const index=Number(detail.index??detail.projectIndex??-1);
