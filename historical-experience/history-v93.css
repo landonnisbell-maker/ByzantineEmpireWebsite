@@ -121,27 +121,11 @@ body.byz-history-is-active nav[data-navbar] > button[aria-label="Portal"]{visibi
   #byz-history-v93 .byz-h-reveal{transform:none!important;opacity:1!important;}
 }
 
-/* V116 — Original Aengel fluid compositing for the Historical page.
-   Intro, About and Historical are DOM overlays over the same native WebGPU
-   project-interior fluid compositor. Never reposition or duplicate the WebGPU
-   canvas: that previously exposed an unwanted render of the whole 3D scene.
-
-   Difference blending lets the CURRENT original WebGPU pixels influence the
-   historical reading surface, including its text, artwork and photographs,
-   without changing the original shader and without putting a second effect
-   above the document. On the near-black base, content keeps its normal color;
-   where native fluid pixels pass underneath, those pixels interact naturally.
-   Do not apply compositing to the Works Cited reading room. */
-body.byz-history-is-active #byz-history-v93{
-  isolation:auto;
+/* V117: The genuine Aengel WebGPU fluid compositor renders these pixels.
+   Preserve the browser's DOM for layout, scroll, image loading and all input;
+   only suppress the *duplicate* DOM pixels after the GPU texture is ready.
+   Works Cited is intentionally never hidden or sampled by the texture. */
+body.byz-h-native-content-v117 #byz-history-v93 .byz-h-hero,
+body.byz-h-native-content-v117 #byz-history-v93 .byz-h-section:not(.byz-h-works){
+  opacity:0!important;
 }
-body.byz-history-is-active #byz-history-v93 .byz-h-hero,
-body.byz-history-is-active #byz-history-v93 .byz-h-section:not(.byz-h-works){
-  mix-blend-mode:difference;
-}
-body.byz-history-is-active #byz-history-v93 .byz-h-works,
-body.byz-history-is-active #byz-history-v93 .byz-h-works-box{
-  mix-blend-mode:normal;
-  isolation:isolate;
-}
-/* Its dark, opaque reading room blocks the native fluid behind the citations. */
