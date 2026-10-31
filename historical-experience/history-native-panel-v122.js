@@ -1,8 +1,8 @@
-/* V130 — Historical Connection native Aengel canvas content.
+/* V131 — Direct-drawn Historical content with a permanent native base texture.
    HTML supplies its existing editorial layout and accessible Works Cited.
    We compile a list of TEXT and IMAGE draw commands only when opening or
    resizing, just as the original Aengel pages prepare content canvases.
-   No DOM screenshot, no scrolling texture upload, no extra WebGPU renderer.
+   The base texture is always present; higher-res tiles enhance it safely.
 */
 (() => {
   'use strict';
@@ -200,19 +200,31 @@
       const maxDimension=8192;
       const scale=Math.max(.5,Math.min(targetScale,maxDimension/width,maxDimension/sectionH,
         Math.sqrt(pixelBudget/(width*sectionH))));
+      // Critical V131 safety fix: always paint the original single-texture
+      // 3D content path FIRST. V130 left bridge.canvas as a transparent 1x1,
+      // so switching shader stages could make the entire page disappear.
+      // Higher-resolution tiles are an optional upgrade, never the only image.
+      const baseScale=Math.min(1,8192/width,8192/doc,
+        Math.sqrt(4500000/(width*doc)));
+      paintTile(bridge.canvas,commands,0,doc,width,Math.max(.1,baseScale));
       const next=[];
-      for(let i=0;i<count;i++){
+      const safeCount=Math.min(4,count);
+      const safeSectionH=doc/safeCount;
+      const safeScale=Math.max(.5,Math.min(targetScale,maxDimension/width,
+        maxDimension/safeSectionH,Math.sqrt(pixelBudget/(width*safeSectionH))));
+      for(let i=0;i<safeCount;i++){
         const canvas=bridge.tiles[i]||document.createElement('canvas');
-        paintTile(canvas,commands,i*sectionH,sectionH,width,scale);
+        paintTile(canvas,commands,i*safeSectionH,safeSectionH,width,safeScale);
         next.push(canvas);
       }
       bridge.tiles=next;
       bridge.tilesReady=true;
-      bridge.tileCount=count;
+      bridge.tileCount=next.length;
       bridge.documentPx=doc;
       bridge.viewportPx=viewport;
       bridge.commandCount=commands.length;
-      bridge.nativeScale=scale;
+      bridge.nativeScale=safeScale;
+      // A new build must be uploaded before hiding the live HTML.
       bridge.ready=true;
       bridge.gpuUploaded=false;
       bridge.version++;
@@ -221,7 +233,7 @@
     }catch(err){
       bridge.ready=false;bridge.tilesReady=false;bridge.gpuUploaded=false;
       bridge.deactivate();
-      console.warn('[V130] Native historical content unavailable; retaining HTML',err);
+      console.warn('[V131] Native historical content unavailable; retaining HTML',err);
     }finally{
       root?.classList.remove('byz-h-capture-v121');
       building=false;
