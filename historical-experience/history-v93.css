@@ -139,13 +139,27 @@ body.byz-h-native-content-v121 #byz-history-v93 .byz-history-scroll{
 }
 /* Works Cited is ordinary HTML, not on the fluid surface. It follows the
    same native smoothed scroll offset but remains sharp and clickable. */
-body.byz-h-native-content-v121 #byz-history-v93 #byz-h-works{
-  position:fixed!important; top:0!important;left:50%!important;
-  width:min(1050px,calc(100vw - 32px))!important;
-  margin:0!important;
-  transform:translate3d(-50%,var(--byz-h-works-top,20000px),0)!important;
-  visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:2!important;
-  will-change:transform;
+/* V122: citations are moved to a sibling of the scrollable page, aligned
+   directly to the native scroll coordinate, NOT to a second animated layer. */
+body.byz-h-native-content-v121 #byz-history-v93 > #byz-h-works{
+ position:absolute!important; top:0!important;left:50%!important;
+ width:min(1050px,calc(100vw - 32px))!important;max-width:none!important;
+ margin:0!important;z-index:5!important;
+ opacity:1!important;visibility:visible!important;
+ pointer-events:auto!important;
+ /* DO NOT inherit .byz-h-reveal's 650ms transform easing; that caused
+    the sources to chase the 3D page and overlap unrelated content. */
+ transition:none!important;
+ will-change:transform;
+}
+body.byz-h-native-content-v121 #byz-history-v93 > #byz-h-works[data-native-shown="0"]{
+ visibility:hidden!important;pointer-events:none!important;
+}
+body.byz-h-native-content-v121 #byz-history-v93 > #byz-h-works .byz-h-reveal{
+ opacity:1!important;transform:none!important;transition:none!important;
+}
+body.byz-h-native-content-v121 #byz-history-v93 .byz-h-works-spacer-v122{
+ display:block!important;pointer-events:none!important;
 }
 /* Measure and capture native text regardless of scroll/reveal state. */
 #byz-history-v93.byz-h-capture-v121 .byz-h-reveal{
