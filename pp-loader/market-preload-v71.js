@@ -38,6 +38,10 @@
   'market-runtime/palia/fonts/PPFrama-Regular.woff2'
  ].map(s=>base+s);
  const mobile=matchMedia('(max-width:720px)').matches?'mobile':'desktop';
+ // V114: these FIVE cloth faces must decode before the optional product-page
+ // images. Otherwise an uncached low-end machine can hit the original renderer's
+ // permanent placeholder path before the browser finishes fetching them.
+ const galleryImages=slugs.map(s=>base+'market-runtime/product-images/'+s+'.webp');
  const imageUrls=slugs.map(s=>base+'market-runtime/product-images/banners/'+s+'-'+mobile+'.webp');
  imageUrls.push(base+'market-runtime/product-images/details/silk-v78-cloak-full.png');
  imageUrls.push(base+'market-runtime/product-images/details/sword-v79-leather-harness.png');
@@ -45,7 +49,7 @@
  imageUrls.push(base+'market-runtime/product-images/details/food-v80-garos-apaki-combo.png');
  imageUrls.push(base+'market-runtime/product-images/details/food-v81-garos-apaki-combo.png');
  imageUrls.push(base+'market-runtime/product-images/details/food-v81-garos-bottle.png');
- let complete=0;const total=docs.length+shared.length+imageUrls.length;
+ let complete=0;const total=docs.length+shared.length+imageUrls.length+galleryImages.length;
  const state={started:true,done:false,complete:0,total,errors:0};
  window.__BYZ_MARKET_PRELOAD_STATE__=state;
  const done=()=>{complete++;state.complete=complete;if(complete>=total){state.done=true;window.dispatchEvent(new Event('byz:market:preload-complete'))}};
@@ -58,7 +62,7 @@
    if(image.decode)await image.decode();else await new Promise((res,rej)=>{image.onload=res;image.onerror=rej})}
   catch(e){state.errors++;console.warn('[Byzantine market image preload]',url,e.message)}finally{done()}
  };
- const tasks=[...docs,...shared].map(url=>()=>fetchOne(url));
+ const tasks=[...galleryImages.map(url=>()=>imageOne(url)),...docs.map(url=>()=>fetchOne(url)),...shared.map(url=>()=>fetchOne(url))];
  for(let url of imageUrls)tasks.push(()=>imageOne(url));
  // Gentle four-request queue; avoid delaying the actual 3D gateway startup.
  let idx=0;const next=async()=>{while(idx<tasks.length){const n=idx++;await tasks[n]()}};

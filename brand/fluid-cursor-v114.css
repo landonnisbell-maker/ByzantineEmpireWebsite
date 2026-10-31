@@ -1,0 +1,32 @@
+/* V114 — adaptive fluid-pointer layer. Transparent to all mouse, touch and scrolling. */
+#byz-fluid-v114{
+  position:fixed;inset:0;z-index:180050;overflow:hidden;
+  pointer-events:none;visibility:hidden;contain:layout style;
+}
+#byz-fluid-v114.byz-fluid-active{visibility:visible}
+#byz-fluid-v114 canvas{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none}
+#byz-fluid-v114 .byz-fluid-lens{
+  position:absolute;left:0;top:0;width:136px;height:136px;
+  margin-left:-68px;margin-top:-68px;border-radius:50%;
+  pointer-events:none;opacity:0;will-change:transform,opacity;
+  transform:translate3d(-200px,-200px,0);
+  backdrop-filter:blur(1.45px) saturate(1.3) contrast(1.08);
+  -webkit-backdrop-filter:blur(1.45px) saturate(1.3) contrast(1.08);
+  background:radial-gradient(circle,transparent 20%,rgba(80,186,255,.025) 47%,rgba(159,224,255,.09) 64%,transparent 77%);
+  box-shadow:inset 0 0 0 1px rgba(191,240,255,.11),inset 0 0 19px rgba(172,228,255,.035);
+  -webkit-mask-image:radial-gradient(circle,#000 28%,rgba(0,0,0,.8) 53%,transparent 73%);
+  mask-image:radial-gradient(circle,#000 28%,rgba(0,0,0,.8) 53%,transparent 73%);
+}
+#byz-fluid-v114.byz-fluid-history .byz-fluid-lens{
+  background:radial-gradient(circle,transparent 20%,rgba(251,181,97,.035) 50%,rgba(255,207,140,.105) 66%,transparent 77%);
+  box-shadow:inset 0 0 0 1px rgba(255,211,158,.14),inset 0 0 17px rgba(255,184,95,.045);
+}
+#byz-fluid-v114.byz-fluid-about .byz-fluid-lens{
+  background:radial-gradient(circle,transparent 20%,rgba(235,112,242,.035) 50%,rgba(255,203,251,.10) 66%,transparent 77%);
+}
+#byz-fluid-v114.byz-fluid-slow .byz-fluid-lens{
+  width:112px;height:112px;margin-left:-56px;margin-top:-56px;
+  backdrop-filter:blur(1px) saturate(1.18);
+  -webkit-backdrop-filter:blur(1px) saturate(1.18);
+}
+@media(prefers-reduced-motion:reduce){#byz-fluid-v114{display:none!important}}
