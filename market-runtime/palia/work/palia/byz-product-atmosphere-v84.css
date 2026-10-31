@@ -5,14 +5,43 @@ html.byz-v84-jewelry {--byz-v84-warm:197,137,57;--byz-v84-cool:98,45,91;--off-bl
 html.byz-v84-food {--byz-v84-warm:202,110,43;--byz-v84-cool:95,63,33;--off-black:#1b1717}
 html.byz-v84-silk {--byz-v84-warm:151,79,182;--byz-v84-cool:106,49,116;--off-black:#161321}
 html.byz-v84-coins {--byz-v84-warm:176,137,67;--byz-v84-cool:69,118,124;--off-black:#171820}
-html[class*="byz-v84-"] .byz-market-product-copy{position:relative;isolation:isolate;}
-html[class*="byz-v84-"] .byz-market-product-copy:before{
- content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
- background:radial-gradient(ellipse 70vw 47vw at 83% 10%,rgba(var(--byz-v84-warm),.19),transparent 75%),radial-gradient(ellipse 69vw 59vw at 8% 57%,rgba(var(--byz-v84-cool),.21),transparent 78%),linear-gradient(165deg,rgba(var(--byz-v84-warm),.025),rgba(2,5,12,0) 60%);
+/* V101 — page-length atmospheric color. The old pseudo-element began at
+   the product copy and made an obvious rectangular seam below the hero. */
+html[class*="byz-v84-"] .work-detail .page {
+  background-image:
+    radial-gradient(ellipse 80% 29% at 87% 25%,rgba(var(--byz-v84-warm),.145),transparent 85%),
+    radial-gradient(ellipse 70% 38% at 5% 78%,rgba(var(--byz-v84-cool),.17),transparent 86%),
+    linear-gradient(180deg,rgba(var(--byz-v84-warm),.045),rgba(var(--byz-v84-cool),.085) 52%,rgba(var(--byz-v84-warm),.045));
+  background-color:transparent;
+  background-repeat:no-repeat;
 }
+html[class*="byz-v84-"] .byz-market-product-copy{position:relative;isolation:isolate;}
+html[class*="byz-v84-"] .byz-market-product-copy::before{content:none!important;display:none!important;}
 html[class*="byz-v84-"] .byz-market-product-copy > :not(.byz-v84-atmosphere){position:relative;z-index:1}
 .byz-v84-atmosphere{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none}
-.byz-v84-cursor{position:absolute;top:0;left:0;width:min(46vw,350px);height:min(46vw,350px);border-radius:50%;pointer-events:none;opacity:0;transform:translate3d(-999px,-999px,0) translate(-50%,-50%);background:radial-gradient(circle,rgba(var(--byz-v84-warm),.2),rgba(var(--byz-v84-warm),.065) 39%,transparent 67%);mix-blend-mode:screen;transition:opacity .3s ease;will-change:transform,opacity}
+/* Premium layered light: colored bounce, satin highlight, and restrained
+   spectral reflection. No canvas, blur filter or per-frame gradient updates. */
+.byz-v84-cursor {
+  position:absolute;top:0;left:0;width:clamp(260px,38vw,510px);aspect-ratio:1;
+  border-radius:50%;pointer-events:none;opacity:0;
+  transform:translate3d(-999px,-999px,0) translate(-50%,-50%);
+  background:
+    radial-gradient(ellipse 34% 42% at 48% 48%,rgba(255,245,223,.12),transparent 88%),
+    radial-gradient(ellipse 57% 48% at 57% 45%,rgba(var(--byz-v84-warm),.24),transparent 85%),
+    radial-gradient(ellipse 49% 58% at 41% 60%,rgba(var(--byz-v84-cool),.18),transparent 90%);
+  mix-blend-mode:screen;transition:opacity .35s ease;
+  will-change:transform;
+}
+.byz-v84-cursor::before {
+  content:'';position:absolute;inset:9%;border-radius:50%;opacity:.5;
+  background:conic-gradient(from 18deg,transparent 0deg,rgba(255,236,197,.18) 27deg,transparent 56deg,transparent 138deg,rgba(var(--byz-v84-warm),.19) 166deg,transparent 192deg,transparent 300deg,rgba(255,255,255,.13) 327deg,transparent 356deg);
+  -webkit-mask-image:radial-gradient(ellipse,transparent 8%,#000 32%,transparent 72%);
+  mask-image:radial-gradient(ellipse,transparent 8%,#000 32%,transparent 72%);
+}
+.byz-v84-cursor::after {
+  content:'';position:absolute;inset:26%;opacity:.72;border-radius:50%;
+  background:radial-gradient(ellipse at 42% 42%,rgba(255,245,224,.24),rgba(var(--byz-v84-warm),.09) 34%,transparent 69%);
+}
 .byz-v84-atmosphere.byz-v84-hover .byz-v84-cursor{opacity:1}
 .byz-v84-mote{position:absolute;bottom:5%;left:var(--mote-x);width:var(--mote-size);height:var(--mote-size);border-radius:50%;opacity:0;background:rgba(var(--byz-v84-warm),.65);box-shadow:0 0 12px rgba(var(--byz-v84-warm),.38);animation:byz-v84-float var(--mote-dur) linear infinite;animation-delay:var(--mote-delay)}
 html.byz-v84-sword .byz-v84-mote{bottom:auto;top:clamp(110px,11%,350px);border-radius:40% 60% 50% 45%;background:rgba(247,155,71,.8)}

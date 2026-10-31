@@ -220,7 +220,10 @@
   var marqueeFadeTimeout = null;
   var marqueeFadingOut = false;
   var marqueeReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-  function marqueeFadeMs() { return marqueeReducedMotion && marqueeReducedMotion.matches ? 160 : 760; }
+  // Set by the original project-store exit bridge (V101). The page's text
+  // and this DOM marquee fade *before* the native crystal camera exit.
+  function isIntroExiting() { return !!window.__BYZ_INTRO_EXIT_LOCK_V101__; }
+  function marqueeFadeMs() { return marqueeReducedMotion && marqueeReducedMotion.matches ? 70 : 460; }
   function finishMarqueeFade() {
     if (!marqueeFadingOut) return;
     marqueeFadingOut = false;
@@ -246,7 +249,7 @@
   }
   function showMarquee() {
     var el = marqueeNode;
-    if (!el || marqueeLastShown) return;
+    if (!el || marqueeLastShown || isIntroExiting()) return;
     var wasHidden = !marqueeFadingOut && !marqueeLastShown;
     if (marqueeFadeTimeout) { clearTimeout(marqueeFadeTimeout); marqueeFadeTimeout=null; }
     marqueeFadingOut = false;
@@ -288,7 +291,7 @@
           box-sizing: border-box;
           contain: layout paint style;
           opacity: 0;
-          transition: opacity .76s cubic-bezier(.22,1,.36,1);
+          transition: opacity .46s ease-in-out;
         }
         #byz-intro-marquee-v97-caption {
           position: fixed; top: 0; left: 0; width: 100%;
@@ -300,7 +303,7 @@
           z-index: 2147479000; pointer-events: none;
           display: none;
           opacity: 0;
-          transition: opacity .76s cubic-bezier(.22,1,.36,1);
+          transition: opacity .46s ease-in-out;
         }
         @media (prefers-reduced-motion: reduce) {
           #byz-intro-marquee-v97, #byz-intro-marquee-v97-caption {transition-duration:.16s;}
@@ -393,6 +396,7 @@
   window.__BYZ_INTRO_MARQUEE_TICK_V97__ = function (active, rect) {
     var el = makeMarquee();
     if (!el) return;
+    if (isIntroExiting()) { hideMarquee(true); return; }
     var shown = !!(active && rect &&
       Number.isFinite(rect.left) && Number.isFinite(rect.top) &&
       rect.width > 20 && rect.height > 20 &&

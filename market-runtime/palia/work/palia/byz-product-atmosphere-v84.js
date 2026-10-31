@@ -22,13 +22,24 @@ function mount(){
   }
  }
  copy.prepend(scene);
- if(finePointer&&!prefersReduced){let queued=false,x=0,y=0;
+ if(finePointer&&!prefersReduced){
+  let x=0,y=0,currentX=0,currentY=0,queued=false,hovering=false,initialized=false;
+  function render(){
+   queued=false;
+   if(!hovering)return;
+   currentX+=(x-currentX)*.22;currentY+=(y-currentY)*.22;
+   cursor.style.transform=`translate3d(${currentX.toFixed(2)}px,${currentY.toFixed(2)}px,0) translate(-50%,-50%)`;
+   if(Math.abs(x-currentX)>0.4||Math.abs(y-currentY)>0.4){queued=true;requestAnimationFrame(render)}
+  }
   copy.addEventListener('pointermove',ev=>{
    const rect=copy.getBoundingClientRect();x=ev.clientX-rect.left;y=ev.clientY-rect.top;
-   scene.classList.add('byz-v84-hover');
-   if(!queued){queued=true;requestAnimationFrame(()=>{cursor.style.transform=`translate3d(${x}px,${y}px,0) translate(-50%,-50%)`;queued=false})}
+   if(!initialized){currentX=x;currentY=y;initialized=true}
+   hovering=true;scene.classList.add('byz-v84-hover');
+   if(!queued){queued=true;requestAnimationFrame(render)}
   },{passive:true});
-  copy.addEventListener('pointerleave',()=>scene.classList.remove('byz-v84-hover'),{passive:true});
+  copy.addEventListener('pointerleave',()=>{
+   hovering=false;initialized=false;scene.classList.remove('byz-v84-hover');
+  },{passive:true});
  }
  return true;
 }
