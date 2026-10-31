@@ -1,20 +1,21 @@
 (()=>{
 'use strict';
-// V112: retain V111 entrance zoom and 1.1s reverse cloth speed, but show the crystal earlier on exit.
+// V113: preserve the V111 entrance exactly; synchronize exit crossfade with the actual camera retreat.
 // Early-preloaded gallery crossfades before the raw prismatic interior.
-// On exit the gallery plays its real reverse intro at the SAME 2x speed,
-// while the returning native crystal camera becomes visible much sooner.
-if(window.__BYZ_MARKET_V36__)return;
-window.__BYZ_MARKET_V36__=true;
+// On exit the cloth keeps its original V111 reverse speed. The native return begins
+// at the same time underneath it; reveal only on its real zoom-out milestone.
+if(window.__BYZ_MARKET_V37__)return;
+window.__BYZ_MARKET_V37__=true;
 window.__BYZ_V24_PAGE_INSTALLED__=true;
 const ORIGIN=location.origin;
 const SHELL=new URL('index.html?embedded=1&v=111.0',document.currentScript.src).href;
 const DEBUG=new URLSearchParams(location.search).has('byzmarketdebug');
-const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V112]',...args)};
+const log=(...args)=>{if(DEBUG)console.info('[BYZ Market V111]',...args)};
 let overlay=null,frame=null,frameLoaded=false,marketReady=false,preloadRequested=false;
 let wanted=false,nativeReached=false,opened=false,recoveries=0,reconnectScheduled=false;
 let safetyCover=false;
-let closing=false,closingStarted=0,exitFallback=0,revealExitTimer=0,returnFadeTimer=0,returnNativeTimer=0;
+let closing=false,closingStarted=0,exitFallback=0,revealExitTimer=0,returnFadeTimer=0;
+let returnFadeStartedAt=0;
 let feedback=null,deadline=0;
 // V103: replay the gallery's original Aengel intro only once it is actually visible.
 // V110: the same Three.js card, ribbon and travel timeline can run backwards
@@ -25,13 +26,11 @@ let galleryPreloadCheck=null;
 // Use a 90ms spin pre-lead so the gallery is moving at reveal.
 // Shorten the opacity fade to 65ms so the native interior never flashes.
 const DIRECT_SPIN_LEAD_MS=90;
-// V112: preserve the same 1.1-second cloth/ribbon reverse and 320ms native
-// camera trigger from V111. Overlap the camera with the cloths by starting
-// the gallery-to-crystal dissolve at 560ms instead of waiting 1030ms.
-const REVERSE_GALLERY_MS=1100;
-const RETURN_NATIVE_START_MS=320;
-const RETURN_FADE_DELAY_MS=560;
-const RETURN_FADE_MS=390;
+// Do not alter the gallery renderer's 1.1s reverse playback, or the native
+// camera's 0.8s traversal / 1.0s retreat. The native timeline itself notifies
+// us when the retreat has begun; the fallback is only for older cached chunks.
+const RETURN_CAMERA_FALLBACK_MS=1180;
+const RETURN_FADE_MS=300;
 const RETURN_SAFETY_MS=3200;
 const STYLES=`
 #byz-v33-market{position:fixed;inset:0;z-index:2147483000;opacity:0;visibility:visible;
@@ -42,10 +41,10 @@ const STYLES=`
 #byz-v33-market.byz-v106-direct{opacity:1;pointer-events:auto;transition:opacity .065s cubic-bezier(.22,1,.36,1)}
 #byz-v33-market.byz-v33-covering{transition:opacity .26s ease-in}
 #byz-v33-market.byz-v33-closing{transition:none}
-/* V112: unveil the retreating crystal while the reverse WebGL cloths are
-   still moving at the unchanged V111 speed. */
+/* V113: the exit fade starts when the native camera has actually begun its
+   reverse movement, not at an arbitrary fraction of cloth playback. */
 #byz-v33-market.byz-v108-returning{opacity:0;pointer-events:none;
- transition:opacity .39s cubic-bezier(.42,0,.58,1)}
+ transition:opacity .30s cubic-bezier(.42,0,.58,1)}
 #byz-v33-market>iframe{display:block;width:100%;height:100%;border:0;background:#000;opacity:0;pointer-events:none}
 /* A cheap, fixed black veil fades over a PRE-RENDERED gallery frame. The iframe
    itself must never jump from transparent to opaque on its first WebGL paint. */
@@ -173,11 +172,11 @@ function prepareMarket(entering=false){
  }
 }
 function clearExitTimers(){
- clearTimeout(exitFallback);clearTimeout(revealExitTimer);clearTimeout(returnFadeTimer);clearTimeout(returnNativeTimer);
- exitFallback=revealExitTimer=returnFadeTimer=returnNativeTimer=0;
+ clearTimeout(exitFallback);clearTimeout(revealExitTimer);clearTimeout(returnFadeTimer);
+ exitFallback=revealExitTimer=returnFadeTimer=0;
 }
 function conceal(){
- marketRevealEpoch++;clearExitTimers();closing=false;
+ marketRevealEpoch++;clearExitTimers();closing=false;returnFadeStartedAt=0;
  opened=false;wanted=false;nativeReached=false;safetyCover=false;
  document.documentElement.classList.remove('byz-v35-market-active');
  overlay?.classList.remove('byz-v33-open','byz-v33-covering','byz-v33-closing','byz-v106-direct','byz-v108-returning','byz-v110-safety','byz-v110-recovering');
@@ -186,10 +185,11 @@ function conceal(){
 }
 function finishClosing(){
  if(!closing)return;
- // Even if the native exterior notification is delivered early, let the
- // complete reversed cloth animation and camera crossfade finish.
- const elapsed=performance.now()-closingStarted;
- const remaining=Math.max(0,RETURN_FADE_DELAY_MS+RETURN_FADE_MS+30-elapsed);
+ // When the native camera reports exterior (or the safety fallback fires),
+ // wait only for any IN-PROGRESS crossfade to finish; never shorten the native
+ // 3D movement itself to make the overlay disappear sooner.
+ if(!returnFadeStartedAt)beginReturnFade();
+ const remaining=Math.max(0,RETURN_FADE_MS+45-(performance.now()-returnFadeStartedAt));
  clearTimeout(revealExitTimer);
  revealExitTimer=setTimeout(()=>{
   if(!closing)return;
@@ -198,12 +198,14 @@ function finishClosing(){
  },remaining);
 }
 function beginReturnFade(){
- if(!closing||!overlay?.isConnected)return;
- // The WebGL cloths are still moving backwards at their unchanged speed.
- // Fade them into the already-retreating native crystal camera sooner.
+ if(!closing||!overlay?.isConnected||returnFadeStartedAt)return;
+ // The native GSAP camera-retreat checkpoint is reached: the raw prism has
+ // passed. The cloth animation is still running at its unchanged V111 speed.
+ returnFadeStartedAt=performance.now();
+ clearTimeout(returnFadeTimer);returnFadeTimer=0;
  document.documentElement.classList.remove('byz-v35-market-active');
  overlay.classList.add('byz-v108-returning');
- log('crossfade gallery back into native reversing crystal camera');
+ log('native camera retreat is visible: dissolve moving cloth into crystals');
 }
 function triggerNativeReturn(){
  if(!closing)return;
@@ -231,14 +233,15 @@ function closeMarket(options={}){
  overlay.classList.remove('byz-v33-open','byz-v106-direct','byz-v108-returning','byz-v109-safety','byz-v109-recovering');
  overlay.setAttribute('aria-hidden','false');
  emit('byz:market:reverse-intro');
- // Do NOT start native exit on the same frame as the reverse cloth motion:
- // the old behavior allowed the crystal camera to finish behind a static frame.
- if(!options.fromNative){
-  returnNativeTimer=setTimeout(()=>{returnNativeTimer=0;triggerNativeReturn()},RETURN_NATIVE_START_MS);
- }
- returnFadeTimer=setTimeout(()=>{returnFadeTimer=0;beginReturnFade()},RETURN_FADE_DELAY_MS);
+ // Start the NATIVE camera timeline while the 1.1s cloth reverse begins.
+ // Neither animation is accelerated; they run concurrently rather than serially.
+ // If the store already sent the exit event, its native timeline is running.
+ if(!options.fromNative)triggerNativeReturn();
+ // Cached chunk fallback: by this point the unmodified native animation has
+ // moved into its real reverse camera leg, so the grey prism cannot flash.
+ returnFadeTimer=setTimeout(()=>{returnFadeTimer=0;beginReturnFade()},RETURN_CAMERA_FALLBACK_MS);
  exitFallback=setTimeout(()=>{exitFallback=0;finishClosing()},RETURN_SAFETY_MS);
- log('reverse cloth gallery first; native zoom-out then crossfade');
+ log('reverse cloth and native return concurrently; reveal at camera-ready event');
  return true;
 }
 // Support older/cached callers safely by starting the native transition.
@@ -248,7 +251,7 @@ window.__BYZ_V24_OPEN_MARKET__=()=>{
  prepareMarket();return false;
 };
 window.__BYZ_V24_CLOSE_MARKET__=()=>closeMarket();
-window.__BYZ_V24_STATUS__=()=>({version:'112.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
+window.__BYZ_V24_STATUS__=()=>({version:'113.0',marketReady,frameLoaded,connected:!!frame?.isConnected,recoveries,opened,wanted,nativeReached,preloadRequested,pathname:location.pathname});
 function applyNative(detail){
  if(!detail)return;
  const index=Number(detail.index??detail.projectIndex??-1);
@@ -275,6 +278,12 @@ window.addEventListener('byz:market:zoom-ready',ev=>{
  if(Number(ev.detail?.index)!==2||closing||!wanted)return;
  nativeReached=true;
  if(marketReady)revealDirect();else engageSafetyCover();
+});
+// Real native GSAP exit checkpoint, at the start of the camera's return to
+// the exterior crystals. This replaces V112's blind early-opacity timer.
+window.addEventListener('byz:market:return-camera-ready',ev=>{
+ if(!closing||Number(ev.detail?.index)!==2)return;
+ beginReturnFade();
 });
 window.addEventListener('byz:market:route',ev=>applyNative(ev.detail));
 window.addEventListener('byz:market:real-page',ev=>applyNative(ev.detail));
