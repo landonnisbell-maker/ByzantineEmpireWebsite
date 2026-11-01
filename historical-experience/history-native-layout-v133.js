@@ -1,5 +1,6 @@
-/* V138 — Historical Connection: native Aengel interior content, original editorial
- * composition, readable source imagery, HTML-only Works Cited. No DOM rasterization.
+/* V141 — Historical Connection: native Aengel interior content with updated
+ * crystal landmark screenshots from the live portal. Readable source imagery and
+ * HTML-only Works Cited. No DOM rasterization.
  * Content is drawn directly into the same CanvasTexture/3D-plane path as the
  * Introduction/About Us pages. The native renderer owns scroll, bend, and fluid. */
 (() => {
@@ -13,8 +14,8 @@
     'product-garos-v93.webp', 'product-apaki-v93.webp',
     'product-silk-textiles-v93.webp', 'product-coins-v93.webp',
     'portal-arch.png', 'portal-open.png',
-    'crystal-blue-hagia-sophia.png', 'crystal-purple-great-palace.png',
-    'crystal-green-hippodrome.png', 'crystal-orange-theodosian-walls.png',
+    'crystal-blue-hagia-sophia-v141.png', 'crystal-purple-great-palace-v141.png',
+    'crystal-green-hippodrome-v141.png', 'crystal-orange-theodosian-walls-v141.png',
     'market-logo.png'
   ];
   const imageCache = new Map();
@@ -143,8 +144,8 @@
     text('Crystals',CX,cursor+45,`normal 49px ${FONT_SERIF}`,C.cream,'center');cursor+=65;
     cursor=wrap(hidden.crystalsIntro || '',CX,cursor+25,1040,`400 21px ${FONT_SANS}`,C.body,29,'center')+66;
     cursor=twoText((hidden.crystals||[]).map((item,i)=>({heading:['Hagia Sophia','Great Palace','Hippodrome','Theodosian Walls'][i]||`Crystal ${i+1}`,body:item.body})),cursor,[
-      'crystal-blue-hagia-sophia.png','crystal-purple-great-palace.png',
-      'crystal-green-hippodrome.png','crystal-orange-theodosian-walls.png'
+      'crystal-blue-hagia-sophia-v141.png','crystal-purple-great-palace-v141.png',
+      'crystal-green-hippodrome-v141.png','crystal-orange-theodosian-walls-v141.png'
     ]);
     cursor=wrap(hidden.crystalsOutro||'',CX,cursor,1070,`400 21px ${FONT_SANS}`,C.body,29,'center')+34;
     cursor=wrap(hidden.mountainsWater||'',CX,cursor,1090,`400 21px ${FONT_SANS}`,C.body,29,'center')+65;
