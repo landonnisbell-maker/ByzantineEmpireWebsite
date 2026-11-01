@@ -46,6 +46,21 @@
  let pending=false;
  function scan(){pending=false;document.querySelectorAll(veilSelector).forEach(attachVeil);pruneAbout();}
  function queueScan(){if(pending)return;pending=true;queueMicrotask(scan);}
- function init(){scan();new MutationObserver(queueScan).observe(document.documentElement,{childList:true,subtree:true});}
+ // V144: look for menu/veil mounts only. Heavy scene / loader DOM updates
+ // are unrelated and must not rescan the entire document each frame.
+ function init(){
+   scan();
+   new MutationObserver(records=>{
+     for(const record of records){
+       const target=record.target;
+       if(target.nodeType===1&&(target.closest?.(veilSelector)||target.closest?.('nav[data-navbar]'))){queueScan();return;}
+       for(const node of record.addedNodes){
+         if(node.nodeType!==1)continue;
+         if(node.matches?.(veilSelector)||node.querySelector?.(veilSelector)||
+            node.matches?.('nav[data-navbar]')||node.querySelector?.('nav[data-navbar]')){queueScan();return;}
+       }
+     }
+   }).observe(document.documentElement,{childList:true,subtree:true});
+ }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

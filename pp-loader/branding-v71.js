@@ -37,6 +37,21 @@
   }
  });}
  function queue(){if(queued)return;queued=true;requestAnimationFrame(scan);}
- function init(){scan();new MutationObserver(queue).observe(document.body,{childList:true,subtree:true});}
+ // V144: React's loader can change while booting, but the rest of the WebGPU
+ // experience should not trigger a full document scan every time its DOM mutates.
+ function init(){
+   scan();
+   const observer=new MutationObserver(records=>{
+     for(const record of records){
+       const target=record.target;
+       if(target.nodeType===1&&(target.matches?.(sel)||target.closest?.(sel))){queue();return;}
+       for(const node of record.addedNodes){
+         if(node.nodeType!==1)continue;
+         if(node.matches?.(sel)||node.querySelector?.(sel)){queue();return;}
+       }
+     }
+   });
+   observer.observe(document.body,{childList:true,subtree:true});
+ }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

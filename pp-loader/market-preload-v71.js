@@ -72,7 +72,18 @@
  let idx=0,watcher=null,launchTimer=null,productWarmAcknowledged=false;
  state.productWarmRequested=false;
  state.productWarmAcknowledged=false;
- const next=async()=>{while(idx<tasks.length){const n=idx++;await tasks[n]()}};
+ // V144: keep the requested page-asset warm-up on the visible READY loader,
+ // but stop starting *new* downloads once a visitor enters the 3D experience.
+ // Active requests can finish naturally; resume any leftovers on Market entry.
+ state.paused=false;
+ state.hoveringEnter=false;
+ let workers=0;
+ const next=async()=>{
+   workers++;
+   try{while(idx<tasks.length&&!state.paused&&!state.hoveringEnter){const n=idx++;await tasks[n]();}}
+   finally{workers--;}
+ };
+ const pump=()=>{while(workers<2&&idx<tasks.length&&!state.paused&&!state.hoveringEnter)void next();};
  const gatewayReady=()=>{
    const root=document.querySelector('body > .loader-module__y9w63G__loaderContainer');
    const btn=root?.querySelector('[data-testid="loader-enter"]');
@@ -102,17 +113,33 @@
    if(state.started)return;
    state.started=true;state.deferred=false;
    // Keep low-priority asset caching gentle (at most 2 requests at once).
-   Promise.all([next(),next()]).catch(e=>{
-     console.warn('[Byzantine market preload] stopped',e);state.done=true;
-   });
+   pump();
    requestProductWarm();
  };
  const check=()=>{
-   if(!gatewayReady())return;
+   // Pause optional cache work while Enter's original per-letter hover
+   // animation is active. It can use the main thread without competing fetch
+   // completions/large image decoding at the same moment.
+   const enterButton=document.querySelector('body > .loader-module__y9w63G__loaderContainer [data-testid="loader-enter"]');
+   if(enterButton&&!enterButton.__byzV144HoverBound){
+     enterButton.__byzV144HoverBound=true;
+     enterButton.addEventListener('pointerenter',()=>{state.hoveringEnter=true},{passive:true});
+     enterButton.addEventListener('pointerleave',()=>{state.hoveringEnter=false;if(state.started&&!state.paused)pump()},{passive:true});
+   }
+   const gate=document.querySelector('body > .loader-module__y9w63G__loaderContainer');
+   const exiting=gate?.classList.contains('loader-module__y9w63G__exiting')||
+     gate?.classList.contains('pp-transitioning')||!gate?.isConnected;
+   const market=document.getElementById('byz-v24-market-page');
+   const inMarket=market?.getAttribute('aria-hidden')==='false';
+   if(state.started&&exiting&&!inMarket)state.paused=true;
+   if(state.paused&&inMarket){
+     state.paused=false;pump();
+   }
+   if(!gatewayReady()||exiting)return;
    if(!state.started&&launchTimer===null){
      // Briefly settle the native renderer first; no extra GPU contexts
      // launch while the original progress is still at 30%.
-     launchTimer=setTimeout(launch,300);
+     launchTimer=setTimeout(()=>{launchTimer=null;if(gatewayReady())launch();},300);
    }
    if(state.started&&!productWarmAcknowledged)requestProductWarm();
    if(productWarmAcknowledged&&watcher!==null){clearInterval(watcher);watcher=null}
