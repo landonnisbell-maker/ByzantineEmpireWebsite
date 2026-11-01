@@ -1,4 +1,4 @@
-/* V133 — Historical Connection: native Aengel interior content, original editorial
+/* V136 — Historical Connection: native Aengel interior content, original editorial
  * composition, readable source imagery, HTML-only Works Cited. No DOM rasterization.
  * Content is drawn directly into the same CanvasTexture/3D-plane path as the
  * Introduction/About Us pages. The native renderer owns scroll, bend, and fluid. */
@@ -103,7 +103,7 @@
           if(name){
             // V135: full-width editorial imagery rather than thumbnails.
             // Use generous image height and reserve the corresponding row space.
-            const imageHeight=410;
+            const imageHeight=495;
             img(name,x,end+18,COL,imageHeight);
             bottom=end+imageHeight+62;
           }
@@ -136,8 +136,8 @@
     portal.forEach((entry,i)=>{
       const x=i?X2:X;
       line(x,cy,x+COL);let bottom=wrap(entry.body,x,cy+36,COL,`400 21px ${FONT_SANS}`,C.body,29);
-      img(i===0?'portal-arch.png':'portal-open.png',x,bottom+18,COL,380);
-      rowEnd=Math.max(rowEnd,bottom+430);
+      img(i===0?'portal-arch.png':'portal-open.png',x,bottom+18,COL,455);
+      rowEnd=Math.max(rowEnd,bottom+505);
     });
     cursor=rowEnd+45;
     text('Crystals',CX,cursor+45,`normal 49px ${FONT_SERIF}`,C.cream,'center');cursor+=65;
@@ -150,7 +150,7 @@
     cursor=wrap(hidden.mountainsWater||'',CX,cursor,1090,`400 21px ${FONT_SANS}`,C.body,29,'center')+65;
     text('Market',CX,cursor+55,`normal 58px ${FONT_SERIF}`,C.cream,'center');cursor+=79;
     cursor=wrap(hidden.market?.body||'',CX,cursor+25,1120,`400 21px ${FONT_SANS}`,C.body,29,'center')+30;
-    img('market-logo.png',CX-555,cursor,1110,430);cursor+=462;
+    img('market-logo.png',CX-555,cursor,1110,490);cursor+=522;
     cursor=wrap('The name we chose for our market is ta pánta pazári, a Greek phrase that translates to “The Everything Bazaar.” Greek was the primary language spoken throughout the Byzantine Empire, making it a fitting choice for our market’s name. We wanted a name that would reflect the wide variety of goods we offer, ranging from swords and cloaks to food and more.',CX,cursor,1110,`400 21px ${FONT_SANS}`,C.body,29,'center')+70;
     const worksY=cursor;
     line(X,worksY,RIGHT);text('04 / SOURCES',CX,worksY+39,`700 15px ${FONT_SANS}`,C.gold,'center');
@@ -173,8 +173,15 @@
     ctx.scale(scale,scale);ctx.translate(-X,0);
     ctx.textBaseline='alphabetic';
     layout.ops.forEach(draw=>draw(ctx));
-    window.__BYZ_HISTORY_LAYOUT_V133__={height:layout.height,worksY:layout.worksY};
     ensureWorks(documentData);
+    // Keep a short blank tail in the GPU canvas, but make the native scroll
+    // controller travel through the full natural-height citations HTML.
+    // Increasing the GPU canvas itself would unnecessarily reduce text clarity.
+    const worksHeight = works ? Math.ceil(works.getBoundingClientRect().height) : 0;
+    window.__BYZ_HISTORY_LAYOUT_V133__={
+      height:layout.height,worksY:layout.worksY,worksHeight,
+      worksTopOffset:150,worksBottomPadding:160
+    };
     return {canvas,height:layout.height,hero:null,carousel:null,progress:null,liveLink:null,next:null};
   }
   window.__BYZ_BUILD_HISTORY_NATIVE_V133__=build;
@@ -189,9 +196,9 @@
       position:'fixed',zIndex:'1500',left:'50%',top:'-9999px',
       width:'min(1120px, calc(100vw - 44px))',transform:'translateX(-50%)',
       background:'#131116',border:'1px solid #756657',outline:'1px solid #302a2d',outlineOffset:'-9px',
-      padding:'28px 36px',boxSizing:'border-box',maxHeight:'72vh',overflowY:'auto',
+      padding:'28px 36px',boxSizing:'border-box',maxHeight:'none',overflowY:'visible',
       color:'#f1eeec',font:'15px/1.65 Manrope, Arial, sans-serif',
-      visibility:'hidden',pointerEvents:'none',contain:'layout style paint'
+      visibility:'hidden',pointerEvents:'none'
     });
     const p=document.createElement('p');p.textContent='Each source below opens in a new tab.';
     p.style.textAlign='center';p.style.margin='0 0 24px';
@@ -207,11 +214,13 @@
       list.appendChild(li);
     });
     works.append(p,list);document.body.appendChild(works);
-    works.addEventListener('wheel',e=>{e.stopPropagation();},{passive:true});
+    // Wheel and touch input bubble to Aengel's native scroll controller.
   }
   window.__BYZ_HISTORY_WORKS_TICK_V133__=(visible,rect)=>{
     if(!works)return;
-    const show=visible&&rect&&Number.isFinite(rect.top)&&rect.top<innerHeight+40&&rect.top+950>-60;
+    const panelTop=rect?.top+150;
+    const panelHeight=window.__BYZ_HISTORY_LAYOUT_V133__?.worksHeight || 0;
+    const show=visible&&rect&&Number.isFinite(panelTop)&&panelTop<innerHeight+40&&panelTop+panelHeight>-60;
     if(!show){works.style.visibility='hidden';works.style.pointerEvents='none';return;}
     works.style.top=`${rect.top+150}px`;
     works.style.visibility='visible';works.style.pointerEvents='auto';
