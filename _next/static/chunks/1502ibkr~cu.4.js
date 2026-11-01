@@ -468,7 +468,10 @@ return{texture:tex,enabled:enabled,slides:slides,color:result};
     if(layout?.worksHeight>0&&layout.height>=layout.worksY){
       const pxPerLogicalUnit=aw/c.current;
       const reservedPx=(layout.height-layout.worksY)*pxPerLogicalUnit;
-      const neededPx=layout.worksTopOffset+layout.worksHeight+layout.worksBottomPadding;
+      // The header/Works Cited spacer is expressed in native content units,
+      // not CSS pixels. Scale it with the 3D page so laptop and desktop have
+      // the same visual gap and the scroll limit reaches the footer.
+      const neededPx=layout.worksTopOffset*pxPerLogicalUnit+layout.worksHeight+layout.worksBottomPadding;
       maxScroll+=Math.max(0,neededPx-reservedPx);
     }
   }
@@ -620,15 +623,22 @@ let I=(0,x.useCallback)(e=>{let t=ei.useProjectStore.getState();g.current||"inte
  if(typeof historyTick==="function"){
   const histState=ei.useProjectStore.getState(),histLayout=window.__BYZ_HISTORY_LAYOUT_V133__;
   const visible=histState.currentProjectIndex===3&&histState.interiorStatus==="interior"&&!!histLayout;
-  let screenY=null;
+  let screenY=null,boxY=null;
   if(visible&&p.current&&histLayout.worksY>=0){
    w.updateWorldMatrix(!0,!1);
    const h=p.current.height;
-   const point=w.localToWorld(new P.Vector3(0,(h/2-histLayout.worksY)*aw,0)).project(o);
-   const py=(1-point.y)*.5*innerHeight;
-   if(Number.isFinite(py))screenY=py;
+   const anchor=histLayout.worksY;
+   // Project the citation box start from native page units, exactly like
+   // the heading. A fixed +150 screen-pixel offset breaks on small monitors.
+   const startPoint=w.localToWorld(new P.Vector3(0,(h/2-anchor)*aw,0)).project(o);
+   const boxPoint=w.localToWorld(new P.Vector3(0,(h/2-anchor-(histLayout.worksTopOffset||150))*aw,0)).project(o);
+   const py=(1-startPoint.y)*.5*innerHeight;
+   const boxPy=(1-boxPoint.y)*.5*innerHeight;
+   if(Number.isFinite(py)&&Number.isFinite(boxPy)){
+     screenY=py;boxY=boxPy;
+   }
   }
-  historyTick(visible&&screenY!==null,{top:screenY,opacity:N.value});
+  historyTick(visible&&screenY!==null,{top:screenY,boxTop:boxY,opacity:N.value});
  }
 const tick=window.__BYZ_INTRO_MARQUEE_TICK_V97__;
  if(typeof tick!=="function")return;

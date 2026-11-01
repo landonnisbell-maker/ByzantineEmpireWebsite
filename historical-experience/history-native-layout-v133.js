@@ -252,11 +252,14 @@
   }
   window.__BYZ_HISTORY_WORKS_TICK_V133__=(visible,rect)=>{
     if(!works)return;
-    const panelTop=rect?.top+150;
+    // V139: Projected from the native Works Cited heading, not offset by
+    // 150 fixed CSS pixels. The heading and HTML citation box now remain
+    // adjacent at any screen height / browser zoom.
+    const panelTop=Number.isFinite(rect?.boxTop)?rect.boxTop:null;
     const panelHeight=window.__BYZ_HISTORY_LAYOUT_V133__?.worksHeight || 0;
-    const show=visible&&rect&&Number.isFinite(panelTop)&&panelTop<innerHeight+40&&panelTop+panelHeight>-60;
+    const show=visible&&Number.isFinite(panelTop)&&panelTop<innerHeight+40&&panelTop+panelHeight>-60;
     if(!show){works.style.visibility='hidden';works.style.pointerEvents='none';return;}
-    works.style.top=`${rect.top+150}px`;
+    works.style.top=`${panelTop}px`;
     works.style.visibility='visible';works.style.pointerEvents='auto';
     works.style.opacity=String(Math.max(0,Math.min(1,rect.opacity??1)));
   };
