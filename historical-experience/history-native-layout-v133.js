@@ -1,4 +1,4 @@
-/* V137 — Historical Connection: native Aengel interior content, original editorial
+/* V138 — Historical Connection: native Aengel interior content, original editorial
  * composition, readable source imagery, HTML-only Works Cited. No DOM rasterization.
  * Content is drawn directly into the same CanvasTexture/3D-plane path as the
  * Introduction/About Us pages. The native renderer owns scroll, bend, and fluid. */
@@ -203,30 +203,32 @@
       visibility:'hidden',pointerEvents:'none'
     });
     const p=document.createElement('p');p.textContent='Each source below opens in a new tab.';
-    p.style.textAlign='center';p.style.margin='0 0 24px';
+    p.style.textAlign='center';p.style.margin='0 0 24px';p.style.lineHeight='2';
 
-    // MLA Works Cited: no numbering; entries are double-spaced with an
-    // exact half-inch hanging indent and no extra paragraph spacing.
-    // Keep the existing citation HTML, including italics and links, intact.
+    // MLA Works Cited: 12pt Times New Roman, true double spacing,
+    // an unnumbered list, and a 0.5-inch hanging indent on every citation.
+    // Container titles stay italicized, URLs show without protocols or underlines.
     const list=document.createElement('div');
     list.setAttribute('role','list');
     list.setAttribute('aria-label','MLA Works Cited references');
     Object.assign(list.style,{
       padding:'0',margin:'0',
       font:'400 16px/2 "Times New Roman", Times, serif',
-      overflowWrap:'anywhere'
+      lineHeight:'2',
+      overflowWrap:'anywhere',textAlign:'left'
     });
     (data.worksCited||[]).forEach(html=>{
       const entry=document.createElement('div');
       entry.setAttribute('role','listitem');
       entry.innerHTML=html;
       Object.assign(entry.style,{
+        display:'block',width:'100%',boxSizing:'border-box',
         paddingLeft:'0.5in',textIndent:'-0.5in',
         margin:'0',lineHeight:'2',
-        whiteSpace:'normal',overflowWrap:'anywhere'
+        whiteSpace:'normal',overflowWrap:'anywhere',textAlign:'left'
       });
       entry.querySelectorAll('a').forEach(a=>{
-        a.style.color='#f1c68b';a.style.textDecoration='underline';
+        a.style.color='#f1c68b';a.style.textDecoration='none';a.style.textDecorationLine='none';
         a.target='_blank';a.rel='noopener noreferrer';
       });
       list.appendChild(entry);
