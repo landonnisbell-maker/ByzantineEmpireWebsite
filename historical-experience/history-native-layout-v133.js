@@ -100,7 +100,13 @@
           const end=wrap(entry.body,x,y0+105,COL-8,`400 21px ${FONT_SANS}`,C.body,29);
           let bottom=end+14;
           const name=imgFiles?.[i+k];
-          if(name){img(name,x,end+14,COL,195);bottom=end+238;}
+          if(name){
+            // V135: full-width editorial imagery rather than thumbnails.
+            // Use generous image height and reserve the corresponding row space.
+            const imageHeight=410;
+            img(name,x,end+18,COL,imageHeight);
+            bottom=end+imageHeight+62;
+          }
           rowEnd=Math.max(rowEnd,bottom);
         });
         maxY=rowEnd+35;
@@ -130,8 +136,8 @@
     portal.forEach((entry,i)=>{
       const x=i?X2:X;
       line(x,cy,x+COL);let bottom=wrap(entry.body,x,cy+36,COL,`400 21px ${FONT_SANS}`,C.body,29);
-      img(i===0?'portal-arch.png':'portal-open.png',x,bottom+18,COL,210);
-      rowEnd=Math.max(rowEnd,bottom+242);
+      img(i===0?'portal-arch.png':'portal-open.png',x,bottom+18,COL,380);
+      rowEnd=Math.max(rowEnd,bottom+430);
     });
     cursor=rowEnd+45;
     text('Crystals',CX,cursor+45,`normal 49px ${FONT_SERIF}`,C.cream,'center');cursor+=65;
@@ -144,7 +150,7 @@
     cursor=wrap(hidden.mountainsWater||'',CX,cursor,1090,`400 21px ${FONT_SANS}`,C.body,29,'center')+65;
     text('Market',CX,cursor+55,`normal 58px ${FONT_SERIF}`,C.cream,'center');cursor+=79;
     cursor=wrap(hidden.market?.body||'',CX,cursor+25,1120,`400 21px ${FONT_SANS}`,C.body,29,'center')+30;
-    img('market-logo.png',CX-490,cursor,980,295);cursor+=327;
+    img('market-logo.png',CX-555,cursor,1110,430);cursor+=462;
     cursor=wrap('The name we chose for our market is ta pánta pazári, a Greek phrase that translates to “The Everything Bazaar.” Greek was the primary language spoken throughout the Byzantine Empire, making it a fitting choice for our market’s name. We wanted a name that would reflect the wide variety of goods we offer, ranging from swords and cloaks to food and more.',CX,cursor,1110,`400 21px ${FONT_SANS}`,C.body,29,'center')+70;
     const worksY=cursor;
     line(X,worksY,RIGHT);text('04 / SOURCES',CX,worksY+39,`700 15px ${FONT_SANS}`,C.gold,'center');
