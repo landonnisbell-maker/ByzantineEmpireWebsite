@@ -1,4 +1,4 @@
-/* V136 — Historical Connection: native Aengel interior content, original editorial
+/* V137 — Historical Connection: native Aengel interior content, original editorial
  * composition, readable source imagery, HTML-only Works Cited. No DOM rasterization.
  * Content is drawn directly into the same CanvasTexture/3D-plane path as the
  * Introduction/About Us pages. The native renderer owns scroll, bend, and fluid. */
@@ -177,7 +177,9 @@
     // Keep a short blank tail in the GPU canvas, but make the native scroll
     // controller travel through the full natural-height citations HTML.
     // Increasing the GPU canvas itself would unnecessarily reduce text clarity.
-    const worksHeight = works ? Math.ceil(works.getBoundingClientRect().height) : 0;
+    // Include the footer below the citations in the native scroll extent;
+    // absolutely positioned children are not counted by getBoundingClientRect.
+    const worksHeight = works ? Math.ceil(works.getBoundingClientRect().height) + 29 + 30 : 0;
     window.__BYZ_HISTORY_LAYOUT_V133__={
       height:layout.height,worksY:layout.worksY,worksHeight,
       worksTopOffset:150,worksBottomPadding:160
@@ -202,18 +204,48 @@
     });
     const p=document.createElement('p');p.textContent='Each source below opens in a new tab.';
     p.style.textAlign='center';p.style.margin='0 0 24px';
-    const list=document.createElement('ol');
-    list.style.cssText='padding-left:28px;margin:0;overflow-wrap:anywhere';
+
+    // MLA Works Cited: no numbering; entries are double-spaced with an
+    // exact half-inch hanging indent and no extra paragraph spacing.
+    // Keep the existing citation HTML, including italics and links, intact.
+    const list=document.createElement('div');
+    list.setAttribute('role','list');
+    list.setAttribute('aria-label','MLA Works Cited references');
+    Object.assign(list.style,{
+      padding:'0',margin:'0',
+      font:'400 16px/2 "Times New Roman", Times, serif',
+      overflowWrap:'anywhere'
+    });
     (data.worksCited||[]).forEach(html=>{
-      const li=document.createElement('li');li.innerHTML=html;
-      li.style.marginBottom='18px';
-      li.querySelectorAll('a').forEach(a=>{
+      const entry=document.createElement('div');
+      entry.setAttribute('role','listitem');
+      entry.innerHTML=html;
+      Object.assign(entry.style,{
+        paddingLeft:'0.5in',textIndent:'-0.5in',
+        margin:'0',lineHeight:'2',
+        whiteSpace:'normal',overflowWrap:'anywhere'
+      });
+      entry.querySelectorAll('a').forEach(a=>{
         a.style.color='#f1c68b';a.style.textDecoration='underline';
         a.target='_blank';a.rel='noopener noreferrer';
       });
-      list.appendChild(li);
+      list.appendChild(entry);
     });
-    works.append(p,list);document.body.appendChild(works);
+
+    // Footer sits BELOW the dark Works Cited panel, not inside its contents.
+    // The parent travels with the existing native Aengel scroll position.
+    const footer=document.createElement('div');
+    footer.className='byz-h-works-footer-v137';
+    footer.textContent='TA PÁNTA PAZÁRI  /  THE EVERYTHING BAZAAR';
+    Object.assign(footer.style,{
+      position:'absolute',top:'calc(100% + 29px)',
+      left:'0',width:'100%',textAlign:'center',
+      color:'#f8f5f1',font:'500 13px/1.5 Manrope, Arial, sans-serif',
+      letterSpacing:'.14em',
+      textShadow:'0 2px 5px rgba(0,0,0,.88), 0 0 12px rgba(0,0,0,.58)',
+      pointerEvents:'none',whiteSpace:'normal'
+    });
+    works.append(p,list,footer);document.body.appendChild(works);
     // Wheel and touch input bubble to Aengel's native scroll controller.
   }
   window.__BYZ_HISTORY_WORKS_TICK_V133__=(visible,rect)=>{
