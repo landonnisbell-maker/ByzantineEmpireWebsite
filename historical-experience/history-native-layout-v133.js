@@ -142,14 +142,20 @@
     cursor=wrap(hidden.intro || '',CX,cursor+25,1060,`400 21px ${FONT_SANS}`,C.body,29,'center')+48;
     text('Portal',CX,cursor+45,`normal 49px ${FONT_SERIF}`,C.cream,'center');cursor+=79;
     const portal=(hidden.portal || []).map((item,i)=>({heading:i===0?'Purple energy':'Gold & purple',body:item.body}));
-    let cy=cursor;let rowEnd=cy;
+    let cy=cursor;
+    const portalImageStarts=[];
     portal.forEach((entry,i)=>{
       const x=i?X2:X;
-      line(x,cy,x+COL);let bottom=wrap(entry.body,x,cy+36,COL,`400 21px ${FONT_SANS}`,C.body,29);
-      img(i===0?'portal-arch.png':'portal-open.png',x,bottom+18,COL,455);
-      rowEnd=Math.max(rowEnd,bottom+505);
+      line(x,cy,x+COL);
+      const bottom=wrap(entry.body,x,cy+36,COL,`400 21px ${FONT_SANS}`,C.body,29);
+      portalImageStarts.push(bottom+18);
     });
-    cursor=rowEnd+45;
+    // Both Portal images begin at the same baseline, clear of the longer paragraph.
+    const portalImageTop=Math.max(...portalImageStarts);
+    portal.forEach((entry,i)=>{
+      img(i===0?'portal-arch.png':'portal-open.png',i?X2:X,portalImageTop,COL,455);
+    });
+    cursor=portalImageTop+455+77;
     text('Crystals',CX,cursor+45,`normal 49px ${FONT_SERIF}`,C.cream,'center');cursor+=65;
     cursor=wrap(hidden.crystalsIntro || '',CX,cursor+25,1040,`400 21px ${FONT_SANS}`,C.body,29,'center')+66;
     cursor=twoText((hidden.crystals||[]).map((item,i)=>({heading:['Hagia Sophia','Great Palace','Hippodrome','Theodosian Walls'][i]||`Crystal ${i+1}`,body:item.body})),cursor,[
