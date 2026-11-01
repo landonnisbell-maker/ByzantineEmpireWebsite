@@ -1,4 +1,4 @@
-/* V141 — Historical Connection: native Aengel interior content with updated
+/* V142 — Historical Connection: paired image alignment and native content with updated
  * crystal landmark screenshots from the live portal. Readable source imagery and
  * HTML-only Works Cited. No DOM rasterization.
  * Content is drawn directly into the same CanvasTexture/3D-plane path as the
@@ -91,7 +91,10 @@
     const twoText=(items,y,imgFiles=null)=>{
       let maxY=y;
       for(let i=0;i<items.length;i+=2){
-        const y0=maxY; let rowEnd=y0;
+        const y0=maxY;
+        const entries=[];
+        // Layout the paired columns first. Images in a row must share a
+        // vertical anchor, even if the paragraphs have different line counts.
         [0,1].forEach(k=>{
           const entry=items[i+k]; if(!entry) return;
           const x=k?X2:X;
@@ -99,17 +102,23 @@
           text(String(i+k+1).padStart(2,'0'),x,y0+26,`700 14px ${FONT_SANS}`,C.gold);
           text(entry.heading,x,y0+73,`normal 40px ${FONT_SERIF}`,C.cream);
           const end=wrap(entry.body,x,y0+105,COL-8,`400 21px ${FONT_SANS}`,C.body,29);
-          let bottom=end+14;
-          const name=imgFiles?.[i+k];
-          if(name){
-            // V135: full-width editorial imagery rather than thumbnails.
-            // Use generous image height and reserve the corresponding row space.
-            const imageHeight=495;
-            img(name,x,end+18,COL,imageHeight);
-            bottom=end+imageHeight+62;
-          }
-          rowEnd=Math.max(rowEnd,bottom);
+          entries.push({x,end,name:imgFiles?.[i+k]});
         });
+        const ends=entries.map(entry=>entry.end);
+        const shortest=Math.min(...ends),longest=Math.max(...ends);
+        // Starting near the shorter paragraph's former image location brings
+        // the longer column's image upward; preserve a safe space after text.
+        const sharedImageTop=Math.max(shortest+18,longest-9);
+        let rowEnd=y0;
+        for(const entry of entries){
+          if(entry.name){
+            const imageHeight=495;
+            img(entry.name,entry.x,sharedImageTop,COL,imageHeight);
+            rowEnd=Math.max(rowEnd,sharedImageTop+imageHeight+44);
+          } else {
+            rowEnd=Math.max(rowEnd,entry.end+14);
+          }
+        }
         maxY=rowEnd+35;
       }
       return maxY;
