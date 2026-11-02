@@ -92,3 +92,43 @@
  .loader-module__y9w63G__progressZone .byz-v145-loader-notices {width:min(92vw,490px)!important;gap:6px!important;}
  .loader-module__y9w63G__progressZone .byz-v145-loader-notices > p {font-size:11px!important;}
 }
+
+
+/* V146: Keep both instructions within a compact, readable column under the
+   progress/Enter control. The previous 690px wrapper was wider than the loader
+   control on many laptop screens. Both states use the same size and anchor. */
+.loader-module__y9w63G__progressZone .byz-v145-loader-notices,
+.loader-module__y9w63G__gate .loader-module__y9w63G__progressZone .byz-v145-loader-notices {
+  width:min(440px, calc(100vw - 48px))!important;
+  max-width:calc(100vw - 48px)!important;
+  min-width:0!important;
+  left:50%!important;
+  top:calc(100% + 13px)!important;
+  transform:translateX(-50%)!important;
+  gap:4px!important;
+  overflow-wrap:break-word!important;
+}
+.loader-module__y9w63G__progressZone .byz-v145-loader-notices > .byz-v105-device-note,
+.loader-module__y9w63G__progressZone .byz-v145-loader-notices > .byz-v145-display-note {
+  width:100%!important;
+  max-width:100%!important;
+  font-size:clamp(10px,.72vw,12px)!important;
+  line-height:1.48!important;
+  letter-spacing:0!important;
+  white-space:normal!important;
+  overflow-wrap:break-word!important;
+  text-wrap:pretty!important;
+}
+@media(max-width:600px), (max-height:620px) {
+  .loader-module__y9w63G__progressZone .byz-v145-loader-notices,
+  .loader-module__y9w63G__gate .loader-module__y9w63G__progressZone .byz-v145-loader-notices {
+    width:min(380px, calc(100vw - 40px))!important;
+    top:calc(100% + 11px)!important;
+    gap:3px!important;
+  }
+  .loader-module__y9w63G__progressZone .byz-v145-loader-notices > .byz-v105-device-note,
+  .loader-module__y9w63G__progressZone .byz-v145-loader-notices > .byz-v145-display-note {
+    font-size:10px!important;
+    line-height:1.4!important;
+  }
+}

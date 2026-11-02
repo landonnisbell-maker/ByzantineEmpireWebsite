@@ -26,8 +26,8 @@
   const logo=el('img','byz-v71-ticket-logo');logo.src=safeImage;logo.alt='';logo.decoding='async';foot.appendChild(logo);div.appendChild(foot);
   panel.appendChild(div);
  }
- let queued=false;
- function scan(){queued=false;document.querySelectorAll(sel).forEach(root=>{
+ let queued=false,seenLoader=null;
+ function scan(){queued=false;document.querySelectorAll(sel).forEach(root=>{seenLoader=root;
   const header=root.querySelector('.loader-module__y9w63G__header');if(header)brand(header);
   const card=root.querySelector('.loader-module__y9w63G__ticketCard');if(card)ticket(card);
   const zone=root.querySelector('.loader-module__y9w63G__progressZone');
@@ -48,6 +48,8 @@
  function init(){
    scan();
    const observer=new MutationObserver(records=>{
+     // Nothing in the loaded experience needs this loader-only observer.
+     if(seenLoader&&!seenLoader.isConnected){observer.disconnect();return;}
      for(const record of records){
        const target=record.target;
        if(target.nodeType===1&&(target.matches?.(sel)||target.closest?.(sel))){queue();return;}
