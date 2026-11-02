@@ -1,3 +1,4 @@
+/* V145: Brightened only the four historical crystal screenshots. */
 /* V142 — Historical Connection: paired image alignment and native content with updated
  * crystal landmark screenshots from the live portal. Readable source imagery and
  * HTML-only Works Cited. No DOM rasterization.
@@ -14,8 +15,8 @@
     'product-garos-v93.webp', 'product-apaki-v93.webp',
     'product-silk-textiles-v93.webp', 'product-coins-v93.webp',
     'portal-arch.png', 'portal-open.png',
-    'crystal-blue-hagia-sophia-v141.png', 'crystal-purple-great-palace-v141.png',
-    'crystal-green-hippodrome-v141.png', 'crystal-orange-theodosian-walls-v141.png',
+    'crystal-blue-hagia-sophia-v145.png', 'crystal-purple-great-palace-v145.png',
+    'crystal-green-hippodrome-v145.png', 'crystal-orange-theodosian-walls-v145.png',
     'market-logo.png'
   ];
   const imageCache = new Map();
@@ -159,8 +160,8 @@
     text('Crystals',CX,cursor+45,`normal 49px ${FONT_SERIF}`,C.cream,'center');cursor+=65;
     cursor=wrap(hidden.crystalsIntro || '',CX,cursor+25,1040,`400 21px ${FONT_SANS}`,C.body,29,'center')+66;
     cursor=twoText((hidden.crystals||[]).map((item,i)=>({heading:['Hagia Sophia','Great Palace','Hippodrome','Theodosian Walls'][i]||`Crystal ${i+1}`,body:item.body})),cursor,[
-      'crystal-blue-hagia-sophia-v141.png','crystal-purple-great-palace-v141.png',
-      'crystal-green-hippodrome-v141.png','crystal-orange-theodosian-walls-v141.png'
+      'crystal-blue-hagia-sophia-v145.png','crystal-purple-great-palace-v145.png',
+      'crystal-green-hippodrome-v145.png','crystal-orange-theodosian-walls-v145.png'
     ]);
     cursor=wrap(hidden.crystalsOutro||'',CX,cursor,1070,`400 21px ${FONT_SANS}`,C.body,29,'center')+34;
     cursor=wrap(hidden.mountainsWater||'',CX,cursor,1090,`400 21px ${FONT_SANS}`,C.body,29,'center')+65;

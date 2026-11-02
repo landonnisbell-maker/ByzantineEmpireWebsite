@@ -31,9 +31,15 @@
   const header=root.querySelector('.loader-module__y9w63G__header');if(header)brand(header);
   const card=root.querySelector('.loader-module__y9w63G__ticketCard');if(card)ticket(card);
   const zone=root.querySelector('.loader-module__y9w63G__progressZone');
-  if(zone && !zone.querySelector('.byz-v105-device-note')){
-   const note=el('p','byz-v105-device-note','This website may load slower or perform worse on lower end devices');
-   zone.appendChild(note);
+  if(zone && !zone.querySelector('.byz-v145-loader-notices')){
+   const legacy=zone.querySelector('.byz-v105-device-note');
+   if(legacy)legacy.remove();
+   const notices=el('div','byz-v145-loader-notices');
+   notices.append(
+     el('p','byz-v105-device-note','This website may load slower or perform worse on lower end devices or a low internet connection'),
+     el('p','byz-v145-display-note','For the best experience, turn your computer brightness all the way up and press F11 for fullscreen mode.')
+   );
+   zone.appendChild(notices);
   }
  });}
  function queue(){if(queued)return;queued=true;requestAnimationFrame(scan);}
