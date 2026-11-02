@@ -26,7 +26,10 @@
   const logo=el('img','byz-v71-ticket-logo');logo.src=safeImage;logo.alt='';logo.decoding='async';foot.appendChild(logo);div.appendChild(foot);
   panel.appendChild(div);
  }
- let queued=false,seenLoader=null;
+ // V147: The loader is remounted when React changes from loading to READY.
+ // Keep watching those remounts; only retire the observer after a real Enter
+ // click AND the whole loader has finished exiting.
+ let queued=false,seenLoader=null,enterClicked=false,exitCheck=null;
  function scan(){queued=false;document.querySelectorAll(sel).forEach(root=>{seenLoader=root;
   const header=root.querySelector('.loader-module__y9w63G__header');if(header)brand(header);
   const card=root.querySelector('.loader-module__y9w63G__ticketCard');if(card)ticket(card);
@@ -48,8 +51,20 @@
  function init(){
    scan();
    const observer=new MutationObserver(records=>{
-     // Nothing in the loaded experience needs this loader-only observer.
-     if(seenLoader&&!seenLoader.isConnected){observer.disconnect();return;}
+     if(seenLoader&&!seenLoader.isConnected){
+       // A detached container commonly means READY has remounted a *new*
+       // loader, NOT that the visitor has entered the experience.
+       const replacement=document.querySelector(sel);
+       if(replacement){seenLoader=replacement;queue();}
+       else if(enterClicked&&!exitCheck){
+         // The exiting loader may briefly unmount/remount; allow the exit
+         // animation to complete before disconnecting the observer.
+         exitCheck=setTimeout(()=>{
+           exitCheck=null;
+           if(enterClicked&&!document.querySelector(sel))observer.disconnect();
+         },1300);
+       }
+     }
      for(const record of records){
        const target=record.target;
        if(target.nodeType===1&&(target.matches?.(sel)||target.closest?.(sel))){queue();return;}
@@ -60,6 +75,11 @@
      }
    });
    observer.observe(document.body,{childList:true,subtree:true});
+   // Don't disconnect merely because React replaces the loader DOM at READY.
+   document.addEventListener('click',event=>{
+     const target=event.target;
+     if(target?.closest?.('[data-testid="loader-enter"], .loader-module__y9w63G__cta'))enterClicked=true;
+   },{capture:true,passive:true});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
